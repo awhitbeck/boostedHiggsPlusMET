@@ -29,19 +29,23 @@ public :
   {
     ntuple = ntuple_;
     label = label_;
-    histo = new TH1F("selectBaselineYields_"+label,"selectBaselineYields_"+label,8,0.5,8.5);
+    histo = new TH1F("selectBaselineYields_"+label,"selectBaselineYields_"+label,2,0.5,2.5);
 
-    ntuple->fChain->SetBranchStatus("nbLeptons",1);
+    /*
     ntuple->fChain->SetBranchStatus("Jet_pt",1);
     ntuple->fChain->SetBranchStatus("Jet_eta",1);
     ntuple->fChain->SetBranchStatus("Jet_phi",1);
     ntuple->fChain->SetBranchStatus("Jet_mass",1);
     ntuple->fChain->SetBranchStatus("nJet",1);
+    */
+    ntuple->fChain->SetBranchStatus("naLeptons",1);
+    ntuple->fChain->SetBranchStatus("met_pt",1);
 
   };
 
   bool process( ) override {
 
+    /*
     int NJets = 0;
     double HT = 0.;
     TLorentzVector MHTvec(0.,0.,0.,0.);
@@ -83,7 +87,6 @@ public :
     
     MHT = MHTvec.Pt();
 
-    /*
     std::cout << "Leptons: " << ntuple->nvLeptons << endl;
     std::cout << "NJets: " << NJets << endl;    
     std::cout << "HT: " << HT << endl;
@@ -95,21 +98,9 @@ public :
     */
 
     histo->Fill(0);
-    if( ntuple->nvLeptons == 0 ) histo->Fill(1);
+    if( ntuple->naLeptons == 0 ) histo->Fill(1);
     else return false;
-    if( NJets>=4 ) histo->Fill(2);
-    else return false;
-    if( HT>500. ) histo->Fill(3);
-    else return false;
-    if( MHT>200. ) histo->Fill(4); 
-    else return false;
-    if( DeltaPhi1>0.5 ) histo->Fill(5);
-    else return false;
-    if( DeltaPhi2>0.5 ) histo->Fill(6);
-    else return false;
-    if( DeltaPhi3>0.3 ) histo->Fill(7);
-    else return false;
-    if( DeltaPhi4>0.3 ) histo->Fill(8);
+    if( ntuple->met_pt>200. ) histo->Fill(2); 
     else return false;
 
     return true;
