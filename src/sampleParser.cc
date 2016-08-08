@@ -51,7 +51,7 @@ fileMap parseInputs( TString inputFileList ){
 	   istream_iterator<string>(),
 	   back_inserter(tokens));
       
-      if( tokens.size() != 3 ){
+      if( tokens.size() < 2 ){
 	std::cout << "sampleparser::parseInputs() -- problem with mapping syntax in " << inputFileList << std::endl;
 	return m ;
       }else{
@@ -86,7 +86,7 @@ xsecMap parseXsec( TString inputFileList ){
 	   istream_iterator<string>(),
 	   back_inserter(tokens));
       
-      if( tokens.size() != 3 ){
+      if( tokens.size() < 3 ){
 	cout << "sampleparser::parseInputs() -- problem with mapping syntax in " << inputFileList << endl;
 	return m ;
       }else{
@@ -158,11 +158,11 @@ TChain* buildChain(vector<fileName> *fileVec, TString treeName){
 
   for( vector<fileName>::iterator it = fileVec->begin() ; it != fileVec->end() ; ++it ){
     sprintf( temp , "root://cmsxrootd.fnal.gov//%s", it->Data() );
-    cout << temp << endl;
+    //cout << temp << endl;
     t->Add( temp );
   }// end loop over files
 
-  cout << "check" << endl;
+  //cout << "check" << endl;
 
   return t ;
 

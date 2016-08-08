@@ -15,6 +15,7 @@ using namespace std;
 // inputs should be:
 //      name of input file
 //      name of output directory
+//      sample norm
 int main(int argc, char** argv){
 
   fileMap fmap = parseInputs("../data/heppyInputs.txt");
@@ -27,12 +28,14 @@ int main(int argc, char** argv){
   t->Add(inputFile);
   float xsec = xsmap[fmap[argv[1]]]; 
   std::cout << "xsec: " << xsec << std::endl;
-  float norm = 1.;
+  float weight = 1.;
+  std::cout << "norm(a): " << argv[3] << std::endl; 
+  float norm = atof(argv[3]);
+  std::cout << "norm(f): " << norm << std::endl; 
 
   heppyTree *ntuple = new heppyTree(t);
   int numEvents = t->GetEntries();
-  norm=float(numEvents);
-
+  
   selectBaseline<heppyTree> *selectBase = new selectBaseline<heppyTree>(ntuple,"test");
 
   ntuple->fChain->SetBranchStatus("*",0);
@@ -63,12 +66,13 @@ int main(int argc, char** argv){
   ntuple->fChain->SetBranchStatus("Flag_METFilters",1);
   ntuple->fChain->SetBranchStatus("Flag_CSCTightHalo2015Filter",1);
   ntuple->fChain->SetBranchStatus("Flag_eeBadScFilter",1);
-  ntuple->fChain->SetBranchStatus("HLT2_BIT_HLT_PFMET90_PFMHT90_IDTight_v",1);
-  ntuple->fChain->SetBranchStatus("HLT2_BIT_HLT_PFMET100_PFMHT100_IDTight_v",1);
-  ntuple->fChain->SetBranchStatus("HLT2_BIT_HLT_PFMET110_PFMHT110_IDTight_v",1);
-  ntuple->fChain->SetBranchStatus("HLT2_BIT_HLT_PFMET120_PFMHT120_IDTight_v",1);
-  ntuple->fChain->SetBranchStatus("HLT2_BIT_HLT_PFMET170_NoiseCleaned_v",1);
-  ntuple->fChain->SetBranchStatus("HLT2_BIT_HLT_PFHT800_v",1) ;
+  ntuple->fChain->SetBranchStatus("HLT_BIT_HLT_PFMET90_PFMHT90_IDTight_v",1);
+  ntuple->fChain->SetBranchStatus("HLT_BIT_HLT_PFMET100_PFMHT100_IDTight_v",1);
+  ntuple->fChain->SetBranchStatus("HLT_BIT_HLT_PFMET110_PFMHT110_IDTight_v",1);
+  ntuple->fChain->SetBranchStatus("HLT_BIT_HLT_PFMET120_PFMHT120_IDTight_v",1);
+  ntuple->fChain->SetBranchStatus("HLT_BIT_HLT_PFMET170_NoiseCleaned_v",1);
+  ntuple->fChain->SetBranchStatus("HLT_BIT_HLT_PFHT350_PFMET100_v",1);
+  ntuple->fChain->SetBranchStatus("HLT_BIT_HLT_PFHT800_v",1) ;
   ntuple->fChain->SetBranchStatus("met_pt",1) ;
   ntuple->fChain->SetBranchStatus("met_phi",1) ;
   ntuple->fChain->SetBranchStatus("nGenHiggsBoson",1) ;
@@ -117,13 +121,14 @@ int main(int argc, char** argv){
   ntuple->fChain->SetBranchStatus("FatjetAK08ungroomed_ChadronFlavour",1);
 
   TTree* outputTree = ntuple->fChain->CloneTree(0);  
-  outputTree->Branch("norm",&norm,"norm/F");
-  outputTree->SetBranchAddress("xsec",&xsec);
+  //outputTree->Branch("weight",&weight,"weight/D");
+  outputTree->SetBranchAddress("xsec",&weight);
   
   for( int i = 0 ; i < numEvents ; i++ ){
     if( i%10000 == 0 ) std::cout << "Event " << i << "/" << numEvents << endl;
     t->GetEntry(i);
     xsec = xsmap[fmap[argv[1]]]; 
+    weight = xsec/norm;
     if( selectBase->process() )
       outputTree->Fill();
   }
@@ -134,7 +139,8 @@ int main(int argc, char** argv){
 		 argv[1])-smap[fmap[argv[1]]]->begin();
 
   char outputFileName[200];
-  sprintf(outputFileName,"%s/heppySkim_%s_%i.root",argv[2],fmap[argv[1]].Data(),pos);
+  sprintf(outputFileName,"heppySkim_%s_%i.root",fmap[argv[1]].Data(),pos);
+  std::cout << "outputFile: " << outputFileName << std::endl;
   TFile* outputFile = new TFile(outputFileName,"RECREATE");
   cout << "save tree" << endl;
   selectBase->histo->Write("baselineYields");
@@ -144,4 +150,5 @@ int main(int argc, char** argv){
   delete ntuple;
   delete selectBase;
 
+  std::cout << "done..." << std::endl;
 }  

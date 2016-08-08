@@ -5,4 +5,6 @@
 */*exe
 */*stdout
 */*stderr
+*/*condor
 */*tar
+*/*dag*
