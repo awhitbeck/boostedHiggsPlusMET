@@ -198,7 +198,8 @@ public :
 
 #endif
 
-#ifdef heppySkimTree_cxx
+#ifndef heppySkimTree_cxx
+#define heppySkimTree_cxx
 heppySkimTree::heppySkimTree(TTree *tree) : fChain(0) 
 {
 // if parameter tree is not specified (or zero), connect the file
