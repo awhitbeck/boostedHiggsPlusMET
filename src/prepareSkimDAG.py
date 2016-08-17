@@ -27,7 +27,7 @@ for f in reversed(inputs.readlines()):
     #print "file:",inputFile
     #print "norm:",norm 
     dagFiles[sample].write("JOB baselineSkim_{0}_{1} baselineSkim.jdl \n".format(sample,indices[sample]))
-    dagFiles[sample].write("VARS baselineSkim_{0}_{1} arguments=\"{2} root://cmseos.fnal.gov//store/user/awhitbe1/heppySkims_V23/ {3}\" \n".format(sample,indices[sample],inputFile,norm))
+    dagFiles[sample].write("VARS baselineSkim_{0}_{1} arguments=\"{2} root://cmseos.fnal.gov//store/user/awhitbe1/heppySkims_V23v2/ {3}\" \n".format(sample,indices[sample],inputFile,norm))
     indices[sample]=indices[sample]+1
 
 #for sample,dagFile in enumerate(dagFiles) : 

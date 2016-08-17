@@ -84,13 +84,13 @@ int main(int argc, char** argv){
   ntuple->fChain->SetBranchStatus("GenHiggsBoson_charge",1);
   ntuple->fChain->SetBranchStatus("GenHiggsBoson_status",1);
   ntuple->fChain->SetBranchStatus("naLeptons",1)      ;
-  ntuple->fChain->SetBranchStatus("aLeptons_charge",1);
-  ntuple->fChain->SetBranchStatus("aLeptons_tightId",1);
-  ntuple->fChain->SetBranchStatus("aLeptons_pdgId",1) ;
-  ntuple->fChain->SetBranchStatus("aLeptons_pt",1)    ;
-  ntuple->fChain->SetBranchStatus("aLeptons_eta",1)   ;
-  ntuple->fChain->SetBranchStatus("aLeptons_phi",1)   ;
-  ntuple->fChain->SetBranchStatus("aLeptons_mass",1)  ;
+  ntuple->fChain->SetBranchStatus("vLeptons_charge",1);
+  ntuple->fChain->SetBranchStatus("vLeptons_tightId",1);
+  ntuple->fChain->SetBranchStatus("vLeptons_pdgId",1) ;
+  ntuple->fChain->SetBranchStatus("vLeptons_pt",1)    ;
+  ntuple->fChain->SetBranchStatus("vLeptons_eta",1)   ;
+  ntuple->fChain->SetBranchStatus("vLeptons_phi",1)   ;
+  ntuple->fChain->SetBranchStatus("vLeptons_mass",1)  ;
   ntuple->fChain->SetBranchStatus("nJet",1)           ;
   ntuple->fChain->SetBranchStatus("Jet_btagCSV",1)    ;
   ntuple->fChain->SetBranchStatus("Jet_btagCMVA",1)   ;
@@ -119,6 +119,7 @@ int main(int argc, char** argv){
   ntuple->fChain->SetBranchStatus("FatjetAK08ungroomed_Flavour",1);
   ntuple->fChain->SetBranchStatus("FatjetAK08ungroomed_BhadronFlavour",1);
   ntuple->fChain->SetBranchStatus("FatjetAK08ungroomed_ChadronFlavour",1);
+  ntuple->fChain->SetBranchStatus("*SubjetAK08softdrop*",1);
 
   TTree* outputTree = ntuple->fChain->CloneTree(0);  
   //outputTree->Branch("weight",&weight,"weight/D");
