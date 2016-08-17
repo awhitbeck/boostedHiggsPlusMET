@@ -20,6 +20,15 @@ double fillLeadingJetMass(heppySkimTree* ntuple){
     return ntuple->FatjetAK08ungroomed_mpruned[0];
 }
 
+double fillLeadingBBtagJetMass(heppySkimTree* ntuple){
+  if(ntuple->nFatjetAK08ungroomed<=1) 
+    return -1.;
+  else
+    if( ntuple->FatjetAK08ungroomed_bbtag[0] >= ntuple->FatjetAK08ungroomed_bbtag[1] )
+      return ntuple->FatjetAK08ungroomed_mpruned[0];
+    else
+      return ntuple->FatjetAK08ungroomed_mpruned[1];
+}
 
 double fillSubLeadingJetMass(heppySkimTree* ntuple){
   if(ntuple->nFatjetAK08ungroomed<=1) 
@@ -219,33 +228,38 @@ bool baselineCut(heppySkimTree* ntuple){
 
 }
 
-bool taggingSRCut(heppySkimTree* ntuple ){ 
+bool taggingCut(heppySkimTree* ntuple ){ 
   return ( baselineCut(ntuple) && 
 	   ( ntuple->FatjetAK08ungroomed_bbtag[0] > bbtagCut || 
 	     ntuple->FatjetAK08ungroomed_bbtag[1] > bbtagCut ));
 }
 
-bool taggingSBCut(heppySkimTree* ntuple ){
+bool antiTaggingCut(heppySkimTree* ntuple ){
   return ( baselineCut(ntuple) && 
 	   ntuple->FatjetAK08ungroomed_bbtag[0] < bbtagCut && 
 	   ntuple->FatjetAK08ungroomed_bbtag[1] < bbtagCut );
 }
 
-bool singleHiggsTagCut(heppySkimTree* ntuple , int nthJet = 0 ){
+bool singleHiggsTagCut(heppySkimTree* ntuple ){
   double HT = fillHT(ntuple);
 
   return ( ntuple->naLeptons == 0            &&
 	   ntuple->met_pt > 300.             &&
 	   HT > 600.                         &&
-	   ntuple->nFatjetAK08ungroomed > nthJet &&
-	   ntuple->FatjetAK08ungroomed_pt[nthJet] > 300. && 
-	   ntuple->FatjetAK08ungroomed_mpruned[nthJet] > 85. && 
-	   ntuple->FatjetAK08ungroomed_mpruned[nthJet] < 135. && 
-	   ntuple->FatjetAK08ungroomed_bbtag[nthJet] > bbtagCut ); 
+	   ntuple->nFatjetAK08ungroomed > 1 &&
+	   ntuple->FatjetAK08ungroomed_pt[0] > 300. && 
+	   ntuple->FatjetAK08ungroomed_pt[1] > 300. && 
+	   ( ntuple->FatjetAK08ungroomed_mpruned[0] > 85. && 
+	     ntuple->FatjetAK08ungroomed_mpruned[0] < 135. && 
+	     ntuple->FatjetAK08ungroomed_bbtag[0] > bbtagCut ) ||
+	   ( ntuple->FatjetAK08ungroomed_mpruned[1] > 85. && 
+	     ntuple->FatjetAK08ungroomed_mpruned[1] < 135. && 
+	     ntuple->FatjetAK08ungroomed_bbtag[1] > bbtagCut ) );
+
 
 }
 
-bool doubleHiggsTagCut(heppySkimTree* ntuple , int nthJet = 0 ){
+bool doubleHiggsTagCut(heppySkimTree* ntuple ){
   double HT = fillHT(ntuple);
 
   return ( ntuple->naLeptons == 0            &&
