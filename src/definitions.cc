@@ -205,6 +205,46 @@ double fillAnalysisBins(heppySkimTree* ntuple){
     return -1.;
 }
 
+double fillRA2b10Bins(heppySkimTree* ntuple){
+  double MET = ntuple->met_pt;
+  double HT = fillHT(ntuple);
+
+  if( MET > 300. && MET < 350. ){
+    if( HT > 300. && HT < 500. ){
+      return 1.;
+    }else if( HT > 500. && HT < 1000. ){
+      return 2.;
+    }else if( HT > 1000. ){
+      return 3.;
+    }else 
+      return -1.;
+  }else if( MET > 350. && MET < 500. ){
+    if( HT > 350. && HT < 500. ){
+      return 4.;
+    }else if( HT > 500. && HT < 1000. ){
+      return 5.;
+    }else if( HT > 1000. ){
+      return 6.;
+    }else 
+      return -1.;
+  }else if( MET > 500. && MET < 750. ){
+    if( HT > 500. && HT < 1000. ){
+      return 7.;
+    }else if( HT > 1000. ){
+      return 8.;
+    }else 
+      return -1.;
+  }else if( MET > 750. ){
+    if( HT > 750. && HT < 1500. ){
+      return 9.;
+    }else if( HT > 1500. ){
+      return 10.;
+    }else
+      return -1.;
+  }else 
+    return -1.;
+}
+
 bool ptBinCut(heppySkimTree* ntuple , int ithBin){
   if( ithBin > 5 ) return false;
   double ptCut[6] = {300.,400.,500.,700.,1000.,999999.};
