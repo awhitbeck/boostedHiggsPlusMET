@@ -63,7 +63,7 @@ class plot{
     if( histoMap.find(ntuple) != histoMap.end() ){
       histoMap[ntuple]->Fill(fillerFunc(ntuple),ntuple->xsec*lumi);
     }else{
-      cout << "plot::fill - ERROR: key not found, " << ntuple << endl;
+      cout << "plot::fill - ERROR: key not found: " << ntuple << endl;
     }
   };
 
@@ -71,7 +71,7 @@ class plot{
     if( signalHistoMap.find(ntuple) != signalHistoMap.end() ){
       signalHistoMap[ntuple]->Fill(fillerFunc(ntuple),ntuple->xsec*lumi);
     }else{
-      cout << "plot::fill - ERROR: key not found, " << ntuple << endl;
+      cout << "plot::fillSignal - ERROR: key not found, " << ntuple << endl;
     }
   };
 
@@ -128,6 +128,26 @@ class plot{
       }else
 	sum->Add(it->second);
     }
+  };
+
+  void Write(){
+
+    for( map<heppySkimTree*,TH1F*>::iterator it = histoMap.begin() ;
+	 it != histoMap.end() ; 
+	 ++it ){
+      if( it->second ) 
+	it->second->Write();
+    }
+
+    for( map<heppySkimTree*,TH1F*>::iterator it = signalHistoMap.begin() ;
+	 it != signalHistoMap.end() ; 
+	 ++it ){
+      if( it->second ) 
+	it->second->Write();
+    }
+    //if( dataHist ) 
+    //  dataHist->Write();
+
   };
 
   void Draw(TCanvas* can,
