@@ -83,19 +83,19 @@ int main(int argc, char** argv){
     for( int iPlot = 0 ; iPlot<SRplots.size() ; iPlot++){
       SRplots[iPlot].addNtuple(ntuple,skims.sampleName[iSample]);
       SBplots[iPlot].addNtuple(ntuple,skims.sampleName[iSample]);
-      RpassFailNum.addNtuple(ntuple,skims.sampleName[iSample]);
-      RpassFailDenom.addNtuple(ntuple,skims.sampleName[iSample]);
-      RpassFailNumVersusPt.addNtuple(ntuple,skims.sampleName[iSample]);
-      RpassFailDenomVersusPt.addNtuple(ntuple,skims.sampleName[iSample]);
-      RpassFailNumVersusMET.addNtuple(ntuple,skims.sampleName[iSample]);
-      RpassFailDenomVersusMET.addNtuple(ntuple,skims.sampleName[iSample]);
-      RpassFailNumVersusHT.addNtuple(ntuple,skims.sampleName[iSample]);
-      RpassFailDenomVersusHT.addNtuple(ntuple,skims.sampleName[iSample]);
-      SB.addNtuple(ntuple,skims.sampleName[iSample]);
-      SR.addNtuple(ntuple,skims.sampleName[iSample]);
-      SBVersusAnalysisBin.addNtuple(ntuple,skims.sampleName[iSample]);
-      SRVersusAnalysisBin.addNtuple(ntuple,skims.sampleName[iSample]);
     }
+    RpassFailNum.addNtuple(ntuple,skims.sampleName[iSample]);
+    RpassFailDenom.addNtuple(ntuple,skims.sampleName[iSample]);
+    RpassFailNumVersusPt.addNtuple(ntuple,skims.sampleName[iSample]);
+    RpassFailDenomVersusPt.addNtuple(ntuple,skims.sampleName[iSample]);
+    RpassFailNumVersusMET.addNtuple(ntuple,skims.sampleName[iSample]);
+    RpassFailDenomVersusMET.addNtuple(ntuple,skims.sampleName[iSample]);
+    RpassFailNumVersusHT.addNtuple(ntuple,skims.sampleName[iSample]);
+    RpassFailDenomVersusHT.addNtuple(ntuple,skims.sampleName[iSample]);
+    SB.addNtuple(ntuple,skims.sampleName[iSample]);
+    SR.addNtuple(ntuple,skims.sampleName[iSample]);
+    SBVersusAnalysisBin.addNtuple(ntuple,skims.sampleName[iSample]);
+    SRVersusAnalysisBin.addNtuple(ntuple,skims.sampleName[iSample]);
     
     int numEvents = ntuple->fChain->GetEntries();
     for( int iEvt = 0 ; iEvt < numEvents ; iEvt++ ){
@@ -103,12 +103,12 @@ int main(int argc, char** argv){
       if( iEvt % 1000000 == 0 ) cout << skims.sampleName[iSample] << ": " << iEvt << "/" << numEvents << endl;
       if(!baselineCut(ntuple)) continue; 
       for( int iPlot = 0 ; iPlot<SRplots.size() ; iPlot++){
-	if( taggingSRCut(ntuple) && ptBinCut(ntuple,iPlot) )
+	if( taggingCut(ntuple) && ptBinCut(ntuple,iPlot) )
 	  SRplots[iPlot].fill(ntuple);
-	if( taggingSBCut(ntuple) && ptBinCut(ntuple,iPlot) )
+	if( antiTaggingCut(ntuple) && ptBinCut(ntuple,iPlot) )
 	  SBplots[iPlot].fill(ntuple);
       }
-      if( taggingSBCut(ntuple) ){
+      if( taggingCut(ntuple) ){
 	double testMass = fillLooseSingleJetMass(ntuple);
 	if( testMass > 95. && testMass < 135. ){ 
 	  RpassFailNum.fill(ntuple);
@@ -147,12 +147,12 @@ int main(int argc, char** argv){
     if( iEvt % 1000000 == 0 ) cout << "Data: " << iEvt << "/" << numEvents << endl;
     if(!baselineCut(skims.dataNtuple)) continue; 
     for( int iPlot = 0 ; iPlot<SRplots.size() ; iPlot++){
-      //if( taggingSRCut(skims.dataNtuple) && ptBinCut(skims.dataNtuple,iPlot) )
+      //if( taggingCut(skims.dataNtuple) && ptBinCut(skims.dataNtuple,iPlot) )
       //  SRplots[iPlot].fillData(skims.dataNtuple);
-      if( taggingSBCut(skims.dataNtuple) && ptBinCut(skims.dataNtuple,iPlot) )
+      if( antiTaggingCut(skims.dataNtuple) && ptBinCut(skims.dataNtuple,iPlot) )
 	SBplots[iPlot].fillData(skims.dataNtuple);
     }
-    if( taggingSBCut(skims.dataNtuple) ){
+    if( antiTaggingCut(skims.dataNtuple) ){
       double testMass = fillLooseSingleJetMass(skims.dataNtuple);
       if( testMass > 95. && testMass < 135. ){
 	RpassFailNumData.fillData(skims.dataNtuple);
@@ -160,7 +160,7 @@ int main(int argc, char** argv){
 	RpassFailDenomData.fillData(skims.dataNtuple);      
       }
     }
-    if( taggingSRCut(skims.dataNtuple) ){
+    if( taggingCut(skims.dataNtuple) ){
       double testMass = fillLooseSingleJetMass(skims.dataNtuple);
       if( testMass > 95. && testMass < 135. ){
 	SRDataVersusAnalysisBin.fillData(skims.dataNtuple);
@@ -287,6 +287,7 @@ int main(int argc, char** argv){
   closureTestVersusAnalysisBin->Scale(RpassFailNum.sum->GetBinContent(1)/RpassFailDenom.sum->GetBinContent(1));
   closureTestVersusAnalysisBin->Divide(SRVersusAnalysisBin.sum);
   closureTestVersusAnalysisBin->SetMarkerStyle(8);
+  closureTestVersusAnalysisBin->GetYaxis()->SetRangeUser(0.,2.5);
   closureTestVersusAnalysisBin->Draw("e1");
   for( int i = 1 ; i <= closureTestVersusAnalysisBin->GetNbinsX() ; i++ ){
     cout << "bin " << i << " " << closureTestVersusAnalysisBin->GetBinContent(i) << "+/-" << closureTestVersusAnalysisBin->GetBinError(i) << endl;
@@ -315,11 +316,11 @@ int main(int argc, char** argv){
   SRDataVersusAnalysisBin.dataHist->Draw("e1,SAME");
 
   canPrediction->cd(2);
-  TPad *pad1 = new TPad("pad1","top pad",0,0.35,1,0.99);
-  pad1->Draw();
-  TPad *pad2 = new TPad("pad2","bottom pad",0,0,1,0.3);
-  pad2->Draw();
-  pad1->cd();
+  //TPad *pad1 = new TPad("pad1","top pad",0,0.35,1,0.99);
+  //pad1->Draw();
+  //TPad *pad2 = new TPad("pad2","bottom pad",0,0,1,0.3);
+  //pad2->Draw();
+  //pad1->cd();
   TH1F* ratioVersusAnalysisBin = new TH1F(*predictionVersusAnalysisBin);
   ratioVersusAnalysisBin->SetNameTitle("ratioVersusAnalysisBin",";Analysis Bin;Predicted/Observed");
   ratioVersusAnalysisBin->Divide(SRDataVersusAnalysisBin.dataHist);
