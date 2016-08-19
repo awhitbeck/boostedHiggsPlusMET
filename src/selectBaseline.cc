@@ -38,6 +38,7 @@ public :
     ntuple->fChain->SetBranchStatus("Jet_mass",1);
     ntuple->fChain->SetBranchStatus("nJet",1);
     */
+
     ntuple->fChain->SetBranchStatus("naLeptons",1);
     ntuple->fChain->SetBranchStatus("aLeptons_pt",1);
     ntuple->fChain->SetBranchStatus("aLeptons_isPFMuon",1);
@@ -60,20 +61,23 @@ public :
     histo->Fill(0);
 
     for( int iLep = 0 ; iLep < ntuple->naLeptons ; iLep++ ){
-      if( ntuple->aLeptons_pt[iLep]>20. && ntuple->aLeptons_isPFMuon[iLep] && (ntuple->aLeptons_isGlobalMuon[iLep]||ntuple->aLeptons_isTrackerMuon[iLep]) )
+      if( (ntuple->aLeptons_pt)[iLep]>20. && ntuple->aLeptons_isPFMuon[iLep] && (ntuple->aLeptons_isGlobalMuon[iLep]||ntuple->aLeptons_isTrackerMuon[iLep]) ){
 	return false;
-    }
+      }
+   }
     histo->Fill(1);
     for( int iLep = 0 ; iLep < ntuple->naLeptons ; iLep++ ){
       if( ntuple->aLeptons_pt[iLep]>20. && 
 	  ( ( abs(ntuple->aLeptons_etaSc[iLep]) < 1.479 && ntuple->aLeptons_relIso03[iLep] < 0.0994 && ntuple->aLeptons_eleSieie[iLep] < 0.011 && abs(ntuple->aLeptons_eleDEta[iLep]) < 0.00477 && abs(ntuple->aLeptons_eleDPhi[iLep]) < 0.222 && ntuple->aLeptons_eleHoE[iLep] < 0.298 && ntuple->aLeptons_eleooEmooP[iLep] < 0.241 && ntuple->aLeptons_eleExpMissingInnerHits[iLep] <= 1 ) ||
-	    ( abs(ntuple->aLeptons_etaSc[iLep]) > 1.479 && ntuple->aLeptons_relIso03[iLep] < 0.107 && ntuple->aLeptons_eleSieie[iLep] < 0.0314 && abs(ntuple->aLeptons_eleDEta[iLep]) < 0.00868 && abs(ntuple->aLeptons_eleDPhi[iLep]) < 0.213 && ntuple->aLeptons_eleHoE[iLep] < 0.101 && ntuple->aLeptons_eleooEmooP[iLep] < 0.14 && ntuple->aLeptons_eleExpMissingInnerHits[iLep] <= 1 ) ))
+	    ( abs(ntuple->aLeptons_etaSc[iLep]) > 1.479 && ntuple->aLeptons_relIso03[iLep] < 0.107 && ntuple->aLeptons_eleSieie[iLep] < 0.0314 && abs(ntuple->aLeptons_eleDEta[iLep]) < 0.00868 && abs(ntuple->aLeptons_eleDPhi[iLep]) < 0.213 && ntuple->aLeptons_eleHoE[iLep] < 0.101 && ntuple->aLeptons_eleooEmooP[iLep] < 0.14 && ntuple->aLeptons_eleExpMissingInnerHits[iLep] <= 1 ) )){
 	return false;
+      }
     }
     histo->Fill(2);
     if( ntuple->met_pt>200. ) histo->Fill(3); 
-    else return false;
-
+    else{
+      return false;
+    }
     return true;
 
   };
