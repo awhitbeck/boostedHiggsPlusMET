@@ -1,8 +1,8 @@
-/store/user/awhitbe1/heppyTrees_80X_T5GH/heppyTree_T5GH_mGluino_1300_mNLSP_1250.root T5GH_mGluino_1300_mNLSP_1250 0.0460525
-/store/user/awhitbe1/heppyTrees_80X_T5GH/heppyTree_T5GH_mGluino_1400_mNLSP_1350.root T5GH_mGluino_1400_mNLSP_1350 0.0252977
-/store/user/awhitbe1/heppyTrees_80X_T5GH/heppyTree_T5GH_mGluino_1500_mNLSP_1450.root T5GH_mGluino_1500_mNLSP_1450 0.0141903
-/store/user/awhitbe1/heppyTrees_80X_T5GH/heppyTree_T5GH_mGluino_1600_mNLSP_1550.root T5GH_mGluino_1600_mNLSP_1550 0.00810078
-/store/user/awhitbe1/heppyTrees_80X_T5GH/heppyTree_T5GH_mGluino_1700_mNLSP_1650.root T5GH_mGluino_1700_mNLSP_1650 0.00470323
+/store/user/awhitbe1/heppyTrees_80X_T5GH/heppyTree_T5GH_mGluino_1300_mNLSP_1250.root T5GH_mGluino_1300_mNLSP_1250 0.0165789
+/store/user/awhitbe1/heppyTrees_80X_T5GH/heppyTree_T5GH_mGluino_1400_mNLSP_1350.root T5GH_mGluino_1400_mNLSP_1350 0.009107172
+/store/user/awhitbe1/heppyTrees_80X_T5GH/heppyTree_T5GH_mGluino_1500_mNLSP_1450.root T5GH_mGluino_1500_mNLSP_1450 0.005108508
+/store/user/awhitbe1/heppyTrees_80X_T5GH/heppyTree_T5GH_mGluino_1600_mNLSP_1550.root T5GH_mGluino_1600_mNLSP_1550 0.0029162808 
+/store/user/awhitbe1/heppyTrees_80X_T5GH/heppyTree_T5GH_mGluino_1700_mNLSP_1650.root T5GH_mGluino_1700_mNLSP_1650 0.0016931628
 /store/user/lpchbb/HeppyNtuples/V23/HTMHT/VHBB_HEPPY_V23_HTMHT__Run2016B-PromptReco-v2/160717_203328/0000/tree_1.root HTMHT 1.
 /store/user/lpchbb/HeppyNtuples/V23/HTMHT/VHBB_HEPPY_V23_HTMHT__Run2016B-PromptReco-v2/160717_203328/0000/tree_10.root HTMHT 1.
 /store/user/lpchbb/HeppyNtuples/V23/HTMHT/VHBB_HEPPY_V23_HTMHT__Run2016B-PromptReco-v2/160717_203328/0000/tree_100.root HTMHT 1.

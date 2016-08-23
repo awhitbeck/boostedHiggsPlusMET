@@ -10,7 +10,8 @@
 
 using namespace std;
 
-double lumi=9200.;
+//double lumi=9200.;
+double lumi=15000.;
 
 class plot{
 
@@ -152,7 +153,8 @@ class plot{
 
   void Draw(TCanvas* can,
 	    vector<heppySkimTree*>ntuples,
-	    vector<heppySkimTree*>signalNtuples){
+	    vector<heppySkimTree*>signalNtuples,
+	    TString dir = "./" ){
 
     if( ! can ) return ;
     can->cd();
@@ -180,9 +182,9 @@ class plot{
     stack->SetMinimum(0.1);
 
     gPad->SetLogy(false);
-    can->SaveAs(label+".png");
+    can->SaveAs(dir+"/"+label+".png");
     gPad->SetLogy(true);
-    can->SaveAs(label+"_LogY.png");
+    can->SaveAs(dir+"/"+label+"_LogY.png");
 
     TCanvas* legCan = new TCanvas("legCan","legCan",500,500);
     TLegend* leg = new TLegend(0.1,.1,.9,.9);
@@ -196,7 +198,7 @@ class plot{
     }
     // leg->AddEntry(dataHist,"data","p");
     leg->Draw();
-    legCan->SaveAs("legend.png");
+    legCan->SaveAs(dir+"/legend.png");
   }
 
   TString label;

@@ -27,11 +27,12 @@ int main(int argc, char** argv){
 
   skimSamples skims;
 
-  plot JMplot_BBtagSR_pt300_400(*fillLooseSingleJetMass,"JMplot_BBtagSR_pt300_400","leading m_{J} [GeV]",15,55.,205.);
-  plot JMplot_BBtagSR_pt400_500(*fillLooseSingleJetMass,"JMplot_BBtagSR_pt400_500","leading m_{J} [GeV]",15,55.,205.);
-  plot JMplot_BBtagSR_pt500_700(*fillLooseSingleJetMass,"JMplot_BBtagSR_pt500_700","leading m_{J} [GeV]",15,55.,205.);
-  plot JMplot_BBtagSR_pt700_1000(*fillLooseSingleJetMass,"JMplot_BBtagSR_pt700_1000","leading m_{J} [GeV]",15,55.,205.);
-  plot JMplot_BBtagSR_pt1000(*fillLooseSingleJetMass,"JMplot_BBtagSR_pt1000","leading m_{J} [GeV]",15,55.,205.);
+  plot JMplot_BBtagSR_pt300_400(*fillLeadingBBtagJetMass,"JMplot_BBtagSR_pt300_400","leading m_{J} [GeV]",15,55.,205.);
+  plot JMplot_BBtagSR_pt400_500(*fillLeadingBBtagJetMass,"JMplot_BBtagSR_pt400_500","leading m_{J} [GeV]",15,55.,205.);
+  plot JMplot_BBtagSR_pt500_700(*fillLeadingBBtagJetMass,"JMplot_BBtagSR_pt500_700","leading m_{J} [GeV]",15,55.,205.);
+  plot JMplot_BBtagSR_pt700_1000(*fillLeadingBBtagJetMass,"JMplot_BBtagSR_pt700_1000","leading m_{J} [GeV]",15,55.,205.);
+  plot JMplot_BBtagSR_pt1000(*fillLeadingBBtagJetMass,"JMplot_BBtagSR_pt1000","leading m_{J} [GeV]",15,55.,205.);
+  plot JptPlot_SR(*fillLeadingBBtagJetPt,"JptPlot_SR","leading p_{t} [GeV]",7,300.,1000.);
 
   vector<plot> SRplots;
   SRplots.push_back(JMplot_BBtagSR_pt300_400);
@@ -39,13 +40,15 @@ int main(int argc, char** argv){
   SRplots.push_back(JMplot_BBtagSR_pt500_700);
   SRplots.push_back(JMplot_BBtagSR_pt700_1000);
   SRplots.push_back(JMplot_BBtagSR_pt1000);
+  SRplots.push_back(JptPlot_SR);
 
   // inverted BBtag plots
-  plot JMplot_BBtagSB_pt300_400(*fillLooseSingleJetMass,"JMplot_BBtagSB_pt300_400","leading m_{J} [GeV]",15,55.,205.);
-  plot JMplot_BBtagSB_pt400_500(*fillLooseSingleJetMass,"JMplot_BBtagSB_pt400_500","leading m_{J} [GeV]",15,55.,205.);
-  plot JMplot_BBtagSB_pt500_700(*fillLooseSingleJetMass,"JMplot_BBtagSB_pt500_700","leading m_{J} [GeV]",15,55.,205.);
-  plot JMplot_BBtagSB_pt700_1000(*fillLooseSingleJetMass,"JMplot_BBtagSB_pt700_1000","leading m_{J} [GeV]",15,55.,205.);
-  plot JMplot_BBtagSB_pt1000(*fillLooseSingleJetMass,"JMplot_BBtagSB_pt1000","leading m_{J} [GeV]",15,55.,205.);
+  plot JMplot_BBtagSB_pt300_400(*fillLeadingBBtagJetMass,"JMplot_BBtagSB_pt300_400","leading m_{J} [GeV]",15,55.,205.);
+  plot JMplot_BBtagSB_pt400_500(*fillLeadingBBtagJetMass,"JMplot_BBtagSB_pt400_500","leading m_{J} [GeV]",15,55.,205.);
+  plot JMplot_BBtagSB_pt500_700(*fillLeadingBBtagJetMass,"JMplot_BBtagSB_pt500_700","leading m_{J} [GeV]",15,55.,205.);
+  plot JMplot_BBtagSB_pt700_1000(*fillLeadingBBtagJetMass,"JMplot_BBtagSB_pt700_1000","leading m_{J} [GeV]",15,55.,205.);
+  plot JMplot_BBtagSB_pt1000(*fillLeadingBBtagJetMass,"JMplot_BBtagSB_pt1000","leading m_{J} [GeV]",15,55.,205.);
+  plot JptPlot_SB(*fillLeadingBBtagJetPt,"JptPlot_SB","leading p_{t} [GeV]",7,300.,1000.);
 
   vector<plot> SBplots;
   SBplots.push_back(JMplot_BBtagSB_pt300_400);
@@ -53,6 +56,7 @@ int main(int argc, char** argv){
   SBplots.push_back(JMplot_BBtagSB_pt500_700);
   SBplots.push_back(JMplot_BBtagSB_pt700_1000);
   SBplots.push_back(JMplot_BBtagSB_pt1000);
+  SBplots.push_back(JptPlot_SB);
 
   plot RpassFailNum(*fillOne,"RpassFailNum","A.U.",1,.5,1.5);
   plot RpassFailDenom(*fillOne,"RpassFailNum","p_{T,J} [GeV]",1,.5,1.5);
@@ -64,10 +68,12 @@ int main(int argc, char** argv){
   plot SBData(*fillOne,"SidebandYieldData","A.U.",1,.5,1.5);
   plot SRData(*fillOne,"SignalRegionYieldData","A.U.",1,.5,1.5);
 
-  plot SBVersusAnalysisBin(*fillAnalysisBins,"SidebandYieldVersusAnalysisBin","A.U.",8,.5,8.5);
-  plot SRVersusAnalysisBin(*fillAnalysisBins,"SignalRegionYieldVersusAnalysisBin","A.U.",8,.5,8.5);
-  plot SBDataVersusAnalysisBin(*fillAnalysisBins,"SidebandYieldDataVersusAnalysisBin","A.U.",8,.5,8.5);
-  plot SRDataVersusAnalysisBin(*fillAnalysisBins,"SignalRegionYieldDataVersusAnalysisBin","A.U.",8,.5,8.5);
+  double (*fillerFunc)(heppySkimTree*) = *fillAnalysisBins;
+
+  plot SBVersusAnalysisBin(fillerFunc,"SidebandYieldVersusAnalysisBin","A.U.",8,.5,8.5);
+  plot SRVersusAnalysisBin(fillerFunc,"SignalRegionYieldVersusAnalysisBin","A.U.",8,.5,8.5);
+  plot SBDataVersusAnalysisBin(fillerFunc,"SidebandYieldDataVersusAnalysisBin","A.U.",8,.5,8.5);
+  plot SRDataVersusAnalysisBin(fillerFunc,"SignalRegionYieldDataVersusAnalysisBin","A.U.",8,.5,8.5);
 
   plot RpassFailNumVersusPt(*fillLooseSinglePt,"RpassFailNumVersusPt","p_{T,J} [GeV]",10,300.,1500.);
   plot RpassFailDenomVersusPt(*fillLooseSinglePt,"RpassFailNumVersusPt","p_{T,J} [GeV]",10,300.,1500.);
@@ -109,15 +115,15 @@ int main(int argc, char** argv){
 	  SBplots[iPlot].fill(ntuple);
       }
       if( taggingCut(ntuple) ){
-	double testMass = fillLooseSingleJetMass(ntuple);
-	if( testMass > 95. && testMass < 135. ){ 
+	double testMass = fillLeadingBBtagJetMass(ntuple);
+	if( testMass > 85. && testMass < 135. ){ 
 	  RpassFailNum.fill(ntuple);
 	  RpassFailNumVersusPt.fill(ntuple);
 	  RpassFailNumVersusMET.fill(ntuple);
 	  RpassFailNumVersusHT.fill(ntuple);
 	  SRVersusAnalysisBin.fill(ntuple);
 	  SR.fill(ntuple);
-	}else if( testMass > 55. && testMass < 205. ){
+	}else if( testMass > 50. && testMass < 200. ){
 	  RpassFailDenom.fill(ntuple);
 	  RpassFailDenomVersusPt.fill(ntuple);
 	  RpassFailDenomVersusMET.fill(ntuple);
@@ -153,19 +159,19 @@ int main(int argc, char** argv){
 	SBplots[iPlot].fillData(skims.dataNtuple);
     }
     if( antiTaggingCut(skims.dataNtuple) ){
-      double testMass = fillLooseSingleJetMass(skims.dataNtuple);
-      if( testMass > 95. && testMass < 135. ){
+      double testMass = fillLeadingBBtagJetMass(skims.dataNtuple);
+      if( testMass > 85. && testMass < 135. ){
 	RpassFailNumData.fillData(skims.dataNtuple);
-      }else if( testMass > 55. && testMass < 205. ){ 
+      }else if( testMass > 50. && testMass < 200. ){ 
 	RpassFailDenomData.fillData(skims.dataNtuple);      
       }
     }
     if( taggingCut(skims.dataNtuple) ){
-      double testMass = fillLooseSingleJetMass(skims.dataNtuple);
-      if( testMass > 95. && testMass < 135. ){
+      double testMass = fillLeadingBBtagJetMass(skims.dataNtuple);
+      if( testMass > 85. && testMass < 135. ){
 	SRDataVersusAnalysisBin.fillData(skims.dataNtuple);
 	SRData.fillData(skims.dataNtuple);
-      }else if( testMass > 55. && testMass < 205. ){ 
+      }else if( testMass > 50. && testMass < 200. ){ 
 	SBDataVersusAnalysisBin.fillData(skims.dataNtuple);
 	SBData.fillData(skims.dataNtuple);
       }
@@ -174,7 +180,7 @@ int main(int argc, char** argv){
 
   TCanvas* can = new TCanvas("can","can",1200,800);
   can->Divide(3,2);
-  for( int iPlot = 0 ; iPlot<SRplots.size() ; iPlot++){
+  for( int iPlot = 0 ; iPlot<SRplots.size()-1 ; iPlot++){
     can->cd(iPlot+1);
     SRplots[iPlot].buildSum();
     SRplots[iPlot].sum->GetXaxis()->SetTitle("m_{J} [GeV]");
@@ -208,7 +214,15 @@ int main(int argc, char** argv){
 
   sprintf(saveString,"tagPassFailRatioVsPt_bbtag_%.1f.png",bbtagCut);
   can->SaveAs(saveString);  
-  
+
+  TCanvas* canPt = new TCanvas("canPt","canPt");
+  SRplots.back().buildSum();
+  SBplots.back().buildSum();
+  SRplots.back().sum->SetLineColor(2);
+  SRplots.back().sum->Draw("histo");
+  SBplots.back().sum->Draw("e1,SAME");
+  canPt->SaveAs("JetPt_SRversusSB.png");
+
   TCanvas* canRatio = new TCanvas("canRatio","canRatio",800,800);
   TGraphAsymmErrors* RpassFailGraph = new TGraphAsymmErrors();
   RpassFailNum.buildSum();
