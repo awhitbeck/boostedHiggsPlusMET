@@ -26,8 +26,15 @@ int main(int argc, char** argv){
   gROOT->ProcessLine("setTDRStyle()");
 
   skimSamples skims;
+  for( int i = 0 ; i < skims.sampleName.size() ; i++ ){
+    if( skims.sampleName[i] == "TT" ){
+      skims.ntuples.erase(skims.ntuples.begin()+i);
+      skims.sampleName.erase(skims.sampleName.begin()+i);
+      skims.fillColor.erase(skims.fillColor.begin()+i);
+    }
+  }
 
-  double (*fillerFunc)(heppySkimTree*) = *fillAnalysisBins;
+  double (*arbitrationFunc)(heppySkimTree*) = *fillSubLeadingJetMass;
 
   plot tagSR_versusMET(*fillMET,"tagSR_versusMET","E_{T}^{miss} [GeV]",10,300.,1300.);
   plot tagSB_versusMET(*fillMET,"tagSB_versusMET","E_{T}^{miss} [GeV]",10,300.,1300.);
@@ -49,7 +56,7 @@ int main(int argc, char** argv){
       if( iEvt % 1000000 == 0 ) cout << skims.sampleName[iSample] << ": " << iEvt << "/" << numEvents << endl;
       if(!baselineCut(ntuple)) continue; 
       if( taggingCut(ntuple) ){
-	double testMass = fillLeadingBBtagJetMass(ntuple);
+	double testMass = arbitrationFunc(ntuple);
 	if( testMass > 85. && testMass < 135. ){ 
 	  tagSR_versusMET.fill(ntuple);
 	}else if( testMass > 50. && testMass < 200. ){
@@ -57,7 +64,7 @@ int main(int argc, char** argv){
 	}
       }
       if( antiTaggingCut(ntuple) ){
-	double testMass = fillLeadingBBtagJetMass(ntuple);
+	double testMass = arbitrationFunc(ntuple);
 	if( testMass > 85. && testMass < 135. ){ 
 	  antitagSR_versusMET.fill(ntuple);
 	}else if( testMass > 50. && testMass < 200. ){
@@ -75,33 +82,16 @@ int main(int argc, char** argv){
   antitagSB_versusMET.buildSum();
   TH1F* prediction = new TH1F(*tagSR_versusMET.sum);
   prediction->SetNameTitle("prediction","prediction");
-  //TH1F* closure = new TH1F(*tagSR_versusMET.sum);
-  //closure->SetNameTitle("closure","closure");
-  //TH1F* RpassFail = new TH1F(*tagSR_versusMET.sum);
-  //RpassFail->SetNameTitle("RpassFail","RpassFail");
-  //TH1F* antitagRpassFail = new TH1F(*antitagSR_versusMET.sum);
-  //antitagRpassFail->SetNameTitle("antiTagRpassFail","antiTagRpassFail");
 
   for( int i = 1 ; i < prediction->GetNbinsX() ; i++ ){
     double pred = tagSB_versusMET.sum->GetBinContent(i);
     pred *= antitagSR_versusMET.sum->GetBinContent(i);
     if( antitagSB_versusMET.sum->GetBinContent(i) != 0. ){
       pred /= antitagSB_versusMET.sum->GetBinContent(i);
-      //antitagRpassFail->SetBinContent(i,antitagSR_versusMET.sum->GetBinContent(i)/antitagSB_versusMET.sum->GetBinContent(i));
     }else{
       pred /= 0.00000001;      
     }
     prediction->SetBinContent(i,pred);
-    //if( tagSR_versusMET.sum->GetBinContent(i) != 0. ){
-    //  closure->SetBinContent(i,pred/tagSR_versusMET.sum->GetBinContent(i)) ;
-    //}else{
-    //  closure->SetBinContent(i,pred/0.00000001);
-    //}
-    //if(tagSB_versusMET.sum->GetBinContent(i) != 0 ){
-      //RpassFail->SetBinContent(i,tagSR_versusMET.sum->GetBinContent(i)/tagSB_versusMET.sum->GetBinContent(i));
-    //}else{
-      //RpassFail->SetBinContent(i,tagSR_versusMET.sum->GetBinContent(i)/0.00000001);
-    //}
   }
   can->cd(1);
   TGraphAsymmErrors* RpassFail = new TGraphAsymmErrors();
@@ -141,7 +131,7 @@ int main(int argc, char** argv){
   closure->GetXaxis()->SetTitle("E_{T}^{miss} [GeV]");
   closure->Draw("A,p");
 
-  can->SaveAs("ABCDclosureTest_versusMET.png");
+  can->SaveAs("ABCDclosureTest_J2ptArbitration/ABCDclosureTest_versusMET.png");
 
 }
 
