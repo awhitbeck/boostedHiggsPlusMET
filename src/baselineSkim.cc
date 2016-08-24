@@ -93,9 +93,14 @@ int main(int argc, char** argv){
   ntuple->fChain->SetBranchStatus("vLeptons_mass",1)  ;
   ntuple->fChain->SetBranchStatus("naLeptons",1);
   ntuple->fChain->SetBranchStatus("aLeptons_pt",1);
+  ntuple->fChain->SetBranchStatus("aLeptons_eta",1);
+  ntuple->fChain->SetBranchStatus("aLeptons_phi",1);
+  ntuple->fChain->SetBranchStatus("aLeptons_mass",1);
   ntuple->fChain->SetBranchStatus("aLeptons_isPFMuon",1);
   ntuple->fChain->SetBranchStatus("aLeptons_isGlobalMuon",1);
   ntuple->fChain->SetBranchStatus("aLeptons_isTrackerMuon",1);
+  ntuple->fChain->SetBranchStatus("aLeptons_miniRelIso",1);
+  ntuple->fChain->SetBranchStatus("aLeptons_mediumMuonId",1);
   ntuple->fChain->SetBranchStatus("aLeptons_etaSc",1);
   ntuple->fChain->SetBranchStatus("aLeptons_relIso03",1);
   ntuple->fChain->SetBranchStatus("aLeptons_eleSieie",1);
@@ -135,7 +140,6 @@ int main(int argc, char** argv){
   ntuple->fChain->SetBranchStatus("*SubjetAK08softdrop*",1);
 
   TTree* outputTree = ntuple->fChain->CloneTree(0);  
-  //outputTree->Branch("weight",&weight,"weight/D");
   outputTree->SetBranchAddress("xsec",&weight);
   
   for( int i = 0 ; i < numEvents ; i++ ){
