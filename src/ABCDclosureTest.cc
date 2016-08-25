@@ -34,7 +34,7 @@ int main(int argc, char** argv){
     }
   }
 
-  double (*arbitrationFunc)(heppySkimTree*) = *fillSubLeadingJetMass;
+  double (*arbitrationFunc)(heppySkimTree*) = *fillLeadingBBtagJetMass;
 
   plot tagSR_versusMET(*fillMET,"tagSR_versusMET","E_{T}^{miss} [GeV]",10,300.,1300.);
   plot tagSB_versusMET(*fillMET,"tagSB_versusMET","E_{T}^{miss} [GeV]",10,300.,1300.);
@@ -131,7 +131,7 @@ int main(int argc, char** argv){
   closure->GetXaxis()->SetTitle("E_{T}^{miss} [GeV]");
   closure->Draw("A,p");
 
-  can->SaveAs("ABCDclosureTest_J2ptArbitration/ABCDclosureTest_versusMET.png");
+  can->SaveAs("ABCDclosureTest_J1bbtagArbitration/ABCDclosureTest_versusMET.png");
 
 }
 

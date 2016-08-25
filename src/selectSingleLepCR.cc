@@ -29,89 +29,49 @@ public :
   {
     ntuple = ntuple_;
     label = label_;
-    histo = new TH1F("selectSingleLepCRYields_"+label,"selectSingleLepCRYields_"+label,8,0.5,8.5);
+    histo = new TH1F("selectSingleLepCRYields_"+label,"selectSingleLepCRYields_"+label,3,0.5,3.5);
 
-    ntuple->fChain->SetBranchStatus("nvLeptons",1);
-    ntuple->fChain->SetBranchStatus("Jet_pt",1);
-    ntuple->fChain->SetBranchStatus("Jet_eta",1);
-    ntuple->fChain->SetBranchStatus("Jet_phi",1);
-    ntuple->fChain->SetBranchStatus("Jet_mass",1);
-    ntuple->fChain->SetBranchStatus("nJet",1);
+    ntuple->fChain->SetBranchStatus("naLeptons",1);
+    ntuple->fChain->SetBranchStatus("aLeptons_pt",1);
+    ntuple->fChain->SetBranchStatus("aLeptons_isPFMuon",1);
+    ntuple->fChain->SetBranchStatus("aLeptons_isGlobalMuon",1);
+    ntuple->fChain->SetBranchStatus("aLeptons_isTrackerMuon",1);
+    ntuple->fChain->SetBranchStatus("aLeptons_etaSc",1);
+    ntuple->fChain->SetBranchStatus("aLeptons_relIso03",1);
+    ntuple->fChain->SetBranchStatus("aLeptons_eleSieie",1);
+    ntuple->fChain->SetBranchStatus("aLeptons_eleDEta",1);
+    ntuple->fChain->SetBranchStatus("aLeptons_eleDPhi",1);
+    ntuple->fChain->SetBranchStatus("aLeptons_eleHoE",1);
+    ntuple->fChain->SetBranchStatus("aLeptons_eleExpMissingInnerHits",1);
+    ntuple->fChain->SetBranchStatus("aLeptons_eleooEmooP",1);
+    ntuple->fChain->SetBranchStatus("met_pt",1);
 
   };
 
   bool process( ) override {
 
-    int NJets = 0;
-    double HT = 0.;
-    TLorentzVector MHTvec(0.,0.,0.,0.);
-    double MHT = 0. ; 
-    double DeltaPhi1=-999.,DeltaPhi2=-999.,DeltaPhi3=-999.,DeltaPhi4=-999.;
-    TLorentzVector MHTjets[4];
-    int MHTjetCount = 0;
-    for( int i = 0 ; i < ntuple->nJet ; i++ ){
-      if( ntuple->Jet_pt[i] > 30. && fabs(ntuple->Jet_eta[i])<2.4 ){
-	NJets++;
-	HT+=ntuple->Jet_pt[i];
-      }// HT stuff
-      if( ntuple->Jet_pt[i] > 30. && fabs(ntuple->Jet_eta[i])<5.0 ){
-	TLorentzVector temp(0.,0.,0.,0.);
-	temp.SetPtEtaPhiM(ntuple->Jet_pt[i],ntuple->Jet_eta[i],ntuple->Jet_phi[i],ntuple->Jet_mass[i]);
-	MHTvec+=temp;
-
-	if( MHTjetCount < 4 ){
-	  MHTjets[MHTjetCount] = temp;
-	  MHTjetCount++;
-	}
-
-      }// MHT stuff
-      
-      if( MHTjetCount > 0 ){
-	DeltaPhi1 = fabs(MHTvec.DeltaPhi(MHTjets[0]));
-      }
-      if( MHTjetCount > 1 ){
-	DeltaPhi2 = fabs(MHTvec.DeltaPhi(MHTjets[1]));
-      }
-      if( MHTjetCount > 2 ){
-	DeltaPhi3 = fabs(MHTvec.DeltaPhi(MHTjets[2]));
-      }
-      if( MHTjetCount > 3 ){
-	DeltaPhi4 = fabs(MHTvec.DeltaPhi(MHTjets[3]));
-      }
-
-      MHT = MHTvec.Pt();
-
-    }// end loop over jets
-
-    /*
-    std::cout << "Leptons: " << ntuple->nselLeptons << endl;
-    std::cout << "NJets: " << NJets << endl;    
-    std::cout << "HT: " << HT << endl;
-    std::cout << "MHT: " << MHT << endl;
-    std::cout << "DeltaPhi1: " << DeltaPhi1 << endl;
-    std::cout << "DeltaPhi2: " << DeltaPhi2 << endl;    
-    std::cout << "DeltaPhi3: " << DeltaPhi3 << endl;
-    std::cout << "DeltaPhi4: " << DeltaPhi4 << endl;
-    */
-
     histo->Fill(0);
-    if( ntuple->nvLeptons == 1 ) histo->Fill(1);
-    else return false;
-    if( NJets>=4 ) histo->Fill(2);
-    else return false;
-    if( HT>500. ) histo->Fill(3);
-    else return false;
-    if( MHT>200. ) histo->Fill(4); 
-    else return false;
-    if( DeltaPhi1>0.5 ) histo->Fill(5);
-    else return false;
-    if( DeltaPhi2>0.5 ) histo->Fill(6);
-    else return false;
-    if( DeltaPhi3>0.3 ) histo->Fill(7);
-    else return false;
-    if( DeltaPhi4>0.3 ) histo->Fill(8);
-    else return false;
 
+    int numElectrons = 0 , numMuons = 0 ;
+
+    for( int iLep = 0 ; iLep < ntuple->naLeptons ; iLep++ ){
+      if( (ntuple->aLeptons_pt)[iLep]>20. && ntuple->aLeptons_isPFMuon[iLep] && (ntuple->aLeptons_isGlobalMuon[iLep]||ntuple->aLeptons_isTrackerMuon[iLep]) ){
+	numMuons++;
+      }
+    }
+    histo->Fill(1);
+    for( int iLep = 0 ; iLep < ntuple->naLeptons ; iLep++ ){
+      if( ntuple->aLeptons_pt[iLep]>20. && 
+	  ( ( abs(ntuple->aLeptons_etaSc[iLep]) < 1.479 && ntuple->aLeptons_relIso03[iLep] < 0.0994 && ntuple->aLeptons_eleSieie[iLep] < 0.011 && abs(ntuple->aLeptons_eleDEta[iLep]) < 0.00477 && abs(ntuple->aLeptons_eleDPhi[iLep]) < 0.222 && ntuple->aLeptons_eleHoE[iLep] < 0.298 && ntuple->aLeptons_eleooEmooP[iLep] < 0.241 && ntuple->aLeptons_eleExpMissingInnerHits[iLep] <= 1 ) ||
+	    ( abs(ntuple->aLeptons_etaSc[iLep]) > 1.479 && ntuple->aLeptons_relIso03[iLep] < 0.107 && ntuple->aLeptons_eleSieie[iLep] < 0.0314 && abs(ntuple->aLeptons_eleDEta[iLep]) < 0.00868 && abs(ntuple->aLeptons_eleDPhi[iLep]) < 0.213 && ntuple->aLeptons_eleHoE[iLep] < 0.101 && ntuple->aLeptons_eleooEmooP[iLep] < 0.14 && ntuple->aLeptons_eleExpMissingInnerHits[iLep] <= 1 ) )){
+	return false;
+      }
+    }
+    histo->Fill(2);
+    if( ntuple->met_pt>200. ) histo->Fill(3); 
+    else{
+      return false;
+    }
     return true;
 
   };
