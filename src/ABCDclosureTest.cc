@@ -27,7 +27,7 @@ int main(int argc, char** argv){
 
   skimSamples skims;
   for( int i = 0 ; i < skims.sampleName.size() ; i++ ){
-    if( skims.sampleName[i] == "TT" ){
+    if( skims.sampleName[i] == "TT" || skims.sampleName[i] == "WJets" ){
       skims.ntuples.erase(skims.ntuples.begin()+i);
       skims.sampleName.erase(skims.sampleName.begin()+i);
       skims.fillColor.erase(skims.fillColor.begin()+i);
