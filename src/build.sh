@@ -1,1 +1,1 @@
-g++ -g `root-config --cflags --glibs` -I$CMSSW_BASE/src/AnalysisTools/src/ -I$CMSSW_BASE/src/boostedHiggsHeppy/src/ -I$CMSSW_BASE/src/ $CMSSW_BASE/src/boostedHiggsHeppy/src/$1.cc -o $CMSSW_BASE/src/boostedHiggsHeppy/src/$1.exe
+g++ `root-config --cflags --glibs` -I$CMSSW_BASE/src/AnalysisTools/src/ -I$CMSSW_BASE/src/boostedHiggsHeppy/src/ -I$CMSSW_BASE/src/ $CMSSW_BASE/src/boostedHiggsHeppy/src/$1.cc -o $CMSSW_BASE/src/boostedHiggsHeppy/src/$1.exe

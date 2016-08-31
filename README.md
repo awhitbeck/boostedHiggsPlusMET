@@ -6,7 +6,7 @@ Before submitting any batch jobs, be sure to retar your working area:
 
 <pre>
 cd $CMSSW_BASE/../
-tar -cf workingArea.tar $CMSSW_BASE --exclude='*tar' --exclude='*root' --exclude='*png' --exclude='*pdf' --exclude='*stdout' --exclude='*stderr' --exclude='*condor'
+tar -cf workingArea.tar CMSSW_7_4_2 --exclude='*.dag.*' --exclude='*tar' --exclude='*root' --exclude='*png' --exclude='*pdf' --exclude='*stdout' --exclude='*stderr' --exclude='*condor'
 mv workingArea.tar $CMSSW_BASE/src/boostedHiggsHeppy/src/
 cd $CMSSW_BASE/src/boostedHiggsHeppy/src/
 </pre>

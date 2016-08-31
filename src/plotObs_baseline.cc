@@ -48,6 +48,9 @@ int main(int argc, char** argv){
   plot J1bbtag_Ptplot(*fillLeadingBBtagJetPt,"J1bbtag_Pt_baseline","p_{T,J} [GeV]",40,300.,2300.);
   plot J2bbtag_Ptplot(*fillSubLeadingBBtagJetPt,"J2bbtag_Pt_baseline","p_{T,J} [GeV]",40,300.,2300.);
 
+  plot J1pt_JetFlavorPlot(*fillLeadingJetFlavor,"J1pt_JetFlavorPlot","Jet Flavor",22,0.5,21.5);
+  plot J2pt_JetFlavorPlot(*fillSubLeadingJetFlavor,"J2pt_JetFlavorPlot","Jet Flavor",22,0.5,21.5);
+
   vector<plot> plots;
   plots.push_back(METplot);
   plots.push_back(HTplot);
@@ -70,6 +73,8 @@ int main(int argc, char** argv){
   plots.push_back(J2pt_Ptplot);
   plots.push_back(J1bbtag_Ptplot);
   plots.push_back(J2bbtag_Ptplot);
+  plots.push_back(J1pt_JetFlavorPlot);
+  plots.push_back(J2pt_JetFlavorPlot);
 
   // background MC samples
   for( int iSample = 0 ; iSample < skims.ntuples.size() ; iSample++){

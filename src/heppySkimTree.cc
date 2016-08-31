@@ -1,3 +1,4 @@
+#define heppySkimTree_cxx
 #include "heppySkimTree.h"
 #include <TH2.h>
 #include <TStyle.h>
@@ -40,4 +41,3 @@ void heppySkimTree::Loop()
       // if (Cut(ientry) < 0) continue;
    }
 }
-

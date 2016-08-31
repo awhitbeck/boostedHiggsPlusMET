@@ -33,6 +33,9 @@ int main(int argc, char** argv){
   plot J1bbtag_Massplot(*fillLeadingBBtagJetMass,"J1bbtag_Mass_antitag","m_{J} [GeV]",20,50.,200.);
   plot J2bbtag_Massplot(*fillSubLeadingBBtagJetMass,"J2bbtag_Mass_antitag","m_{J} [GeV]",20,50.,200.);
 
+  plot J1pt_JetFlavorPlot(*fillLeadingJetFlavor,"J1pt_JetFlavorPlot","Jet Flavor",22,0.5,21.5);
+  plot J2pt_JetFlavorPlot(*fillSubLeadingJetFlavor,"J2pt_JetFlavorPlot","Jet Flavor",22,0.5,21.5);
+
   plot J1pt_BBplot(*fillLeadingBBtag,"J1pt_BBtag_antitag","bb-tag",20,-1.,1.);
   plot J2pt_BBplot(*fillSubLeadingBBtag,"J2pt_BBtag_antitag","bb-tag",20,-1.,1.);
   plot J1bbtag_BBplot(*fillLeadingBBtagJetBBtag,"J1bbtag_BBtag_antitag","bb-tag",20,-1.,1.);
@@ -70,6 +73,8 @@ int main(int argc, char** argv){
   plots.push_back(J2pt_Ptplot);
   plots.push_back(J1bbtag_Ptplot);
   plots.push_back(J2bbtag_Ptplot);
+  plots.push_back(J1pt_JetFlavorPlot);
+  plots.push_back(J2pt_JetFlavorPlot);
 
   // background MC samples
   for( int iSample = 0 ; iSample < skims.ntuples.size() ; iSample++){

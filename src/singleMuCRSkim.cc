@@ -99,6 +99,8 @@ int main(int argc, char** argv){
   ntuple->fChain->SetBranchStatus("aLeptons_mediumMuonId",1);
   ntuple->fChain->SetBranchStatus("aLeptons_etaSc",1);
   ntuple->fChain->SetBranchStatus("aLeptons_relIso03",1);
+  ntuple->fChain->SetBranchStatus("aLeptons_relIso04",1);
+  ntuple->fChain->SetBranchStatus("aLeptons_relIsoAn04",1);
   ntuple->fChain->SetBranchStatus("aLeptons_eleSieie",1);
   ntuple->fChain->SetBranchStatus("aLeptons_eleDEta",1);
   ntuple->fChain->SetBranchStatus("aLeptons_eleDPhi",1);
@@ -136,7 +138,7 @@ int main(int argc, char** argv){
   ntuple->fChain->SetBranchStatus("*SubjetAK08softdrop*",1);
 
   TTree* outputTree = ntuple->fChain->CloneTree(0);
-  outputTree->Branch("weight",&weight,"weight/F");
+  outputTree->SetBranchAddress("xsec",&weight);
 
   for( int i = 0 ; i < numEvents ; i++ ){
     if( i%10000 == 0 ) std::cout << "Event " << i << "/" << numEvents << endl;

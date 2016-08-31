@@ -99,6 +99,8 @@ int main(int argc, char** argv){
   ntuple->fChain->SetBranchStatus("aLeptons_mediumMuonId",1);
   ntuple->fChain->SetBranchStatus("aLeptons_etaSc",1);
   ntuple->fChain->SetBranchStatus("aLeptons_relIso03",1);
+  ntuple->fChain->SetBranchStatus("aLeptons_relIso04",1);
+  ntuple->fChain->SetBranchStatus("aLeptons_relIsoAn04",1);
   ntuple->fChain->SetBranchStatus("aLeptons_eleSieie",1);
   ntuple->fChain->SetBranchStatus("aLeptons_eleDEta",1);
   ntuple->fChain->SetBranchStatus("aLeptons_eleDPhi",1);

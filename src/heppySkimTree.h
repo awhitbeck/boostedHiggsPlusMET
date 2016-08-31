@@ -1,8 +1,8 @@
 //////////////////////////////////////////////////////////
 // This class has been automatically generated on
-// Sun Aug  7 23:22:25 2016 by ROOT version 6.02/05
+// Tue Aug 30 09:19:03 2016 by ROOT version 6.02/05
 // from TTree tree/PhysicsTools.Heppy.analyzers.core.AutoFillTreeProducer.AutoFillTreeProducer_1
-// found on file: heppSkim_QCD_HT1000to1500_TuneCUETP8M1_13TeV-madgraphMLM-pythia8.root
+// found on file: singleMuCR_TT_TuneCUETP8M1_13TeV-powheg-pythia8_4631.root
 //////////////////////////////////////////////////////////
 
 #ifndef heppySkimTree_h
@@ -58,6 +58,20 @@ public :
    Int_t           HLT_BIT_HLT_PFHT800_v;
    Float_t         met_pt;
    Float_t         met_phi;
+   Int_t           nSubjetAK08softdrop;
+   Float_t         SubjetAK08softdrop_pt[10];   //[nSubjetAK08softdrop]
+   Float_t         SubjetAK08softdrop_eta[10];   //[nSubjetAK08softdrop]
+   Float_t         SubjetAK08softdrop_phi[10];   //[nSubjetAK08softdrop]
+   Float_t         SubjetAK08softdrop_mass[10];   //[nSubjetAK08softdrop]
+   Float_t         SubjetAK08softdrop_btag[10];   //[nSubjetAK08softdrop]
+   Int_t           nvLeptons;
+   Int_t           vLeptons_charge[2];   //[nvLeptons]
+   Int_t           vLeptons_tightId[2];   //[nvLeptons]
+   Int_t           vLeptons_pdgId[2];   //[nvLeptons]
+   Float_t         vLeptons_pt[2];   //[nvLeptons]
+   Float_t         vLeptons_eta[2];   //[nvLeptons]
+   Float_t         vLeptons_phi[2];   //[nvLeptons]
+   Float_t         vLeptons_mass[2];   //[nvLeptons]
    Int_t           nGenHiggsBoson;
    Int_t           GenHiggsBoson_pdgId[1];   //[nGenHiggsBoson]
    Float_t         GenHiggsBoson_pt[1];   //[nGenHiggsBoson]
@@ -67,41 +81,53 @@ public :
    Float_t         GenHiggsBoson_charge[1];   //[nGenHiggsBoson]
    Int_t           GenHiggsBoson_status[1];   //[nGenHiggsBoson]
    Int_t           naLeptons;
-   Int_t           aLeptons_charge[8];   //[naLeptons]
-   Int_t           aLeptons_tightId[8];   //[naLeptons]
-   Int_t           aLeptons_pdgId[8];   //[naLeptons]
+   Float_t         aLeptons_relIso03[8];   //[naLeptons]
+   Float_t         aLeptons_relIso04[8];   //[naLeptons]
+   Float_t         aLeptons_miniRelIso[8];   //[naLeptons]
+   Float_t         aLeptons_relIsoAn04[8];   //[naLeptons]
+   Int_t           aLeptons_mediumMuonId[8];   //[naLeptons]
    Float_t         aLeptons_pt[8];   //[naLeptons]
    Float_t         aLeptons_eta[8];   //[naLeptons]
    Float_t         aLeptons_phi[8];   //[naLeptons]
    Float_t         aLeptons_mass[8];   //[naLeptons]
+   Float_t         aLeptons_eleSieie[8];   //[naLeptons]
+   Float_t         aLeptons_eleDEta[8];   //[naLeptons]
+   Float_t         aLeptons_eleDPhi[8];   //[naLeptons]
+   Float_t         aLeptons_eleHoE[8];   //[naLeptons]
+   Float_t         aLeptons_isPFMuon[8];   //[naLeptons]
+   Float_t         aLeptons_isGlobalMuon[8];   //[naLeptons]
+   Float_t         aLeptons_isTrackerMuon[8];   //[naLeptons]
+   Float_t         aLeptons_etaSc[8];   //[naLeptons]
+   Float_t         aLeptons_eleExpMissingInnerHits[8];   //[naLeptons]
+   Float_t         aLeptons_eleooEmooP[8];   //[naLeptons]
    Int_t           nFatjetAK08ungroomed;
-   Float_t         FatjetAK08ungroomed_pt[8];   //[nFatjetAK08ungroomed]
-   Float_t         FatjetAK08ungroomed_eta[8];   //[nFatjetAK08ungroomed]
-   Float_t         FatjetAK08ungroomed_phi[8];   //[nFatjetAK08ungroomed]
-   Float_t         FatjetAK08ungroomed_mass[8];   //[nFatjetAK08ungroomed]
-   Float_t         FatjetAK08ungroomed_tau1[8];   //[nFatjetAK08ungroomed]
-   Float_t         FatjetAK08ungroomed_tau2[8];   //[nFatjetAK08ungroomed]
-   Float_t         FatjetAK08ungroomed_mpruned[8];   //[nFatjetAK08ungroomed]
-   Float_t         FatjetAK08ungroomed_mprunedcorr[8];   //[nFatjetAK08ungroomed]
-   Float_t         FatjetAK08ungroomed_bbtag[8];   //[nFatjetAK08ungroomed]
-   Float_t         FatjetAK08ungroomed_chargedHadronEnergyFraction[8];   //[nFatjetAK08ungroomed]
-   Float_t         FatjetAK08ungroomed_chargedMultiplicity[8];   //[nFatjetAK08ungroomed]
-   Int_t           FatjetAK08ungroomed_Flavour[8];   //[nFatjetAK08ungroomed]
-   Int_t           FatjetAK08ungroomed_BhadronFlavour[8];   //[nFatjetAK08ungroomed]
-   Int_t           FatjetAK08ungroomed_ChadronFlavour[8];   //[nFatjetAK08ungroomed]
+   Float_t         FatjetAK08ungroomed_pt[5];   //[nFatjetAK08ungroomed]
+   Float_t         FatjetAK08ungroomed_eta[5];   //[nFatjetAK08ungroomed]
+   Float_t         FatjetAK08ungroomed_phi[5];   //[nFatjetAK08ungroomed]
+   Float_t         FatjetAK08ungroomed_mass[5];   //[nFatjetAK08ungroomed]
+   Float_t         FatjetAK08ungroomed_tau1[5];   //[nFatjetAK08ungroomed]
+   Float_t         FatjetAK08ungroomed_tau2[5];   //[nFatjetAK08ungroomed]
+   Float_t         FatjetAK08ungroomed_mpruned[5];   //[nFatjetAK08ungroomed]
+   Float_t         FatjetAK08ungroomed_mprunedcorr[5];   //[nFatjetAK08ungroomed]
+   Float_t         FatjetAK08ungroomed_bbtag[5];   //[nFatjetAK08ungroomed]
+   Float_t         FatjetAK08ungroomed_chargedHadronEnergyFraction[5];   //[nFatjetAK08ungroomed]
+   Float_t         FatjetAK08ungroomed_chargedMultiplicity[5];   //[nFatjetAK08ungroomed]
+   Int_t           FatjetAK08ungroomed_Flavour[5];   //[nFatjetAK08ungroomed]
+   Int_t           FatjetAK08ungroomed_BhadronFlavour[5];   //[nFatjetAK08ungroomed]
+   Int_t           FatjetAK08ungroomed_ChadronFlavour[5];   //[nFatjetAK08ungroomed]
    Int_t           nJet;
-   Float_t         Jet_btagCSV[25];   //[nJet]
-   Float_t         Jet_btagCMVA[25];   //[nJet]
-   Int_t           Jet_partonFlavour[25];   //[nJet]
-   Int_t           Jet_hadronFlavour[25];   //[nJet]
-   Int_t           Jet_mcMatchId[25];   //[nJet]
-   Float_t         Jet_pt[25];   //[nJet]
-   Float_t         Jet_eta[25];   //[nJet]
-   Float_t         Jet_phi[25];   //[nJet]
-   Float_t         Jet_mass[25];   //[nJet]
-   Float_t         Jet_btagBDT[25];   //[nJet]
-   Float_t         Jet_btagCSVV0[25];   //[nJet]
-   Float_t         Jet_btagCMVAV2[25];   //[nJet]
+   Float_t         Jet_btagCSV[22];   //[nJet]
+   Float_t         Jet_btagCMVA[22];   //[nJet]
+   Int_t           Jet_partonFlavour[22];   //[nJet]
+   Int_t           Jet_hadronFlavour[22];   //[nJet]
+   Int_t           Jet_mcMatchId[22];   //[nJet]
+   Float_t         Jet_pt[22];   //[nJet]
+   Float_t         Jet_eta[22];   //[nJet]
+   Float_t         Jet_phi[22];   //[nJet]
+   Float_t         Jet_mass[22];   //[nJet]
+   Float_t         Jet_btagBDT[22];   //[nJet]
+   Float_t         Jet_btagCSVV0[22];   //[nJet]
+   Float_t         Jet_btagCMVAV2[22];   //[nJet]
 
    // List of branches
    TBranch        *b_run;   //!
@@ -140,6 +166,20 @@ public :
    TBranch        *b_HLT_BIT_HLT_PFHT800_v;   //!
    TBranch        *b_met_pt;   //!
    TBranch        *b_met_phi;   //!
+   TBranch        *b_nSubjetAK08softdrop;   //!
+   TBranch        *b_SubjetAK08softdrop_pt;   //!
+   TBranch        *b_SubjetAK08softdrop_eta;   //!
+   TBranch        *b_SubjetAK08softdrop_phi;   //!
+   TBranch        *b_SubjetAK08softdrop_mass;   //!
+   TBranch        *b_SubjetAK08softdrop_btag;   //!
+   TBranch        *b_nvLeptons;   //!
+   TBranch        *b_vLeptons_charge;   //!
+   TBranch        *b_vLeptons_tightId;   //!
+   TBranch        *b_vLeptons_pdgId;   //!
+   TBranch        *b_vLeptons_pt;   //!
+   TBranch        *b_vLeptons_eta;   //!
+   TBranch        *b_vLeptons_phi;   //!
+   TBranch        *b_vLeptons_mass;   //!
    TBranch        *b_nGenHiggsBoson;   //!
    TBranch        *b_GenHiggsBoson_pdgId;   //!
    TBranch        *b_GenHiggsBoson_pt;   //!
@@ -149,13 +189,25 @@ public :
    TBranch        *b_GenHiggsBoson_charge;   //!
    TBranch        *b_GenHiggsBoson_status;   //!
    TBranch        *b_naLeptons;   //!
-   TBranch        *b_aLeptons_charge;   //!
-   TBranch        *b_aLeptons_tightId;   //!
-   TBranch        *b_aLeptons_pdgId;   //!
+   TBranch        *b_aLeptons_relIso03;   //!
+   TBranch        *b_aLeptons_relIso04;   //!
+   TBranch        *b_aLeptons_miniRelIso;   //!
+   TBranch        *b_aLeptons_relIsoAn04;   //!
+   TBranch        *b_aLeptons_mediumMuonId;   //!
    TBranch        *b_aLeptons_pt;   //!
    TBranch        *b_aLeptons_eta;   //!
    TBranch        *b_aLeptons_phi;   //!
    TBranch        *b_aLeptons_mass;   //!
+   TBranch        *b_aLeptons_eleSieie;   //!
+   TBranch        *b_aLeptons_eleDEta;   //!
+   TBranch        *b_aLeptons_eleDPhi;   //!
+   TBranch        *b_aLeptons_eleHoE;   //!
+   TBranch        *b_aLeptons_isPFMuon;   //!
+   TBranch        *b_aLeptons_isGlobalMuon;   //!
+   TBranch        *b_aLeptons_isTrackerMuon;   //!
+   TBranch        *b_aLeptons_etaSc;   //!
+   TBranch        *b_aLeptons_eleExpMissingInnerHits;   //!
+   TBranch        *b_aLeptons_eleooEmooP;   //!
    TBranch        *b_nFatjetAK08ungroomed;   //!
    TBranch        *b_FatjetAK08ungroomed_pt;   //!
    TBranch        *b_FatjetAK08ungroomed_eta;   //!
@@ -198,16 +250,15 @@ public :
 
 #endif
 
-#ifndef heppySkimTree_cxx
-#define heppySkimTree_cxx
+#ifdef heppySkimTree_cxx
 heppySkimTree::heppySkimTree(TTree *tree) : fChain(0) 
 {
 // if parameter tree is not specified (or zero), connect the file
 // used to generate this class and read the Tree.
    if (tree == 0) {
-      TFile *f = (TFile*)gROOT->GetListOfFiles()->FindObject("heppSkim_QCD_HT1000to1500_TuneCUETP8M1_13TeV-madgraphMLM-pythia8.root");
+      TFile *f = (TFile*)gROOT->GetListOfFiles()->FindObject("singleMuCR_TT_TuneCUETP8M1_13TeV-powheg-pythia8_4631.root");
       if (!f || !f->IsOpen()) {
-         f = new TFile("heppSkim_QCD_HT1000to1500_TuneCUETP8M1_13TeV-madgraphMLM-pythia8.root");
+         f = new TFile("singleMuCR_TT_TuneCUETP8M1_13TeV-powheg-pythia8_4631.root");
       }
       f->GetObject("tree",tree);
 
@@ -292,6 +343,20 @@ void heppySkimTree::Init(TTree *tree)
    fChain->SetBranchAddress("HLT_BIT_HLT_PFHT800_v", &HLT_BIT_HLT_PFHT800_v, &b_HLT_BIT_HLT_PFHT800_v);
    fChain->SetBranchAddress("met_pt", &met_pt, &b_met_pt);
    fChain->SetBranchAddress("met_phi", &met_phi, &b_met_phi);
+   fChain->SetBranchAddress("nSubjetAK08softdrop", &nSubjetAK08softdrop, &b_nSubjetAK08softdrop);
+   fChain->SetBranchAddress("SubjetAK08softdrop_pt", SubjetAK08softdrop_pt, &b_SubjetAK08softdrop_pt);
+   fChain->SetBranchAddress("SubjetAK08softdrop_eta", SubjetAK08softdrop_eta, &b_SubjetAK08softdrop_eta);
+   fChain->SetBranchAddress("SubjetAK08softdrop_phi", SubjetAK08softdrop_phi, &b_SubjetAK08softdrop_phi);
+   fChain->SetBranchAddress("SubjetAK08softdrop_mass", SubjetAK08softdrop_mass, &b_SubjetAK08softdrop_mass);
+   fChain->SetBranchAddress("SubjetAK08softdrop_btag", SubjetAK08softdrop_btag, &b_SubjetAK08softdrop_btag);
+   fChain->SetBranchAddress("nvLeptons", &nvLeptons, &b_nvLeptons);
+   fChain->SetBranchAddress("vLeptons_charge", vLeptons_charge, &b_vLeptons_charge);
+   fChain->SetBranchAddress("vLeptons_tightId", vLeptons_tightId, &b_vLeptons_tightId);
+   fChain->SetBranchAddress("vLeptons_pdgId", vLeptons_pdgId, &b_vLeptons_pdgId);
+   fChain->SetBranchAddress("vLeptons_pt", vLeptons_pt, &b_vLeptons_pt);
+   fChain->SetBranchAddress("vLeptons_eta", vLeptons_eta, &b_vLeptons_eta);
+   fChain->SetBranchAddress("vLeptons_phi", vLeptons_phi, &b_vLeptons_phi);
+   fChain->SetBranchAddress("vLeptons_mass", vLeptons_mass, &b_vLeptons_mass);
    fChain->SetBranchAddress("nGenHiggsBoson", &nGenHiggsBoson, &b_nGenHiggsBoson);
    fChain->SetBranchAddress("GenHiggsBoson_pdgId", &GenHiggsBoson_pdgId, &b_GenHiggsBoson_pdgId);
    fChain->SetBranchAddress("GenHiggsBoson_pt", &GenHiggsBoson_pt, &b_GenHiggsBoson_pt);
@@ -301,13 +366,25 @@ void heppySkimTree::Init(TTree *tree)
    fChain->SetBranchAddress("GenHiggsBoson_charge", &GenHiggsBoson_charge, &b_GenHiggsBoson_charge);
    fChain->SetBranchAddress("GenHiggsBoson_status", &GenHiggsBoson_status, &b_GenHiggsBoson_status);
    fChain->SetBranchAddress("naLeptons", &naLeptons, &b_naLeptons);
-   fChain->SetBranchAddress("aLeptons_charge", aLeptons_charge, &b_aLeptons_charge);
-   fChain->SetBranchAddress("aLeptons_tightId", aLeptons_tightId, &b_aLeptons_tightId);
-   fChain->SetBranchAddress("aLeptons_pdgId", aLeptons_pdgId, &b_aLeptons_pdgId);
+   fChain->SetBranchAddress("aLeptons_relIso03", aLeptons_relIso03, &b_aLeptons_relIso03);
+   fChain->SetBranchAddress("aLeptons_relIso04", aLeptons_relIso04, &b_aLeptons_relIso04);
+   fChain->SetBranchAddress("aLeptons_miniRelIso", aLeptons_miniRelIso, &b_aLeptons_miniRelIso);
+   fChain->SetBranchAddress("aLeptons_relIsoAn04", aLeptons_relIsoAn04, &b_aLeptons_relIsoAn04);
+   fChain->SetBranchAddress("aLeptons_mediumMuonId", aLeptons_mediumMuonId, &b_aLeptons_mediumMuonId);
    fChain->SetBranchAddress("aLeptons_pt", aLeptons_pt, &b_aLeptons_pt);
    fChain->SetBranchAddress("aLeptons_eta", aLeptons_eta, &b_aLeptons_eta);
    fChain->SetBranchAddress("aLeptons_phi", aLeptons_phi, &b_aLeptons_phi);
    fChain->SetBranchAddress("aLeptons_mass", aLeptons_mass, &b_aLeptons_mass);
+   fChain->SetBranchAddress("aLeptons_eleSieie", aLeptons_eleSieie, &b_aLeptons_eleSieie);
+   fChain->SetBranchAddress("aLeptons_eleDEta", aLeptons_eleDEta, &b_aLeptons_eleDEta);
+   fChain->SetBranchAddress("aLeptons_eleDPhi", aLeptons_eleDPhi, &b_aLeptons_eleDPhi);
+   fChain->SetBranchAddress("aLeptons_eleHoE", aLeptons_eleHoE, &b_aLeptons_eleHoE);
+   fChain->SetBranchAddress("aLeptons_isPFMuon", aLeptons_isPFMuon, &b_aLeptons_isPFMuon);
+   fChain->SetBranchAddress("aLeptons_isGlobalMuon", aLeptons_isGlobalMuon, &b_aLeptons_isGlobalMuon);
+   fChain->SetBranchAddress("aLeptons_isTrackerMuon", aLeptons_isTrackerMuon, &b_aLeptons_isTrackerMuon);
+   fChain->SetBranchAddress("aLeptons_etaSc", aLeptons_etaSc, &b_aLeptons_etaSc);
+   fChain->SetBranchAddress("aLeptons_eleExpMissingInnerHits", aLeptons_eleExpMissingInnerHits, &b_aLeptons_eleExpMissingInnerHits);
+   fChain->SetBranchAddress("aLeptons_eleooEmooP", aLeptons_eleooEmooP, &b_aLeptons_eleooEmooP);
    fChain->SetBranchAddress("nFatjetAK08ungroomed", &nFatjetAK08ungroomed, &b_nFatjetAK08ungroomed);
    fChain->SetBranchAddress("FatjetAK08ungroomed_pt", FatjetAK08ungroomed_pt, &b_FatjetAK08ungroomed_pt);
    fChain->SetBranchAddress("FatjetAK08ungroomed_eta", FatjetAK08ungroomed_eta, &b_FatjetAK08ungroomed_eta);

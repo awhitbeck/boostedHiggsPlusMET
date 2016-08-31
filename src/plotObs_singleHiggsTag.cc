@@ -12,7 +12,7 @@
 #include "plotterUtils.cc"
 #include "skimSamples.cc"
 #include "definitions.cc"
-#include "heppySkimTree.h"
+#include "heppySkimTree.cc"
 
 using namespace std;
 
@@ -22,31 +22,35 @@ int main(int argc, char** argv){
   gROOT->ProcessLine("setTDRStyle()");
   
   skimSamples skims;
+  typedef plot<heppySkimTree> plot;
+  
+  plot METplot(*fillMET<heppySkimTree>,"MET_singleHiggsTag","MET [GeV]",15,300.,1800.);
+  plot HTplot(*fillHT<heppySkimTree>,"HT_singleHiggsTag","H_{T} [GeV]",15,300,2800.);
+  plot NJetsplot(*fillNJets<heppySkimTree>,"NJets_singleHiggsTag","n_{j}",14,1.5,15.5);
+  plot BTagsplot(*fillBTags<heppySkimTree>,"BTags_singleHiggsTag","n_{b}",6,-0.5,5.5);
+  plot Binsplot(*fillAnalysisBins<heppySkimTree>,"AnalysisBins_singleHiggsTag","i^th Bin",8,0.5,8.5);
+  plot J1pt_Massplot(*fillLeadingJetMass<heppySkimTree>,"J1pt_Mass_singleHiggsTag","m_{J} [GeV]",20,50.,200.);
+  plot J2pt_Massplot(*fillSubLeadingJetMass<heppySkimTree>,"J2pt_Mass_singleHiggsTag","m_{J} [GeV]",20,50.,200.);
+  plot J1bbtag_Massplot(*fillLeadingBBtagJetMass<heppySkimTree>,"J1bbtag_Mass_singleHiggsTag","m_{J} [GeV]",20,50.,200.);
+  plot J2bbtag_Massplot(*fillSubLeadingBBtagJetMass<heppySkimTree>,"J2bbtag_Mass_singleHiggsTag","m_{J} [GeV]",20,50.,200.);
 
-  plot METplot(*fillMET,"MET_singleHiggsTag","MET [GeV]",15,300.,1800.);
-  plot HTplot(*fillHT,"HT_singleHiggsTag","H_{T} [GeV]",15,300,2800.);
-  plot NJetsplot(*fillNJets,"NJets_singleHiggsTag","n_{j}",14,1.5,15.5);
-  plot BTagsplot(*fillBTags,"BTags_singleHiggsTag","n_{b}",6,-0.5,5.5);
-  plot Binsplot(*fillAnalysisBins,"AnalysisBins_singleHiggsTag","i^th Bin",8,0.5,8.5);
-  plot J1pt_Massplot(*fillLeadingJetMass,"J1pt_Mass_singleHiggsTag","m_{J} [GeV]",20,50.,200.);
-  plot J2pt_Massplot(*fillSubLeadingJetMass,"J2pt_Mass_singleHiggsTag","m_{J} [GeV]",20,50.,200.);
-  plot J1bbtag_Massplot(*fillLeadingBBtagJetMass,"J1bbtag_Mass_singleHiggsTag","m_{J} [GeV]",20,50.,200.);
-  plot J2bbtag_Massplot(*fillSubLeadingBBtagJetMass,"J2bbtag_Mass_singleHiggsTag","m_{J} [GeV]",20,50.,200.);
+  plot J1pt_BBplot(*fillLeadingBBtag<heppySkimTree>,"J1pt_BBtag_singleHiggsTag","bb-tag",20,-1.,1.);
+  plot J2pt_BBplot(*fillSubLeadingBBtag<heppySkimTree>,"J2pt_BBtag_singleHiggsTag","bb-tag",20,-1.,1.);
+  plot J1bbtag_BBplot(*fillLeadingBBtagJetBBtag<heppySkimTree>,"J1bbtag_BBtag_singleHiggsTag","bb-tag",20,-1.,1.);
+  plot J2bbtag_BBplot(*fillSubLeadingBBtagJetBBtag<heppySkimTree>,"J2bbtag_BBtag_singleHiggsTag","bb-tag",20,-1.,1.);
 
-  plot J1pt_BBplot(*fillLeadingBBtag,"J1pt_BBtag_singleHiggsTag","bb-tag",20,-1.,1.);
-  plot J2pt_BBplot(*fillSubLeadingBBtag,"J2pt_BBtag_singleHiggsTag","bb-tag",20,-1.,1.);
-  plot J1bbtag_BBplot(*fillLeadingBBtagJetBBtag,"J1bbtag_BBtag_singleHiggsTag","bb-tag",20,-1.,1.);
-  plot J2bbtag_BBplot(*fillSubLeadingBBtagJetBBtag,"J2bbtag_BBtag_singleHiggsTag","bb-tag",20,-1.,1.);
+  plot J1pt_Tau21plot(*fillLeadingTau21<heppySkimTree>,"J1pt_Tau21_singleHiggsTag","#tau_{21}",20,0.,1.);
+  plot J2pt_Tau21plot(*fillSubLeadingTau21<heppySkimTree>,"J2pt_Tau21_singleHiggsTag","#tau_{21}",20,0.,1.);
+  plot J1bbtag_Tau21plot(*fillLeadingBBtagJetTau21<heppySkimTree>,"J1bbtag_Tau21_singleHiggsTag","#tau_{21}",20,0.,1.);
+  plot J2bbtag_Tau21plot(*fillSubLeadingBBtagJetTau21<heppySkimTree>,"J2bbtag_Tau21_singleHiggsTag","#tau_{21}",20,0.,1.);
 
-  plot J1pt_Tau21plot(*fillLeadingTau21,"J1pt_Tau21_singleHiggsTag","#tau_{21}",20,0.,1.);
-  plot J2pt_Tau21plot(*fillSubLeadingTau21,"J2pt_Tau21_singleHiggsTag","#tau_{21}",20,0.,1.);
-  plot J1bbtag_Tau21plot(*fillLeadingBBtagJetTau21,"J1bbtag_Tau21_singleHiggsTag","#tau_{21}",20,0.,1.);
-  plot J2bbtag_Tau21plot(*fillSubLeadingBBtagJetTau21,"J2bbtag_Tau21_singleHiggsTag","#tau_{21}",20,0.,1.);
+  plot J1pt_Ptplot(*fillLeadingJetPt<heppySkimTree>,"J1pt_Pt_singleHiggsTag","p_{T,J} [GeV]",40,300.,2300.);
+  plot J2pt_Ptplot(*fillSubLeadingJetPt<heppySkimTree>,"J2pt_Pt_singleHiggsTag","p_{T,J} [GeV]",40,300.,2300.);
+  plot J1bbtag_Ptplot(*fillLeadingBBtagJetPt<heppySkimTree>,"J1bbtag_Pt_singleHiggsTag","p_{T,J} [GeV]",40,300.,2300.);
+  plot J2bbtag_Ptplot(*fillSubLeadingBBtagJetPt<heppySkimTree>,"J2bbtag_Pt_singleHiggsTag","p_{T,J} [GeV]",40,300.,2300.);
 
-  plot J1pt_Ptplot(*fillLeadingJetPt,"J1pt_Pt_singleHiggsTag","p_{T,J} [GeV]",40,300.,2300.);
-  plot J2pt_Ptplot(*fillSubLeadingJetPt,"J2pt_Pt_singleHiggsTag","p_{T,J} [GeV]",40,300.,2300.);
-  plot J1bbtag_Ptplot(*fillLeadingBBtagJetPt,"J1bbtag_Pt_singleHiggsTag","p_{T,J} [GeV]",40,300.,2300.);
-  plot J2bbtag_Ptplot(*fillSubLeadingBBtagJetPt,"J2bbtag_Pt_singleHiggsTag","p_{T,J} [GeV]",40,300.,2300.);
+  plot J1pt_JetFlavorPlot(*fillLeadingJetFlavor<heppySkimTree>,"J1pt_JetFlavorPlot","Jet Flavor",22,0.5,21.5);
+  plot J2pt_JetFlavorPlot(*fillSubLeadingJetFlavor<heppySkimTree>,"J2pt_JetFlavorPlot","Jet Flavor",22,0.5,21.5);
 
   vector<plot> plots;
   plots.push_back(METplot);
@@ -70,6 +74,8 @@ int main(int argc, char** argv){
   plots.push_back(J2pt_Ptplot);
   plots.push_back(J1bbtag_Ptplot);
   plots.push_back(J2bbtag_Ptplot);
+  plots.push_back(J1pt_JetFlavorPlot);
+  plots.push_back(J2pt_JetFlavorPlot);
 
   // background MC samples
   for( int iSample = 0 ; iSample < skims.ntuples.size() ; iSample++){

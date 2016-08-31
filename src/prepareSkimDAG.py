@@ -13,24 +13,20 @@ def getSampleNorm( sample = "" ):
 
 dagFiles = {}
 indices = {}
-masterDAG = open("baselineSkim.dag","w")
+#skimType = "baseline"
+skimType = "singleMuCR"
+masterDAG = open("{0}Skim.dag".format(skimType),"w")
 
 for f in reversed(inputs.readlines()):
     f = f[:-1]
     inputFile = f.split()[0]
     sample = f.split()[1]
     if not sample in dagFiles : 
-        dagFiles[sample] = open("baselineSkim_{0}.dag".format(sample),"w")
+        dagFiles[sample] = open("{0}Skim_{1}.dag".format(skimType,sample),"w")
         indices[sample] = 0 
-        masterDAG.write("SUBDAG EXTERNAL baselineSkim_{0} baselineSkim_{0}.dag \n".format(sample))
+        masterDAG.write("SUBDAG EXTERNAL {0}Skim_{1} {0}Skim_{1}.dag \n".format(skimType,sample))
     norm = getSampleNorm(sample)
-    #print "file:",inputFile
-    #print "norm:",norm 
-    dagFiles[sample].write("JOB baselineSkim_{0}_{1} baselineSkim.jdl \n".format(sample,indices[sample]))
-    dagFiles[sample].write("VARS baselineSkim_{0}_{1} arguments=\"{2} root://cmseos.fnal.gov//store/user/awhitbe1/heppySkims_V23v4/ {3}\" \n".format(sample,indices[sample],inputFile,norm))
+
+    dagFiles[sample].write("JOB {0}Skim_{1}_{2} {0}Skim.jdl \n".format(skimType,sample,indices[sample]))
+    dagFiles[sample].write("VARS {0}Skim_{1}_{2} arguments=\"{3} root://cmseos.fnal.gov//store/user/awhitbe1/heppySkims_V23v4/ {4}\" \n".format(skimType,sample,indices[sample],inputFile,norm))
     indices[sample]=indices[sample]+1
-
-#for sample,dagFile in enumerate(dagFiles) : 
-#    dagFile.close()
-
-#masterDAG.close()

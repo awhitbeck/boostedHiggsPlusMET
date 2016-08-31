@@ -1,5 +1,4 @@
 #include "TLorentzVector.h"
-#include "heppySkimTree.cc"
 
 // constants
 // ==============================================
@@ -17,7 +16,148 @@ double CalcdPhi( double phi1 , double phi2 ){
 
 }
 
-double fillDeltaPhi1(heppySkimTree* ntuple){
+//////////////////////
+//////////////////////
+//////////////////////
+// Lepton functions //
+//////////////////////
+//////////////////////
+//////////////////////
+
+
+/////////////////////
+// Gen Lepton Info //
+/////////////////////
+
+template<typename ntupleType> bool SingleGenMuon(ntupleType* ntuple){
+  int genMuons = 0 ;
+  int genElectrons = 0 ;
+
+  for( int iLep = 0 ; iLep < ntuple->nGenLep ; iLep++ ){
+    if( abs(ntuple->GenLep_pdgId[iLep]) == 13 )
+      genMuons++;
+    if( abs(ntuple->GenLep_pdgId[iLep]) == 11 )
+      genElectrons++;
+  }
+
+  return genMuons==1 && genElectrons==0 ; 
+
+}
+
+template<typename ntupleType> bool SingleMuonAccept(ntupleType* ntuple){
+  int genMuons = 0 ;
+
+  for( int iLep = 0 ; iLep < ntuple->nGenLep ; iLep++ ){
+    if( abs(ntuple->GenLep_pdgId[iLep]) == 13 && ntuple->GenLep_pt[iLep]>10. && fabs(ntuple->GenLep_eta[iLep])<2.4 )
+      genMuons++;
+  }
+
+  return genMuons>0 ;
+
+}
+
+///////////////////////////
+// RECO Muon definitions //
+///////////////////////////
+
+template<typename ntupleType> int getAMuonIndex(ntupleType* ntuple){
+  for( int iLep = 0 ; iLep < ntuple->naLeptons ; iLep++ ){
+    if( ntuple->aLeptons_pt[iLep]>10. && abs(ntuple->aLeptons_eta[iLep])<2.4 && ntuple->aLeptons_mediumMuonId[iLep] == 1 && ntuple->aLeptons_miniRelIso[iLep] < 0.2  ){
+      return iLep;
+    }
+  }
+  return -1;
+}
+template<typename ntupleType> int getVMuonIndex(ntupleType* ntuple){
+  for( int iLep = 0 ; iLep < ntuple->nvLeptons ; iLep++ ){
+    if( ntuple->vLeptons_pt[iLep]>10. && abs(ntuple->vLeptons_eta[iLep])<2.4 && ntuple->vLeptons_mediumMuonId[iLep] == 1 && ntuple->vLeptons_miniRelIso[iLep] < 0.2  ){
+      return iLep;
+    }
+  }
+  return -1;
+}
+
+template<typename ntupleType> int numMuons(ntupleType* ntuple){
+  int numMuons_ = 0 ;
+  for( int iLep = 0 ; iLep < ntuple->nvLeptons ; iLep++ ){
+    if( ntuple->vLeptons_pt[iLep]>10. && abs(ntuple->vLeptons_eta[iLep])<2.4 && ntuple->vLeptons_mediumMuonId[iLep] == 1 && ntuple->vLeptons_miniRelIso[iLep] < 0.2  ){
+      numMuons_++;
+    }
+  }
+  for( int iLep = 0 ; iLep < ntuple->naLeptons ; iLep++ ){
+    if( ntuple->aLeptons_pt[iLep]>10. && abs(ntuple->aLeptons_eta[iLep])<2.4 && ntuple->aLeptons_mediumMuonId[iLep] == 1 && ntuple->aLeptons_miniRelIso[iLep] < 0.2  ){
+      numMuons_++;
+    }
+  }  
+  return numMuons_;
+}
+
+template<typename ntupleType> double fillNumMuons(ntupleType* ntuple){
+  return double(numMuons(ntuple));
+}
+
+template<typename ntupleType> int numElectrons(ntupleType* ntuple){
+  int numElectrons_ = 0;
+  for( int iLep = 0 ; iLep < ntuple->naLeptons ; iLep++ ){
+    if( ( ntuple->aLeptons_pt[iLep]>10. && abs(ntuple->aLeptons_eta[iLep])<2.5 && ntuple->aLeptons_miniRelIso[iLep] < 0.1 ) &&
+	( ( abs(ntuple->aLeptons_etaSc[iLep]) < 1.479 && ntuple->aLeptons_eleSieie[iLep] < 0.0115 && abs(ntuple->aLeptons_eleDEta[iLep]) < 0.00749 &&
+	    abs(ntuple->aLeptons_eleDPhi[iLep]) < 0.228 && ntuple->aLeptons_eleHoE[iLep] < 0.356 && ntuple->aLeptons_eleooEmooP[iLep] < 0.299 && 
+	    ntuple->aLeptons_eleExpMissingInnerHits[iLep] <= 2 
+	    ) || 
+	  ( abs(ntuple->aLeptons_etaSc[iLep]) > 1.479 && ntuple->aLeptons_eleSieie[iLep] < 0.037 && abs(ntuple->aLeptons_eleDEta[iLep]) < 0.00895 && 
+	    abs(ntuple->aLeptons_eleDPhi[iLep]) < 0.213 && ntuple->aLeptons_eleHoE[iLep] < 0.211 && ntuple->aLeptons_eleooEmooP[iLep] < 0.15 && 
+	    ntuple->aLeptons_eleExpMissingInnerHits[iLep] <= 3 ))){ 
+      numElectrons_++;
+    }
+  }
+
+  for( int iLep = 0 ; iLep < ntuple->nvLeptons ; iLep++ ){
+    if( ( ntuple->vLeptons_pt[iLep]>10. && abs(ntuple->vLeptons_eta[iLep])<2.5 && ntuple->vLeptons_miniRelIso[iLep] < 0.1 ) &&
+	( ( abs(ntuple->vLeptons_etaSc[iLep]) < 1.479 && ntuple->vLeptons_eleSieie[iLep] < 0.0115 && abs(ntuple->vLeptons_eleDEta[iLep]) < 0.00749 &&
+	    abs(ntuple->vLeptons_eleDPhi[iLep]) < 0.228 && ntuple->vLeptons_eleHoE[iLep] < 0.356 && ntuple->vLeptons_eleooEmooP[iLep] < 0.299 && 
+	    ntuple->vLeptons_eleExpMissingInnerHits[iLep] <= 2 
+	    ) || 
+	  ( abs(ntuple->vLeptons_etaSc[iLep]) > 1.479 && ntuple->vLeptons_eleSieie[iLep] < 0.037 && abs(ntuple->vLeptons_eleDEta[iLep]) < 0.00895 && 
+	    abs(ntuple->vLeptons_eleDPhi[iLep]) < 0.213 && ntuple->vLeptons_eleHoE[iLep] < 0.211 && ntuple->vLeptons_eleooEmooP[iLep] < 0.15 && 
+	    ntuple->vLeptons_eleExpMissingInnerHits[iLep] <= 3 ))){ 
+      numElectrons_++;
+    }
+  }
+  return numElectrons_;
+}
+
+template<typename ntupleType> double fillLepPt(ntupleType* ntuple){
+  int index = getAMuonIndex(ntuple);
+  if( index != -1 ) 
+    return ntuple->aLeptons_pt[index];
+  else{
+    index = getVMuonIndex(ntuple);
+    if( index != -1 )
+      return ntuple->vLeptons_pt[index];
+    else
+      return -9999.;
+  }
+}
+
+template<typename ntupleType> double fillLepActivity(ntupleType* ntuple){
+  int index = getAMuonIndex(ntuple);
+  if( index != -1 ) 
+    return ntuple->aLeptons_relIso04[index] - ntuple->aLeptons_miniRelIso[index];
+  else{
+    index = getVMuonIndex(ntuple);
+    if( index != -1 )
+      return ntuple->vLeptons_relIso04[index] - ntuple->vLeptons_miniRelIso[index];
+    else
+      return -9999.;
+  }
+}
+
+//////////////////////
+// END LEPTON STUFF //
+//////////////////////
+
+
+template<typename ntupleType> double fillDeltaPhi1(ntupleType* ntuple){
   int count = 0;
   double dPhi = -9999.;
   for(int iJet = 0 ; iJet < ntuple->nJet ; iJet++ ){
@@ -30,7 +170,7 @@ double fillDeltaPhi1(heppySkimTree* ntuple){
   }
 }
 
-double fillDeltaPhi2(heppySkimTree* ntuple){
+template<typename ntupleType> double fillDeltaPhi2(ntupleType* ntuple){
   int count = 0;
   double dPhi = -9999.;
   for(int iJet = 0 ; iJet < ntuple->nJet ; iJet++ ){
@@ -43,7 +183,7 @@ double fillDeltaPhi2(heppySkimTree* ntuple){
   }
 }
 
-double fillDeltaPhi3(heppySkimTree* ntuple){
+template<typename ntupleType> double fillDeltaPhi3(ntupleType* ntuple){
   int count = 0;
   double dPhi = -9999.;
   for(int iJet = 0 ; iJet < ntuple->nJet ; iJet++ ){
@@ -56,7 +196,7 @@ double fillDeltaPhi3(heppySkimTree* ntuple){
   }
 }
 
-double fillDeltaPhi4(heppySkimTree* ntuple){
+template<typename ntupleType> double fillDeltaPhi4(ntupleType* ntuple){
   int count = 0;
   double dPhi = -9999.;
   for(int iJet = 0 ; iJet < ntuple->nJet ; iJet++ ){
@@ -69,15 +209,28 @@ double fillDeltaPhi4(heppySkimTree* ntuple){
   }
 }
 
-double fillMET(heppySkimTree* ntuple){
+template<typename ntupleType> double fillMHT(ntupleType* ntuple){
+
+  TLorentzVector MHTvec(0.,0.,0.,0.);
+  for(int iJet = 0 ; iJet < ntuple->nJet ; iJet++ ){
+    if( ntuple->Jet_pt[iJet]>30. && fabs(ntuple->Jet_eta[iJet])<5.0 ){
+      TLorentzVector temp;
+      temp.SetPtEtaPhiM(ntuple->Jet_pt[iJet],ntuple->Jet_eta[iJet],ntuple->Jet_phi[iJet],ntuple->Jet_mass[iJet]);
+      MHTvec-=temp;
+    }
+  }
+  return MHTvec.Pt();
+}
+
+template<typename ntupleType> double fillMET(ntupleType* ntuple){
   return ntuple->met_pt;
 }
 
-double fillOne(heppySkimTree* ntuple){
+template<typename ntupleType> double fillOne(ntupleType* ntuple){
   return 1.;
 }
 
-double fillNJets(heppySkimTree* ntuple){
+template<typename ntupleType> double fillNJets(ntupleType* ntuple){
   double NJets = 0.;
   for(int iJet = 0 ; iJet < ntuple->nJet ; iJet++ ){
     if( ntuple->Jet_pt[iJet]>30. && fabs(ntuple->Jet_eta[iJet])<2.4 )
@@ -86,7 +239,7 @@ double fillNJets(heppySkimTree* ntuple){
   return NJets;
 }
 
-double fillBTags(heppySkimTree* ntuple){
+template<typename ntupleType> double fillBTags(ntupleType* ntuple){
   double BTags = 0.;
   for(int iJet = 0 ; iJet < ntuple->nJet ; iJet++ ){
     if( ntuple->Jet_pt[iJet]>30. && fabs(ntuple->Jet_eta[iJet])<2.4 && ntuple->Jet_btagCSV[iJet]>0.89 )
@@ -95,14 +248,28 @@ double fillBTags(heppySkimTree* ntuple){
   return BTags;
 }
 
-double fillLeadingJetMass(heppySkimTree* ntuple){
+template<typename ntupleType> double fillLeadingJetMass(ntupleType* ntuple){
   if(ntuple->nFatjetAK08ungroomed<=0) 
     return -1.;
   else
     return ntuple->FatjetAK08ungroomed_mpruned[0];
 }
 
-double fillLeadingBBtagJetMass(heppySkimTree* ntuple){
+template<typename ntupleType> double fillLeadingJetFlavor(ntupleType* ntuple){
+  if(ntuple->nFatjetAK08ungroomed<=0) 
+    return -1.;
+  else
+    return ntuple->FatjetAK08ungroomed_Flavour[0];
+}
+
+template<typename ntupleType> double fillSubLeadingJetFlavor(ntupleType* ntuple){
+  if(ntuple->nFatjetAK08ungroomed<=1) 
+    return -1.;
+  else
+    return ntuple->FatjetAK08ungroomed_Flavour[1];
+}
+
+template<typename ntupleType> double fillLeadingBBtagJetMass(ntupleType* ntuple){
   if(ntuple->nFatjetAK08ungroomed<=1) 
     return -1.;
   else
@@ -112,7 +279,7 @@ double fillLeadingBBtagJetMass(heppySkimTree* ntuple){
       return ntuple->FatjetAK08ungroomed_mpruned[1];
 }
 
-double fillLeadingBBtagJetPt(heppySkimTree* ntuple){
+template<typename ntupleType> double fillLeadingBBtagJetPt(ntupleType* ntuple){
   if(ntuple->nFatjetAK08ungroomed<=1) 
     return -1.;
   else
@@ -122,7 +289,7 @@ double fillLeadingBBtagJetPt(heppySkimTree* ntuple){
       return ntuple->FatjetAK08ungroomed_pt[1];
 }
 
-double fillLeadingBBtagJetBBtag(heppySkimTree* ntuple){
+template<typename ntupleType> double fillLeadingBBtagJetBBtag(ntupleType* ntuple){
   if(ntuple->nFatjetAK08ungroomed<=1) 
     return -1.;
   else
@@ -132,7 +299,7 @@ double fillLeadingBBtagJetBBtag(heppySkimTree* ntuple){
       return ntuple->FatjetAK08ungroomed_bbtag[1];
 }
 
-double fillLeadingBBtagJetTau21(heppySkimTree* ntuple){
+template<typename ntupleType> double fillLeadingBBtagJetTau21(ntupleType* ntuple){
   if(ntuple->nFatjetAK08ungroomed<=1) 
     return -1.;
   else
@@ -143,7 +310,7 @@ double fillLeadingBBtagJetTau21(heppySkimTree* ntuple){
 }
 
 // - - - - - - - - - - - - - - - - -  - - - - - - - - - - - - - - - - -  - - - - - - - - - - - - - - - - - 
-double fillSubLeadingBBtagJetMass(heppySkimTree* ntuple){
+template<typename ntupleType> double fillSubLeadingBBtagJetMass(ntupleType* ntuple){
   if(ntuple->nFatjetAK08ungroomed<=1) 
     return -1.;
   else
@@ -153,7 +320,7 @@ double fillSubLeadingBBtagJetMass(heppySkimTree* ntuple){
       return ntuple->FatjetAK08ungroomed_mpruned[1];
 }
 
-double fillSubLeadingBBtagJetPt(heppySkimTree* ntuple){
+template<typename ntupleType> double fillSubLeadingBBtagJetPt(ntupleType* ntuple){
   if(ntuple->nFatjetAK08ungroomed<=1) 
     return -1.;
   else
@@ -163,7 +330,7 @@ double fillSubLeadingBBtagJetPt(heppySkimTree* ntuple){
       return ntuple->FatjetAK08ungroomed_pt[1];
 }
 
-double fillSubLeadingBBtagJetBBtag(heppySkimTree* ntuple){
+template<typename ntupleType> double fillSubLeadingBBtagJetBBtag(ntupleType* ntuple){
   if(ntuple->nFatjetAK08ungroomed<=1) 
     return -1.;
   else
@@ -173,7 +340,7 @@ double fillSubLeadingBBtagJetBBtag(heppySkimTree* ntuple){
       return ntuple->FatjetAK08ungroomed_bbtag[1];
 }
 
-double fillSubLeadingBBtagJetTau21(heppySkimTree* ntuple){
+template<typename ntupleType> double fillSubLeadingBBtagJetTau21(ntupleType* ntuple){
   if(ntuple->nFatjetAK08ungroomed<=1) 
     return -1.;
   else
@@ -183,56 +350,56 @@ double fillSubLeadingBBtagJetTau21(heppySkimTree* ntuple){
       return ntuple->FatjetAK08ungroomed_tau2[1]/ntuple->FatjetAK08ungroomed_tau1[1];
 }
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-double fillSubLeadingJetMass(heppySkimTree* ntuple){
+template<typename ntupleType> double fillSubLeadingJetMass(ntupleType* ntuple){
   if(ntuple->nFatjetAK08ungroomed<=1) 
     return -1.;
   else
     return ntuple->FatjetAK08ungroomed_mpruned[1];
 }
 
-double fillLeadingJetPt(heppySkimTree* ntuple){
+template<typename ntupleType> double fillLeadingJetPt(ntupleType* ntuple){
   if(ntuple->nFatjetAK08ungroomed<=0) 
     return -1.;
   else
     return ntuple->FatjetAK08ungroomed_pt[0];
 }
 
-double fillSubLeadingJetPt(heppySkimTree* ntuple){
+template<typename ntupleType> double fillSubLeadingJetPt(ntupleType* ntuple){
   if(ntuple->nFatjetAK08ungroomed<=1) 
     return -1.;
   else
     return ntuple->FatjetAK08ungroomed_pt[1];
 }
 
-double fillLeadingBBtag(heppySkimTree* ntuple){
+template<typename ntupleType> double fillLeadingBBtag(ntupleType* ntuple){
   if(ntuple->nFatjetAK08ungroomed<=0) 
     return -1.;
   else
     return ntuple->FatjetAK08ungroomed_bbtag[0];
 }
 
-double fillSubLeadingBBtag(heppySkimTree* ntuple){
+template<typename ntupleType> double fillSubLeadingBBtag(ntupleType* ntuple){
   if(ntuple->nFatjetAK08ungroomed<=1) 
     return -1.;
   else
     return ntuple->FatjetAK08ungroomed_bbtag[1];
 }
 
-double fillLeadingTau21(heppySkimTree* ntuple){
+template<typename ntupleType> double fillLeadingTau21(ntupleType* ntuple){
   if(ntuple->nFatjetAK08ungroomed<=0) 
     return -1.;
   else
     return ntuple->FatjetAK08ungroomed_tau2[0]/ntuple->FatjetAK08ungroomed_tau1[0];
 }
 
-double fillSubLeadingTau21(heppySkimTree* ntuple){
+template<typename ntupleType> double fillSubLeadingTau21(ntupleType* ntuple){
   if(ntuple->nFatjetAK08ungroomed<=1) 
     return -1.;
   else
     return ntuple->FatjetAK08ungroomed_tau2[1]/ntuple->FatjetAK08ungroomed_tau1[1];
 }
 
-double fillHT(heppySkimTree* ntuple){
+template<typename ntupleType> double fillHT(ntupleType* ntuple){
   double HT = 0.;
   //cout << "nJets: " << ntuple->nJet << endl;
   for(int iJet = 0 ; iJet < ntuple->nJet ; iJet++ ){
@@ -243,7 +410,7 @@ double fillHT(heppySkimTree* ntuple){
   return HT;
 }
 
-double fillSingleJetMass(heppySkimTree* ntuple){
+template<typename ntupleType> double fillSingleJetMass(ntupleType* ntuple){
 
   const int maxJets=2;
   for( int i = 0 ; i < maxJets ; i++){ 
@@ -257,7 +424,7 @@ double fillSingleJetMass(heppySkimTree* ntuple){
   return -9999.;
 }
 
-double fillLooseSingleJetMass(heppySkimTree* ntuple){
+template<typename ntupleType> double fillLooseSingleJetMass(ntupleType* ntuple){
 
   const int maxJets=2;
   for( int i = 0 ; i < maxJets ; i++){ 
@@ -270,7 +437,7 @@ double fillLooseSingleJetMass(heppySkimTree* ntuple){
   return -9999.;
 }
 
-double fillSingleBBtag(heppySkimTree* ntuple){
+template<typename ntupleType> double fillSingleBBtag(ntupleType* ntuple){
 
   const int maxJets=2;
   for( int i = 0 ; i < maxJets ; i++){ 
@@ -284,7 +451,7 @@ double fillSingleBBtag(heppySkimTree* ntuple){
   return -9999.;
 }
 
-double fillSingleTau21(heppySkimTree* ntuple){
+template<typename ntupleType> double fillSingleTau21(ntupleType* ntuple){
 
   const int maxJets=2;
   for( int i = 0 ; i < maxJets ; i++){ 
@@ -298,7 +465,7 @@ double fillSingleTau21(heppySkimTree* ntuple){
   return -9999.;
 }
 
-double fillSinglePt(heppySkimTree* ntuple){
+template<typename ntupleType> double fillSinglePt(ntupleType* ntuple){
 
   const int maxJets=2;
   for( int i = 0 ; i < maxJets ; i++){ 
@@ -312,7 +479,7 @@ double fillSinglePt(heppySkimTree* ntuple){
   return -9999.;
 }
 
-double fillLooseSinglePt(heppySkimTree* ntuple){
+template<typename ntupleType> double fillLooseSinglePt(ntupleType* ntuple){
 
   const int maxJets=2;
   for( int i = 0 ; i < maxJets ; i++){ 
@@ -325,7 +492,7 @@ double fillLooseSinglePt(heppySkimTree* ntuple){
   return -9999.;
 }
 
-double fillAnalysisBins(heppySkimTree* ntuple){
+template<typename ntupleType> double fillAnalysisBins(ntupleType* ntuple){
   double MET = ntuple->met_pt;
   double HT = fillHT(ntuple);
 
@@ -358,7 +525,7 @@ double fillAnalysisBins(heppySkimTree* ntuple){
     return -1.;
 }
 
-double fillRA2b10Bins(heppySkimTree* ntuple){
+template<typename ntupleType> double fillRA2b10Bins(ntupleType* ntuple){
   double MET = ntuple->met_pt;
   double HT = fillHT(ntuple);
 
@@ -398,7 +565,7 @@ double fillRA2b10Bins(heppySkimTree* ntuple){
     return -1.;
 }
 
-double fillRA2b160Bins( heppySkimTree* ntuple ){
+template<typename ntupleType> double fillRA2b160Bins( ntupleType* ntuple ){
 
   int BTags = int(fillBTags(ntuple));
   int NJets = int(fillNJets(ntuple));
@@ -443,14 +610,14 @@ double fillRA2b160Bins( heppySkimTree* ntuple ){
     return -1.;  
 }
 
-bool ptBinCut(heppySkimTree* ntuple , int ithBin){
+template<typename ntupleType> bool ptBinCut(ntupleType* ntuple , int ithBin){
   if( ithBin > 5 ) return false;
   double ptCut[6] = {300.,400.,500.,700.,1000.,999999.};
   double pt = fillLooseSinglePt(ntuple);
   return pt>ptCut[ithBin] && pt<ptCut[ithBin+1];
 }
  
-bool RA2bBaselineCut(heppySkimTree* ntuple){
+template<typename ntupleType> bool RA2bBaselineCut(ntupleType* ntuple){
 
   double DeltaPhi1 = fillDeltaPhi1(ntuple);
   double DeltaPhi2 = fillDeltaPhi2(ntuple);
@@ -465,7 +632,8 @@ bool RA2bBaselineCut(heppySkimTree* ntuple){
   return (NJets == 3 && MET > 300. && HT > 300. && DeltaPhi1 > 0.5 && DeltaPhi2 > 0.5 && DeltaPhi3 > 0.3) || (NJets > 3 && MET > 300. && HT > 300. && DeltaPhi1 > 0.5 && DeltaPhi2 > 0.5 && DeltaPhi3 > 0.3 && DeltaPhi4 > 0.3);
 
 }
-bool baselineCut(heppySkimTree* ntuple){
+
+template<typename ntupleType> bool baselineCut(ntupleType* ntuple){
   double HT = fillHT(ntuple);
 
   return ( //ntuple->naLeptons == 0            &&
@@ -481,7 +649,7 @@ bool baselineCut(heppySkimTree* ntuple){
 
 }
 
-bool taggingCut(heppySkimTree* ntuple ){ 
+template<typename ntupleType> bool taggingCut(ntupleType* ntuple ){ 
   return ( baselineCut(ntuple) && 
 	   ( ntuple->FatjetAK08ungroomed_bbtag[0] > bbtagCut
 	     // && ntuple->FatjetAK08ungroomed_mpruned[0] > 85. 
@@ -493,7 +661,7 @@ bool taggingCut(heppySkimTree* ntuple ){
 	     ));
 }
 
-bool antiTaggingCut(heppySkimTree* ntuple ){
+template<typename ntupleType> bool antiTaggingCut(ntupleType* ntuple ){
   return ( baselineCut(ntuple) && 
 	   ! ( ( ntuple->FatjetAK08ungroomed_bbtag[0] > bbtagCut
 		 // && ntuple->FatjetAK08ungroomed_mpruned[0] > 85.
@@ -505,7 +673,7 @@ bool antiTaggingCut(heppySkimTree* ntuple ){
 		 ) ) ) ;
 }
 
-bool singleHiggsTagCut(heppySkimTree* ntuple ){
+template<typename ntupleType> bool singleHiggsTagCut(ntupleType* ntuple ){
   double HT = fillHT(ntuple);
 
   return ( //ntuple->naLeptons == 0            &&
@@ -524,7 +692,7 @@ bool singleHiggsTagCut(heppySkimTree* ntuple ){
 
 }
 
-bool doubleHiggsTagCut(heppySkimTree* ntuple ){
+template<typename ntupleType> bool doubleHiggsTagCut(ntupleType* ntuple ){
   double HT = fillHT(ntuple);
 
   return ( //ntuple->naLeptons == 0            &&
