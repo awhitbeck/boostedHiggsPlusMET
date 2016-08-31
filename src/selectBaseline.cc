@@ -53,6 +53,22 @@ public :
     ntuple->fChain->SetBranchStatus("aLeptons_eleooEmooP",1);
     ntuple->fChain->SetBranchStatus("met_pt",1);
 
+    ntuple->fChain->SetBranchStatus("nvLeptons",1);
+    ntuple->fChain->SetBranchStatus("vLeptons_pt",1);
+    ntuple->fChain->SetBranchStatus("vLeptons_isPFMuon",1);
+    ntuple->fChain->SetBranchStatus("vLeptons_isGlobalMuon",1);
+    ntuple->fChain->SetBranchStatus("vLeptons_isTrackerMuon",1);
+    ntuple->fChain->SetBranchStatus("vLeptons_miniRelIso",1);
+    ntuple->fChain->SetBranchStatus("vLeptons_mediumMuonId",1);
+    ntuple->fChain->SetBranchStatus("vLeptons_etaSc",1);
+    ntuple->fChain->SetBranchStatus("vLeptons_relIso03",1);
+    ntuple->fChain->SetBranchStatus("vLeptons_eleSieie",1);
+    ntuple->fChain->SetBranchStatus("vLeptons_eleDEta",1);
+    ntuple->fChain->SetBranchStatus("vLeptons_eleDPhi",1);
+    ntuple->fChain->SetBranchStatus("vLeptons_eleHoE",1);
+    ntuple->fChain->SetBranchStatus("vLeptons_eleExpMissingInnerHits",1);
+    ntuple->fChain->SetBranchStatus("vLeptons_eleooEmooP",1);
+
   };
 
   bool process( ) override {
@@ -65,24 +81,45 @@ public :
 	numMuons++;
       }
     }
+    for( int iLep = 0 ; iLep < ntuple->nvLeptons ; iLep++ ){
+      if( ntuple->vLeptons_pt[iLep]>10. && abs(ntuple->vLeptons_eta[iLep])<2.4 && ntuple->vLeptons_mediumMuonId[iLep] == 1 && ntuple->vLeptons_miniRelIso[iLep] < 0.2  ){
+	numMuons++;
+      }
+    }  
 
     if( numMuons >= minMu && numMuons <= maxMu ) 
       histo->Fill(1);
     else
       return false;
-    
+
     for( int iLep = 0 ; iLep < ntuple->naLeptons ; iLep++ ){
       if( ( ntuple->aLeptons_pt[iLep]>10. && abs(ntuple->aLeptons_eta[iLep])<2.5 && ntuple->aLeptons_miniRelIso[iLep] < 0.1 ) &&
-	( ( abs(ntuple->aLeptons_etaSc[iLep]) < 1.479 && ntuple->aLeptons_eleSieie[iLep] < 0.0115 && abs(ntuple->aLeptons_eleDEta[iLep]) < 0.00749 &&
-	  abs(ntuple->aLeptons_eleDPhi[iLep]) < 0.228 && ntuple->aLeptons_eleHoE[iLep] < 0.356 && ntuple->aLeptons_eleooEmooP[iLep] < 0.299 && 
-	  ntuple->aLeptons_eleExpMissingInnerHits[iLep] <= 2 
+	  ( ( abs(ntuple->aLeptons_etaSc[iLep]) < 1.479 && ntuple->aLeptons_eleSieie[iLep] < 0.0115 && abs(ntuple->aLeptons_eleDEta[iLep]) < 0.00749 &&
+	      abs(ntuple->aLeptons_eleDPhi[iLep]) < 0.228 && ntuple->aLeptons_eleHoE[iLep] < 0.356 && ntuple->aLeptons_eleooEmooP[iLep] < 0.299 && 
+	      ntuple->aLeptons_eleExpMissingInnerHits[iLep] <= 2 
+	      ) || 
+	    ( abs(ntuple->aLeptons_etaSc[iLep]) > 1.479 && ntuple->aLeptons_eleSieie[iLep] < 0.037 && abs(ntuple->aLeptons_eleDEta[iLep]) < 0.00895 && 
+	      abs(ntuple->aLeptons_eleDPhi[iLep]) < 0.213 && ntuple->aLeptons_eleHoE[iLep] < 0.211 && ntuple->aLeptons_eleooEmooP[iLep] < 0.15 && 
+	      ntuple->aLeptons_eleExpMissingInnerHits[iLep] <= 3 ))){ 
+	numElectrons++;
+      }
+    }
+    
+    for( int iLep = 0 ; iLep < ntuple->nvLeptons ; iLep++ ){
+      if( ( ntuple->vLeptons_pt[iLep]>10. && abs(ntuple->vLeptons_eta[iLep])<2.5 && ntuple->vLeptons_miniRelIso[iLep] < 0.1 ) &&
+	( ( abs(ntuple->vLeptons_etaSc[iLep]) < 1.479 && ntuple->vLeptons_eleSieie[iLep] < 0.0115 && abs(ntuple->vLeptons_eleDEta[iLep]) < 0.00749 &&
+	  abs(ntuple->vLeptons_eleDPhi[iLep]) < 0.228 && ntuple->vLeptons_eleHoE[iLep] < 0.356 && ntuple->vLeptons_eleooEmooP[iLep] < 0.299 && 
+	  ntuple->vLeptons_eleExpMissingInnerHits[iLep] <= 2 
 	    ) || 
-	  ( abs(ntuple->aLeptons_etaSc[iLep]) > 1.479 && ntuple->aLeptons_eleSieie[iLep] < 0.037 && abs(ntuple->aLeptons_eleDEta[iLep]) < 0.00895 && 
-	    abs(ntuple->aLeptons_eleDPhi[iLep]) < 0.213 && ntuple->aLeptons_eleHoE[iLep] < 0.211 && ntuple->aLeptons_eleooEmooP[iLep] < 0.15 && 
-	    ntuple->aLeptons_eleExpMissingInnerHits[iLep] <= 3 ))){ 
+	  ( abs(ntuple->vLeptons_etaSc[iLep]) > 1.479 && ntuple->vLeptons_eleSieie[iLep] < 0.037 && abs(ntuple->vLeptons_eleDEta[iLep]) < 0.00895 && 
+	    abs(ntuple->vLeptons_eleDPhi[iLep]) < 0.213 && ntuple->vLeptons_eleHoE[iLep] < 0.211 && ntuple->vLeptons_eleooEmooP[iLep] < 0.15 && 
+	    ntuple->vLeptons_eleExpMissingInnerHits[iLep] <= 3 ))){ 
 	  numElectrons++;
 	}
     }
+
+
+
     if( numElectrons >= minEle && numElectrons <= maxEle )
       histo->Fill(2);
     else 
