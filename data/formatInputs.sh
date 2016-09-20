@@ -1,10 +1,12 @@
 #!/bin/bash
 
-
 samples="""HTMHT
 JetHT
-BulkGravTohhTohVVhbb_narrow_M-1000_13TeV-madgraph
-TT_TuneCUETP8M1_13TeV-powheg-pythia8
+TTJets_TuneCUETP8M1_13TeV-madgraphMLM-pythia8
+TTJets_HT-600to800_TuneCUETP8M1_13TeV-madgraphMLM-pythia8
+TTJets_HT-800to1200_TuneCUETP8M1_13TeV-madgraphMLM-pythia8
+TTJets_HT-1200to2500_TuneCUETP8M1_13TeV-madgraphMLM-pythia8
+TTJets_HT-2500toInf_TuneCUETP8M1_13TeV-madgraphMLM-pythia8
 QCD_HT1000to1500_TuneCUETP8M1_13TeV-madgraphMLM-pythia8
 QCD_HT1500to2000_TuneCUETP8M1_13TeV-madgraphMLM-pythia8
 QCD_HT2000toInf_TuneCUETP8M1_13TeV-madgraphMLM-pythia8
@@ -24,9 +26,77 @@ WJetsToLNu_HT-400To600_TuneCUETP8M1_13TeV-madgraphMLM-pythia8
 WJetsToLNu_HT-600To800_TuneCUETP8M1_13TeV-madgraphMLM-pythia8
 WJetsToLNu_HT-800To1200_TuneCUETP8M1_13TeV-madgraphMLM-pythia8"""
 
+### all cross sections were taken from here:
+# https://github.com/TreeMaker/TreeMaker/blob/Run2/WeightProducer/python/getWeightProducer_cff.py
+declare -A xsec
+xsec["HTMHT"]="1."
+xsec["TTJets_TuneCUETP8M1_13TeV-madgraphMLM-pythia8"]="831.76"
+xsec["TTJets_SingleLeptFromT_TuneCUETP8M1_13TeV-madgraphMLM-pythia8"]="182.72"
+xsec["TTJets_SingleLeptFromTbar_TuneCUETP8M1_13TeV-madgraphMLM-pythia8"]="182.72"
+xsec["TTJets_DiLept_TuneCUETP8M1_13TeV-madgraphMLM-pythia8"]="88.34"
+xsec["TTJets_HT-600to800_TuneCUETP8M1_13TeV-madgraphMLM-pythia8"]="2.7343862"
+xsec["TTJets_HT-800to1200_TuneCUETP8M1_13TeV-madgraphMLM-pythia8"]="1.12075054"
+xsec["TTJets_HT-1200to2500_TuneCUETP8M1_13TeV-madgraphMLM-pythia8"]="0.1979159"
+xsec["TTJets_HT-2500toInf_TuneCUETP8M1_13TeV-madgraphMLM-pythia8"]="0.002368366"
+xsec["WJetsToLNu_HT-100To200_TuneCUETP8M1_13TeV-madgraphMLM-pythia8"]="1627.45"
+xsec["WJetsToLNu_HT-200To400_TuneCUETP8M1_13TeV-madgraphMLM-pythia8"]="435.24"
+xsec["WJetsToLNu_HT-400To600_TuneCUETP8M1_13TeV-madgraphMLM-pythia8"]="59.18"
+xsec["WJetsToLNu_HT-600To800_TuneCUETP8M1_13TeV-madgraphMLM-pythia8"]="14.58"
+xsec["WJetsToLNu_HT-800To1200_TuneCUETP8M1_13TeV-madgraphMLM-pythia8"]="6.66"
+xsec["WJetsToLNu_HT-1200To2500_TuneCUETP8M1_13TeV-madgraphMLM-pythia8"]="1.608"
+xsec["WJetsToLNu_HT-2500ToInf_TuneCUETP8M1_13TeV-madgraphMLM-pythia8"]="0.03891"
+xsec["QCD_HT200to300_TuneCUETP8M1_13TeV-madgraphMLM-pythia8"]="1717000"
+xsec["QCD_HT300to500_TuneCUETP8M1_13TeV-madgraphMLM-pythia8"]="351300"
+xsec["QCD_HT500to700_TuneCUETP8M1_13TeV-madgraphMLM-pythia8"]="31630"
+xsec["QCD_HT700to1000_TuneCUETP8M1_13TeV-madgraphMLM-pythia8"]="6802"
+xsec["QCD_HT1000to1500_TuneCUETP8M1_13TeV-madgraphMLM-pythia8"]="1206"
+xsec["QCD_HT1500to2000_TuneCUETP8M1_13TeV-madgraphMLM-pythia8"]="120.4"
+xsec["QCD_HT2000toInf_TuneCUETP8M1_13TeV-madgraphMLM-pythia8"]="25.24"
+xsec["DYJetsToLL_M-50_HT-100to200_TuneCUETP8M1_13TeV-madgraphMLM-pythia8"]="183.1"
+xsec["DYJetsToLL_M-50_HT-200to400_TuneCUETP8M1_13TeV-madgraphMLM-pythia8"]="50.49"
+xsec["DYJetsToLL_M-50_HT-400to600_TuneCUETP8M1_13TeV-madgraphMLM-pythia8"]="6.994"
+xsec["DYJetsToLL_M-50_HT-600toInf_TuneCUETP8M1_13TeV-madgraphMLM-pythia8"]="2.7"
+xsec["DYJetsToLL_M-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8"]="6025.2"
+xsec["ZJetsToNuNu_HT-100To200_13TeV-madgraph"]="344.3"
+xsec["ZJetsToNuNu_HT-200To400_13TeV-madgraph"]="95.23"
+xsec["ZJetsToNuNu_HT-400To600_13TeV-madgraph"]="13.19"
+xsec["ZJetsToNuNu_HT-600To800_13TeV-madgraph"]="3.221"
+xsec["ZJetsToNuNu_HT-800To1200_13TeV-madgraph"]="1.474"
+xsec["ZJetsToNuNu_HT-1200To2500_13TeV-madgraph"]="0.3586"
+xsec["ZJetsToNuNu_HT-2500ToInf_13TeV-madgraph"]="0.008203"
+xsec["GJets_HT-100To200_TuneCUETP8M1_13TeV-madgraphMLM-pythia8"]="9226"
+xsec["GJets_HT-200To400_TuneCUETP8M1_13TeV-madgraphMLM-pythia8"]="2300"
+xsec["GJets_HT-400To600_TuneCUETP8M1_13TeV-madgraphMLM-pythia8"]="277.4"
+xsec["GJets_HT-600ToInf_TuneCUETP8M1_13TeV-madgraphMLM-pythia8"]="93.38"
+xsec["GJets_DR-0p4_HT-100To200_TuneCUETP8M1_13TeV-madgraphMLM-pythia8"]="5000"
+xsec["GJets_DR-0p4_HT-200To400_TuneCUETP8M1_13TeV-madgraphMLM-pythia8"]="1079"
+xsec["GJets_DR-0p4_HT-400To600_TuneCUETP8M1_13TeV-madgraphMLM-pythia8"]="125.9"
+xsec["GJets_DR-0p4_HT-600ToInf_TuneCUETP8M1_13TeV-madgraphMLM-pythia8"]="43.36"
+xsec["ST_s-channel_4f_leptonDecays_13TeV-amcatnlo-pythia8_TuneCUETP8M1"]="3.34"
+xsec["ST_t-channel_antitop_4f_leptonDecays_13TeV-powheg-pythia8_TuneCUETP8M1"]="26.23"
+xsec["ST_t-channel_top_4f_leptonDecays_13TeV-powheg-pythia8_TuneCUETP8M1"]="44.07"
+xsec["ST_tW_antitop_5f_inclusiveDecays_13TeV-powheg-pythia8_TuneCUETP8M1"]="35.6"
+xsec["ST_tW_top_5f_inclusiveDecays_13TeV-powheg-pythia8_TuneCUETP8M1"]="35.6"
+xsec["WWTo2L2Nu_13TeV-powheg"]="12.178"
+xsec["WWTo1L1Nu2Q_13TeV_amcatnloFXFX_madspin_pythia8"]="49.997"
+xsec["WZTo1L1Nu2Q_13TeV_amcatnloFXFX_madspin_pythia8"]="10.71"
+xsec["WZTo1L3Nu_13TeV_amcatnloFXFX_madspin_pythia8"]="3.058"
+xsec["ZZTo2L2Q_13TeV_amcatnloFXFX_madspin_pythia8"]="3.22"
+xsec["ZZTo2Q2Nu_13TeV_amcatnloFXFX_madspin_pythia8"]="4.04"
+xsec["TTZToLLNuNu_M-10_TuneCUETP8M1_13TeV-amcatnlo-pythia8"]="0.2529"
+xsec["TTZToQQ_TuneCUETP8M1_13TeV-amcatnlo-pythia8"]="0.5297"
+xsec["TTWJetsToLNu_TuneCUETP8M1_13TeV-amcatnloFXFX-madspin-pythia8"]="0.2043"
+xsec["TTWJetsToQQ_TuneCUETP8M1_13TeV-amcatnloFXFX-madspin-pythia8"]="0.4026"
+xsec["TTGJets_TuneCUETP8M1_13TeV-amcatnloFXFX-madspin-pythia8"]="3.697"
+xsec["TTTT_TuneCUETP8M1_13TeV-amcatnlo-pythia8"]="0.009103"
+xsec["WWZ_TuneCUETP8M1_13TeV-amcatnlo-pythia8"]="0.1651"
+xsec["WZZ_TuneCUETP8M1_13TeV-amcatnlo-pythia8"]="0.05565"
+xsec["ZZZ_TuneCUETP8M1_13TeV-amcatnlo-pythia8"]="0.01398"
+
 for sample in $samples 
 do
-    echo "#tag ${sample}" >> heppyInputs.txt
-    echo "#xsec 1." >> heppyInputs.txt
-    ls /eos/uscms/store/user/lpchbb/HeppyNtuples/V23/${sample}/*/*/*/*.root | awk -F "/eos/uscms" '{print $2'} >> heppyInputs.txt
+    for file in `ls /eos/uscms/store/user/lpcsusyhad/SusyRA2Analysis2015/Run2ProductionV10/*${sample}*.root | awk -F "/eos/uscms" '{print $2'}` 
+    do 
+	echo $file $sample ${xsec[$sample]} >> RA2bInputs.txt
+    done
 done
