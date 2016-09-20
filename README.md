@@ -26,7 +26,18 @@ mv workingArea.tar $CMSSW_BASE/src/boostedHiggsHeppy/src/
 cd $CMSSW_BASE/src/boostedHiggsHeppy/src/
 </pre>
 
-# Baseline Skims
+This repo is largely a bunch of individual analysis scripts that can be used to perform various
+measurements and/or validations.  This list includes:
+
+|  Section Link | Quick description |
+|:------------------------|:---------|
+|[Baseline Skims](baselineSkim) | | 
+|[Single-μ Skims](singleMuSkim)| |
+|[Generate Datacard Inputs](datacardInputs)| | 
+|[Plot Observables](plotObs)| | 
+|[Toy Validations](toyValidation)| | 
+
+# <a name="baselineSkim"></a>Baseline Skims
 
 baselineSkim.cc is used to reduce the heppy trees down to a managable size by
 selecting one the events that pass a set of baseline cuts.  These cuts are
@@ -66,3 +77,23 @@ monitor the progress of the sample-level DAG jobs:
 tail prepareSkimDAG.py.dagman.out
 </pre>
 Similarly, one can check on the progress of each sub-DAG. 
+
+# <a name="singleMuSkim"></a> Single Muon Skims
+
+This should be merged with the baseline skims... workflows are very very similar.
+
+# <a name="datacardInputs"></a> Generating datacard inputs
+
+<code>datacardInputs_MET.cc</code> can be used to create a root file with expected yields for generating
+datacards.  
+
+# <a name="plotObs"></a> Plotting Observables
+
+<code>plotObs_antitag.cc</code>, <code>plotObs_baseline.cc</code>, <code>plotObs_singleHiggsTag.cc</code>, <code>plotObs_singleMuCR_antitag.cc</code>, <code>plotObs_singleMuCR_singleHiggsTag.cc</code> can be used to
+plot various observables in the signal region and each of the control regions.
+
+# <a name="toyValidation"></a> Toy validations
+
+<code>FulltoyValidation.cc</code>, and <code>FulltoyValidationBkgOnly.cc</code> can be used to construct the
+likelihood model used for background estimations, generete toys, and validate closure and signal bias based
+on the fitted parameters from each toy.
