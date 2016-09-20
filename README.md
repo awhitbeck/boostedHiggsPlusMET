@@ -3,19 +3,19 @@ classes to facilitate some things.
 
 #General Stuff:
 
-## Setting up the code:
+#### Setting up the code:
 <pre>
 git clone https://github.com/awhitbeck/AnalysisTools.git
 git clone https://github.com/awhitbeck/boostedHiggsPlusMET.git
 </pre>
 
-## Compiling:
+#### Compiling:
 
 There is currently no makefile for this repository.  However, to compile any of the code, one can use <code>build.sh</code>
 by passing the name of the target .cc minus the file extension as an arugment.  The executable will will have the same
 root as the target file name, but will be append with '.exe'
  
-## Batch:
+#### Batch:
 
 Before submitting any batch jobs, be sure to retar your working area and copy it into the <code>src/</code> directory.
 
@@ -39,7 +39,7 @@ Example:
 ./baselineSkim.exe /store/user/lpcsusyhad/SusyRA2Analysis2015/Run2ProductionV10/Spring16.TTJets_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_0_RA2AnalysisTree.root ./
 </pre>
 
-### Batch submit:
+#### Batch submit:
 
 To submit the code to condor @ the LPC, the simplest method is to first create a list of DAG files.  A script exists
 to generate these dag files automatically.  The input arguments to the bash script (<code>baslineSkim.sh</code>) which is executed 
@@ -53,8 +53,16 @@ To generate all of the necessary DAG files, run:
 <pre>
 python prepareSkimDAG.py
 </pre>
+The output will be one root DAG file and one sub-DAG for each sample.  
 
 Then submitting all jobs is reduce to:
 <pre>
 condor_submit_dag baselineSkim.dag
 </pre>
+
+The root dag job continuously dumps reports in <code>baselineSkim.dag.dagman.out</code>.  For example, to 
+monitor the progress of the sample-level DAG jobs:
+<pre>
+tail prepareSkimDAG.py.dagman.out
+</pre>
+Similarly, one can check on the progress of each sub-DAG. 
