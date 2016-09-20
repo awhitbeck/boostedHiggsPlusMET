@@ -34,12 +34,13 @@ int main(int argc, char** argv){
     }
   }
 
-  double (*arbitrationFunc)(heppySkimTree*) = *fillLeadingBBtagJetMass;
+  double (*arbitrationFunc)(heppySkimTree*) = *fillLeadingBBtagJetMass<heppySkimTree>;
+  typedef plot<heppySkimTree> plot;
 
-  plot tagSR_versusMET(*fillMET,"tagSR_versusMET","E_{T}^{miss} [GeV]",10,300.,1300.);
-  plot tagSB_versusMET(*fillMET,"tagSB_versusMET","E_{T}^{miss} [GeV]",10,300.,1300.);
-  plot antitagSR_versusMET(*fillMET,"antitagSR_versusMET","E_{T}^{miss} [GeV]",10,300.,1300.);
-  plot antitagSB_versusMET(*fillMET,"antitagSB_versusMET","E_{T}^{miss} [GeV]",10,300.,1300.);
+  plot tagSR_versusMET(*fillMET<heppySkimTree>,"tagSR_versusMET","E_{T}^{miss} [GeV]",10,300.,1300.);
+  plot tagSB_versusMET(*fillMET<heppySkimTree>,"tagSB_versusMET","E_{T}^{miss} [GeV]",10,300.,1300.);
+  plot antitagSR_versusMET(*fillMET<heppySkimTree>,"antitagSR_versusMET","E_{T}^{miss} [GeV]",10,300.,1300.);
+  plot antitagSB_versusMET(*fillMET<heppySkimTree>,"antitagSB_versusMET","E_{T}^{miss} [GeV]",10,300.,1300.);
 
   // MC backgrounds
   for( int iSample = 0 ; iSample < skims.ntuples.size() ; iSample++){

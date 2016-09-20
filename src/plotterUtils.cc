@@ -1,3 +1,4 @@
+#include "THStack.h"
 #include "heppySkimTree.h"
 #include "TH1F.h"
 #include "TString.h"
@@ -11,7 +12,8 @@
 using namespace std;
 
 //double lumi=9200.;
-double lumi=15000.;
+//double lumi=15000.;
+double lumi=40000.;
 
 template <typename ntupleType> class plot{
 
@@ -114,7 +116,7 @@ template <typename ntupleType> class plot{
       cout << "plot::setFillColor - ERROR: couldn't find key, " << ntuple << endl;
     }
   };
-
+  
   void buildStack(vector<ntupleType*> ntuples){
     if( stack ){
       for( int iSample = 0 ; iSample < ntuples.size() ; iSample++ ){

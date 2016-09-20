@@ -83,14 +83,6 @@ int main(int argc, char** argv){
   ntuple->fChain->SetBranchStatus("GenHiggsBoson_mass",1);
   ntuple->fChain->SetBranchStatus("GenHiggsBoson_charge",1);
   ntuple->fChain->SetBranchStatus("GenHiggsBoson_status",1);
-  ntuple->fChain->SetBranchStatus("naLeptons",1)      ;
-  ntuple->fChain->SetBranchStatus("vLeptons_charge",1);
-  ntuple->fChain->SetBranchStatus("vLeptons_tightId",1);
-  ntuple->fChain->SetBranchStatus("vLeptons_pdgId",1) ;
-  ntuple->fChain->SetBranchStatus("vLeptons_pt",1)    ;
-  ntuple->fChain->SetBranchStatus("vLeptons_eta",1)   ;
-  ntuple->fChain->SetBranchStatus("vLeptons_phi",1)   ;
-  ntuple->fChain->SetBranchStatus("vLeptons_mass",1)  ;
   ntuple->fChain->SetBranchStatus("naLeptons",1);
   ntuple->fChain->SetBranchStatus("aLeptons_pt",1);
   ntuple->fChain->SetBranchStatus("aLeptons_eta",1);
@@ -111,6 +103,26 @@ int main(int argc, char** argv){
   ntuple->fChain->SetBranchStatus("aLeptons_eleHoE",1);
   ntuple->fChain->SetBranchStatus("aLeptons_eleExpMissingInnerHits",1);
   ntuple->fChain->SetBranchStatus("aLeptons_eleooEmooP",1);
+  ntuple->fChain->SetBranchStatus("nvLeptons",1);
+  ntuple->fChain->SetBranchStatus("vLeptons_pt",1);
+  ntuple->fChain->SetBranchStatus("vLeptons_eta",1);
+  ntuple->fChain->SetBranchStatus("vLeptons_phi",1);
+  ntuple->fChain->SetBranchStatus("vLeptons_mass",1);
+  ntuple->fChain->SetBranchStatus("vLeptons_isPFMuon",1);
+  ntuple->fChain->SetBranchStatus("vLeptons_isGlobalMuon",1);
+  ntuple->fChain->SetBranchStatus("vLeptons_isTrackerMuon",1);
+  ntuple->fChain->SetBranchStatus("vLeptons_miniRelIso",1);
+  ntuple->fChain->SetBranchStatus("vLeptons_mediumMuonId",1);
+  ntuple->fChain->SetBranchStatus("vLeptons_etaSc",1);
+  ntuple->fChain->SetBranchStatus("vLeptons_relIso03",1);
+  ntuple->fChain->SetBranchStatus("vLeptons_relIso04",1);
+  ntuple->fChain->SetBranchStatus("vLeptons_relIsoAn04",1);
+  ntuple->fChain->SetBranchStatus("vLeptons_eleSieie",1);
+  ntuple->fChain->SetBranchStatus("vLeptons_eleDEta",1);
+  ntuple->fChain->SetBranchStatus("vLeptons_eleDPhi",1);
+  ntuple->fChain->SetBranchStatus("vLeptons_eleHoE",1);
+  ntuple->fChain->SetBranchStatus("vLeptons_eleExpMissingInnerHits",1);
+  ntuple->fChain->SetBranchStatus("vLeptons_eleooEmooP",1);
   ntuple->fChain->SetBranchStatus("nJet",1)           ;
   ntuple->fChain->SetBranchStatus("Jet_btagCSV",1)    ;
   ntuple->fChain->SetBranchStatus("Jet_btagCMVA",1)   ;
@@ -147,6 +159,8 @@ int main(int argc, char** argv){
   for( int i = 0 ; i < numEvents ; i++ ){
     if( i%10000 == 0 ) std::cout << "Event " << i << "/" << numEvents << endl;
     t->GetEntry(i);
+
+    cout << "nvLeptons: " << ntuple->nvLeptons << endl;
     xsec = xsmap[fmap[argv[1]]]; 
     weight = xsec/norm;
     if( selectBase->process() )

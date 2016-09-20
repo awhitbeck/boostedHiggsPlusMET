@@ -1,5 +1,5 @@
 #include "TChain.h"
-#include "heppySkimTree.h"
+#include "heppySkimTree.cc"
 #include "TString.h"
 
 #include <vector>
@@ -67,5 +67,17 @@ public :
     dataNtuple = new heppySkimTree(data);
 
   };
-  
+
+  heppySkimTree* findNtuple(TString name){
+    for( int iSam = 0 ; iSam < sampleName.size() ; iSam++ ){
+      if( sampleName[iSam] == name )
+	return ntuples[iSam] ;
+    }
+    for( int iSam = 0 ; iSam < signalSampleName.size() ; iSam++ ){
+      if( signalSampleName[iSam] == name )
+	return signalNtuples[iSam] ;
+    }
+    return NULL;
+  };
+
 };
