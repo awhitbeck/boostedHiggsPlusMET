@@ -48,9 +48,13 @@ on the worker nodes are passed to the JDL files via the DAG files.  An example j
 JOB baselineSkim_QCD_HT1000to1500_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_0 baselineSkim.jdl
 VARS baselineSkim_QCD_HT1000to1500_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_0 arguments="/store/user/lpcsusyhad/SusyRA2Analysis2015/Run2ProductionV10/Spring16.QCD_HT1000to1500_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_ext1_9_RA2AnalysisTree.root root://cmseos.fnal.gov//store/user/awhitbe1/RA2bSkims_V10_v0/ "
 </pre>
-The jdl file for run the skims is <code>baselineSkim.jdl</code>.  One should specify the three command line arguments to <code>baselineSkim.sh</code> 
-when submitting the job.  e.g.:
 
+To generate all of the necessary DAG files, run:
 <pre>
-condor_submit baselineSkim.jdl arguments='root://cmseos.fnal.gov//store/user/lpchbb/HeppyNtuples/V14/ root://cmseos.fnal.gov//store/user/awhitbe1/heppySkims/ TTJets_TuneCUETP8M1_13TeV-madgraphMLM-pythia8.root'
+python prepareSkimDAG.py
+</pre>
+
+Then submitting all jobs is reduce to:
+<pre>
+condor_submit_dag baselineSkim.dag
 </pre>
