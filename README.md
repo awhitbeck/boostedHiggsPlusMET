@@ -5,6 +5,10 @@ classes to facilitate some things.
 
 #### Setting up the code:
 <pre>
+cmsrel CMSSW_7_4_2
+cd CMSSW_7_4_2/src/
+cmsenv
+
 git clone https://github.com/awhitbeck/AnalysisTools.git
 git clone https://github.com/awhitbeck/boostedHiggsPlusMET.git
 </pre>
