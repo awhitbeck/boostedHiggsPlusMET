@@ -64,7 +64,7 @@ template <typename ntupleType> class plot{
   
   void fill(ntupleType* ntuple ){
     if( histoMap.find(ntuple) != histoMap.end() ){
-      histoMap[ntuple]->Fill(fillerFunc(ntuple),ntuple->xsec*lumi);
+      histoMap[ntuple]->Fill(fillerFunc(ntuple),ntuple->Weight*lumi);
     }else{
       cout << "plot::fill - ERROR: key not found: " << ntuple << endl;
     }
@@ -72,7 +72,7 @@ template <typename ntupleType> class plot{
 
   void fillSignal(ntupleType* ntuple ){
     if( signalHistoMap.find(ntuple) != signalHistoMap.end() ){
-      signalHistoMap[ntuple]->Fill(fillerFunc(ntuple),ntuple->xsec*lumi);
+      signalHistoMap[ntuple]->Fill(fillerFunc(ntuple),ntuple->Weight*lumi);
     }else{
       cout << "plot::fillSignal - ERROR: key not found, " << ntuple << endl;
     }
