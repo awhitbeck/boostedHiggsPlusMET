@@ -366,7 +366,11 @@ template<typename ntupleType> bool RA2bBaselineCut(ntupleType* ntuple){
 
 template<typename ntupleType> bool baselineCut(ntupleType* ntuple){
  
-  return ( ntuple->MET > 300.             &&
+  return ( ntuple->BTags>=1 && 
+	   ntuple->NJets>=4 && 
+	   ntuple->DeltaPhi1>=0.5 && 
+	   ntuple->DeltaPhi2>=0.5 && 
+	   ntuple->MET > 300.             &&
 	   ntuple->HT > 600.                         &&
 	   ntuple->JetsAK8->size() >= 2 &&
 	   ntuple->JetsAK8->at(0).Pt() > 300. && 
