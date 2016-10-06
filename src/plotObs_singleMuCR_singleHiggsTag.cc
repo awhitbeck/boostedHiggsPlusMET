@@ -21,7 +21,9 @@ int main(int argc, char** argv){
   gROOT->ProcessLine(".L ~/tdrstyle.C");
   gROOT->ProcessLine("setTDRStyle()");
   
-  skimSamples skims("singleMuCR");
+  lumi = 24500;
+
+  skimSamples skims("root://cmseos.fnal.gov//store/user/awhitbe1/RA2bSkims_V10_v0/singleMuCR");
   typedef plot<RA2bTree> plot;
   plot METplot(*fillMET<RA2bTree>,"MET_singleMuCR_singleHiggsTag","MET [GeV]",15,300.,1800.);
   plot HTplot(*fillHT<RA2bTree>,"HT_singleMuCR_singleHiggsTag","H_{T} [GeV]",15,300,2800.);
@@ -87,12 +89,15 @@ int main(int argc, char** argv){
     }
 
     int numEvents = ntuple->fChain->GetEntries();
+    ntupleBranchStatus<RA2bTree>(ntuple);
     for( int iEvt = 0 ; iEvt < numEvents ; iEvt++ ){
       ntuple->GetEntry(iEvt);
       if( iEvt % 1000000 == 0 ) cout << skims.sampleName[iSample] << ": " << iEvt << "/" << numEvents << endl;
       //if( iEvt > 100000 ) break;
       if(! baselineCut(ntuple) ) continue;
-      if(! taggingCut(ntuple) ) continue;
+      if( doubleHiggsTagCut(ntuple) ) continue;
+      if( ntuple->NJets<4 || ntuple->BTags<1 || ntuple->DeltaPhi1<0.5 || ntuple->DeltaPhi2<0.5 ) continue;
+      if(! singleHiggsTagLooseCut(ntuple) ) continue;
       for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++ ){
 	plots[iPlot].fill(ntuple);
       }
@@ -110,11 +115,14 @@ int main(int argc, char** argv){
     }
 
     int numEvents = ntuple->fChain->GetEntries();
+    ntupleBranchStatus<RA2bTree>(ntuple);
     for( int iEvt = 0 ; iEvt < numEvents ; iEvt++ ){
       ntuple->GetEntry(iEvt);
       if( iEvt % 1000000 == 0 ) cout << skims.signalSampleName[iSample] << ": " << iEvt << "/" << numEvents << endl;
       if(! baselineCut(ntuple) ) continue;
-      if(! taggingCut(ntuple) ) continue;
+      if( doubleHiggsTagCut(ntuple) ) continue;
+      if( ntuple->NJets<4 || ntuple->BTags<1 || ntuple->DeltaPhi1<0.5 || ntuple->DeltaPhi2<0.5 ) continue;
+      if(! singleHiggsTagLooseCut(ntuple) ) continue;
       //if(ntuple->nGenHiggsBoson!=2) continue;
       for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++){
 	plots[iPlot].fillSignal(ntuple);
@@ -122,6 +130,28 @@ int main(int argc, char** argv){
     }
   }
   */
+
+  // Data samples
+  RA2bTree* ntuple = skims.dataNtuple;
+  for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++){
+    plots[iPlot].addDataNtuple(ntuple,"data");
+  }
+
+  int numEvents = ntuple->fChain->GetEntries();
+  ntupleBranchStatus<RA2bTree>(ntuple);
+  for( int iEvt = 0 ; iEvt < numEvents ; iEvt++ ){
+    ntuple->GetEntry(iEvt);
+    if( iEvt % 1000000 == 0 ) cout << "data: " << iEvt << "/" << numEvents << endl;
+    if(! baselineCut(ntuple) ) continue;
+    if( doubleHiggsTagCut(ntuple) ) continue;
+    if( ntuple->NJets<4 || ntuple->BTags<1 || ntuple->DeltaPhi1<0.5 || ntuple->DeltaPhi2<0.5 ) continue;
+    if(! singleHiggsTagLooseCut(ntuple) ) continue;
+    if( ntuple->TriggerPass->size() < 44 || ( !ntuple->TriggerPass->at(41) && !ntuple->TriggerPass->at(42) && !ntuple->TriggerPass->at(43) && !ntuple->TriggerPass->at(44)) ) continue;
+    for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++){
+      plots[iPlot].fillData(ntuple);
+    }
+  }
+  
 
   TCanvas* can = new TCanvas("can","can",500,500);
   for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++){

@@ -28,7 +28,15 @@ int main(int argc, char** argv){
   plot HTplot(*fillHT<RA2bTree>,"HT_antitag","H_{T} [GeV]",15,300,2800.);
   plot NJetsplot(*fillNJets<RA2bTree>,"NJets_antitag","n_{j}",14,1.5,15.5);
   plot BTagsplot(*fillBTags<RA2bTree>,"BTags_antitag","n_{b}",6,-0.5,5.5);
+  
   plot Binsplot(*fillAnalysisBins<RA2bTree>,"AnalysisBins_antitag","i^th Bin",8,0.5,8.5);
+  
+  plot DeltaPhi1plot(*fillDeltaPhi1<RA2bTree>,"DeltaPhi1_baseline","#Delta#Phi_{1}",20,0,3.1415);
+  plot DeltaPhi2plot(*fillDeltaPhi2<RA2bTree>,"DeltaPhi2_baseline","#Delta#Phi_{2}",20,0,3.1415);
+  plot DeltaPhi3plot(*fillDeltaPhi3<RA2bTree>,"DeltaPhi3_baseline","#Delta#Phi_{3}",20,0,3.1415);
+  plot DeltaPhi4plot(*fillDeltaPhi4<RA2bTree>,"DeltaPhi4_baseline","#Delta#Phi_{4}",20,0,3.1415);
+
+
   plot J1pt_Massplot(*fillLeadingJetMass<RA2bTree>,"J1pt_Mass_antitag","m_{J} [GeV]",20,50.,200.);
   plot J2pt_Massplot(*fillSubLeadingJetMass<RA2bTree>,"J2pt_Mass_antitag","m_{J} [GeV]",20,50.,200.);
   plot J1bbtag_Massplot(*fillLeadingBBtagJetMass<RA2bTree>,"J1bbtag_Mass_antitag","m_{J} [GeV]",20,50.,200.);
@@ -58,6 +66,12 @@ int main(int argc, char** argv){
   plots.push_back(NJetsplot);
   plots.push_back(BTagsplot);
   plots.push_back(Binsplot);
+  
+  plots.push_back(DeltaPhi1plot);
+  plots.push_back(DeltaPhi2plot);
+  plots.push_back(DeltaPhi3plot);
+  plots.push_back(DeltaPhi4plot);
+
   plots.push_back(J1pt_Massplot);
   plots.push_back(J2pt_Massplot);
   plots.push_back(J1bbtag_Massplot);
@@ -88,12 +102,15 @@ int main(int argc, char** argv){
     }
 
     int numEvents = ntuple->fChain->GetEntries();
+    ntupleBranchStatus<RA2bTree>(ntuple);
     for( int iEvt = 0 ; iEvt < numEvents ; iEvt++ ){
       ntuple->GetEntry(iEvt);
       if( iEvt % 1000000 == 0 ) cout << skims.sampleName[iSample] << ": " << iEvt << "/" << numEvents << endl;
       //if( iEvt > 100000 ) break;
       if(! baselineCut(ntuple) ) continue;
-      if(! antiTaggingCut(ntuple) ) continue;
+      if( doubleHiggsTagCut(ntuple) ) continue;
+      if( ntuple->NJets<4 || ntuple->BTags<1 || ntuple->DeltaPhi1<0.5 || ntuple->DeltaPhi2<0.5 ) continue;
+      if(! antiTaggingLooseCut(ntuple) ) continue;
       for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++ ){
 	plots[iPlot].fill(ntuple);
       }
@@ -101,26 +118,51 @@ int main(int argc, char** argv){
   }
 
   // Signal samples
-  for( int iSample = 0 ; iSample < skims.signalNtuples.size() ; iSample++){
+  for( int iSample = 0 ; iSample < 0 /*skims.signalNtuples.size()*/ ; iSample++){
 
     RA2bTree* ntuple = skims.signalNtuples[iSample];
-    for( int iPlot = 0 ; iPlot < 0 /*plots.size()*/ ; iPlot++){
+    for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++){
       plots[iPlot].addSignalNtuple(ntuple,skims.signalSampleName[iSample]);
       plots[iPlot].setLineColor(ntuple,skims.lineColor[iSample]);
     }
 
     int numEvents = ntuple->fChain->GetEntries();
+    ntupleBranchStatus<RA2bTree>(ntuple);
     for( int iEvt = 0 ; iEvt < numEvents ; iEvt++ ){
       ntuple->GetEntry(iEvt);
       if( iEvt % 1000000 == 0 ) cout << skims.signalSampleName[iSample] << ": " << iEvt << "/" << numEvents << endl;
       if(! baselineCut(ntuple) ) continue;
-      if(! antiTaggingCut(ntuple) ) continue;
+      if( doubleHiggsTagCut(ntuple) ) continue;
+      if( ntuple->NJets<4 || ntuple->BTags<1 || ntuple->DeltaPhi1<0.5 || ntuple->DeltaPhi2<0.5 ) continue;
+      if(! antiTaggingLooseCut(ntuple) ) continue;
       //if(ntuple->nGenHiggsBoson!=2) continue;
       for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++){
 	plots[iPlot].fillSignal(ntuple);
       }
     }
   }
+
+    // Data samples
+  RA2bTree* ntuple = skims.dataNtuple;
+  for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++){
+    plots[iPlot].addDataNtuple(ntuple,"data_HTMHT");
+  }
+  
+  int numEvents = ntuple->fChain->GetEntries();
+  ntupleBranchStatus<RA2bTree>(ntuple);
+  for( int iEvt = 0 ; iEvt < numEvents ; iEvt++ ){
+    ntuple->GetEntry(iEvt);
+    if( iEvt % 1000000 == 0 ) cout << "data_HTMHT: " << iEvt << "/" << numEvents << endl;
+    if(! baselineCut(ntuple) ) continue;
+    if( doubleHiggsTagCut(ntuple) ) continue;
+    if( ntuple->NJets<4 || ntuple->BTags<1 || ntuple->DeltaPhi1<0.5 || ntuple->DeltaPhi2<0.5 ) continue;
+    if(! antiTaggingLooseCut(ntuple) ) continue;    
+    if( ntuple->TriggerPass->size() < 44 || ( !ntuple->TriggerPass->at(41) && !ntuple->TriggerPass->at(42) && !ntuple->TriggerPass->at(43) && !ntuple->TriggerPass->at(44)) ) continue;
+    for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++){
+      plots[iPlot].fillData(ntuple);
+    }
+  }
+
 
   TCanvas* can = new TCanvas("can","can",500,500);
   for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++){

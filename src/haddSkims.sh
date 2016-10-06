@@ -1,35 +1,36 @@
-#!/Bin-/bash
+#!/Bin/bash
 
 
 #skims="V23v4"
 skims="RA2bSkims_V10_v0"
-skimType="RA2bSkim"
+#skimType="RA2bSkim"
+skimType="singleMuCR"
 eos="root://cmseos.fnal.gov//store/user/awhitbe1/"
 eosWrite="root://cmsxrootd.fnal.gov/"
-# samples="""QCD_HT1000to1500_TuneCUETP8M1_13TeV-madgraphMLM-pythia8
-# QCD_HT1500to2000_TuneCUETP8M1_13TeV-madgraphMLM-pythia8
-# QCD_HT2000toInf_TuneCUETP8M1_13TeV-madgraphMLM-pythia8
-# QCD_HT300to500_TuneCUETP8M1_13TeV-madgraphMLM-pythia8
-# QCD_HT500to700_TuneCUETP8M1_13TeV-madgraphMLM-pythia8
-# QCD_HT700to1000_TuneCUETP8M1_13TeV-madgraphMLM-pythia8
-# ZJetsToNuNu_HT-1200To2500_13TeV-madgraph
-# ZJetsToNuNu_HT-200To400_13TeV-madgraph
-# ZJetsToNuNu_HT-2500ToInf_13TeV-madgraph
-# ZJetsToNuNu_HT-400To600_13TeV-madgraph
-# ZJetsToNuNu_HT-600To800_13TeV-madgraph
-# ZJetsToNuNu_HT-800To1200_13TeV-madgraph
-# WJetsToLNu_HT-200To400_TuneCUETP8M1_13TeV-madgraphMLM-pythia8
-# WJetsToLNu_HT-400To600_TuneCUETP8M1_13TeV-madgraphMLM-pythia8
-# WJetsToLNu_HT-600To800_TuneCUETP8M1_13TeV-madgraphMLM-pythia8
-# WJetsToLNu_HT-800To1200_TuneCUETP8M1_13TeV-madgraphMLM-pythia8
-# WJetsToLNu_HT-1200To2500_TuneCUETP8M1_13TeV-madgraphMLM-pythia8
-# WJetsToLNu_HT-2500ToInf_TuneCUETP8M1_13TeV-madgraphMLM-pythia8
-# TTJets_TuneCUETP8M1_13TeV-madgraphMLM-pythia8
-# TTJets_HT-600to800_TuneCUETP8M1_13TeV-madgraphMLM-pythia8
-# TTJets_HT-800to1200_TuneCUETP8M1_13TeV-madgraphMLM-pythia8
-# TTJets_HT-1200to2500_TuneCUETP8M1_13TeV-madgraphMLM-pythia8
-# TTJets_HT-2500toInf_TuneCUETP8M1_13TeV-madgraphMLM-pythia8
-# """
+samples="""QCD_HT1000to1500_TuneCUETP8M1_13TeV-madgraphMLM-pythia8
+QCD_HT1500to2000_TuneCUETP8M1_13TeV-madgraphMLM-pythia8
+QCD_HT2000toInf_TuneCUETP8M1_13TeV-madgraphMLM-pythia8
+QCD_HT300to500_TuneCUETP8M1_13TeV-madgraphMLM-pythia8
+QCD_HT500to700_TuneCUETP8M1_13TeV-madgraphMLM-pythia8
+QCD_HT700to1000_TuneCUETP8M1_13TeV-madgraphMLM-pythia8
+ZJetsToNuNu_HT-1200To2500_13TeV-madgraph
+ZJetsToNuNu_HT-200To400_13TeV-madgraph
+ZJetsToNuNu_HT-2500ToInf_13TeV-madgraph
+ZJetsToNuNu_HT-400To600_13TeV-madgraph
+ZJetsToNuNu_HT-600To800_13TeV-madgraph
+ZJetsToNuNu_HT-800To1200_13TeV-madgraph
+WJetsToLNu_HT-200To400_TuneCUETP8M1_13TeV-madgraphMLM-pythia8
+WJetsToLNu_HT-400To600_TuneCUETP8M1_13TeV-madgraphMLM-pythia8
+WJetsToLNu_HT-600To800_TuneCUETP8M1_13TeV-madgraphMLM-pythia8
+WJetsToLNu_HT-800To1200_TuneCUETP8M1_13TeV-madgraphMLM-pythia8
+WJetsToLNu_HT-1200To2500_TuneCUETP8M1_13TeV-madgraphMLM-pythia8
+WJetsToLNu_HT-2500ToInf_TuneCUETP8M1_13TeV-madgraphMLM-pythia8
+TTJets_TuneCUETP8M1_13TeV-madgraphMLM-pythia8
+TTJets_HT-600to800_TuneCUETP8M1_13TeV-madgraphMLM-pythia8
+TTJets_HT-800to1200_TuneCUETP8M1_13TeV-madgraphMLM-pythia8
+TTJets_HT-1200to2500_TuneCUETP8M1_13TeV-madgraphMLM-pythia8
+TTJets_HT-2500toInf_TuneCUETP8M1_13TeV-madgraphMLM-pythia8
+"""
 
 for sample in $samples 
 do
@@ -41,13 +42,13 @@ do
     #hadd -f -k -v 0 -j5 ${skimType}_$sample.root ~/eos/${skims}/${skimType}*${sample}*root
 done
 
-# sample="ZJetsToNuNu_HT-600To800_13TeV-madgraph"
-# hadd -f -k -v 0 -j6 ${skimType}_${sample}_x.root ~/eos/${skims}/${skimType}_${sample}_[0-9].root
-# hadd -f -k -v 0 -j6 ${skimType}_${sample}_xx.root ~/eos/${skims}/${skimType}_${sample}_[0-9][0-9].root
-# hadd -f -k -v 0 -j6 ${skimType}_${sample}_xxx.root ~/eos/${skims}/${skimType}_${sample}_[0-9][0-9][0-9].root
-# hadd -f -k -v 0 -j6 ${skimType}_${sample}.root ${skimType}_${sample}_*x*.root
-# xrdcp --force ${skimType}_$sample.root root://cmseos.fnal.gov//store/user/awhitbe1/${skims}/${skimType}_$sample.root
-# rm ${skimType}_${sample}*.root
+sample="ZJetsToNuNu_HT-600To800_13TeV-madgraph"
+hadd -f -k -v 0 -j6 ${skimType}_${sample}_x.root ~/eos/${skims}/${skimType}_${sample}_[0-9].root
+hadd -f -k -v 0 -j6 ${skimType}_${sample}_xx.root ~/eos/${skims}/${skimType}_${sample}_[0-9][0-9].root
+hadd -f -k -v 0 -j6 ${skimType}_${sample}_xxx.root ~/eos/${skims}/${skimType}_${sample}_[0-9][0-9][0-9].root
+hadd -f -k -v 0 -j6 ${skimType}_${sample}.root ${skimType}_${sample}_*x*.root
+xrdcp --force ${skimType}_$sample.root root://cmseos.fnal.gov//store/user/awhitbe1/${skims}/${skimType}_$sample.root
+rm ${skimType}_${sample}*.root
 
 hadd -f -k -v 0 -j6 ${skimType}_QCD.root ${eos}/${skims}/${skimType}_QCD_HT1000to1500_TuneCUETP8M1_13TeV-madgraphMLM-pythia8.root ${eos}/${skims}/${skimType}_QCD_HT1500to2000_TuneCUETP8M1_13TeV-madgraphMLM-pythia8.root ${eos}/${skims}/${skimType}_QCD_HT2000toInf_TuneCUETP8M1_13TeV-madgraphMLM-pythia8.root ${eos}/${skims}/${skimType}_QCD_HT300to500_TuneCUETP8M1_13TeV-madgraphMLM-pythia8.root ${eos}/${skims}/${skimType}_QCD_HT500to700_TuneCUETP8M1_13TeV-madgraphMLM-pythia8.root ${eos}/${skims}/${skimType}_QCD_HT700to1000_TuneCUETP8M1_13TeV-madgraphMLM-pythia8.root
 

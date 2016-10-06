@@ -13,6 +13,7 @@ cd boostedHiggsHeppy/src
 
 FILE=`ls *.root`
 xrdcp --force $FILE $OUTPUTDIR/$FILE
+rm $FILE
 #./baselineSkim.exe root://cmseos.fnal.gov//store/user/lpchbb/HeppyNtuples/V14/ root://cmseos.fnal.gov//store/user/awhitbe1/heppySkims/ TTJets_TuneCUETP8M1_13TeV-madgraphMLM-pythia8.root
 
 

@@ -4,8 +4,8 @@ inputs = open("../data/RA2bInputs.txt","read")
 
 dagFiles = {}
 indices = {}
-skimType = "baseline"
-#skimType = "singleMuCR"
+#skimType = "baseline"
+skimType = "singleMuCR"
 masterDAG = open("{0}Skim.dag".format(skimType),"w")
 
 for f in reversed(inputs.readlines()):

@@ -2,39 +2,30 @@ from ROOT import *
 
 inputFileName="datacardInputsRA2b10.root"
 histoTag="AnalysisRA2b10Bins"
-signalTags=["mGluino1300","mGluino1400","mGluino1500","mGluino1600","mGluino1700"]
+signalTags=["mGluino1300","mGluino1500","mGluino1700","mHiggsino900","mHiggsino1000"]
 
 for signalTag in signalTags : 
 
     inputFile = TFile(inputFileName,"read")
 
-    regions = ["tagSR","tagSB","antitagSR","antitagSB"]        
-
+    regions = ["tagSR","tagSB","antitagSR","antitagSB","doubletagSR","doubletagSB","mutagSR","mutagSB","muantitagSR","muantitagSB","muDoubletagSR","muDoubletagSB"]
     for r in regions : 
 
         WJets = inputFile.Get(histoTag+"_"+r+"_WJets")
         ZJets = inputFile.Get(histoTag+"_"+r+"_ZJets")
         TT = inputFile.Get(histoTag+"_"+r+"_TT")
         QCD = inputFile.Get(histoTag+"_"+r+"_QCD")
-        total = TH1F(WJets)
-        total.SetNameTitle("total","total")
-        total.Add(ZJets)
-        total.Add(TT)
-        total.Add(QCD)
         signal = inputFile.Get(histoTag+"_"+r+"_"+signalTag)
         
-        #histos = [signal,WJets,ZJets,TT,QCD]
-        #histoLabel = ["signal","WJets","ZJets","TT","QCD"]
         histos = [signal,total]
         histoLabel = ["signal","bkg"]
 
-        #if WJets.GetNbinsX() != ZJets.GetNbinsX() != TT.GetNbinsX() != QCD.GetNbinsX() != signal.GetNbinsX() : 
         if total.GetNbinsX() != signal.GetNbinsX() : 
             assert(0)
 
         for i in range(signal.GetNbinsX()) :
 
-            outputFile = open("2016RA2b10bins/datacard_"+histoTag+"_"+r+"_"+signalTag+"_bin{0}.txt".format(i),'w')
+            outputFile = open("RA2bSkims_datacards_MET/datacard_"+histoTag+"_"+r+"_"+signalTag+"_bin{0}.txt".format(i),'w')
             outputFile.write("imax 1  #number of channels \n")
             outputFile.write("jmax 1  #number of backgrounds \n")
             if r=="tagSR":

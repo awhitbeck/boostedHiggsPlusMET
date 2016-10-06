@@ -1,3 +1,4 @@
+#include <algorithm>
 #include "TString.h"
 #include "TChain.h"
 #include "TH1F.h"
@@ -29,6 +30,7 @@ int main(int argc, char** argv){
   plot NJetsplot(*fillNJets<RA2bTree>,"NJets_singleHiggsTag","n_{j}",14,1.5,15.5);
   plot BTagsplot(*fillBTags<RA2bTree>,"BTags_singleHiggsTag","n_{b}",6,-0.5,5.5);
   plot Binsplot(*fillAnalysisBins<RA2bTree>,"AnalysisBins_singleHiggsTag","i^th Bin",8,0.5,8.5);
+
   plot J1pt_Massplot(*fillLeadingJetMass<RA2bTree>,"J1pt_Mass_singleHiggsTag","m_{J} [GeV]",20,50.,200.);
   plot J2pt_Massplot(*fillSubLeadingJetMass<RA2bTree>,"J2pt_Mass_singleHiggsTag","m_{J} [GeV]",20,50.,200.);
   plot J1bbtag_Massplot(*fillLeadingBBtagJetMass<RA2bTree>,"J1bbtag_Mass_singleHiggsTag","m_{J} [GeV]",20,50.,200.);
@@ -88,12 +90,15 @@ int main(int argc, char** argv){
     }
 
     int numEvents = ntuple->fChain->GetEntries();
+    ntupleBranchStatus<RA2bTree>(ntuple);
     for( int iEvt = 0 ; iEvt < numEvents ; iEvt++ ){
       ntuple->GetEntry(iEvt);
-      if( iEvt % 1000000 == 0 ) cout << skims.sampleName[iSample] << ": " << iEvt << "/" << numEvents << endl;
+      if( iEvt % 10000 == 0 ) cout << skims.sampleName[iSample] << ": " << iEvt << "/" << numEvents << endl;
       //if( iEvt > 100000 ) break;
       if(! baselineCut(ntuple) ) continue;
-      if(! taggingCut(ntuple) ) continue;
+      if( doubleHiggsTagCut(ntuple) ) continue;
+      if( ntuple->NJets<4 || ntuple->BTags<1 || ntuple->DeltaPhi1<0.5 || ntuple->DeltaPhi2<0.5 ) continue;
+      if(! singleHiggsTagLooseCut(ntuple) ) continue;
       for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++ ){
 	plots[iPlot].fill(ntuple);
       }
@@ -101,7 +106,7 @@ int main(int argc, char** argv){
   }
 
   // Signal samples
-  for( int iSample = 0 ; iSample < 0 /*skims.signalNtuples.size()*/ ; iSample++){
+  for( int iSample = 0 ; iSample < skims.signalNtuples.size() ; iSample++){
 
     RA2bTree* ntuple = skims.signalNtuples[iSample];
     for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++){
@@ -110,13 +115,23 @@ int main(int argc, char** argv){
     }
 
     int numEvents = ntuple->fChain->GetEntries();
+    ntupleBranchStatus<RA2bTree>(ntuple);
     for( int iEvt = 0 ; iEvt < numEvents ; iEvt++ ){
       ntuple->GetEntry(iEvt);
       if( iEvt % 1000000 == 0 ) cout << skims.signalSampleName[iSample] << ": " << iEvt << "/" << numEvents << endl;
       if(! baselineCut(ntuple) ) continue;
-      if(! taggingCut(ntuple) ) continue;
+      if( doubleHiggsTagCut(ntuple) ) continue;
+      if( ntuple->NJets<4 || ntuple->BTags<1 || ntuple->DeltaPhi1<0.5 || ntuple->DeltaPhi2<0.5 ) continue;
+      if(! singleHiggsTagLooseCut(ntuple) ) continue;
       for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++){
-	plots[iPlot].fillSignal(ntuple);
+	if( skims.signalSampleName[iSample].Index("mHiggsino900") != -1 ){
+	  //cout << "mHiggsino900: " << ntuple->Weight*40000./59508. << endl;
+	  plots[iPlot].fillSignal(ntuple,ntuple->Weight*40000./59508.);
+	}else if( skims.signalSampleName[iSample].Index("mHiggsino1000") != -1 ){
+	  //cout << "mHiggsino1000: " << ntuple->Weight*40000./62968. << endl;
+	  plots[iPlot].fillSignal(ntuple,ntuple->Weight*40000./62968.);
+	}else
+	  plots[iPlot].fillSignal(ntuple);
       }
     }
   }

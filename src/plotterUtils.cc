@@ -80,7 +80,7 @@ template <typename ntupleType> class plot{
 
   void fill(ntupleType* ntuple , float customWeight ){
     if( histoMap.find(ntuple) != histoMap.end() ){
-      histoMap[ntuple]->Fill(fillerFunc(ntuple),lumi*customWeight);
+      histoMap[ntuple]->Fill(fillerFunc(ntuple),customWeight);
     }else{
       cout << "plot::fill - ERROR: key not found: " << ntuple << endl;
     }
@@ -164,8 +164,8 @@ template <typename ntupleType> class plot{
       if( it->second ) 
 	it->second->Write();
     }
-    //if( dataHist ) 
-    //  dataHist->Write();
+    if( dataHist ) 
+      dataHist->Write();
 
   };
 
@@ -177,14 +177,18 @@ template <typename ntupleType> class plot{
     if( ! can ) return ;
     can->cd();
 
-    buildStack(ntuples);
-    stack->Draw("histo");
-    cout << "xlabel: " << xlabel << endl;
-    stack->GetXaxis()->SetTitle(xlabel);
-    stack->GetXaxis()->SetNdivisions(505);
-    stack->GetYaxis()->SetTitle("Events");
-    buildSum();
-    double max = sum->GetMaximum(); 
+    double max = 0 ;
+    if( histoMap.size() ){
+      buildStack(ntuples);
+      stack->Draw("histo");
+      cout << "xlabel: " << xlabel << endl;
+      stack->GetXaxis()->SetTitle(xlabel);
+      stack->GetXaxis()->SetNdivisions(505);
+      stack->GetYaxis()->SetTitle("Events");
+      buildSum();
+      max = sum->GetMaximum(); 
+    }
+    
     for(int iSample = 0 ; iSample < signalNtuples.size() ; iSample++){
       TH1F* temp = signalHistoMap[signalNtuples[iSample]];
       if( temp ){
@@ -194,9 +198,9 @@ template <typename ntupleType> class plot{
 	  max = temp->GetMaximum();
       }
     }
-    //dataHist->Draw("e1,SAME");
-    //if( dataHist->GetMaximum() > max ) 
-    //  max = dataHist->GetMaximum();
+    dataHist->Draw("e1,SAME");
+    if( dataHist->GetMaximum() > max ) 
+      max = dataHist->GetMaximum();
 
     stack->SetMaximum(max);
     stack->SetMinimum(0.1);

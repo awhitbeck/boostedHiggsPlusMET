@@ -12,7 +12,7 @@
 #include "plotterUtils.cc"
 #include "skimSamples.cc"
 #include "definitions.cc"
-#include "heppySkimTree.h"
+#include "RA2bTree.h"
 
 using namespace std;
 
@@ -22,11 +22,12 @@ int main(int argc, char** argv){
   gROOT->ProcessLine("setTDRStyle()");
   
   skimSamples skims;
+  typedef plot<RA2bTree> plot;
 
-  plot BinsSRSingleHiggsPlot(*fillAnalysisBins,"AnalysisBins_tagSR","i^th Bin",8,0.5,8.5);
-  plot BinsSRAntiTagPlot(*fillAnalysisBins,"AnalysisBins_antitagSR","i^th Bin",8,0.5,8.5);
-  plot BinsSBSingleHiggsPlot(*fillAnalysisBins,"AnalysisBins_tagSB","i^th Bin",8,0.5,8.5);
-  plot BinsSBAntiTagPlot(*fillAnalysisBins,"AnalysisBins_antitagSB","i^th Bin",8,0.5,8.5);
+  plot BinsSRSingleHiggsPlot(*fillAnalysisBins<RA2bTree>,"AnalysisBins_tagSR","i^th Bin",8,0.5,8.5);
+  plot BinsSRAntiTagPlot(*fillAnalysisBins<RA2bTree>,"AnalysisBins_antitagSR","i^th Bin",8,0.5,8.5);
+  plot BinsSBSingleHiggsPlot(*fillAnalysisBins<RA2bTree>,"AnalysisBins_tagSB","i^th Bin",8,0.5,8.5);
+  plot BinsSBAntiTagPlot(*fillAnalysisBins<RA2bTree>,"AnalysisBins_antitagSB","i^th Bin",8,0.5,8.5);
 
   vector<plot> plots;
   plots.push_back(BinsSRSingleHiggsPlot);

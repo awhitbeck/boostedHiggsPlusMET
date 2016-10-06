@@ -60,10 +60,12 @@ int main(int argc, char** argv){
     }
 
     int numEvents = ntuple->fChain->GetEntries();
+    ntupleBranchStatus<RA2bTree>(ntuple);
     for( int iEvt = 0 ; iEvt < numEvents ; iEvt++ ){
       ntuple->GetEntry(iEvt);
-      if( iEvt % 1000000 == 0 ) cout << skims.sampleName[iSample] << ": " << iEvt << "/" << numEvents << endl;
+      if( iEvt % 100000 == 0 ) cout << skims.sampleName[iSample] << ": " << iEvt << "/" << numEvents << endl;
       //if( iEvt > 100000 ) break;
+      if(! baselineCut(ntuple) ) continue;
       if(! doubleHiggsTagCut(ntuple) ) continue;
       for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++ ){
 	plots[iPlot].fill(ntuple);
@@ -72,7 +74,7 @@ int main(int argc, char** argv){
   }
 
   // Signal samples
-  for( int iSample = 0 ; iSample < 0 /*skims.signalNtuples.size()*/ ; iSample++){
+  for( int iSample = 0 ; iSample < skims.signalNtuples.size() ; iSample++){
 
     RA2bTree* ntuple = skims.signalNtuples[iSample];
     for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++){
@@ -81,13 +83,22 @@ int main(int argc, char** argv){
     }
 
     int numEvents = ntuple->fChain->GetEntries();
+    ntupleBranchStatus<RA2bTree>(ntuple);
     for( int iEvt = 0 ; iEvt < numEvents ; iEvt++ ){
       ntuple->GetEntry(iEvt);
-      if( iEvt % 1000000 == 0 ) cout << skims.signalSampleName[iSample] << ": " << iEvt << "/" << numEvents << endl;
+      if( iEvt % 100000 == 0 ) cout << skims.signalSampleName[iSample] << ": " << iEvt << "/" << numEvents << endl;
+      if(! baselineCut(ntuple) ) continue;
       if(! doubleHiggsTagCut(ntuple) ) continue;
       //if(ntuple->nGenHiggsBoson!=2) continue;
       for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++){
-	plots[iPlot].fillSignal(ntuple);
+	if( skims.signalSampleName[iSample].Index("mHiggsino900") != -1 ){
+	  //cout << "mHiggsino900: " << ntuple->Weight*40000./59508. << endl;
+	  plots[iPlot].fillSignal(ntuple,ntuple->Weight*40000./59508.);
+	}else if( skims.signalSampleName[iSample].Index("mHiggsino1000") != -1 ){
+	  //cout << "mHiggsino1000: " << ntuple->Weight*40000./62968. << endl;
+	  plots[iPlot].fillSignal(ntuple,ntuple->Weight*40000./62968.);
+	}else
+	  plots[iPlot].fillSignal(ntuple);
       }
     }
   }
@@ -98,6 +109,7 @@ int main(int argc, char** argv){
   }
 
   int numEvents = skims.dataNtuple->fChain->GetEntries();
+  ntupleBranchStatus<RA2bTree>(skims.dataNtuple);
   for( int iEvt = 0 ; iEvt < numEvents ; iEvt++ ){
     skims.dataNtuple->GetEntry(iEvt);
     if(! doubleHiggsTagCut(skims.dataNtuple) ) continue;
@@ -105,7 +117,7 @@ int main(int argc, char** argv){
     if( iEvt % 1000000 == 0 ) cout << "DATA: " << iEvt << "/" << numEvents << endl;
     //if( iEvt > 100000 ) break ;
     for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++){
-      plots[iPlot].fillData(skims.dataNtuple);
+      plots[iPlot].fillSignal(skims.dataNtuple);
     }
   }
 
