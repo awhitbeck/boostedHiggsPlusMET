@@ -461,7 +461,7 @@ template<typename ntupleType> bool METHTCut(ntupleType* ntuple){
 
 template<typename ntupleType> bool AK8JetPtCut(ntupleType* ntuple){
   return ( ntuple->JetsAK8->size() >= 2 &&
-	   ntuple->JetsAK8->at(0).Pt() > 300. &&
+           ntuple->JetsAK8->at(0).Pt() > 300. &&
 	   ntuple->JetsAK8->at(1).Pt() > 300. );
 }
 
@@ -488,10 +488,10 @@ template<typename ntupleType> bool baselineCut(ntupleType* ntuple){
 
 template<typename ntupleType> bool singleHiggsTagLooseCut(ntupleType* ntuple ){ 
   return ( baselineCut(ntuple) && 
-	   ( ntuple->JetsAK8_doubleBDiscriminator->at(0) > bbtagCut
-	     ) || 
-	   ( ntuple->JetsAK8_doubleBDiscriminator->at(1) > bbtagCut
-	     ));
+           ( ntuple->JetsAK8_doubleBDiscriminator->at(0) > bbtagCut ) 
+           && ( ntuple->JetsAK8_doubleBDiscriminator->at(1) < bbtagCut )
+           //|| ( ntuple->JetsAK8_doubleBDiscriminator->at(1) > bbtagCut )
+           );
 }
 
 template<typename ntupleType> bool antiTaggingLooseCut(ntupleType* ntuple ){

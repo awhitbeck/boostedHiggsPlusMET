@@ -54,21 +54,21 @@ int main(int argc, char** argv){
       if( int(fillBTags(ntuple)) < 1 ) continue; 
       if( fillDeltaPhi1(ntuple) < 0.5 ) continue; 
       if( fillDeltaPhi2(ntuple) < 0.5 ) continue; 
-      if( taggingCut(ntuple) ){
-	double jetMass = fillLeadingBBtagJetMass(ntuple);
-	if( jetMass > 85 && jetMass < 135 ){ 
-	  plots[0].fill(ntuple);
-	}else if( jetMass > 50 && jetMass < 200){
-	  plots[1].fill(ntuple);
-	}
+      if( doubleTaggingLooseCut(ntuple) ){
+          double jetMass = fillLeadingBBtagJetMass(ntuple);
+          if( jetMass > 85 && jetMass < 135 ){ 
+              plots[0].fill(ntuple);
+          }else if( jetMass > 50 && jetMass < 200){
+              plots[1].fill(ntuple);
+          }
       }
-      if( antiTaggingCut(ntuple) ){
-	double jetMass = fillLeadingBBtagJetMass(ntuple);
-	if( jetMass > 85 && jetMass < 135 ){
-	  plots[2].fill(ntuple);
-	}else if( jetMass > 50 && jetMass < 200){
-	  plots[3].fill(ntuple);
-	}
+      if( singleHiggsTagLooseCut(ntuple) ){
+          double jetMass = fillLeadingBBtagJetMass(ntuple);
+          if( jetMass > 85 && jetMass < 135 ){
+              plots[2].fill(ntuple);
+          }else if( jetMass > 50 && jetMass < 200){
+              plots[3].fill(ntuple);
+          }
       }
     }
   }
@@ -92,21 +92,21 @@ int main(int argc, char** argv){
       if( fillDeltaPhi1(ntuple) < 0.5 ) continue; 
       if( fillDeltaPhi2(ntuple) < 0.5 ) continue; 
       if(ntuple->nGenHiggsBoson!=2) continue;
-      if( taggingCut(ntuple) ){
-	double jetMass = fillLeadingBBtagJetMass(ntuple);
-	if( jetMass > 85 && jetMass < 135 ){ 
-	  plots[0].fillSignal(ntuple);
-	}else if( jetMass > 50 && jetMass < 200){
-	  plots[1].fillSignal(ntuple);
-	}
+      if( doubleTaggingLooseCut(ntuple) ){
+          double jetMass = fillLeadingBBtagJetMass(ntuple);
+          if( jetMass > 85 && jetMass < 135 ){ 
+              plots[0].fillSignal(ntuple);
+          }else if( jetMass > 50 && jetMass < 200){
+              plots[1].fillSignal(ntuple);
+          }
       }
-      if( antiTaggingCut(ntuple) ){
-	double jetMass = fillLeadingBBtagJetMass(ntuple);
-	if( jetMass > 85 && jetMass < 135 ){
-	  plots[2].fillSignal(ntuple);
-	}else if( jetMass > 50 && jetMass < 200){
-	  plots[3].fillSignal(ntuple);
-	}
+      if( singleHiggsTagLooseCut(ntuple) ){
+          double jetMass = fillLeadingBBtagJetMass(ntuple);
+          if( jetMass > 85 && jetMass < 135 ){
+              plots[2].fillSignal(ntuple);
+          }else if( jetMass > 50 && jetMass < 200){
+              plots[3].fillSignal(ntuple);
+          }
       }
     }
   }

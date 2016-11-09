@@ -45,37 +45,38 @@ public :
     signalNtuples.push_back(new RA2bTree(mGluino1300));
     signalSampleName.push_back("mGluino1300");
     lineColor.push_back(kRed-1);
-    /*
+
     mGluino1400 = new TChain("PreSelection");
     mGluino1400->Add(skimType+"_T5HH_mGluino1400_0.root");
     signalNtuples.push_back(new RA2bTree(mGluino1400));
     signalSampleName.push_back("mGluino1400");
     lineColor.push_back(kRed);
-    */
+
     mGluino1500 = new TChain("PreSelection");
     mGluino1500->Add(skimType+"_T5HH_mGluino1500_0.root");
     signalNtuples.push_back(new RA2bTree(mGluino1500));
     signalSampleName.push_back("mGluino1500");
     lineColor.push_back(kRed+1);
-    /*
+
     mGluino1600 = new TChain("PreSelection");
     mGluino1600->Add(skimType+"_T5HH_mGluino1600_0.root");
     signalNtuples.push_back(new RA2bTree(mGluino1600));
     signalSampleName.push_back("mGluino1600");
     lineColor.push_back(kOrange);
-    */
+
     mGluino1700 = new TChain("PreSelection");
     mGluino1700->Add(skimType+"_T5HH_mGluino1700_0.root");
     signalNtuples.push_back(new RA2bTree(mGluino1700));
     signalSampleName.push_back("mGluino1700");        
     lineColor.push_back(kOrange+1);
 
+    /*
     mHiggsino1000 = new TChain("tree");
     mHiggsino1000->Add("root://cmseos.fnal.gov///store/user/rgp230/SUSY/T5qqqqVV/T5HH_1000_1.root");
     signalNtuples.push_back(new RA2bTree(mHiggsino1000));
     signalSampleName.push_back("mHiggsino1000");        
     lineColor.push_back(kOrange);
-
+    
     mHiggsino900 = new TChain("tree");
     mHiggsino900->Add("root://cmseos.fnal.gov///store/user/rgp230/SUSY/T5qqqqVV/T5HH_900_1.root");
     signalNtuples.push_back(new RA2bTree(mHiggsino900));
@@ -117,7 +118,7 @@ public :
     signalNtuples.push_back(new RA2bTree(mHiggsino300));
     signalSampleName.push_back("mHiggsino300");        
     lineColor.push_back(kRed);
-    
+    */
     data = new TChain("PreSelection");
     data->Add(skimType+"_HTMHT.root");
     dataNtuple = new RA2bTree(data);

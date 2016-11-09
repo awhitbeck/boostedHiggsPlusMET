@@ -91,14 +91,14 @@ int main(int argc, char** argv){
       if(! doubleHiggsTagCut(ntuple) ) continue;
       //if(ntuple->nGenHiggsBoson!=2) continue;
       for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++){
-	if( skims.signalSampleName[iSample].Index("mHiggsino900") != -1 ){
-	  //cout << "mHiggsino900: " << ntuple->Weight*40000./59508. << endl;
-	  plots[iPlot].fillSignal(ntuple,ntuple->Weight*40000./59508.);
-	}else if( skims.signalSampleName[iSample].Index("mHiggsino1000") != -1 ){
-	  //cout << "mHiggsino1000: " << ntuple->Weight*40000./62968. << endl;
-	  plots[iPlot].fillSignal(ntuple,ntuple->Weight*40000./62968.);
-	}else
-	  plots[iPlot].fillSignal(ntuple);
+          if( skims.signalSampleName[iSample].Index("mHiggsino900") != -1 ){
+              //cout << "mHiggsino900: " << ntuple->Weight*40000./59508. << endl;
+              plots[iPlot].fillSignal(ntuple,ntuple->Weight*40000./59508.);
+          }else if( skims.signalSampleName[iSample].Index("mHiggsino1000") != -1 ){
+              //cout << "mHiggsino1000: " << ntuple->Weight*40000./62968. << endl;
+              plots[iPlot].fillSignal(ntuple,ntuple->Weight*40000./62968.);
+          }else
+              plots[iPlot].fillSignal(ntuple);
       }
     }
   }
@@ -111,14 +111,14 @@ int main(int argc, char** argv){
   int numEvents = skims.dataNtuple->fChain->GetEntries();
   ntupleBranchStatus<RA2bTree>(skims.dataNtuple);
   for( int iEvt = 0 ; iEvt < numEvents ; iEvt++ ){
-    skims.dataNtuple->GetEntry(iEvt);
-    if(! doubleHiggsTagCut(skims.dataNtuple) ) continue;
-    //if(skims.dataNtuple->HLT_BIT_HLT_PFMET100_PFMHT100_IDTight_v==0) continue;
-    if( iEvt % 1000000 == 0 ) cout << "DATA: " << iEvt << "/" << numEvents << endl;
-    //if( iEvt > 100000 ) break ;
-    for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++){
-      plots[iPlot].fillSignal(skims.dataNtuple);
-    }
+      skims.dataNtuple->GetEntry(iEvt);
+      if(! doubleHiggsTagCut(skims.dataNtuple) ) continue;
+      //if(skims.dataNtuple->HLT_BIT_HLT_PFMET100_PFMHT100_IDTight_v==0) continue;
+      if( iEvt % 1000000 == 0 ) cout << "DATA: " << iEvt << "/" << numEvents << endl;
+      //if( iEvt > 100000 ) break ;
+      for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++){
+          plots[iPlot].fillSignal(skims.dataNtuple);
+      }
   }
 
   TCanvas* can = new TCanvas("can","can",500,500);
