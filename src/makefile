@@ -27,47 +27,47 @@ plotObs_fastFullComp:plotObs_fastFullComp.cc fastFullSamples.cc
 all:$(EXECS) FulltoyValidation plotHiggsPt_TChiHH
 
 plotObs_fastFullComp:
-	$(CC) -g $(CFLAGS) $(LIBS) $(INCLUDES) plotObs_fastFullComp.cc -o $@
+	$(CC) -g $(CFLAGS) $(LIBS) $(INCLUDES) plotObs_fastFullComp.cc -o ../bin/$@
 ALPHABET:
-	$(CC) $(CFLAGS) $(LIBS) $(INCLUDES) ALPHABET.cc -o $@
+	$(CC) $(CFLAGS) $(LIBS) $(INCLUDES) ALPHABET.cc -o ../bin/$@
 
 cutFlow_HiggsinoOnly:
-	$(CC) $(CFLAGS) $(LIBS) $(INCLUDES) cutFlow_HiggsinoOnly.cc -o $@
+	$(CC) $(CFLAGS) $(LIBS) $(INCLUDES) cutFlow_HiggsinoOnly.cc -o ../bin/$@
 
 plotObs_singleHiggsTag:
-	$(CC) $(CFLAGS) $(LIBS) $(INCLUDES) plotObs_singleHiggsTag.cc -o $@
+	$(CC) $(CFLAGS) $(LIBS) $(INCLUDES) plotObs_singleHiggsTag.cc -o ../bin/$@
 plotObs_doubleHiggsTag:
-	$(CC) $(CFLAGS) $(LIBS) $(INCLUDES) plotObs_doubleHiggsTag.cc -o $@
+	$(CC) $(CFLAGS) $(LIBS) $(INCLUDES) plotObs_doubleHiggsTag.cc -o ../bin/$@
 plotObs_antitag:
-	$(CC) $(CFLAGS) $(LIBS) $(INCLUDES) plotObs_antitag.cc -o $@
+	$(CC) $(CFLAGS) $(LIBS) $(INCLUDES) plotObs_antitag.cc -o ../bin/$@
 plotObs_baseline:
-	$(CC) $(CFLAGS) $(LIBS) $(INCLUDES) plotObs_baseline.cc -o $@
+	$(CC) $(CFLAGS) $(LIBS) $(INCLUDES) plotObs_baseline.cc -o ../bin/$@
 plotObs_singleMuCR_baseline:
-	$(CC) $(CFLAGS) $(LIBS) $(INCLUDES) plotObs_singleMuCR_baseline.cc -o $@	
+	$(CC) $(CFLAGS) $(LIBS) $(INCLUDES) plotObs_singleMuCR_baseline.cc -o ../bin/$@	
 plotObs_singleMuCR_antitag:
-	$(CC) $(CFLAGS) $(LIBS) $(INCLUDES) plotObs_singleMuCR_antitag.cc -o $@
+	$(CC) $(CFLAGS) $(LIBS) $(INCLUDES) plotObs_singleMuCR_antitag.cc -o ../bin/$@
 plotObs_singleMuCR_singleHiggsTag:
-	$(CC) $(CFLAGS) $(LIBS) $(INCLUDES) plotObs_singleMuCR_singleHiggsTag.cc -o $@
+	$(CC) $(CFLAGS) $(LIBS) $(INCLUDES) plotObs_singleMuCR_singleHiggsTag.cc -o ../bin/$@
 
 baselineSkim:
-	$(CC) $(CFLAGS) $(LIBS) $(INCLUDES) baselineSkim.cc -o $@
+	$(CC) $(CFLAGS) $(LIBS) $(INCLUDES) baselineSkim.cc -o ../bin/$@
 singleMuCRSkim:
-	$(CC) $(CFLAGS) $(LIBS) $(INCLUDES) singleMuCRSkim.cc -o $@
+	$(CC) $(CFLAGS) $(LIBS) $(INCLUDES) singleMuCRSkim.cc -o ../bin/$@
 
 datacardInputs_MET:
-	$(CC) $(CFLAGS) $(LIBS) $(INCLUDES) datacardInputs_MET.cc -o $@
+	$(CC) $(CFLAGS) $(LIBS) $(INCLUDES) datacardInputs_MET.cc -o ../bin/$@
 
 datacardInputs_MET_BTags1_DeltaPhi12:
-	$(CC) $(CFLAGS) $(LIBS) $(INCLUDES) datacardInputs_MET_BTags1_DeltaPhi12.cc -o $@
+	$(CC) $(CFLAGS) $(LIBS) $(INCLUDES) datacardInputs_MET_BTags1_DeltaPhi12.cc -o ../bin/$@
 
 FulltoyValidation_ALPHABET:
-	$(CC) -g $(CFLAGS) $(LIBS) $(ROOFITLIBS) $(INCLUDES) FulltoyValidation_ALPHABET.cc -o $@
+	$(CC) -g $(CFLAGS) $(LIBS) $(ROOFITLIBS) $(INCLUDES) FulltoyValidation_ALPHABET.cc -o ../bin/$@
 FulltoyValidation:
-	$(CC) $(CFLAGS) $(LIBS) $(ROOFITLIBS) $(INCLUDES) FulltoyValidation.cc -o $@
+	$(CC) $(CFLAGS) $(LIBS) $(ROOFITLIBS) $(INCLUDES) FulltoyValidation.cc -o ../bin/$@
 
 plotHiggsPt_TChiHH:
-	$(CC) $(CFLAGS) $(LIBS) $(ROOFITLIBS) $(INCLUDES) plotHiggsPt_TChiHH.cc -o $@
+	$(CC) $(CFLAGS) $(LIBS) $(ROOFITLIBS) $(INCLUDES) plotHiggsPt_TChiHH.cc -o ../bin/$@
 plotObs_doubleHiggsTag_HiggsinoOnly:
-	$(CC) $(CFLAGS) $(LIBS) $(ROOFITLIBS) $(INCLUDES) plotObs_doubleHiggsTag_HiggsinoOnly.cc -o $@
+	$(CC) $(CFLAGS) $(LIBS) $(ROOFITLIBS) $(INCLUDES) plotObs_doubleHiggsTag_HiggsinoOnly.cc -o ../bin/$@
 clean : 
 	rm $(EXECS) 
