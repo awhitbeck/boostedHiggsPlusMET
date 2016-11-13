@@ -14,9 +14,10 @@ for (dirpath, dirnames, filenames) in walk(options.dir):
 
 outputFile = open(options.dir+"/README.md","w")
 
+outputFile.write("|image|description|\n")
+outputFile.write("| --- | --- |\n")
 for f in fileList:
     if f[-4:]!=".png": continue
-    #outputFile.write("[{0}]({0})".format(f))
-    outputFile.write("![{0}]({0})".format(f))
+    outputFile.write("| [{0}]({0})![{0}]({0}) |  |".format(f))
 
 outputFile.close()    
