@@ -82,62 +82,62 @@ int main(int argc, char** argv){
   // background MC samples
   for( int iSample = 0 ; iSample < skims.ntuples.size() ; iSample++){
 
-    RA2bTree* ntuple = skims.ntuples[iSample];
+      RA2bTree* ntuple = skims.ntuples[iSample];
 
-    for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++){
-      plots[iPlot].addNtuple(ntuple,skims.sampleName[iSample]);
-      plots[iPlot].setFillColor(ntuple,skims.fillColor[iSample]);
-    }
-
-    int numEvents = ntuple->fChain->GetEntries();
-    ntupleBranchStatus<RA2bTree>(ntuple);
-    for( int iEvt = 0 ; iEvt < numEvents ; iEvt++ ){
-      ntuple->GetEntry(iEvt);
-      if( iEvt % 10000 == 0 ) cout << skims.sampleName[iSample] << ": " << iEvt << "/" << numEvents << endl;
-      //if( iEvt > 100000 ) break;
-      if(! baselineCut(ntuple) ) continue;
-      if( doubleHiggsTagCut(ntuple) ) continue;
-      if( ntuple->NJets<4 || ntuple->BTags<1 || ntuple->DeltaPhi1<0.5 || ntuple->DeltaPhi2<0.5 ) continue;
-      if(! singleHiggsTagLooseCut(ntuple) ) continue;
-      for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++ ){
-	plots[iPlot].fill(ntuple);
+      for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++){
+          plots[iPlot].addNtuple(ntuple,skims.sampleName[iSample]);
+          plots[iPlot].setFillColor(ntuple,skims.fillColor[iSample]);
       }
-    }
+
+      int numEvents = ntuple->fChain->GetEntries();
+      ntupleBranchStatus<RA2bTree>(ntuple);
+      for( int iEvt = 0 ; iEvt < numEvents ; iEvt++ ){
+          ntuple->GetEntry(iEvt);
+          if( iEvt % 10000 == 0 ) cout << skims.sampleName[iSample] << ": " << iEvt << "/" << numEvents << endl;
+          //if( iEvt > 100000 ) break;
+          if(! baselineCut(ntuple) ) continue;
+          if( doubleTaggingLooseCut(ntuple) ) continue;
+          //if( ntuple->NJets<4 || ntuple->BTags<1 || ntuple->DeltaPhi1<0.5 || ntuple->DeltaPhi2<0.5 ) continue;
+          if(! singleHiggsTagLooseCut(ntuple) ) continue;
+          for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++ ){
+              plots[iPlot].fill(ntuple);
+          }
+      }
   }
 
   // Signal samples
   for( int iSample = 0 ; iSample < skims.signalNtuples.size() ; iSample++){
 
-    RA2bTree* ntuple = skims.signalNtuples[iSample];
-    for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++){
-      plots[iPlot].addSignalNtuple(ntuple,skims.signalSampleName[iSample]);
-      plots[iPlot].setLineColor(ntuple,skims.lineColor[iSample]);
-    }
-
-    int numEvents = ntuple->fChain->GetEntries();
-    ntupleBranchStatus<RA2bTree>(ntuple);
-    for( int iEvt = 0 ; iEvt < numEvents ; iEvt++ ){
-      ntuple->GetEntry(iEvt);
-      if( iEvt % 1000000 == 0 ) cout << skims.signalSampleName[iSample] << ": " << iEvt << "/" << numEvents << endl;
-      if(! baselineCut(ntuple) ) continue;
-      if( doubleHiggsTagCut(ntuple) ) continue;
-      if( ntuple->NJets<4 || ntuple->BTags<1 || ntuple->DeltaPhi1<0.5 || ntuple->DeltaPhi2<0.5 ) continue;
-      if(! singleHiggsTagLooseCut(ntuple) ) continue;
+      RA2bTree* ntuple = skims.signalNtuples[iSample];
       for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++){
-	if( skims.signalSampleName[iSample].Index("mHiggsino900") != -1 ){
-	  //cout << "mHiggsino900: " << ntuple->Weight*40000./59508. << endl;
-	  plots[iPlot].fillSignal(ntuple,ntuple->Weight*40000./59508.);
-	}else if( skims.signalSampleName[iSample].Index("mHiggsino1000") != -1 ){
-	  //cout << "mHiggsino1000: " << ntuple->Weight*40000./62968. << endl;
-	  plots[iPlot].fillSignal(ntuple,ntuple->Weight*40000./62968.);
-	}else
-	  plots[iPlot].fillSignal(ntuple);
+          plots[iPlot].addSignalNtuple(ntuple,skims.signalSampleName[iSample]);
+          plots[iPlot].setLineColor(ntuple,skims.lineColor[iSample]);
       }
-    }
+
+      int numEvents = ntuple->fChain->GetEntries();
+      ntupleBranchStatus<RA2bTree>(ntuple);
+      for( int iEvt = 0 ; iEvt < numEvents ; iEvt++ ){
+          ntuple->GetEntry(iEvt);
+          if( iEvt % 1000000 == 0 ) cout << skims.signalSampleName[iSample] << ": " << iEvt << "/" << numEvents << endl;
+          if(! baselineCut(ntuple) ) continue;
+          if( doubleTaggingLooseCut(ntuple) ) continue;
+          //if( ntuple->NJets<4 || ntuple->BTags<1 || ntuple->DeltaPhi1<0.5 || ntuple->DeltaPhi2<0.5 ) continue;
+          if(! singleHiggsTagLooseCut(ntuple) ) continue;
+          for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++){
+              if( skims.signalSampleName[iSample].Index("mHiggsino900") != -1 ){
+                  //cout << "mHiggsino900: " << ntuple->Weight*40000./59508. << endl;
+                  plots[iPlot].fillSignal(ntuple,ntuple->Weight*40000./59508.);
+              }else if( skims.signalSampleName[iSample].Index("mHiggsino1000") != -1 ){
+                  //cout << "mHiggsino1000: " << ntuple->Weight*40000./62968. << endl;
+                  plots[iPlot].fillSignal(ntuple,ntuple->Weight*40000./62968.);
+              }else
+                  plots[iPlot].fillSignal(ntuple);
+          }
+      }
   }
 
   TCanvas* can = new TCanvas("can","can",500,500);
   for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++){
-    plots[iPlot].Draw(can,skims.ntuples,skims.signalNtuples,"plotObs_singleHiggsTag_plots");
+    plots[iPlot].Draw(can,skims.ntuples,skims.signalNtuples,"../plots/plotObs_singleHiggsTag_plots");
   }
 }
