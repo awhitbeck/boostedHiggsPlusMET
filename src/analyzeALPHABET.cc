@@ -9,7 +9,10 @@
 #include "TLegend.h"
 #include "TROOT.h"
 
+#include "ALPHABET.h"
+
 using namespace std;
+using namespace alphabet;
 
 int main(int argc, char** argv){
 
@@ -44,7 +47,7 @@ int main(int argc, char** argv){
     vector<TH1F*> ratioSR;
     vector<TH1F*> ratioSB;
 
-    for( int bin  = 300 ; bin <= 500 ; bin+=100){
+    for( int bin  = int(lowestMET) ; bin <= lowestMET+binWidth*(numMETbins-1) ; bin+=binWidth){
 
         TString b = "";
         b+=bin;
