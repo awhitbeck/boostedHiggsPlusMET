@@ -18,6 +18,6 @@ outputFile.write("|image|description|\n")
 outputFile.write("| --- | --- |\n")
 for f in fileList:
     if f[-4:]!=".png": continue
-    outputFile.write("| [{0}]({0})![{0}]({0}) |  |".format(f))
+    outputFile.write("| ![{0}]({0}) |  | \n".format(f))
 
 outputFile.close()    
