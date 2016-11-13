@@ -13,8 +13,10 @@
 #include "skimSamples.cc"
 #include "definitions.cc"
 #include "RA2bTree.cc"
+#include "ALPHABET.h"
 
 using namespace std;
+using namespace alphabet;
 
 int main(int argc, char** argv){
 
@@ -26,9 +28,7 @@ int main(int argc, char** argv){
   typedef plot<RA2bTree> plot;
 
   vector<vector<plot> > plots;
-  const int numMETbins=3;
-  const int lowestMET=300.;
-  const int binWidth=200.;
+
   for( int i = 0 ; i < numMETbins ; i++ ) {
     TString tag="_";
     tag+=lowestMET+i*binWidth;
@@ -130,7 +130,7 @@ int main(int argc, char** argv){
       for( int iBin = 0 ; iBin < numMETbins ; iBin++ ){
           if( ntuple->MET > lowestMET ){
               if( ntuple->MET > lowestMET+binWidth*(numMETbins-1) )
-                  bin = numMETbins;
+                  bin = numMETbins-1;
               else
                   bin = int((ntuple->MET-lowestMET)/binWidth);
           }
