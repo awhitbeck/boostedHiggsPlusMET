@@ -17,6 +17,6 @@ outputFile = open(options.dir+"/README.md","w")
 for f in fileList:
     if f[-4:]!=".png": continue
     #outputFile.write("[{0}]({0})".format(f))
-    outputFile.write("![{0}]({0})\n".format(f))
+    outputFile.write("![{0}]({0})".format(f))
 
 outputFile.close()    
