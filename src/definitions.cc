@@ -496,10 +496,10 @@ template<typename ntupleType> bool singleHiggsTagLooseCut(ntupleType* ntuple ){
 
 template<typename ntupleType> bool antiTaggingLooseCut(ntupleType* ntuple ){
   return ( baselineCut(ntuple) && 
-	   ! ( ( ntuple->JetsAK8_doubleBDiscriminator->at(0) > bbtagCut
-		 ) ||
-	       ( ntuple->JetsAK8_doubleBDiscriminator->at(1) > bbtagCut 
-		 ) ) ) ;
+           ( ( ntuple->JetsAK8_doubleBDiscriminator->at(0) < bbtagCut
+               ) &&
+             ( ntuple->JetsAK8_doubleBDiscriminator->at(1) < bbtagCut 
+               ) ) ) ;
 }
 
 template<typename ntupleType> bool doubleTaggingLooseCut(ntupleType* ntuple ){

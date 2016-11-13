@@ -12,7 +12,7 @@
 #include "plotterUtils.cc"
 #include "skimSamples.cc"
 #include "definitions.cc"
-#include "heppySkimTree.cc"
+#include "RA2bTree.cc"
 
 using namespace std;
 
@@ -22,11 +22,12 @@ int main(int argc, char** argv){
   gROOT->ProcessLine("setTDRStyle()");
   
   skimSamples skims;
+  typedef plot<RA2bTree> plot;
 
-  plot tagSRMETplot(*fillMET<heppySkimTree>,"MET_tagSR","E_{T}^{miss} [GeV]",17,300.,2000.);
-  plot tagSBMETplot(*fillMET<heppySkimTree>,"MET_tagSB","E_{T}^{miss} [GeV]",17,300.,2000.);
-  plot antiTagSRMETplot(*fillMET<heppySkimTree>,"MET_antitagSR","E_{T}^{miss} [GeV]",17,300.,2000.);
-  plot antiTagSBMETplot(*fillMET<heppySkimTree>,"MET_antitagSB","E_{T}^{miss} [GeV]",17,300.,2000.);
+  plot tagSRMETplot(*fillMET<RA2bTree>,"MET_tagSR","E_{T}^{miss} [GeV]",17,300.,2000.);
+  plot tagSBMETplot(*fillMET<RA2bTree>,"MET_tagSB","E_{T}^{miss} [GeV]",17,300.,2000.);
+  plot antiTagSRMETplot(*fillMET<RA2bTree>,"MET_antitagSR","E_{T}^{miss} [GeV]",17,300.,2000.);
+  plot antiTagSBMETplot(*fillMET<RA2bTree>,"MET_antitagSB","E_{T}^{miss} [GeV]",17,300.,2000.);
 
   vector<plot> plots;
   plots.push_back(tagSRMETplot);
@@ -37,7 +38,7 @@ int main(int argc, char** argv){
   // background MC samples
   for( int iSample = 0 ; iSample < skims.ntuples.size() ; iSample++){
 
-    heppySkimTree* ntuple = skims.ntuples[iSample];
+    RA2bTree* ntuple = skims.ntuples[iSample];
 
     for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++){
       plots[iPlot].addNtuple(ntuple,skims.sampleName[iSample]);
@@ -47,7 +48,7 @@ int main(int argc, char** argv){
     int numEvents = ntuple->fChain->GetEntries();
     for( int iEvt = 0 ; iEvt < numEvents ; iEvt++ ){
       ntuple->GetEntry(iEvt);
-      if( iEvt % 1000000 == 0 ) cout << skims.sampleName[iSample] << ": " << iEvt << "/" << numEvents << endl;
+      if( iEvt % 100000 == 0 ) cout << skims.sampleName[iSample] << ": " << iEvt << "/" << numEvents << endl;
       //if( iEvt > 100000 ) break;
       if(! baselineCut(ntuple) ) continue;
       if( int(fillNJets(ntuple)) < 4 ) continue; 
@@ -76,7 +77,7 @@ int main(int argc, char** argv){
   // Signal samples
   for( int iSample = 0 ; iSample < skims.signalNtuples.size() ; iSample++){
 
-    heppySkimTree* ntuple = skims.signalNtuples[iSample];
+    RA2bTree* ntuple = skims.signalNtuples[iSample];
     for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++){
       plots[iPlot].addSignalNtuple(ntuple,skims.signalSampleName[iSample]);
       plots[iPlot].setLineColor(ntuple,skims.lineColor[iSample]);
@@ -85,13 +86,12 @@ int main(int argc, char** argv){
     int numEvents = ntuple->fChain->GetEntries();
     for( int iEvt = 0 ; iEvt < numEvents ; iEvt++ ){
       ntuple->GetEntry(iEvt);
-      if( iEvt % 1000000 == 0 ) cout << skims.signalSampleName[iSample] << ": " << iEvt << "/" << numEvents << endl;
+      if( iEvt % 100000 == 0 ) cout << skims.signalSampleName[iSample] << ": " << iEvt << "/" << numEvents << endl;
       if(!baselineCut(ntuple) ) continue;
       if( int(fillNJets(ntuple)) < 4 )continue;
       if( int(fillBTags(ntuple)) < 1 ) continue; 
       if( fillDeltaPhi1(ntuple) < 0.5 ) continue; 
       if( fillDeltaPhi2(ntuple) < 0.5 ) continue; 
-      if(ntuple->nGenHiggsBoson!=2) continue;
       if( doubleTaggingLooseCut(ntuple) ){
           double jetMass = fillLeadingBBtagJetMass(ntuple);
           if( jetMass > 85 && jetMass < 135 ){ 
@@ -115,7 +115,7 @@ int main(int argc, char** argv){
   TCanvas* can = new TCanvas("can","can",500,500);
   for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++){
     plots[iPlot].buildSum();
-    plots[iPlot].Draw(can,skims.ntuples,skims.signalNtuples,"NJets4_BTags1_DeltaPhi12_METonlyBinning_V23v4");
+    //plots[iPlot].Draw(can,skims.ntuples,skims.signalNtuples,"NJets4_BTags1_DeltaPhi12_METonlyBinning_V23v4");
     outputFile->cd();
     plots[iPlot].Write();
   }

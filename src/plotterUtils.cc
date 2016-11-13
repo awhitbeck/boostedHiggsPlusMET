@@ -25,6 +25,7 @@ template <typename ntupleType> class plot{
     xlabel = "" ; 
     nbins = 40; lower = 200.; upper = 1200.;
     stack=new THStack(label+"_stack",label+"_stack");
+    dataHist=NULL;
   };
 
   plot( double (*fillerFunc_)(ntupleType*) , 
@@ -35,6 +36,7 @@ template <typename ntupleType> class plot{
     xlabel =xlabel_ ; 
     nbins = nbins_; lower = lower_; upper = upper_;
     stack=new THStack(label+"_stack",label+"_stack");
+    dataHist=NULL;
   };
   
   void setBinning(int nbins_ , double lower_ , double upper_ ){
@@ -198,9 +200,11 @@ template <typename ntupleType> class plot{
 	  max = temp->GetMaximum();
       }
     }
-    dataHist->Draw("e1,SAME");
-    if( dataHist->GetMaximum() > max ) 
-      max = dataHist->GetMaximum();
+    if(dataHist){
+        dataHist->Draw("e1,SAME");
+        if( dataHist->GetMaximum() > max ) 
+            max = dataHist->GetMaximum();
+    }
 
     stack->SetMaximum(max);
     stack->SetMinimum(0.1);
@@ -220,7 +224,8 @@ template <typename ntupleType> class plot{
     for(int iSample = 0 ; iSample < signalNtuples.size() ; iSample++){
       leg->AddEntry(signalHistoMap[signalNtuples[iSample]],tagMap[signalNtuples[iSample]],"f");
     }
-    // leg->AddEntry(dataHist,"data","p");
+    if( dataHist )
+        leg->AddEntry(dataHist,"data","p");
     leg->Draw();
     legCan->SaveAs(dir+"/legend.png");
   }

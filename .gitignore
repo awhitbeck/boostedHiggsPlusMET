@@ -1,7 +1,7 @@
 **/*.log
 **/*#
 **/roostats*
-**/*.png
+src/**/*.png
 **/*~
 **/*root
 **/*exe
