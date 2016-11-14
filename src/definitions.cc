@@ -484,7 +484,13 @@ template<typename ntupleType> bool baselineCut(ntupleType* ntuple){
            ntuple->JetsAK8_prunedMass->at(1) > 50. && 
            ntuple->JetsAK8_prunedMass->at(1) < 200.&&
            ntuple->DeltaPhi1>0.5 && 
-           ntuple->DeltaPhi2>0.5 );
+           ntuple->DeltaPhi2>0.5 &&
+           ntuple->HBHENoiseFilter==1 && 
+           ntuple->HBHEIsoNoiseFilter==1 && 
+           ntuple->eeBadScFilter==1 && 
+           ntuple->EcalDeadCellTriggerPrimitiveFilter == 1 && 
+           ntuple->NVtx>0 && 
+           ntuple->JetID == 1);
 
 }
 
