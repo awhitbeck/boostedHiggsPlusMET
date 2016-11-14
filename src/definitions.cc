@@ -27,6 +27,12 @@ template<typename ntupleType>void ntupleBranchStatus(ntupleType* ntuple){
   ntuple->fChain->SetBranchStatus("JetsAK8*",1);
   ntuple->fChain->SetBranchStatus("Weight",1);  
   ntuple->fChain->SetBranchStatus("TriggerPass",1);  
+  ntuple->fChain->SetBranchStatus("HBHENoiseFilter",1);
+  ntuple->fChain->SetBranchStatus("HBHEIsoNoiseFilter",1);
+  ntuple->fChain->SetBranchStatus("eeBadScFilter",1);
+  ntuple->fChain->SetBranchStatus("EcalDeadCellTriggerPrimitiveFilter",1);
+  ntuple->fChain->SetBranchStatus("NVtx",1);
+  ntuple->fChain->SetBranchStatus("JetID",1);
 }
 
 //////////////////////
