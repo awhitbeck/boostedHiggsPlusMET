@@ -33,14 +33,14 @@ int main(int argc, char** argv){
     TString tag="_";
     tag+=lowestMET+i*binWidth;
     vector<plot> plotsTemp;
-    plotsTemp.push_back(plot(*fillLeadingJetMass<RA2bTree>,"mJ_tagSR"+tag,"m_{J} [GeV]",30,50.,200.));
-    plotsTemp.push_back(plot(*fillLeadingJetMass<RA2bTree>,"mJ_tagSB"+tag,"m_{J} [GeV]",30,50.,200.));
+    plotsTemp.push_back(plot(*fillLeadingJetMass<RA2bTree>,"mJ_tagSR"+tag,"m_{J} [GeV]",40,50.,250.));
+    plotsTemp.push_back(plot(*fillLeadingJetMass<RA2bTree>,"mJ_tagSB"+tag,"m_{J} [GeV]",40,50.,250.));
     
-    plotsTemp.push_back(plot(*fillLeadingJetMass<RA2bTree>,"mJ_antitagSR"+tag,"m_{J} [GeV]",30,50.,200.));
-    plotsTemp.push_back(plot(*fillLeadingJetMass<RA2bTree>,"mJ_antitagSB"+tag,"m_{J} [GeV]",30,50.,200.));
+    plotsTemp.push_back(plot(*fillLeadingJetMass<RA2bTree>,"mJ_antitagSR"+tag,"m_{J} [GeV]",40,50.,250.));
+    plotsTemp.push_back(plot(*fillLeadingJetMass<RA2bTree>,"mJ_antitagSB"+tag,"m_{J} [GeV]",40,50.,250.));
     
-    plotsTemp.push_back(plot(*fillLeadingJetMass<RA2bTree>,"mJ_doubletagSR"+tag,"m_{J} [GeV]",30,50.,200.));
-    plotsTemp.push_back(plot(*fillLeadingJetMass<RA2bTree>,"mJ_doubletagSB"+tag,"m_{J} [GeV]",30,50.,200.));
+    plotsTemp.push_back(plot(*fillLeadingJetMass<RA2bTree>,"mJ_doubletagSR"+tag,"m_{J} [GeV]",40,50.,250.));
+    plotsTemp.push_back(plot(*fillLeadingJetMass<RA2bTree>,"mJ_doubletagSB"+tag,"m_{J} [GeV]",40,50.,250.));
 
     plots.push_back(plotsTemp);
   }
@@ -52,8 +52,8 @@ int main(int argc, char** argv){
 
     for( int iBin = 0 ; iBin < numMETbins ; iBin++){
       for( int iPlot = 0 ; iPlot < plots[iBin].size() ; iPlot++){
-	plots[iBin][iPlot].addNtuple(ntuple,skims.sampleName[iSample]);
-	plots[iBin][iPlot].setFillColor(ntuple,skims.fillColor[iSample]);
+          plots[iBin][iPlot].addNtuple(ntuple,skims.sampleName[iSample]);
+          plots[iBin][iPlot].setFillColor(ntuple,skims.fillColor[iSample]);
       }
     }
 
@@ -82,7 +82,7 @@ int main(int argc, char** argv){
             double jetMass = fillLeadingJetMass(ntuple);
             if( jetMass > 85 && jetMass < 135 ){
                 plots[bin][4].fill(ntuple);
-            }else if( jetMass > 50 && jetMass < 200){
+            }else if( (jetMass > 50 && jetMass < 85) || (jetMass > 180 && jetMass < 250 ) ){
                 plots[bin][5].fill(ntuple);
             }
         }else{
@@ -90,7 +90,7 @@ int main(int argc, char** argv){
                 double jetMass = fillLeadingJetMass(ntuple);
                 if( jetMass > 85 && jetMass < 135 ){ 
                     plots[bin][0].fill(ntuple);
-                }else if( jetMass > 50 && jetMass < 200){
+                }else if( (jetMass > 50 && jetMass < 85) || (jetMass > 180 && jetMass < 250 ) ){
                     plots[bin][1].fill(ntuple);
                 }
             }
@@ -98,7 +98,7 @@ int main(int argc, char** argv){
                 double jetMass = fillLeadingJetMass(ntuple);
                 if( jetMass > 85 && jetMass < 135 ){
                     plots[bin][2].fill(ntuple);
-                }else if( jetMass > 50 && jetMass < 200){
+                }else if( (jetMass > 50 && jetMass < 85) || (jetMass > 180 && jetMass < 250 ) ){
                     plots[bin][3].fill(ntuple);
                 }
             }
@@ -140,7 +140,7 @@ int main(int argc, char** argv){
           double jetMass = fillLeadingJetMass(ntuple);
           if( jetMass > 85 && jetMass < 135 ){
               plots[bin][4].fillData(ntuple);
-          }else if( jetMass > 50 && jetMass < 200){
+          }else if( jetMass > 50 && jetMass < 250){
               plots[bin][5].fillData(ntuple);
           }
       }else{
@@ -148,7 +148,7 @@ int main(int argc, char** argv){
               double jetMass = fillLeadingJetMass(ntuple);
               if( jetMass > 85 && jetMass < 135 ){ 
                   plots[bin][0].fillData(ntuple);
-              }else if( jetMass > 50 && jetMass < 200){
+              }else if( jetMass > 50 && jetMass < 250){
                   plots[bin][1].fillData(ntuple);
               }
           }
@@ -156,7 +156,7 @@ int main(int argc, char** argv){
               double jetMass = fillLeadingJetMass(ntuple);
               if( jetMass > 85 && jetMass < 135 ){
                   plots[bin][2].fillData(ntuple);
-              }else if( jetMass > 50 && jetMass < 200){
+              }else if( jetMass > 50 && jetMass < 250){
                   plots[bin][3].fillData(ntuple);
               }
           }
