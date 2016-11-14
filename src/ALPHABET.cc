@@ -64,7 +64,7 @@ int main(int argc, char** argv){
         if( iEvt % 100000 == 0 ) cout << skims.sampleName[iSample] << ": " << iEvt << "/" << numEvents << endl;
         //if( iEvt > 100000 ) break;
         if(! baselineCut(ntuple) ) continue;
-        //if( ntuple->BTags<1 || ntuple->DeltaPhi1<0.5 || ntuple->DeltaPhi2<0.5 || ntuple->DeltaPhi3<0.3 || ntuple->DeltaPhi4<0.3) continue;
+        //if( ntuple->DeltaPhi1<0.5 || ntuple->DeltaPhi2<0.5 ) continue;
 
         int bin = -1;
         for( int iBin = 0 ; iBin < numMETbins ; iBin++ ){
@@ -86,7 +86,6 @@ int main(int argc, char** argv){
                 plots[bin][5].fill(ntuple);
             }
         }else{
-            //if( ntuple->BTags<1 || ntuple->DeltaPhi1<0.5 || ntuple->DeltaPhi2<0.5 || ntuple->DeltaPhi3<0.3 || ntuple->DeltaPhi4<0.3) continue;
             if( singleHiggsTagLooseCut(ntuple) ){
                 double jetMass = fillLeadingJetMass(ntuple);
                 if( jetMass > 85 && jetMass < 135 ){ 
@@ -124,8 +123,7 @@ int main(int argc, char** argv){
       if( iEvt % 100000 == 0 ) cout << "data: " << iEvt << "/" << numEvents << endl;
       //if( iEvt > 100000 ) break;
       if(! baselineCut(ntuple) ) continue;
-      //if( ntuple->BTags<1 || ntuple->DeltaPhi1<0.5 || ntuple->DeltaPhi2<0.5 || ntuple->DeltaPhi3<0.3 || ntuple->DeltaPhi4<0.3) continue;
-      
+      //if( ntuple->DeltaPhi1<0.5 || ntuple->DeltaPhi2<0.5 ) continue;
       int bin = -1;
       for( int iBin = 0 ; iBin < numMETbins ; iBin++ ){
           if( ntuple->MET > lowestMET ){
@@ -146,7 +144,6 @@ int main(int argc, char** argv){
               plots[bin][5].fillData(ntuple);
           }
       }else{
-          //if( ntuple->BTags<1 || ntuple->DeltaPhi1<0.5 || ntuple->DeltaPhi2<0.5 || ntuple->DeltaPhi3<0.3 || ntuple->DeltaPhi4<0.3) continue;
           if( singleHiggsTagLooseCut(ntuple) ){
               double jetMass = fillLeadingJetMass(ntuple);
               if( jetMass > 85 && jetMass < 135 ){ 

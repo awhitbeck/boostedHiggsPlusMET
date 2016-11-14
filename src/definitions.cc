@@ -475,14 +475,16 @@ template<typename ntupleType> bool AK8JetLooseMassCut(ntupleType* ntuple){
 template<typename ntupleType> bool baselineCut(ntupleType* ntuple){
  
   return ( ntuple->MET > 300.             &&
-	   ntuple->HT > 600.                         &&
-	   ntuple->JetsAK8->size() >= 2 &&
-	   ntuple->JetsAK8->at(0).Pt() > 300. && 
-	   ntuple->JetsAK8_prunedMass->at(0) > 50. && 
-	   ntuple->JetsAK8_prunedMass->at(0) < 200. && 
-	   ntuple->JetsAK8->at(1).Pt() > 300. &&
+           ntuple->HT > 600.                         &&
+           ntuple->JetsAK8->size() >= 2 &&
+           ntuple->JetsAK8->at(0).Pt() > 300. && 
+           ntuple->JetsAK8_prunedMass->at(0) > 50. && 
+           ntuple->JetsAK8_prunedMass->at(0) < 200. && 
+           ntuple->JetsAK8->at(1).Pt() > 300. &&
            ntuple->JetsAK8_prunedMass->at(1) > 50. && 
-           ntuple->JetsAK8_prunedMass->at(1) < 200. );
+           ntuple->JetsAK8_prunedMass->at(1) < 200.&&
+           ntuple->DeltaPhi1>0.5 && 
+           ntuple->DeltaPhi2>0.5 );
 
 }
 

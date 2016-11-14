@@ -87,6 +87,7 @@ int main(int argc, char** argv){
         //if( iEvt > 100000 ) break;
         if(! baselineCut(ntuple) ) continue;
         if(! doubleTaggingLooseCut(ntuple) ) continue;
+        //if(  ntuple->DeltaPhi1<0.5 || ntuple->DeltaPhi2<0.5 ) continue;
         for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++ ){
             plots[iPlot].fill(ntuple);
         }
@@ -109,6 +110,7 @@ int main(int argc, char** argv){
           if( iEvt % 100000 == 0 ) cout << skims.signalSampleName[iSample] << ": " << iEvt << "/" << numEvents << endl;
           if(! baselineCut(ntuple) ) continue;
           if(! doubleTaggingLooseCut(ntuple) ) continue;
+          //if(  ntuple->DeltaPhi1<0.5 || ntuple->DeltaPhi2<0.5 ) continue;
           //if(ntuple->nGenHiggsBoson!=2) continue;
           for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++){
               plots[iPlot].fillSignal(ntuple);
@@ -117,20 +119,23 @@ int main(int argc, char** argv){
   }
   
   // Data tree
+  RA2bTree* ntuple = skims.dataNtuple;
   for( int iPlot = 0 ; iPlot < 0 /*plots.size()*/ ; iPlot++){
-    plots[iPlot].addDataNtuple(skims.dataNtuple,"data");
+    plots[iPlot].addDataNtuple(ntuple,"data");
   }
 
-  int numEvents = skims.dataNtuple->fChain->GetEntries();
-  ntupleBranchStatus<RA2bTree>(skims.dataNtuple);
+  int numEvents = ntuple->fChain->GetEntries();
+  ntupleBranchStatus<RA2bTree>(ntuple);
   for( int iEvt = 0 ; iEvt < numEvents ; iEvt++ ){
-      skims.dataNtuple->GetEntry(iEvt);
-      if(! doubleTaggingLooseCut(skims.dataNtuple) ) continue;
-      //if(skims.dataNtuple->HLT_BIT_HLT_PFMET100_PFMHT100_IDTight_v==0) continue;
+      ntuple->GetEntry(iEvt);
+      if(! baselineCut(ntuple) ) continue;
+      if(! doubleTaggingLooseCut(ntuple) ) continue;
+      //if(  ntuple->DeltaPhi1<0.5 || ntuple->DeltaPhi2<0.5 ) continue;
+      //if(ntuple->HLT_BIT_HLT_PFMET100_PFMHT100_IDTight_v==0) continue;
       if( iEvt % 1000000 == 0 ) cout << "DATA: " << iEvt << "/" << numEvents << endl;
       //if( iEvt > 100000 ) break ;
       for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++){
-          plots[iPlot].fillSignal(skims.dataNtuple);
+          plots[iPlot].fillSignal(ntuple);
       }
   }
 

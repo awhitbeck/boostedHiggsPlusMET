@@ -109,7 +109,7 @@ int main(int argc, char** argv){
       //if( iEvt > 100000 ) break;
       if(! baselineCut(ntuple) ) continue;
       if( doubleHiggsTagCut(ntuple) ) continue;
-      //if( ntuple->NJets<4 || ntuple->BTags<1 || ntuple->DeltaPhi1<0.5 || ntuple->DeltaPhi2<0.5 ) continue;
+      //if( ntuple->DeltaPhi1<0.5 || ntuple->DeltaPhi2<0.5 ) continue;
       if(! antiTaggingLooseCut(ntuple) ) continue;
       for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++ ){
 	plots[iPlot].fill(ntuple);
@@ -133,7 +133,7 @@ int main(int argc, char** argv){
       if( iEvt % 1000000 == 0 ) cout << skims.signalSampleName[iSample] << ": " << iEvt << "/" << numEvents << endl;
       if(! baselineCut(ntuple) ) continue;
       if( doubleHiggsTagCut(ntuple) ) continue;
-      //if( ntuple->NJets<4 || ntuple->BTags<1 || ntuple->DeltaPhi1<0.5 || ntuple->DeltaPhi2<0.5 ) continue;
+      //if( ntuple->DeltaPhi1<0.5 || ntuple->DeltaPhi2<0.5 ) continue;
       if(! antiTaggingLooseCut(ntuple) ) continue;
       //if(ntuple->nGenHiggsBoson!=2) continue;
       for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++){
@@ -155,7 +155,7 @@ int main(int argc, char** argv){
     if( iEvt % 1000000 == 0 ) cout << "data_HTMHT: " << iEvt << "/" << numEvents << endl;
     if(! baselineCut(ntuple) ) continue;
     if( doubleHiggsTagCut(ntuple) ) continue;
-    //if( ntuple->NJets<4 || ntuple->BTags<1 || ntuple->DeltaPhi1<0.5 || ntuple->DeltaPhi2<0.5 ) continue;
+    //if( ntuple->DeltaPhi1<0.5 || ntuple->DeltaPhi2<0.5 ) continue;
     if(! antiTaggingLooseCut(ntuple) ) continue;    
     //if( ntuple->TriggerPass->size() < 44 || ( !ntuple->TriggerPass->at(41) && !ntuple->TriggerPass->at(42) && !ntuple->TriggerPass->at(43) && !ntuple->TriggerPass->at(44)) ) continue;
     for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++){
