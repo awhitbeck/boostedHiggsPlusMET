@@ -141,6 +141,6 @@ int main(int argc, char** argv){
 
   TCanvas* can = new TCanvas("can","can",500,500);
   for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++){
-    plots[iPlot].Draw(can,skims.ntuples,skims.signalNtuples,"plotObs_doubleHiggsTag_plots");
+    plots[iPlot].Draw(can,skims.ntuples,skims.signalNtuples,"../plots/plotObs_doubleHiggsTag_plots");
   }
 }
