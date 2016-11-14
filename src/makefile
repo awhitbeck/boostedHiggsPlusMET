@@ -32,7 +32,7 @@ plotObs_fastFullComp:
 ALPHABET:
 	$(CC) $(CFLAGS) $(LIBS) $(INCLUDES) ALPHABET.cc -o ../bin/$@
 analyzeALPHABET:
-	$(CC) $(CFLAGS) $(LIBS) $(INCLUDES) analyzeALPHABET.cc -o ../bin/$@
+	$(CC) -g $(CFLAGS) $(LIBS) $(INCLUDES) analyzeALPHABET.cc -o ../bin/$@
 cutFlow_HiggsinoOnly:
 	$(CC) $(CFLAGS) $(LIBS) $(INCLUDES) cutFlow_HiggsinoOnly.cc -o ../bin/$@
 plotObs_singleHiggsTag:
