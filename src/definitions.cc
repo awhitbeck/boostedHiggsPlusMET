@@ -535,10 +535,10 @@ template<typename ntupleType> bool singleHiggsTagCut(ntupleType* ntuple ){
 
 template<typename ntupleType> bool doubleHiggsTagCut(ntupleType* ntuple ){
   return ( baselineCut(ntuple) &&
-	   ntuple->JetsAK8_prunedMass->at(0) > 85. && 
-	   ntuple->JetsAK8_prunedMass->at(0) < 135. && 
-	   ntuple->JetsAK8_doubleBDiscriminator->at(0) > bbtagCut &&
-	   ntuple->JetsAK8_prunedMass->at(1) > 85. && 
-	   ntuple->JetsAK8_prunedMass->at(1) < 135. && 
-	   ntuple->JetsAK8_doubleBDiscriminator->at(1) > bbtagCut ) ;
+           ntuple->JetsAK8_prunedMass->at(0) > 85. && 
+           ntuple->JetsAK8_prunedMass->at(0) < 135. && 
+           ntuple->JetsAK8_doubleBDiscriminator->at(0) > bbtagCut &&
+           //ntuple->JetsAK8_prunedMass->at(1) > 85. && 
+           //ntuple->JetsAK8_prunedMass->at(1) < 135. && 
+           ntuple->JetsAK8_doubleBDiscriminator->at(1) > bbtagCut ) ;
 }
