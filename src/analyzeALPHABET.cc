@@ -40,7 +40,7 @@ int main(int argc, char** argv){
     can_rpf_single->Divide(6,1);
     
     TCanvas* can_closure = new TCanvas("can_closure","can_closure",500,500);
-    //can_closure->Divide(6,1);
+    can_closure->Divide(6,1);
 
     vector<TF1*> funcDouble;//TF1("func","[0]+[1]*x",50.,200.)
     vector<TF1*> funcSingle;//TF1("func","[0]+[1]*x",50.,200.)
@@ -71,7 +71,7 @@ int main(int argc, char** argv){
             //////////////////////////////////////////////////////////////////////////////////////////////////
             // - - - - - - - - - - - - - - Draw Rp/f for anti-tag -> double-tag - - - - - - - - - - - - - - //
             //////////////////////////////////////////////////////////////////////////////////////////////////
-            funcDouble.push_back(new TF1("funcDouble_"+b+"_"+s,"[0]+[1]*x",50.,200.));
+            funcDouble.push_back(new TF1("funcDouble_"+b+"_"+s,"[0]+[1]*x",50.,250.));
             //cout << "mJ_doubletagSR_"+b+"_"+s << endl;
             ratioSRdouble.push_back(new TH1F(*((TH1F*)inputFile->Get("mJ_doubletagSR_"+b+"_"+s))));
             ratioSRdouble.back()->SetNameTitle("ratioSRdouble_"+b+"_"+s,"ratioSRdouble_"+b+"_"+s);
@@ -93,7 +93,7 @@ int main(int argc, char** argv){
             ratioSRdouble.back()->GetXaxis()->SetTitle("m_{J} [GeV]");
             ratioSRdouble.back()->GetYaxis()->SetRangeUser(0.,0.25);
 
-            can_rpf_double->cd()   ;
+            can_rpf_double->cd();
             can_rpf_double->cd(i+1);
             ratioSRdouble.back()->Draw();
             ratioSBdouble.back()->Draw("SAME");
@@ -106,7 +106,7 @@ int main(int argc, char** argv){
             //////////////////////////////////////////////////////////////////////////////////////////////////
             // - - - - - - - - - - - - - - Draw Rp/f for anti-tag -> single-tag - - - - - - - - - - - - - - //
             //////////////////////////////////////////////////////////////////////////////////////////////////
-            funcSingle.push_back(new TF1("funcSingle_"+b+"_"+s,"[0]+[1]*x",50.,200.));
+            funcSingle.push_back(new TF1("funcSingle_"+b+"_"+s,"[0]+[1]*x",50.,250.));
             //cout << "mJ_singletagSR_"+b+"_"+s << endl;
             ratioSRsingle.push_back(new TH1F(*((TH1F*)inputFile->Get("mJ_tagSR_"+b+"_"+s))));
             ratioSRsingle.back()->SetNameTitle("ratioSRsingle_"+b+"_"+s,"ratioSRsingle_"+b+"_"+s);
