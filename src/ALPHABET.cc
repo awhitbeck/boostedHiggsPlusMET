@@ -82,7 +82,8 @@ int main(int argc, char** argv){
             double jetMass = fillLeadingJetMass(ntuple);
             if( jetMass > 85 && jetMass < 135 ){
                 plots[bin][4].fill(ntuple);
-            }else if( (jetMass > 50 && jetMass < 85) || (jetMass > 180 && jetMass < 250 ) ){
+                //}else if( (jetMass > 50 && jetMass < 85) || (jetMass > 180 && jetMass < 250 ) ){
+            }else if( jetMass > 50 && jetMass < 250 ){
                 plots[bin][5].fill(ntuple);
             }
         }else{
@@ -90,7 +91,8 @@ int main(int argc, char** argv){
                 double jetMass = fillLeadingJetMass(ntuple);
                 if( jetMass > 85 && jetMass < 135 ){ 
                     plots[bin][0].fill(ntuple);
-                }else if( (jetMass > 50 && jetMass < 85) || (jetMass > 180 && jetMass < 250 ) ){
+                    //}else if( (jetMass > 50 && jetMass < 85) || (jetMass > 180 && jetMass < 250 ) ){
+                }else if( jetMass > 50 && jetMass < 250 ){
                     plots[bin][1].fill(ntuple);
                 }
             }
@@ -98,7 +100,8 @@ int main(int argc, char** argv){
                 double jetMass = fillLeadingJetMass(ntuple);
                 if( jetMass > 85 && jetMass < 135 ){
                     plots[bin][2].fill(ntuple);
-                }else if( (jetMass > 50 && jetMass < 85) || (jetMass > 180 && jetMass < 250 ) ){
+                    //}else if( (jetMass > 50 && jetMass < 85) || (jetMass > 180 && jetMass < 250 ) ){
+                }else if( jetMass > 50 && jetMass < 250 ){
                     plots[bin][3].fill(ntuple);
                 }
             }
@@ -139,7 +142,7 @@ int main(int argc, char** argv){
       if( doubleTaggingLooseCut(ntuple) ){
           double jetMass = fillLeadingJetMass(ntuple);
           if( jetMass > 85 && jetMass < 135 ){
-              plots[bin][4].fillData(ntuple);
+              ; //plots[bin][4].fillData(ntuple);
           }else if( jetMass > 50 && jetMass < 250){
               plots[bin][5].fillData(ntuple);
           }
@@ -147,7 +150,7 @@ int main(int argc, char** argv){
           if( singleHiggsTagLooseCut(ntuple) ){
               double jetMass = fillLeadingJetMass(ntuple);
               if( jetMass > 85 && jetMass < 135 ){ 
-                  plots[bin][0].fillData(ntuple);
+                  ; //plots[bin][0].fillData(ntuple);
               }else if( jetMass > 50 && jetMass < 250){
                   plots[bin][1].fillData(ntuple);
               }
