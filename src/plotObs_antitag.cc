@@ -37,10 +37,10 @@ int main(int argc, char** argv){
   plot DeltaPhi4plot(*fillDeltaPhi4<RA2bTree>,"DeltaPhi4_antitag","#Delta#Phi_{4}",20,0,3.1415);
 
 
-  plot J1pt_Massplot(*fillLeadingJetMass<RA2bTree>,"J1pt_Mass_antitag","m_{J} [GeV]",20,50.,200.);
-  plot J2pt_Massplot(*fillSubLeadingJetMass<RA2bTree>,"J2pt_Mass_antitag","m_{J} [GeV]",20,50.,200.);
-  plot J1bbtag_Massplot(*fillLeadingBBtagJetMass<RA2bTree>,"J1bbtag_Mass_antitag","m_{J} [GeV]",20,50.,200.);
-  plot J2bbtag_Massplot(*fillSubLeadingBBtagJetMass<RA2bTree>,"J2bbtag_Mass_antitag","m_{J} [GeV]",20,50.,200.);
+  plot J1pt_Massplot(*fillLeadingJetMass<RA2bTree>,"J1pt_Mass_antitag","m_{J} [GeV]",40,50.,250.);
+  plot J2pt_Massplot(*fillSubLeadingJetMass<RA2bTree>,"J2pt_Mass_antitag","m_{J} [GeV]",40,50.,250.);
+  plot J1bbtag_Massplot(*fillLeadingBBtagJetMass<RA2bTree>,"J1bbtag_Mass_antitag","m_{J} [GeV]",40,50.,250.);
+  plot J2bbtag_Massplot(*fillSubLeadingBBtagJetMass<RA2bTree>,"J2bbtag_Mass_antitag","m_{J} [GeV]",40,50.,250.);
 
   plot J1pt_JetFlavorPlot(*fillLeadingJetFlavor<RA2bTree>,"J1pt_JetFlavorPlot","Jet Flavor",22,0.5,21.5);
   plot J2pt_JetFlavorPlot(*fillSubLeadingJetFlavor<RA2bTree>,"J2pt_JetFlavorPlot","Jet Flavor",22,0.5,21.5);
@@ -163,8 +163,11 @@ int main(int argc, char** argv){
     }
   }
 
+  TFile outputFile("antitagHistos.root","recreate");
   TCanvas* can = new TCanvas("can","can",500,500);
   for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++){
     plots[iPlot].Draw(can,skims.ntuples,skims.signalNtuples,"../plots/plotObs_antitag_plots");
+    plots[iPlot].Write();
   }
+  outputFile.Close();
 }

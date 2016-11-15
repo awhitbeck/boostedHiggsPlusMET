@@ -31,10 +31,10 @@ int main(int argc, char** argv){
   plot BTagsplot(*fillBTags<RA2bTree>,"BTags_singleHiggsTag","n_{b}",6,-0.5,5.5);
   plot Binsplot(*fillAnalysisBins<RA2bTree>,"AnalysisBins_singleHiggsTag","i^th Bin",8,0.5,8.5);
 
-  plot J1pt_Massplot(*fillLeadingJetMass<RA2bTree>,"J1pt_Mass_singleHiggsTag","m_{J} [GeV]",20,50.,200.);
-  plot J2pt_Massplot(*fillSubLeadingJetMass<RA2bTree>,"J2pt_Mass_singleHiggsTag","m_{J} [GeV]",20,50.,200.);
-  plot J1bbtag_Massplot(*fillLeadingBBtagJetMass<RA2bTree>,"J1bbtag_Mass_singleHiggsTag","m_{J} [GeV]",20,50.,200.);
-  plot J2bbtag_Massplot(*fillSubLeadingBBtagJetMass<RA2bTree>,"J2bbtag_Mass_singleHiggsTag","m_{J} [GeV]",20,50.,200.);
+  plot J1pt_Massplot(*fillLeadingJetMass<RA2bTree>,"J1pt_Mass_singleHiggsTag","m_{J} [GeV]",40,50.,250.);
+  plot J2pt_Massplot(*fillSubLeadingJetMass<RA2bTree>,"J2pt_Mass_singleHiggsTag","m_{J} [GeV]",40,50.,250.);
+  plot J1bbtag_Massplot(*fillLeadingBBtagJetMass<RA2bTree>,"J1bbtag_Mass_singleHiggsTag","m_{J} [GeV]",40,50.,250.);
+  plot J2bbtag_Massplot(*fillSubLeadingBBtagJetMass<RA2bTree>,"J2bbtag_Mass_singleHiggsTag","m_{J} [GeV]",40,50.,250.);
 
   plot J1pt_BBplot(*fillLeadingBBtag<RA2bTree>,"J1pt_BBtag_singleHiggsTag","bb-tag",20,-1.,1.);
   plot J2pt_BBplot(*fillSubLeadingBBtag<RA2bTree>,"J2pt_BBtag_singleHiggsTag","bb-tag",20,-1.,1.);

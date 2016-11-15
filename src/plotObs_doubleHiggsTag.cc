@@ -36,11 +36,11 @@ int main(int argc, char** argv){
   plot DeltaPhi4plot(*fillDeltaPhi4<RA2bTree>,"DeltaPhi4_doubleHiggsTag","#Delta#Phi_{4}",20,0,3.1415);
 
 
-  plot J1Mplot(*fillLeadingJetMass<RA2bTree>,"J1M_doubleHiggsTag","leading m_{J} [GeV]",20,50.,200.);
+  plot J1Mplot(*fillLeadingJetMass<RA2bTree>,"J1M_doubleHiggsTag","leading m_{J} [GeV]",40,50.,250.);
   plot J1BBplot(*fillLeadingBBtag<RA2bTree>,"J1BB_doubleHiggsTag","leading bb-tag",20,-1.,1.);
   plot J1Tau21plot(*fillLeadingTau21<RA2bTree>,"J1Tau21_doubleHiggsTag","leading #tau_{21}",20,0.,1.);
   plot J1Ptplot(*fillLeadingJetPt<RA2bTree>,"J1Pt_doubleHiggsTag","leading p_{T,J} [GeV]",40,300.,2300.);
-  plot J2Mplot(*fillSubLeadingJetMass<RA2bTree>,"J2M_doubleHiggsTag","subleading m_{J} [GeV]",20,50.,200.);
+  plot J2Mplot(*fillSubLeadingJetMass<RA2bTree>,"J2M_doubleHiggsTag","subleading m_{J} [GeV]",40,50.,250.);
   plot J2BBplot(*fillSubLeadingBBtag<RA2bTree>,"J2BB_doubleHiggsTag","subleading bb-tag",20,-1.,1.);
   plot J2Tau21plot(*fillSubLeadingTau21<RA2bTree>,"J2Tau21_doubleHiggsTag","subleading #tau_{21}",20,0.,1.);
   plot J2Ptplot(*fillSubLeadingJetPt<RA2bTree>,"J2Pt_doubleHiggsTag","subleading p_{T,J} [GeV]",40,300.,2300.);
