@@ -24,11 +24,6 @@ public :
     ntuples.push_back(new RA2bTree(ZJets));
     sampleName.push_back("ZJets");
     fillColor.push_back(kGreen);
-    QCD = new TChain("PreSelection");
-    QCD->Add(skimType+"_QCD.root");
-    ntuples.push_back(new RA2bTree(QCD));
-    sampleName.push_back("QCD");
-    fillColor.push_back(kGray);
     WJets = new TChain("PreSelection");
     WJets->Add(skimType+"_WJets.root");
     ntuples.push_back(new RA2bTree(WJets));
@@ -39,6 +34,11 @@ public :
     ntuples.push_back(new RA2bTree(TT));
     sampleName.push_back("TT");
     fillColor.push_back(kCyan);
+    QCD = new TChain("PreSelection");
+    QCD->Add(skimType+"_QCD.root");
+    ntuples.push_back(new RA2bTree(QCD));
+    sampleName.push_back("QCD");
+    fillColor.push_back(kGray);
 
     mGluino1300 = new TChain("PreSelection");
     mGluino1300->Add(skimType+"_T5HH_mGluino1300_0.root");
