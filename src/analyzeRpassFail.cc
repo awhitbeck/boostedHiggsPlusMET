@@ -7,6 +7,7 @@
 #include <vector>
 #include <iostream>
 #include <iomanip>
+#include <assert.h>
 #include "TLegend.h"
 #include "TROOT.h"
 
@@ -21,18 +22,20 @@ int main(int argc, char** argv){
     gROOT->ProcessLine(".L ~/tdrstyle.C");
     gROOT->ProcessLine("setTDRStyle()");
 
-    TString s("");
-    if( argc < 2 ){
-        s = "sum";
-    }else if( argc == 2 ){
+    ////////////////////////////////////////////////////////////////////////
+    // - - - - - - - - - - - - input configuration - - - - - - - - - - -  //
+    ////////////////////////////////////////////////////////////////////////
+    TString s("sum");
+    double yMax(0.2);
+    if( argc >= 3 )
+        yMax = atof(argv[2]);
+    if( argc >= 2 )
         s = argv[1];
-    }else{
-        cout << "too many arguments.  Either provide the sample" << endl;
-        cout << "you wish to analyze, or nothing.  The code defaults" << endl;
-        cout << "to analyzing the sum of all MC backgrounds. " << endl;
-        cout << "allowed samples: data, TT, WJets, ZJets, QCD, sum" << endl;
-        return 1;
-    }
+
+    cout << "s: " << s << endl;
+    cout << "yMax: " << yMax << endl;
+    assert(s=="data" || s=="TT" || s=="WJets" || s=="ZJets" || s=="QCD" || s=="sum");
+    // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
     TFile* inputFile = new TFile("ALPHABEThistos.root","read");
     
@@ -99,7 +102,7 @@ int main(int argc, char** argv){
 
         ratio.back()->GetYaxis()->SetTitle("R_{p/f}");
         ratio.back()->GetXaxis()->SetTitle("m_{J} [GeV]");
-        ratio.back()->GetYaxis()->SetRangeUser(0.,0.2);
+        ratio.back()->GetYaxis()->SetRangeUser(0.,yMax);
         ratio.back()->GetYaxis()->SetNdivisions(504);
 
         SBantiError.push_back(0.);
@@ -129,9 +132,9 @@ int main(int argc, char** argv){
         leg->AddEntry(ratio.back(),"MET_"+b,"p");
     }
     leg->Draw();
-    can_rpf_double->SaveAs("../plots/ALPHABET/ALPHABET_sum_rpf_double_allMET.png");
-    can_rpf_double->SaveAs("../plots/ALPHABET/ALPHABET_sum_rpf_double_allMET.eps");
-    can_rpf_double->SaveAs("../plots/ALPHABET/ALPHABET_sum_rpf_double_allMET.pdf");
+    can_rpf_double->SaveAs("../plots/ALPHABET/ALPHABET_"+TString(s)+"_rpf_double_allMET.png");
+    can_rpf_double->SaveAs("../plots/ALPHABET/ALPHABET_"+TString(s)+"_rpf_double_allMET.eps");
+    can_rpf_double->SaveAs("../plots/ALPHABET/ALPHABET_"+TString(s)+"_rpf_double_allMET.pdf");
 
     cout << " & A & B & C & D & Pred. & MC Exp \\\\ \\hline \\hline" << endl;
     for( int i = 0 ; i < numMETbins ; i++ ){
