@@ -69,6 +69,8 @@ int main(int argc, char** argv){
     cout << "C = double-tag sideband" << endl;
     cout << "D = double-tag mass window (signal region)" << endl;
 
+    bool aggregate=true;
+
     for( int bin  = int(lowestMET) ; bin <= lowestMET+binWidth*(numMETbins-1) ; bin+=binWidth){
 
         TString b = "";
@@ -83,6 +85,13 @@ int main(int argc, char** argv){
         SRanti.back()->SetNameTitle("SRanti_"+b+"_"+s,"SRanti_"+b+"_"+s);
         SBanti.push_back(new TH1F(*((TH1F*)inputFile->Get("mJ_antitagSB_"+b+"_"+s))));
         SBanti.back()->SetNameTitle("SBanti_"+b+"_"+s,"SBanti_"+b+"_"+s);
+
+        if( aggregate && SRdouble.size() > 1 ){
+            SBdouble[0]->Add(SBdouble.back());
+            SBanti[0]->Add(SBanti.back());
+            SRdouble[0]->Add(SRdouble.back());
+            SRanti[0]->Add(SRanti.back());
+        }
 
         ratioSRdouble.push_back(new TH1F(*((TH1F*)inputFile->Get("mJ_doubletagSR_"+b+"_"+s))));
         ratioSRdouble.back()->SetNameTitle("ratioSRdouble_"+b+"_"+s,"ratioSRdouble_"+b+"_"+s);
@@ -131,7 +140,33 @@ int main(int argc, char** argv){
 
         leg->AddEntry(ratio.back(),"MET_"+b,"p");
     }
+
+    if( aggregate ){
+        ratioSBdouble[0]->SetMarkerColor(1);
+        ratioSRdouble[0]->SetMarkerColor(1);
+        ratioSBdouble[0] = new TH1F(*ratioSBdouble[0]);
+        ratioSRdouble[0] = new TH1F(*ratioSRdouble[0]);
+ 
+
+        ratio[0] = new TH1F(*ratioSRdouble[0]);
+        ratio[0]->SetNameTitle("ratio_MET_all","ratio_MET_all");
+        ratio[0]->Add(ratioSBdouble[0]);
+
+        ratio[0]->GetYaxis()->SetTitle("R_{p/f}");
+        ratio[0]->GetXaxis()->SetTitle("m_{J} [GeV]");
+        ratio[0]->GetYaxis()->SetRangeUser(0.,yMax);
+        ratio[0]->GetYaxis()->SetNdivisions(505);
+
+        ratio[0]->Draw();
+
+        can_rpf_double->SaveAs("../plots/ALPHABET/ALPHABET_"+TString(s)+"_rpf_double_intMET.png");
+        can_rpf_double->SaveAs("../plots/ALPHABET/ALPHABET_"+TString(s)+"_rpf_double_intMET.eps");
+        can_rpf_double->SaveAs("../plots/ALPHABET/ALPHABET_"+TString(s)+"_rpf_double_intMET.pdf");
+        return 0;
+    }
+    
     leg->Draw();
+
     can_rpf_double->SaveAs("../plots/ALPHABET/ALPHABET_"+TString(s)+"_rpf_double_allMET.png");
     can_rpf_double->SaveAs("../plots/ALPHABET/ALPHABET_"+TString(s)+"_rpf_double_allMET.eps");
     can_rpf_double->SaveAs("../plots/ALPHABET/ALPHABET_"+TString(s)+"_rpf_double_allMET.pdf");
