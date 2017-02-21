@@ -10,6 +10,7 @@
 #include <assert.h>
 #include "TLegend.h"
 #include "TROOT.h"
+#include "TStyle.h"
 
 #include "ALPHABET.h"
 
@@ -22,11 +23,18 @@ int main(int argc, char** argv){
     gROOT->ProcessLine(".L ~/tdrstyle.C");
     gROOT->ProcessLine("setTDRStyle()");
 
-    ////////////////////////////////////////////////////////////////////////
-    // - - - - - - - - - - - - input configuration - - - - - - - - - - -  //
-    ////////////////////////////////////////////////////////////////////////
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //  - - - - - - - - - - - - input configuration - - - - - - - - - - -                                             //
+    // argument 1 is the sample -- assert(s=="data" || s=="TT" || s=="WJets" || s=="ZJets" || s=="QCD" || s=="sum");  //
+    // argument 2 is the maximum of the y-axis;                                                                       //
+    // argument 3 is the region index (0:signal, 1:muon, 2: low-dphi 3: photon);                                      //
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     TString s("sum");
     double yMax(0.2);
+    int region(0);
+    if( argc >=4 )
+        region = atoi(argv[3]);
     if( argc >= 3 )
         yMax = atof(argv[2]);
     if( argc >= 2 )
@@ -34,12 +42,23 @@ int main(int argc, char** argv){
 
     cout << "s: " << s << endl;
     cout << "yMax: " << yMax << endl;
-    assert(s=="data" || s=="TT" || s=="WJets" || s=="ZJets" || s=="QCD" || s=="sum");
+    assert(s=="data" || s=="TT" || s=="WJets" || s=="ZJets" || s=="QCD" || s=="GJets" || s=="sum");
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-    TFile* inputFile = new TFile("ALPHABEThistos.root","read");
-    
+    TFile* inputFile;
+    if( region == 0 )
+        inputFile = new TFile("ALPHABEThistos.root","read");
+    else if( region == 1 )
+        inputFile = new TFile("ALPHABEThistos_singleMu.root","read");
+    else if( region == 2 )
+        inputFile = new TFile("ALPHABEThistos_lowDphi.root","read");
+    else if( region == 3 )
+        inputFile = new TFile("ALPHABEThistos_photon.root","read");
+    else 
+        assert(1);
+
     TCanvas* can_rpf_double = new TCanvas("can_rpf_double","can_rpf_double",500,500);
+    gStyle->SetErrorX(0.5);
     //can_rpf_double->Divide(6,1);
 
     vector<TH1F*> SRdouble;
@@ -70,21 +89,45 @@ int main(int argc, char** argv){
     cout << "D = double-tag mass window (signal region)" << endl;
 
     bool aggregate=true;
-
     for( int bin  = int(lowestMET) ; bin <= lowestMET+binWidth*(numMETbins-1) ; bin+=binWidth){
 
         TString b = "";
         b+=bin;
 
-        SRdouble.push_back(new TH1F(*((TH1F*)inputFile->Get("mJ_doubletagSR_"+b+"_"+s))));
-        SRdouble.back()->SetNameTitle("SRdouble_"+b+"_"+s,"SRdouble_"+b+"_"+s);
-        SBdouble.push_back(new TH1F(*((TH1F*)inputFile->Get("mJ_doubletagSB_"+b+"_"+s))));
-        SBdouble.back()->SetNameTitle("SBdouble_"+b+"_"+s,"SBdouble_"+b+"_"+s);
+        double mJbinning[4] = {50.,85.,135.,250.};
+        double error;
 
-        SRanti.push_back(new TH1F(*((TH1F*)inputFile->Get("mJ_antitagSR_"+b+"_"+s))));
-        SRanti.back()->SetNameTitle("SRanti_"+b+"_"+s,"SRanti_"+b+"_"+s);
-        SBanti.push_back(new TH1F(*((TH1F*)inputFile->Get("mJ_antitagSB_"+b+"_"+s))));
-        SBanti.back()->SetNameTitle("SBanti_"+b+"_"+s,"SBanti_"+b+"_"+s);
+        SRdouble.push_back(new TH1F("SRdouble_"+b+"_"+s,"SRdouble_"+b+"_"+s,3,mJbinning));
+        SRdouble.back()->SetBinContent(1,((TH1F*)inputFile->Get("mJ_doubletagSR_"+b+"_"+s))->IntegralAndError(1,7,error));
+        SRdouble.back()->SetBinError(1,error);
+        SRdouble.back()->SetBinContent(2,((TH1F*)inputFile->Get("mJ_doubletagSR_"+b+"_"+s))->IntegralAndError(8,17,error));
+        SRdouble.back()->SetBinError(2,error);
+        SRdouble.back()->SetBinContent(3,((TH1F*)inputFile->Get("mJ_doubletagSR_"+b+"_"+s))->IntegralAndError(18,40,error));
+        SRdouble.back()->SetBinError(3,error);
+
+        SBdouble.push_back(new TH1F("SBdouble_"+b+"_"+s,"SBdouble_"+b+"_"+s,3,mJbinning));
+        SBdouble.back()->SetBinContent(1,((TH1F*)inputFile->Get("mJ_doubletagSB_"+b+"_"+s))->IntegralAndError(1,7,error));
+        SBdouble.back()->SetBinError(1,error);
+        SBdouble.back()->SetBinContent(2,((TH1F*)inputFile->Get("mJ_doubletagSB_"+b+"_"+s))->IntegralAndError(8,17,error));
+        SBdouble.back()->SetBinError(2,error);
+        SBdouble.back()->SetBinContent(3,((TH1F*)inputFile->Get("mJ_doubletagSB_"+b+"_"+s))->IntegralAndError(18,40,error));
+        SBdouble.back()->SetBinError(3,error);
+
+        SRanti.push_back(new TH1F("SRantitag_"+b+"_"+s,"SRantitag_"+b+"_"+s,3,mJbinning));
+        SRanti.back()->SetBinContent(1,((TH1F*)inputFile->Get("mJ_antitagSR_"+b+"_"+s))->IntegralAndError(1,7,error));
+        SRanti.back()->SetBinError(1,error);
+        SRanti.back()->SetBinContent(2,((TH1F*)inputFile->Get("mJ_antitagSR_"+b+"_"+s))->IntegralAndError(8,17,error));
+        SRanti.back()->SetBinError(1,error);
+        SRanti.back()->SetBinContent(3,((TH1F*)inputFile->Get("mJ_antitagSR_"+b+"_"+s))->IntegralAndError(18,40,error));
+        SRanti.back()->SetBinError(1,error);
+
+        SBanti.push_back(new TH1F("SBantitag_"+b+"_"+s,"SBantitag_"+b+"_"+s,3,mJbinning));
+        SBanti.back()->SetBinContent(1,((TH1F*)inputFile->Get("mJ_antitagSB_"+b+"_"+s))->IntegralAndError(1,7,error));
+        SBanti.back()->SetBinError(1,error);
+        SBanti.back()->SetBinContent(2,((TH1F*)inputFile->Get("mJ_antitagSB_"+b+"_"+s))->IntegralAndError(8,17,error));
+        SBanti.back()->SetBinError(2,error);
+        SBanti.back()->SetBinContent(3,((TH1F*)inputFile->Get("mJ_antitagSB_"+b+"_"+s))->IntegralAndError(18,40,error));
+        SBanti.back()->SetBinError(3,error);
 
         if( aggregate && SRdouble.size() > 1 ){
             SBdouble[0]->Add(SBdouble.back());
@@ -93,15 +136,20 @@ int main(int argc, char** argv){
             SRanti[0]->Add(SRanti.back());
         }
 
-        ratioSRdouble.push_back(new TH1F(*((TH1F*)inputFile->Get("mJ_doubletagSR_"+b+"_"+s))));
+        SRdouble[0]->Print();
+        SBdouble[0]->Print();
+        SRanti[0]->Print();
+        SBanti[0]->Print();
+        
+        ratioSRdouble.push_back(new TH1F(*SRdouble.back()));
         ratioSRdouble.back()->SetNameTitle("ratioSRdouble_"+b+"_"+s,"ratioSRdouble_"+b+"_"+s);
-        ratioSRdouble.back()->Divide((TH1F*)inputFile->Get("mJ_antitagSR_"+b+"_"+s));
+        ratioSRdouble.back()->Divide(SRanti.back());
         ratioSRdouble.back()->SetMarkerStyle(8);
         ratioSRdouble.back()->SetMarkerColor((bin/100)%6);
         
-        ratioSBdouble.push_back(new TH1F(*(TH1F*)inputFile->Get("mJ_doubletagSB_"+b+"_"+s)));
+        ratioSBdouble.push_back(new TH1F(*SBdouble.back()));
         ratioSBdouble.back()->SetNameTitle("ratioSBdouble_"+b+"_"+s,"ratioSBdouble_"+b+"_"+s);
-        ratioSBdouble.back()->Divide((TH1F*)inputFile->Get("mJ_antitagSB_"+b+"_"+s));
+        ratioSBdouble.back()->Divide(SBanti.back());
         ratioSBdouble.back()->SetMarkerStyle(4);
         ratioSBdouble.back()->SetMarkerColor((bin/100)%6);
 
@@ -147,6 +195,8 @@ int main(int argc, char** argv){
         ratioSBdouble[0] = new TH1F(*ratioSBdouble[0]);
         ratioSRdouble[0] = new TH1F(*ratioSRdouble[0]);
  
+        ratioSRdouble[0]->Print();
+        ratioSBdouble[0]->Print();
 
         ratio[0] = new TH1F(*ratioSRdouble[0]);
         ratio[0]->SetNameTitle("ratio_MET_all","ratio_MET_all");
@@ -157,19 +207,54 @@ int main(int argc, char** argv){
         ratio[0]->GetYaxis()->SetRangeUser(0.,yMax);
         ratio[0]->GetYaxis()->SetNdivisions(505);
 
-        ratio[0]->Draw();
+        ratio[0]->Draw("e1");
 
-        can_rpf_double->SaveAs("../plots/ALPHABET/ALPHABET_"+TString(s)+"_rpf_double_intMET.png");
-        can_rpf_double->SaveAs("../plots/ALPHABET/ALPHABET_"+TString(s)+"_rpf_double_intMET.eps");
-        can_rpf_double->SaveAs("../plots/ALPHABET/ALPHABET_"+TString(s)+"_rpf_double_intMET.pdf");
+        if( region == 0 ){
+            can_rpf_double->SaveAs("../plots/ALPHABET/ALPHABET_"+TString(s)+"_rpf_double_intMET.png");
+            can_rpf_double->SaveAs("../plots/ALPHABET/ALPHABET_"+TString(s)+"_rpf_double_intMET.eps");
+            can_rpf_double->SaveAs("../plots/ALPHABET/ALPHABET_"+TString(s)+"_rpf_double_intMET.pdf");
+        }
+        if( region == 1 ){
+            can_rpf_double->SaveAs("../plots/ALPHABET/ALPHABET_singleMuCR_"+TString(s)+"_rpf_double_intMET.png");
+            can_rpf_double->SaveAs("../plots/ALPHABET/ALPHABET_singleMuCR_"+TString(s)+"_rpf_double_intMET.eps");
+            can_rpf_double->SaveAs("../plots/ALPHABET/ALPHABET_singleMuCR_"+TString(s)+"_rpf_double_intMET.pdf");
+        }
+        if( region == 2 ){
+            can_rpf_double->SaveAs("../plots/ALPHABET/ALPHABET_lowDphi_"+TString(s)+"_rpf_double_intMET.png");
+            can_rpf_double->SaveAs("../plots/ALPHABET/ALPHABET_lowDphi_"+TString(s)+"_rpf_double_intMET.eps");
+            can_rpf_double->SaveAs("../plots/ALPHABET/ALPHABET_lowDphi_"+TString(s)+"_rpf_double_intMET.pdf");
+        }
+        if( region == 3 ){
+            can_rpf_double->SaveAs("../plots/ALPHABET/ALPHABET_photon_"+TString(s)+"_rpf_double_intMET.png");
+            can_rpf_double->SaveAs("../plots/ALPHABET/ALPHABET_photon_"+TString(s)+"_rpf_double_intMET.eps");
+            can_rpf_double->SaveAs("../plots/ALPHABET/ALPHABET_photon_"+TString(s)+"_rpf_double_intMET.pdf");
+        }
+            
         return 0;
     }
     
     leg->Draw();
 
-    can_rpf_double->SaveAs("../plots/ALPHABET/ALPHABET_"+TString(s)+"_rpf_double_allMET.png");
-    can_rpf_double->SaveAs("../plots/ALPHABET/ALPHABET_"+TString(s)+"_rpf_double_allMET.eps");
-    can_rpf_double->SaveAs("../plots/ALPHABET/ALPHABET_"+TString(s)+"_rpf_double_allMET.pdf");
+    if( region == 0 ){
+        can_rpf_double->SaveAs("../plots/ALPHABET/ALPHABET_"+TString(s)+"_rpf_double_allMET.png");
+        can_rpf_double->SaveAs("../plots/ALPHABET/ALPHABET_"+TString(s)+"_rpf_double_allMET.eps");
+        can_rpf_double->SaveAs("../plots/ALPHABET/ALPHABET_"+TString(s)+"_rpf_double_allMET.pdf");
+    }
+    if( region == 1 ){
+        can_rpf_double->SaveAs("../plots/ALPHABET/ALPHABET_singleMuCR_"+TString(s)+"_rpf_double_allMET.png");
+        can_rpf_double->SaveAs("../plots/ALPHABET/ALPHABET_singleMuCR_"+TString(s)+"_rpf_double_allMET.eps");
+        can_rpf_double->SaveAs("../plots/ALPHABET/ALPHABET_singleMuCR_"+TString(s)+"_rpf_double_allMET.pdf");
+    }
+    if( region == 2 ){
+        can_rpf_double->SaveAs("../plots/ALPHABET/ALPHABET_lowDphi_"+TString(s)+"_rpf_double_allMET.png");
+        can_rpf_double->SaveAs("../plots/ALPHABET/ALPHABET_lowDphi_"+TString(s)+"_rpf_double_allMET.eps");
+        can_rpf_double->SaveAs("../plots/ALPHABET/ALPHABET_lowDphi_"+TString(s)+"_rpf_double_allMET.pdf");
+    }
+    if( region == 3 ){
+        can_rpf_double->SaveAs("../plots/ALPHABET/ALPHABET_photon_"+TString(s)+"_rpf_double_allMET.png");
+        can_rpf_double->SaveAs("../plots/ALPHABET/ALPHABET_photon_"+TString(s)+"_rpf_double_allMET.eps");
+        can_rpf_double->SaveAs("../plots/ALPHABET/ALPHABET_photon_"+TString(s)+"_rpf_double_allMET.pdf");
+    }
 
     cout << " & A & B & C & D & Pred. & MC Exp \\\\ \\hline \\hline" << endl;
     for( int i = 0 ; i < numMETbins ; i++ ){

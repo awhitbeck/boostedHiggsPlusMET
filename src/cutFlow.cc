@@ -26,22 +26,28 @@ int main(int argc, char** argv){
   typedef bool(*cutFunc)(RA2bTree*);
   vector<cutFunc> cutFlow;
   vector<TString> cutName;
-  cutFlow.push_back(*AK8MultCut<RA2bTree>);
-  cutName.push_back("Preselection");
+  cutFlow.push_back(*FiltersCut<RA2bTree>);
+  cutName.push_back("Filters");
   cutFlow.push_back(*METHTCut<RA2bTree>);
   cutName.push_back("METHT");
   cutFlow.push_back(*DeltaPhi1Cut<RA2bTree>);
   cutName.push_back("DeltaPhi1");
   cutFlow.push_back(*DeltaPhi2Cut<RA2bTree>);
   cutName.push_back("DeltaPhi2");
+  cutFlow.push_back(*DeltaPhi3Cut<RA2bTree>);
+  cutName.push_back("DeltaPhi3");
+  cutFlow.push_back(*DeltaPhi4Cut<RA2bTree>);
+  cutName.push_back("DeltaPhi4");
+  cutFlow.push_back(*AK8MultCut<RA2bTree>);
+  cutName.push_back("AK8Multiplicity");
   cutFlow.push_back(*AK8JetPtCut<RA2bTree>);
   cutName.push_back("JetPt");
   cutFlow.push_back(*AK8JetLooseMassCut<RA2bTree>);
   cutName.push_back("LooseJetMass");
   cutFlow.push_back(*doubleTaggingLooseCut<RA2bTree>);
-  cutName.push_back("doubleTagLoose");
-  cutFlow.push_back(*doubleHiggsTagCut<RA2bTree>);
-  cutName.push_back("doubleTag");
+  cutName.push_back("doubleBBtag");
+  cutFlow.push_back(*doubleMassCut<RA2bTree>);
+  cutName.push_back("doubleMass");
 
   //vector<vector<plot> > plots;
   vector<vector<plot> > plots;
@@ -52,7 +58,6 @@ int main(int argc, char** argv){
     tempPlots.push_back(plot(*fillMET<RA2bTree>,"MET_"+cutName[iCut],"MET [GeV]",15,300.,1800.));
     tempPlots.push_back(plot(*fillMET<RA2bTree>,"METwide_"+cutName[iCut],"MET [GeV]",18,0.,1800.));
     tempPlots.push_back(plot(*fillHT<RA2bTree>,"HT_"+cutName[iCut],"H_{T} [GeV]",15,300,2800.));
-    tempPlots.push_back(plot(*fillAnalysisBins<RA2bTree>,"AnalysisBins_"+cutName[iCut],"i^th Bin",8,0.5,8.5));
     tempPlots.push_back(plot(*fillLeadingJetMass<RA2bTree>,"J1M_"+cutName[iCut],"leading m_{J} [GeV]",20,50.,200.));
     tempPlots.push_back(plot(*fillLeadingJetMass<RA2bTree>,"J1Mwide_"+cutName[iCut],"leading m_{J} [GeV]",20,0.,200.));
     tempPlots.push_back(plot(*fillLeadingBBtag<RA2bTree>,"J1BB_"+cutName[iCut],"leading bb-tag",20,-1.,1.));
@@ -65,6 +70,10 @@ int main(int argc, char** argv){
     tempPlots.push_back(plot(*fillSubLeadingTau21<RA2bTree>,"J2Tau21_"+cutName[iCut],"subleading #tau_{21}",20,0.,1.));
     tempPlots.push_back(plot(*fillSubLeadingJetPt<RA2bTree>,"J2Pt_"+cutName[iCut],"subleading p_{T,J} [GeV]",40,300.,2300.));
     tempPlots.push_back(plot(*fillSubLeadingJetPt<RA2bTree>,"J2PtWide_"+cutName[iCut],"subleading p_{T,J} [GeV]",46,0.,2300.));
+    tempPlots.push_back(plot(*fillDeltaPhi1<RA2bTree>,"DeltaPhi1_"+cutName[iCut],"#Delta#Phi_{1}",20,0.,3.1415));
+    tempPlots.push_back(plot(*fillDeltaPhi2<RA2bTree>,"DeltaPhi2_"+cutName[iCut],"#Delta#Phi_{2}",20,0.,3.1415));
+    tempPlots.push_back(plot(*fillDeltaPhi3<RA2bTree>,"DeltaPhi3_"+cutName[iCut],"#Delta#Phi_{3}",20,0.,3.1415));
+    tempPlots.push_back(plot(*fillDeltaPhi4<RA2bTree>,"DeltaPhi4_"+cutName[iCut],"#Delta#Phi_{4}",20,0.,3.1415));
 
     plots.push_back(tempPlots);
   }
@@ -76,20 +85,23 @@ int main(int argc, char** argv){
 
     for( int iCut = 0 ; iCut < plots.size() ; iCut++){
       for( int iPlot = 0 ; iPlot < plots[iCut].size() ; iPlot++){
-	plots[iCut][iPlot].addNtuple(ntuple,skims.sampleName[iSample]);
-	plots[iCut][iPlot].setFillColor(ntuple,skims.fillColor[iSample]);
+          plots[iCut][iPlot].addNtuple(ntuple,skims.sampleName[iSample]);
+          plots[iCut][iPlot].setFillColor(ntuple,skims.fillColor[iSample]);
+          plots[iCut][iPlot].dataHist=0;
       }
     }
 
     int numEvents = ntuple->fChain->GetEntries();
     ntupleBranchStatus<RA2bTree>(ntuple);
     for( int iEvt = 0 ; iEvt < numEvents ; iEvt++ ){
+
+        if( skims.sampleName[iSample] != "TT" && iEvt > 1000 ) continue;
       ntuple->GetEntry(iEvt);
       if( iEvt % 100000 == 0 ) cout << skims.sampleName[iSample] << ": " << iEvt << "/" << numEvents << endl;
       for( int iCut = 0 ; iCut < cutFlow.size() ; iCut++ ){
 	if( ! cutFlow[iCut](ntuple) ) break;
 	for( int iPlot = 0 ; iPlot < plots[iCut].size() ; iPlot++ ){
-	  plots[iCut][iPlot].fill(ntuple);
+        plots[iCut][iPlot].fill(ntuple,1.);
 	}
       }
     }
@@ -109,24 +121,32 @@ int main(int argc, char** argv){
     int numEvents = ntuple->fChain->GetEntries();
     ntupleBranchStatus<RA2bTree>(ntuple);
     for( int iEvt = 0 ; iEvt < numEvents ; iEvt++ ){
+
+
+        if( iEvt > 1000 ) continue;
+
       ntuple->GetEntry(iEvt);
       if( iEvt % 100000 == 0 ) cout << skims.signalSampleName[iSample] << ": " << iEvt << "/" << numEvents << endl;
-      //if(! baselineCut(ntuple) ) continue;
       for( int iCut = 0 ; iCut < cutFlow.size() ; iCut++ ){
 	if( ! cutFlow[iCut](ntuple) ) break;
 	for( int iPlot = 0 ; iPlot < plots[iCut].size() ; iPlot++ ){
-	    plots[iCut][iPlot].fillSignal(ntuple);
+        if( skims.signalSampleName[iSample] == "T5HH1300" )
+            plots[iCut][iPlot].fillSignal(ntuple,1.0);//lumi*0.0460525/numEvents);
+        if( skims.signalSampleName[iSample] == "T5HH1700" )
+            plots[iCut][iPlot].fillSignal(ntuple,1.0);//lumi*0.00470323/numEvents);
 	}
       }
     }
   }
 
-  TCanvas* can = new TCanvas("can","can",500,500);
+  /*
   for( int iCut = 0 ; iCut < cutFlow.size() ; iCut++ ){
     for( int iPlot = 0 ; iPlot < plots[iCut].size() ; iPlot++){
-      plots[iCut][iPlot].Draw(can,skims.ntuples,skims.signalNtuples,"../plots/cutFlow_plots");
+      TCanvas* can = new TCanvas("can","can",500,500);
+      plots[iCut][iPlot].DrawNoRatio(can,skims.ntuples,skims.signalNtuples,"../plots/cutFlow_plots");
     }
   }
+  */
 
   for( int iSample = 0 ; iSample < skims.ntuples.size() ; iSample++){ 
     cout << " & All Bkg. " << endl;

@@ -20,7 +20,7 @@ int main(int argc, char** argv){
     gROOT->ProcessLine(".L ~/tdrstyle.C");
     gROOT->ProcessLine("setTDRStyle()");
 
-    TFile* inputFile = new TFile("ALPHABEThistos.root","read");
+    TFile* inputFile = new TFile("ALPHABEThistos_singleMu.root","read");
     
     TString samples[6] = {"data","TT","WJets","ZJets","QCD","sum"};
 
@@ -221,12 +221,12 @@ int main(int argc, char** argv){
             estDouble.back()->Draw("SAME");
             //leg.back()->Draw();
         }
-        can_rpf_single->SaveAs("../plots/ALPHABET/ALPHABETrpf_single_MET"+b+".png");
-        can_rpf_double->SaveAs("../plots/ALPHABET/ALPHABETrpf_double_MET"+b+".png");
-        can_closure->SaveAs("../plots/ALPHABET/ALPHABETclosure_MET"+b+".png");   
-        can_antitag->SaveAs("../plots/ALPHABET/ALPHABET_antitag_MET"+b+".png");  
-        can_singletag->SaveAs("../plots/ALPHABET/ALPHABET_singletag_MET"+b+".png");  
-        can_doubletag->SaveAs("../plots/ALPHABET/ALPHABET_doubletag_MET"+b+".png");  
+        can_rpf_single->SaveAs("../plots/ALPHABET/ALPHABETrpf_singleMu_single_MET"+b+".png");
+        can_rpf_double->SaveAs("../plots/ALPHABET/ALPHABETrpf_singleMu_double_MET"+b+".png");
+        can_closure->SaveAs("../plots/ALPHABET/ALPHABETclosure_singleMu_MET"+b+".png");   
+        can_antitag->SaveAs("../plots/ALPHABET/ALPHABET_singleMu_antitag_MET"+b+".png");  
+        can_singletag->SaveAs("../plots/ALPHABET/ALPHABET_singleMu_singletag_MET"+b+".png");  
+        can_doubletag->SaveAs("../plots/ALPHABET/ALPHABET_singleMu_doubletag_MET"+b+".png");  
     }
     return 0;
 }
