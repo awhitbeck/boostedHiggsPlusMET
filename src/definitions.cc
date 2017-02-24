@@ -256,7 +256,7 @@ template<typename ntupleType> double fillLeadingJetFlavor(ntupleType* ntuple){
   if(ntuple->JetsAK8->size()==0) return -99999.;
   if( ntuple->JetsAK8_NumBhadrons->at(0)==2 ) 
     return 21.;
-  else if( ntuple->JetsAK8_NumBhadrons->at(0)==2 )
+  else if( ntuple->JetsAK8_NumBhadrons->at(0)==1 )
     return 5.;
   else return 1.;
 }
@@ -351,7 +351,7 @@ template<typename ntupleType> double fillLeadingBBtagJetFlavor(ntupleType* ntupl
     index = int( ntuple->JetsAK8_doubleBDiscriminator->at(0) < ntuple->JetsAK8_doubleBDiscriminator->at(1) );
     if( ntuple->JetsAK8_NumBhadrons->at(index)==2 ) 
       return 21.;
-    else if( ntuple->JetsAK8_NumBhadrons->at(index)==2 )
+    else if( ntuple->JetsAK8_NumBhadrons->at(index)==1 )
       return 5.;
     else return 1.;
   }
