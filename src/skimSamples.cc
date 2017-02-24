@@ -4,6 +4,8 @@
 
 #include <vector>
 
+static const BASE_DIR="root://cmseos.fnal.gov//store/user/lpcsusyhad/SusyRA2Analysis2015/Skims/Run2ProductionV12/";
+
 class skimSamples{
 
 public : 
@@ -29,20 +31,20 @@ public :
         skimTypeLDP="";
 
         if( r == kSignal ){
-            skimType="root://cmseos.fnal.gov//store/user/lpcsusyhad/SusyRA2Analysis2015/Skims/Run2ProductionV11/tree_signal/";
-            skimTypeLDP="root://cmseos.fnal.gov//store/user/lpcsusyhad/SusyRA2Analysis2015/Skims/Run2ProductionV11/tree_LDP/";
+            skimType=BASE_DIR+"tree_signal/";
+            skimTypeLDP=BASE_DIR+"tree_LDP/";
         }
         if( r == kPhoton ){
-            skimType="root://cmseos.fnal.gov//store/user/lpcsusyhad/SusyRA2Analysis2015/Skims/Run2ProductionV11/tree_GJet_CleanVars/";
-            skimTypeLDP="root://cmseos.fnal.gov//store/user/lpcsusyhad/SusyRA2Analysis2015/Skims/Run2ProductionV11/tree_GJetLDP_CleanVars/";
+            skimType=BASE_DIR+"tree_GJet_CleanVars/";
+            skimTypeLDP=BASE_DIR+"tree_GJetLDP_CleanVars/";
         }
         if( r == kSLm ){
-            skimType="root://cmseos.fnal.gov//store/user/lpcsusyhad/SusyRA2Analysis2015/Skims/Run2ProductionV11/tree_SLm/";
-            skimTypeLDP="root://cmseos.fnal.gov//store/user/lpcsusyhad/SusyRA2Analysis2015/Skims/Run2ProductionV11/tree_SLmLDP/";
+            skimType=BASE_DIR+"tree_SLm/";
+            skimTypeLDP=BASE_DIR+"tree_SLmLDP/";
         }
         if( r == kSLe ){
-            skimType="root://cmseos.fnal.gov//store/user/lpcsusyhad/SusyRA2Analysis2015/Skims/Run2ProductionV11/tree_SLe/";
-            skimTypeLDP="root://cmseos.fnal.gov//store/user/lpcsusyhad/SusyRA2Analysis2015/Skims/Run2ProductionV11/tree_SLeLDP/";
+            skimType=BASE_DIR+"tree_SLe/";
+            skimTypeLDP=BASE_DIR+"tree_SLeLDP/";
         }
 
         ///////////////////////////////////////////////////////////////////////
