@@ -62,6 +62,14 @@ compile code with:
 make ALPHABET
 make ALPHABET_photon
 ```
+#### plots basic distributions after baseline selection
+
+A number of basic distributions after baseline cuts can be plotted with `plotObs_*_baseline.cc`.  This code will produce all of the plots and save the histograms to a root file.  E.g. for the single muon validation region:
+
+```bash
+make plotOb_singleMuCR_baseline
+plotOb_singleMuCR_baseline
+```
 
 #### B-hadron flavor fits
 
@@ -75,3 +83,4 @@ make flavorFit
 flavorFit photon 0 # lead jet
 flavorFit photon 1 # sub-leadjet
 ``` 
+
