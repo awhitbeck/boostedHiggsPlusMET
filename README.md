@@ -40,7 +40,11 @@ Example:
 
 #### Region descriptions/definitions
 
-Baseline selections are defined for the signal region and for each of the validation regions. Broadly, they require two AK8 jets with transverse momentum above ... 
+Baseline selections are defined for the signal region and for each of the validation regions. Broadly, they require two AK8 jets with transverse momentum above 300 GeV and mass between 50 and 250 GeV, MET>300 GeV, HT>600 GeV, the usual deltaPhi cut, and the usual event filters.  
+
+There are also 3 validation regions defined: low deltaPhi -- QCD enriched, single photon -- proxy for Z(nn), and a single lepton control region -- W/top enriched. 
+
+For the signal region, and each of the validation regions, a function is defined in `definitions.cc` to specify all of the cuts applied: [signal region function](https://github.com/awhitbeck/boostedHiggsPlusMET/blob/RA2b_V12_v0/src/definitions.cc#L665-L687), [photon validation region function](https://github.com/awhitbeck/boostedHiggsPlusMET/blob/RA2b_V12_v0/src/definitions.cc#L789-L853), [low deltaPhi validation region function](https://github.com/awhitbeck/boostedHiggsPlusMET/blob/RA2b_V12_v0/src/definitions.cc#L749-L770), [single muon validation region function](https://github.com/awhitbeck/boostedHiggsPlusMET/blob/RA2b_V12_v0/src/definitions.cc#L689-L718), [single electron validation region function](https://github.com/awhitbeck/boostedHiggsPlusMET/blob/RA2b_V12_v0/src/definitions.cc#L720-L747).
 
 #### Comparisons of ABCD predictions
 
@@ -50,4 +54,24 @@ see code `ALPHABET.cc` -- [here](https://github.com/awhitbeck/boostedHiggsPlusME
 
 Then to produce plots and scale factors, see code `checkScaleFactors.cc` -- [here](https://github.com/awhitbeck/boostedHiggsPlusMET/blob/RA2b_V12_v0/src/checkScaleFactors.cc)
 
-Because photons need to be cleaned from AK8 jets, there is a dedicated piece of code to create histograms for checking ABCD yields in the photon control region. This is something that needs to be improved to avoid mistakes due to upkeep costs. The code is `ALPHABET_photon.cc` -- [here]()
+Because photons need to be cleaned from AK8 jets, there is a dedicated piece of code to create histograms for checking ABCD yields in the photon control region. This is something that needs to be improved to avoid mistakes due to upkeep costs. The code is `ALPHABET_photon.cc` -- [here](https://github.com/awhitbeck/boostedHiggsPlusMET/blob/RA2b_V12_v0/src/ALPHABET_photon.cc)
+
+compile code with:
+
+```bash
+make ALPHABET
+make ALPHABET_photon
+```
+
+#### B-hadron flavor fits
+
+To produce the b-hadron flavor fits, you should first run the `plotObs_*_baseline.cc` code to produce all of the input histograms.  E.g. for the photon control region:
+
+```bash
+make plotObs_photon_baseline
+plotObs_photon_baseline
+
+make flavorFit
+flavorFit photon 0 # lead jet
+flavorFit photon 1 # sub-leadjet
+``` 
