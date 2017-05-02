@@ -34,6 +34,10 @@ Example:
 
 #### Things to run
 
-MC plots of signal region -- minus data: `plotObs_baseline.cc`, `plotObs_doubleHiggsTag.cc`, `plotObs_antitag.cc`
+- MC plots of signal region -- minus data: `plotObs_baseline.cc`, `plotObs_doubleHiggsTag.cc`, `plotObs_antitag.cc`
 
-MC plots of top/W enriched control region (with data): `plotObs_singleMuCR_baseline.cc`, 
+- MC plots of top/W enriched control region (with data): `plotObs_singleMuCR_baseline.cc`, 
+
+#### Region descriptions/definitions
+
+Baseline selections are defined for the signal region and for each of the validation regions. Broadly, they require two AK8 jets with transverse momentum above ... 
