@@ -41,3 +41,12 @@ Example:
 #### Region descriptions/definitions
 
 Baseline selections are defined for the signal region and for each of the validation regions. Broadly, they require two AK8 jets with transverse momentum above ... 
+
+#### Comparisons of ABCD predictions
+
+To access the consistency between data/MC predicitons, yields from data and MC are compared in each of the ABCD regions.  Scale factors are also derived from these plots.  In region A, the observed yeild in data is compared to the prediction from data.  To reproduce these plots, first create histograms:
+
+see code `ALPHABET.cc` -- [here](https://github.com/awhitbeck/boostedHiggsPlusMET/blob/RA2b_V12_v0/src/ALPHABET.cc) 
+
+Then to produce plots and scale factors, see code `checkScaleFactors.cc` -- [here](https://github.com/awhitbeck/boostedHiggsPlusMET/blob/RA2b_V12_v0/src/checkScaleFactors.cc)
+
