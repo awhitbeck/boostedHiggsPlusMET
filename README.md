@@ -50,3 +50,4 @@ see code `ALPHABET.cc` -- [here](https://github.com/awhitbeck/boostedHiggsPlusME
 
 Then to produce plots and scale factors, see code `checkScaleFactors.cc` -- [here](https://github.com/awhitbeck/boostedHiggsPlusMET/blob/RA2b_V12_v0/src/checkScaleFactors.cc)
 
+Because photons need to be cleaned from AK8 jets, there is a dedicated piece of code to create histograms for checking ABCD yields in the photon control region. This is something that needs to be improved to avoid mistakes due to upkeep costs. The code is `ALPHABET_photon.cc` -- [here]()
