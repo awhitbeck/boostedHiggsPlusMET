@@ -32,7 +32,7 @@ int main(int argc, char** argv){
   skimSamples skims(skimSamples::kSLm);
   typedef plot<RA2bTree> plot;
 
-  plot METplot(*fillMET<RA2bTree>,"MET_singleMuCR_baseline","MET [GeV]",15,100.,1600.);
+  plot METplot(*fillMET<RA2bTree>,"MET_singleMuCR_baseline","MET [GeV]",18,100.,1000.);
   plot HTplot(*fillHT<RA2bTree>,"HT_singleMuCR_baseline","H_{T} [GeV]",15,300,2800.);
   plot MTplot(*computeMuonMT<RA2bTree>,"MT_singleMuCR_baseline","M_{T} [GeV]",30,0,300.);
   plot NJetsplot(*fillNJets<RA2bTree>,"NJets_singleMuCR_baseline","n_{j}",14,1.5,15.5);
