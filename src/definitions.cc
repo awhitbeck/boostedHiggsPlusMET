@@ -696,14 +696,14 @@ template<typename ntupleType> bool singleMuBaselineCut(ntupleType* ntuple){
              ntuple->MET > 100.             &&
              ntuple->HT > 300.                         &&
              ntuple->JetsAK8->size() >= 2 &&
-             //muonLeadJetdR(ntuple) > 1.0 &&
-             //muonSubleadJetdR(ntuple) > 1.0 &&
-             /*ntuple->JetsAK8->at(0).Pt() > 300. && 
+             muonLeadJetdR(ntuple) > 1.0 &&
+             muonSubleadJetdR(ntuple) > 1.0 &&
+             ntuple->JetsAK8->at(0).Pt() > 300. && 
              ntuple->JetsAK8_prunedMass->at(0) > 50. && 
              ntuple->JetsAK8_prunedMass->at(0) < 250. && 
              ntuple->JetsAK8->at(1).Pt() > 300. &&
              ntuple->JetsAK8_prunedMass->at(1) > 50. && 
-             ntuple->JetsAK8_prunedMass->at(1) < 250.&&*/
+             ntuple->JetsAK8_prunedMass->at(1) < 250.&&
              ntuple->DeltaPhi1>0.5 && 
              ntuple->DeltaPhi2>0.5 &&
              ntuple->DeltaPhi3>0.3 && 
