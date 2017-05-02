@@ -3,8 +3,9 @@ CFLAGS=
 LIBS=`root-config --cflags --glibs` -L $(ROOTSYS)/lib -I$(ROOTSYS)/include
 ROOFITLIBS=-lRooFit -lHtml -lMinuit -lRooFitCore
 INCLUDES=-I$(CMSSW_BASE)/src/AnalysisTools/src/ -I$(CMSSW_BASE)/src/ -I$(CMSSW_BASE)/src/Analysis/btag/
-EXECS=plotObs_photon_baseline plotObs_singleEleCR_baseline plotObs_photon_doubleHiggsTag plotObs_photon_antitag plotObs_lowDPhi_baseline plotObs_lowDPhi_antitag plotObs_lowDPhi_doubleHiggsTag plotObs_singleHiggsTag plotObs_doubleHiggsTag plotObs_antitag plotObs_baseline plotObs_singleMuCR_antitag plotObs_singleMuCR_singleHiggsTag plotObs_singleMuCR_doubleHiggsTag plotObs_singleMuCR_baseline baselineSkim singleMuCRSkim datacardInputs_MET datacardInputs_MET_BTag1_DeltaPhi12 cutFlow_HIggsinoOnly cutFlow NminusOne J1BB_NminusOne J2BB_NminusOne J1M_NminusOne J2M_NminusOne J1Pt_NminusOne J2Pt_NminusOne ALPHABET ALPHABET_photon plotObs_fastFullComp analyzeALPHABET analyzeRpassFail testBTagSF
+EXECS=flavorFit plotObs_photon_baseline plotObs_singleEleCR_baseline plotObs_photon_doubleHiggsTag plotObs_photon_antitag plotObs_lowDPhi_baseline plotObs_lowDPhi_antitag plotObs_lowDPhi_doubleHiggsTag plotObs_singleHiggsTag plotObs_doubleHiggsTag plotObs_antitag plotObs_baseline plotObs_singleMuCR_antitag plotObs_singleMuCR_singleHiggsTag plotObs_singleMuCR_doubleHiggsTag plotObs_singleMuCR_baseline baselineSkim singleMuCRSkim datacardInputs_MET datacardInputs_MET_BTag1_DeltaPhi12 cutFlow_HIggsinoOnly cutFlow NminusOne J1BB_NminusOne J2BB_NminusOne J1M_NminusOne J2M_NminusOne J1Pt_NminusOne J2Pt_NminusOne ALPHABET ALPHABET_photon plotObs_fastFullComp analyzeALPHABET analyzeRpassFail testBTagSF
 $(EXECS):RA2bTree.cc definitions.cc skimSamples.cc plotterUtils.cc
+flavorFit:flavorFit.cc
 baselineSkim:sampleParser.cc selectBaseline.cc baselineSkim.cc
 datacardInputs_MET:datacardInputs_MET.cc
 datacardInputs_MET_BTags1_DeltaPhi12:datacardInputs_MET_BTags1_DeltaPhi12.cc
@@ -23,7 +24,7 @@ plotObs_lowDPhi_antitag:plotObs_lowDPhi_antitag.cc
 plotObs_lowDPhi_doubleHiggsTag:plotObs_lowDPhi_doubleHiggsTag.cc
 plotObs_singleMuCR_doubleHiggsTag:plotObs_singleMuCR_doubleHiggsTag.cc
 plotObs_doubleHiggsTag:plotObs_doubleHiggsTag.cc
-plotObs_singleHiggsTag:plotObs_singleHiggsTag.cc
+plotObs_singleHiggsTag:
 FulltoyValidation:FulltoyValidation.cc
 FulltoyValidation_ALPHABET:FulltoyValidation_ALPHABET.cc
 plotHiggsPt_TChiHH:plotHiggsPt_TChiHH.cc
@@ -48,7 +49,8 @@ all:$(EXECS) FulltoyValidation plotHiggsPt_TChiHH
 
 testBTagSF:
 	$(CC) -g $(CFLAGS) $(LIBS) $(INCLUDES) testBTagSF.cc -o ../bin/$@
-
+flavorFit:
+	$(CC) -g $(CFLAGS) $(LIBS) $(ROOFITLIBS) $(INCLUDES) flavorFit.cc -o ../bin/$@
 plotObs_fastFullComp:
 	$(CC) $(CFLAGS) $(LIBS) $(INCLUDES) plotObs_fastFullComp.cc -o ../bin/$@
 ALPHABET:
@@ -98,7 +100,7 @@ plotObs_singleEleCR_baseline:
 plotObs_singleMuCR_doubleHiggsTag:
 	$(CC) $(CFLAGS) $(LIBS) $(INCLUDES) plotObs_singleMuCR_doubleHiggsTag.cc -o ../bin/$@	
 plotObs_singleMuCR_baseline:
-	$(CC) $(CFLAGS) $(LIBS) $(INCLUDES) plotObs_singleMuCR_baseline.cc -o ../bin/$@	
+	$(CC) -g $(CFLAGS) $(LIBS) $(INCLUDES) plotObs_singleMuCR_baseline.cc -o ../bin/$@	
 plotObs_singleMuCR_antitag:
 	$(CC) -g $(CFLAGS) $(LIBS) $(INCLUDES) plotObs_singleMuCR_antitag.cc -o ../bin/$@
 plotObs_singleMuCR_singleHiggsTag:
