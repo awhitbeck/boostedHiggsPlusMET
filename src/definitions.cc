@@ -3,6 +3,8 @@
 // constants
 // ==============================================
 double bbtagCut = 0.3;
+TFile* puWeightFile = new TFile("../data/PileupHistograms_0121_69p2mb_pm4p6.root");
+TH1F* puWeightHist = (TH1F*) puWeightFile->Get("pu_weights_down");
 // ==============================================
 
 double CalcdPhi( double phi1 , double phi2 ){
@@ -42,8 +44,28 @@ template<typename ntupleType>void ntupleBranchStatus(ntupleType* ntuple){
   ntuple->fChain->SetBranchStatus("CaloMET",1);
   ntuple->fChain->SetBranchStatus("NVtx",1);
   ntuple->fChain->SetBranchStatus("JetID",1);
+  ntuple->fChain->SetBranchStatus("madHT",1);
+  ntuple->fChain->SetBranchStatus("NJetsISR",1);
 }
 
+/***************************************************************/
+/* - - - - - - - - - - - - custom weights - - - - - - - - - -  */
+/***************************************************************/
+template<typename ntupleType> double customPUweights(ntupleType* ntuple){
+    int nVtx = ntuple->TrueNumInteractions;
+    return puWeightHist->GetBinContent(puWeightHist->GetXaxis()->FindBin(min(ntuple->TrueNumInteractions,puWeightHist->GetBinLowEdge(puWeightHist->GetNbinsX()+1))));
+}
+
+template<typename ntupleType> double ISRweights(ntupleType* ntuple){
+    double D = 1.071;
+    double w[6]={0.920,0.821,0.715,0.662,0.561,0.511};
+    if( ntuple->NJetsISR == 0 )
+        return 0.0;
+    else if( ntuple->NJetsISR >= 6 )
+        return w[5]*D;
+    else 
+        return w[ntuple->NJetsISR]*D;
+}
 //////////////////////
 //////////////////////
 //////////////////////
@@ -261,6 +283,10 @@ template<typename ntupleType> double fillLeadingJetFlavor(ntupleType* ntuple){
   else return 1.;
 }
 
+template<typename ntupleType> double fillLeadingNbHadrons(ntupleType* ntuple){
+    return ntuple->JetsAK8_NumBhadrons->at(0);
+}
+
 template<typename ntupleType> double fillLeadingJetPt(ntupleType* ntuple){
   if(ntuple->JetsAK8->size()==0) return-99999.;
   return ntuple->JetsAK8->at(0).Pt();
@@ -302,6 +328,10 @@ template<typename ntupleType> double fillSubLeadingJetFlavor(ntupleType* ntuple)
   else if (ntuple->JetsAK8_NumBhadrons->at(1)==1 )
     return 5.;
   else return 1.;
+}
+
+template<typename ntupleType> double fillSubLeadingNbHadrons(ntupleType* ntuple){
+    return ntuple->JetsAK8_NumBhadrons->at(1);
 }
 
 template<typename ntupleType> double fillSubLeadingJetPt(ntupleType* ntuple){
@@ -661,18 +691,19 @@ template<typename ntupleType> bool singleMuBaselineCut(ntupleType* ntuple){
     if( ntuple->Muons->size() != 1 || ntuple->Electrons->size() != 0 ) return false;
     double MT = computeMuonMT(ntuple);
 
-    return ( MT < 100. &&
+    return ( ntuple->Muons->at(0).Pt()>25. &&
+             MT < 100. &&
              ntuple->MET > 100.             &&
-             ntuple->HT > 600.                         &&
+             ntuple->HT > 300.                         &&
              ntuple->JetsAK8->size() >= 2 &&
              //muonLeadJetdR(ntuple) > 1.0 &&
              //muonSubleadJetdR(ntuple) > 1.0 &&
-             ntuple->JetsAK8->at(0).Pt() > 300. && 
+             /*ntuple->JetsAK8->at(0).Pt() > 300. && 
              ntuple->JetsAK8_prunedMass->at(0) > 50. && 
              ntuple->JetsAK8_prunedMass->at(0) < 250. && 
              ntuple->JetsAK8->at(1).Pt() > 300. &&
              ntuple->JetsAK8_prunedMass->at(1) > 50. && 
-             ntuple->JetsAK8_prunedMass->at(1) < 250.&&
+             ntuple->JetsAK8_prunedMass->at(1) < 250.&&*/
              ntuple->DeltaPhi1>0.5 && 
              ntuple->DeltaPhi2>0.5 &&
              ntuple->DeltaPhi3>0.3 && 
@@ -691,9 +722,10 @@ template<typename ntupleType> bool singleEleBaselineCut(ntupleType* ntuple){
     if( ntuple->Muons->size() != 0 || ntuple->Electrons->size() != 1 ) return false;
     double MT = computeElectronMT(ntuple);
 
-    return ( MT < 100. &&
+    return ( ntuple->Electrons->at(0).Pt()>25. && 
+             MT < 100. &&
              ntuple->MET > 100.             &&
-             ntuple->HT > 600.                         &&
+             ntuple->HT > 300.                         &&
              ntuple->JetsAK8->size() >= 2 &&
              ntuple->JetsAK8->at(0).Pt() > 300. && 
              ntuple->JetsAK8_prunedMass->at(0) > 50. && 
