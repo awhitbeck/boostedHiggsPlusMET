@@ -125,6 +125,7 @@ int main(int argc, char** argv){
         ntuple->GetEntry(iEvt);
         if( iEvt % 100000 == 0 ) cout << "data: " << iEvt << "/" << numEvents << endl;
         if(! photonBaselineCut(ntuple) ) continue;
+        if( !ntuple->TriggerPass->at(51)==1 ) continue;
         int bin = -1;
         for( int iBin = 0 ; iBin < numMETbins ; iBin++ ){
             if( ntuple->MET > lowestMET ){
