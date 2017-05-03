@@ -147,9 +147,9 @@ int main(int argc, char** argv){
       if( iEvt % 1000000 == 0 ) cout << skims.sampleName[iSample] << ": " << iEvt << "/" << numEvents << endl;
 
       if(! photonBaselineCut(ntuple) ) continue;
-      if( skims.sampleName[iSample] == "QCD" && ntuple->Photons_nonPrompt->at(0) == 0 ) continue;
+      if( skims.sampleName[iSample] == "QCD" && ntuple->Photons_nonPrompt->at(0) == 0 && ntuple->madMinPhotonDeltaR>0.4 && ntuple->madMinDeltaRStatus==1 ) continue;
       if( skims.sampleName[iSample] == "GJets" && ntuple->Photons_nonPrompt->at(0) == 1 ) continue;
-      //cout << "pass baseline" << endl;
+
       for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++ ){
           iBin=plots[iPlot].fill(ntuple,ntuple->Weight*lumi*ntuple->puWeight);
           if( plots[iPlot].label == "NJets_singleMuCR_baseline" && iBin>0 && iBin <=14 )
@@ -159,7 +159,6 @@ int main(int argc, char** argv){
           }
           if( plots[iPlot].label == "J2pt_numBhadrons_baseline" && iBin > 0 && iBin <= 5 )
               SubLeadingBBdiscVersusNbHad[iBin-1].fill(ntuple,ntuple->Weight*lumi*customPUweights(ntuple));
-
       }
     }
   }
@@ -209,7 +208,7 @@ int main(int argc, char** argv){
       if( iEvt % 1000000 == 0 ) cout << "data: " << iEvt << "/" << numEvents << endl;
       if(! photonBaselineCut(ntuple) ) continue;
       cout << "pass baseline (data)" << endl;
-      //if( !ntuple->TriggerPass->at(51)==1 ) continue;
+      if( !ntuple->TriggerPass->at(51)==1 ) continue;
       for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++){
           iBin=plots[iPlot].fillData(ntuple);
           if( plots[iPlot].label == "NJets_singleMuCR_baseline" && iBin>0 && iBin <=14 )
