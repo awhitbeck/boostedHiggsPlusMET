@@ -155,9 +155,10 @@ int main(int argc, char** argv){
       ntuple->GetEntry(iEvt);
       if( iEvt % 1000000 == 0 ) cout << "data: " << iEvt << "/" << numEvents << endl;
       if(! singleEleBaselineCut(ntuple) ) continue;
-      //if( ntuple->TriggerPass->at(5)!=1 && ntuple->TriggerPass->at(6)!=1 && ntuple->TriggerPass->at(7)!=1 && ntuple->TriggerPass->at(8)!=1) continue;
-      for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++){
-          plots[iPlot].fillData(ntuple);
+      if( ntuple->TriggerPass->at(5) == 1 || ntuple->TriggerPass->at(6)==1 || ntuple->TriggerPass->at(7)==1 || ntuple->TriggerPass->at(8)==1){
+          for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++){
+              plots[iPlot].fillData(ntuple);
+          }
       }
   }
   
