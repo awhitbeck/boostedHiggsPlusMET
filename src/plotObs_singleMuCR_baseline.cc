@@ -87,12 +87,12 @@ int main(int argc, char** argv){
   plot J1bbtag_Tau21plot(*fillLeadingBBtagJetTau21<RA2bTree>,"J1bbtag_Tau21_singleMuCR_baseline","#tau_{21}",20,0.,1.);
   plot J2bbtag_Tau21plot(*fillSubLeadingBBtagJetTau21<RA2bTree>,"J2bbtag_Tau21_singleMuCR_baseline","#tau_{21}",20,0.,1.);
 
-  plot J1pt_Ptplot(*fillLeadingJetPt<RA2bTree>,"J1pt_Pt_singleMuCR_baseline","p_{T,J} [GeV]",50,300.,2300.);
-  plot J2pt_Ptplot(*fillSubLeadingJetPt<RA2bTree>,"J2pt_Pt_singleMuCR_baseline","p_{T,J} [GeV]",50,300.,1800.);
-  plot J1pt_PtLooseplot(*fillLeadingJetPt<RA2bTree>,"J1pt_PtLoose_singleMuCR_baseline","p_{T,J} [GeV]",50,0.,2000.);
-  plot J2pt_PtLooseplot(*fillSubLeadingJetPt<RA2bTree>,"J2pt_PtLoose_singleMuCR_baseline","p_{T,J} [GeV]",50,0.,2000.);
-  plot J1bbtag_Ptplot(*fillLeadingBBtagJetPt<RA2bTree>,"J1bbtag_Pt_singleMuCR_baseline","p_{T,J} [GeV]",50,0.,1500.);
-  plot J2bbtag_Ptplot(*fillSubLeadingBBtagJetPt<RA2bTree>,"J2bbtag_Pt_singleMuCR_baseline","p_{T,J} [GeV]",50,300.,2300.);
+  plot J1pt_Ptplot(*fillLeadingJetPt<RA2bTree>,"J1pt_Pt_singleMuCR_baseline","p_{T,J} [GeV]",50,300.,1300.);
+  plot J2pt_Ptplot(*fillSubLeadingJetPt<RA2bTree>,"J2pt_Pt_singleMuCR_baseline","p_{T,J} [GeV]",50,300.,1300.);
+  plot J1pt_PtLooseplot(*fillLeadingJetPt<RA2bTree>,"J1pt_PtLoose_singleMuCR_baseline","p_{T,J} [GeV]",50,0.,1300.);
+  plot J2pt_PtLooseplot(*fillSubLeadingJetPt<RA2bTree>,"J2pt_PtLoose_singleMuCR_baseline","p_{T,J} [GeV]",50,0.,1300.);
+  plot J1bbtag_Ptplot(*fillLeadingBBtagJetPt<RA2bTree>,"J1bbtag_Pt_singleMuCR_baseline","p_{T,J} [GeV]",50,0.,1300.);
+  plot J2bbtag_Ptplot(*fillSubLeadingBBtagJetPt<RA2bTree>,"J2bbtag_Pt_singleMuCR_baseline","p_{T,J} [GeV]",50,300.,1300.);
 
   plot J1pt_JetFlavorPlot(*fillLeadingJetFlavor<RA2bTree>,"J1pt_JetFlavorPlot","Jet Flavor",22,0.5,21.5);
   plot J2pt_JetFlavorPlot(*fillSubLeadingJetFlavor<RA2bTree>,"J2pt_JetFlavorPlot","Jet Flavor",22,0.5,21.5);
@@ -152,18 +152,22 @@ int main(int argc, char** argv){
     for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++){
       plots[iPlot].addNtuple(ntuple,skims.sampleName[iSample]);
       plots[iPlot].setFillColor(ntuple,skims.fillColor[iSample]);
+      plots[iPlot].setLineColor(ntuple,skims.lineColor[iSample]);
     }
     for( int iPlot = 0 ; iPlot < HTversusNJetsplots.size() ; iPlot++){
         HTversusNJetsplots[iPlot].addNtuple(ntuple,skims.sampleName[iSample]);
         HTversusNJetsplots[iPlot].setFillColor(ntuple,skims.fillColor[iSample]);
+        HTversusNJetsplots[iPlot].setLineColor(ntuple,skims.lineColor[iSample]);
     }
     for( int iPlot = 0 ; iPlot < LeadingBBdiscVersusNbHad.size() ; iPlot++){
         LeadingBBdiscVersusNbHad[iPlot].addNtuple(ntuple,skims.sampleName[iSample]);
         LeadingBBdiscVersusNbHad[iPlot].setFillColor(ntuple,skims.fillColor[iSample]);
+        LeadingBBdiscVersusNbHad[iPlot].setLineColor(ntuple,skims.lineColor[iSample]);
     }
     for( int iPlot = 0 ; iPlot < SubLeadingBBdiscVersusNbHad.size() ; iPlot++){
         SubLeadingBBdiscVersusNbHad[iPlot].addNtuple(ntuple,skims.sampleName[iSample]);
         SubLeadingBBdiscVersusNbHad[iPlot].setFillColor(ntuple,skims.fillColor[iSample]);
+        SubLeadingBBdiscVersusNbHad[iPlot].setLineColor(ntuple,skims.lineColor[iSample]);
     }
 
     int numEvents = ntuple->fChain->GetEntries();
@@ -199,7 +203,7 @@ int main(int argc, char** argv){
     RA2bTree* ntuple = skims.signalNtuples[iSample];
     for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++){
       plots[iPlot].addSignalNtuple(ntuple,skims.signalSampleName[iSample]);
-      plots[iPlot].setLineColor(ntuple,skims.lineColor[iSample]);
+      plots[iPlot].setLineColor(ntuple,skims.sigLineColor[iSample]);
     }
 
     int numEvents = ntuple->fChain->GetEntries();
