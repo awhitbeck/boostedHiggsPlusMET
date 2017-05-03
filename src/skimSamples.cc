@@ -14,6 +14,7 @@ class skimSamples{
 public : 
 
     TChain *WJets,*ZJets,*QCD,*SnglT,*TT,*TTExtra,*GJets,*GJets0p4,*Other,*DY; 
+    TChain *QCDfrank,*GJetsfrank,*GJets0p4frank,*DYfrank; 
     TChain *mGluino1300, *mGluino1400, *mGluino1500, *mGluino1600, *mGluino1700;
     TChain *T5HH1300,*T5HH1700,*T5HH1000,*T5HH1900;
     TChain *data;
@@ -21,7 +22,7 @@ public :
     RA2bTree* dataNtuple;
     std::vector<TString> sampleName, signalSampleName;
     std::vector<TString> dataSampleName; 
-    std::vector<int> fillColor, lineColor;
+    std::vector<int> fillColor, lineColor, sigLineColor;
 
     enum region {kSignal,kPhoton,kSLm,kSLe,kNumRegions};
     TString regionNames[kNumRegions]={"signal","photon","SLm","SLe"};
@@ -38,8 +39,8 @@ public :
             skimTypeLDP=BASE_DIR+"tree_LDP/";
         }
         if( r == kPhoton ){
-            skimType=BASE_DIR+"tree_GJet_CleanVars/";
-            skimTypeLDP=BASE_DIR+"tree_GJetLDP_CleanVars/";
+            skimType="root://cmseos.fnal.gov//store/user/fojensen/boostedSkims/";
+            skimTypeLDP="root://cmseos.fnal.gov//store/user/fojensen/boostedSkims/";
         }
         if( r == kSLm ){
             skimType=BASE_DIR+"tree_SLm/";
@@ -53,12 +54,61 @@ public :
         ///////////////////////////////////////////////////////////////////////
         // - - - - - - - - - - BACKGROUND INPUTS - - - - - - - - - - - - - - //
         ///////////////////////////////////////////////////////////////////////
+        
+        // -- Frank's private skims -- 
+        std::vector<TString> QCDfrankFileNames;
+        QCDfrankFileNames.push_back("Summer16.QCD_HT300to500.root");
+        QCDfrankFileNames.push_back("Summer16.QCD_HT500to700.root");
+        QCDfrankFileNames.push_back("Summer16.QCD_HT700to1000.root");
+        QCDfrankFileNames.push_back("Summer16.QCD_HT1000to1500.root");
+        QCDfrankFileNames.push_back("Summer16.QCD_HT1500to2000.root");
+        QCDfrankFileNames.push_back("Summer16.QCD_HT2000toInf.root");
+        QCDfrank = new TChain("PreSelection");
+        for( int i = 0 ; i < QCDfrankFileNames.size() ; i++ ){
+            QCDfrank->Add(skimType+"/"+QCDfrankFileNames[i]);
+        }
+        if( r == kPhoton ){ 
+            ntuples.push_back(new RA2bTree(QCDfrank));
+            sampleName.push_back("QCD");
+            fillColor.push_back(kGray);
+            lineColor.push_back(1);
+        }
+
+        std::vector<TString> GJetsfrankFileNames;
+        GJetsfrankFileNames.push_back("Summer16.GJets_DR-0p4_HT-100To200.root");
+        GJetsfrankFileNames.push_back("Summer16.GJets_DR-0p4_HT-200To400.root");
+        GJetsfrankFileNames.push_back("Summer16.GJets_DR-0p4_HT-400To600.root");
+        GJetsfrankFileNames.push_back("Summer16.GJets_DR-0p4_HT-600ToInf.root");
+        GJetsfrank = new TChain("PreSelection");
+        for( int i = 0 ; i < GJetsfrankFileNames.size() ; i++ ){
+            GJetsfrank->Add(skimType+"/"+GJetsfrankFileNames[i]);
+        }
+        if( r == kPhoton ){ 
+            ntuples.push_back(new RA2bTree(GJetsfrank));
+            sampleName.push_back("GJets");
+            fillColor.push_back(kGreen);
+            lineColor.push_back(1);
+        }
+
+        std::vector<TString> SinglePhotonFrankFileNames;
+        SinglePhotonFrankFileNames.push_back("Run2016B-03Feb2017_ver2-v2.SinglePhoton.root");
+        SinglePhotonFrankFileNames.push_back("Run2016C-03Feb2017-v1.SinglePhoton.root");
+        SinglePhotonFrankFileNames.push_back("Run2016D-03Feb2017-v1.SinglePhoton.root");
+        SinglePhotonFrankFileNames.push_back("Run2016E-03Feb2017-v1.SinglePhoton.root");
+        SinglePhotonFrankFileNames.push_back("Run2016F-03Feb2017-v1.SinglePhoton.root");
+        SinglePhotonFrankFileNames.push_back("Run2016G-03Feb2017-v1.SinglePhoton.root");
+        SinglePhotonFrankFileNames.push_back("Run2016H-03Feb2017_ver2-v1.SinglePhoton.root");
+        SinglePhotonFrankFileNames.push_back("Run2016H-03Feb2017_ver3-v1.SinglePhoton.root");
+        if( r == kPhoton ){
+            data = new TChain("PreSelection");
+            for( int i = 0 ; i < SinglePhotonFrankFileNames.size() ; i++ ){
+                data->Add(skimType+"/"+SinglePhotonFrankFileNames[i]);
+            }
+            dataNtuple = new RA2bTree(data);
+        }
+        
+        // -- RA2b central skims -- 
         std::vector<TString> OtherFileNames;
-        OtherFileNames.push_back("tree_ST_s-channel.root");
-        OtherFileNames.push_back("tree_ST_t-channel_antitop.root");
-        OtherFileNames.push_back("tree_ST_t-channel_top.root");
-        OtherFileNames.push_back("tree_ST_tW_antitop.root");
-        OtherFileNames.push_back("tree_ST_tW_top.root");
         OtherFileNames.push_back("tree_WWTo1L1Nu2Q.root");
         OtherFileNames.push_back("tree_WWTo2L2Nu.root");
         OtherFileNames.push_back("tree_WWZ.root");
@@ -79,9 +129,12 @@ public :
             Other->Add(skimType+"/"+OtherFileNames[i]);
             Other->Add(skimTypeLDP+"/"+OtherFileNames[i]);
         }
-        //ntuples.push_back(new RA2bTree(Other));
-        //sampleName.push_back("Other");
-        //fillColor.push_back(kRed+1);
+        if( r == kSignal || r == kSLm || r == kSLe ){
+            ntuples.push_back(new RA2bTree(Other));
+            sampleName.push_back("Other");
+            fillColor.push_back(kRed+1);
+            lineColor.push_back(1);
+        }
 
         std::vector<TString> ZJetsFileNames;
         ZJetsFileNames.push_back("tree_ZJetsToNuNu_HT-100to200.root");
@@ -100,6 +153,7 @@ public :
             ntuples.push_back(new RA2bTree(ZJets));
             sampleName.push_back("ZJets");
             fillColor.push_back(kGreen+1);
+            lineColor.push_back(1);
         }
 
         std::vector<TString> WJetsFileNames;
@@ -119,6 +173,7 @@ public :
             ntuples.push_back(new RA2bTree(WJets));
             sampleName.push_back("WJets");
             fillColor.push_back(kBlue);
+            lineColor.push_back(1);
         }
 
         std::vector<TString> SnglTFileNames;
@@ -136,21 +191,7 @@ public :
             ntuples.push_back(new RA2bTree(SnglT));
             sampleName.push_back("SnglT");
             fillColor.push_back(kOrange);
-        }
-
-        std::vector<TString> TTExtraFileNames;
-        TTExtraFileNames.push_back("tree_TTJets_SingleLeptFromT.root");
-        TTExtraFileNames.push_back("tree_TTJets_SingleLeptFromTbar.root");
-        TTExtraFileNames.push_back("tree_TTJets_DiLept.root");
-        TTExtra = new TChain("tree");
-        for( int i = 0 ; i < TTExtraFileNames.size() ; i++ ) {
-            TTExtra->Add(skimType+"/"+TTExtraFileNames[i]);
-            TTExtra->Add(skimTypeLDP+"/"+TTExtraFileNames[i]);
-        }
-        if( r == kSignal || r == kSLm || r == kSLe ){
-            ntuples.push_back(new RA2bTree(TTExtra));
-            sampleName.push_back("TTExtra");
-            fillColor.push_back(kCyan);
+            lineColor.push_back(1);
         }
 
         std::vector<TString> TTFileNames;
@@ -160,15 +201,30 @@ public :
         TTFileNames.push_back("tree_TTJets_HT-2500toInf.root");
         TT = new TChain("tree");
         for( int i = 0 ; i < TTFileNames.size() ; i++ ){
-            cout << "TTFile: " << skimType<<"/"<<TTFileNames[i] << endl;
             TT->Add(skimType+"/"+TTFileNames[i]);
             TT->Add(skimTypeLDP+"/"+TTFileNames[i]);
         }
         if( r == kSignal || r == kSLm || r == kSLe ){
-            cout << "YES" << endl;
             ntuples.push_back(new RA2bTree(TT));
             sampleName.push_back("TT");
             fillColor.push_back(kCyan);
+            lineColor.push_back(kCyan);
+        }
+
+        std::vector<TString> TTExtraFileNames;
+        TTExtraFileNames.push_back("tree_TTJets_SingleLeptFromT.root");
+        TTExtraFileNames.push_back("tree_TTJets_SingleLeptFromTbar.root");
+        TTExtraFileNames.push_back("tree_TTJets_DiLept.root");        
+        TTExtra = new TChain("tree");
+        for( int i = 0 ; i < TTExtraFileNames.size() ; i++ ){
+            TTExtra->Add(skimType+"/"+TTExtraFileNames[i]);
+            TTExtra->Add(skimTypeLDP+"/"+TTExtraFileNames[i]);
+        }
+        if( r == kSignal || r == kSLm || r == kSLe ){
+            ntuples.push_back(new RA2bTree(TTExtra));
+            sampleName.push_back("TTExtra");
+            fillColor.push_back(kCyan);
+            lineColor.push_back(1);
         }
 
         std::vector<TString> DYFileNames;
@@ -184,6 +240,7 @@ public :
         //ntuples.push_back(new RA2bTree(DY));
         //sampleName.push_back("DY");
         //fillColor.push_back(kGreen);
+        //lineColor.push_back(1);
 
         std::vector<TString> GJets0p4FileNames;
         GJets0p4FileNames.push_back("tree_GJets_DR-0p4_HT-100to200.root");
@@ -199,6 +256,7 @@ public :
         //ntuples.push_back(new RA2bTree(GJets0p4));
         //sampleName.push_back("GJets");
         //fillColor.push_back(kGreen);
+        //lineColor.push_back(1);
         //}
 
         std::vector<TString> GJetsFileNames;
@@ -211,11 +269,12 @@ public :
             GJets->Add(skimType+"/"+GJetsFileNames[i]);
             GJets->Add(skimTypeLDP+"/"+GJetsFileNames[i]);
         }
-        if( r == kPhoton ){
+        /*if( r == kPhoton ){
             ntuples.push_back(new RA2bTree(GJets));
             sampleName.push_back("GJets");
             fillColor.push_back(kGreen);
-        }
+            lineColor.push_back(1);
+        }*/
 
         std::vector<TString> QCDFileNames;
         QCDFileNames.push_back("tree_QCD_HT-200to300.root");
@@ -231,10 +290,11 @@ public :
             QCD->Add(skimType+"/"+QCDFileNames[i]);
             QCD->Add(skimTypeLDP+"/"+QCDFileNames[i]);
         }
-        if( r == kSignal || r == kPhoton ){
+        if( r == kSignal /*|| r == kPhoton*/ ){
             ntuples.push_back(new RA2bTree(QCD));
             sampleName.push_back("QCD");
             fillColor.push_back(kGray);
+            lineColor.push_back(1);
         }
 
 
@@ -304,14 +364,14 @@ public :
         SinglePhotonFileNames.push_back("tree_SinglePhoton_re2016G.root");
         SinglePhotonFileNames.push_back("tree_SinglePhoton_re2016H2.root");
         SinglePhotonFileNames.push_back("tree_SinglePhoton_re2016H3.root");
-        if( r == kPhoton ){
+        /*if( r == kPhoton ){
             data = new TChain("tree");
             for( int i = 0 ; i < SinglePhotonFileNames.size() ; i++ ){
                 data->Add(skimTypeLDP+"/"+SinglePhotonFileNames[i]);
                 data->Add(skimType+"/"+SinglePhotonFileNames[i]);
             }
             dataNtuple = new RA2bTree(data);
-        }
+        }*/
 
         std::vector<TString> T5HH1300FilesNames;
         T5HH1300FilesNames.push_back("root://cmseos.fnal.gov//store/user/fojensen/T5qqqqZHProduction/Summer16.SMS-T5qqqqZH-mGluino1300_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_0_RA2AnalysisTree.root");
@@ -334,7 +394,7 @@ public :
             }
             signalNtuples.push_back(new RA2bTree(T5HH1300));
             signalSampleName.push_back("T5HH1300");
-            lineColor.push_back(kRed);
+            sigLineColor.push_back(kRed);
         }
 
         std::vector<TString> T5HH1000FilesNames;
@@ -351,7 +411,7 @@ public :
         T5HH1000FilesNames.push_back("root://cmseos.fnal.gov//store/user/fojensen/T5qqqqZHProduction/Summer16.SMS-T5qqqqZH-mGluino1000_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_1_RA2AnalysisTree.root");
         T5HH1000FilesNames.push_back("root://cmseos.fnal.gov//store/user/fojensen/T5qqqqZHProduction/Summer16.SMS-T5qqqqZH-mGluino1000_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_2_RA2AnalysisTree.root");
         T5HH1000FilesNames.push_back("root://cmseos.fnal.gov//store/user/fojensen/T5qqqqZHProduction/Summer16.SMS-T5qqqqZH-mGluino1000_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_3_RA2AnalysisTree.root");
-        T5HH1000FilesNames.push_back("root://cmseos.fnal.gov//store/user/fojensen/T5qqqqZHProduction/Summer16.SMS-T5qqqqZH-mGluino1000_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_4_RA2AnalysisTree.root");
+        T5HH1000FilesNames.push_back("root://cmseos.fnal.gov//store/user/fojensen/T5qqqqZHProduction/Summer16.SMS-T5qqqqZH-mGluino1000_TuneCUETP8M1_13TeV-madgraphML-pythia8_4_RA2AnalysisTree.root");
         T5HH1000FilesNames.push_back("root://cmseos.fnal.gov//store/user/fojensen/T5qqqqZHProduction/Summer16.SMS-T5qqqqZH-mGluino1000_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_5_RA2AnalysisTree.root");
         T5HH1000FilesNames.push_back("root://cmseos.fnal.gov//store/user/fojensen/T5qqqqZHProduction/Summer16.SMS-T5qqqqZH-mGluino1000_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_6_RA2AnalysisTree.root");
         T5HH1000FilesNames.push_back("root://cmseos.fnal.gov//store/user/fojensen/T5qqqqZHProduction/Summer16.SMS-T5qqqqZH-mGluino1000_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_7_RA2AnalysisTree.root");
@@ -364,7 +424,7 @@ public :
             }
             signalNtuples.push_back(new RA2bTree(T5HH1000));
             signalSampleName.push_back("T5HH1000");
-            lineColor.push_back(kRed);
+            sigLineColor.push_back(kRed);
         }
 
         std::vector<TString> T5HH1900FilesNames;
@@ -385,7 +445,7 @@ T5HH1900FilesNames.push_back("root://cmseos.fnal.gov//store/user/fojensen/T5qqqq
             }
             signalNtuples.push_back(new RA2bTree(T5HH1900));
             signalSampleName.push_back("T5HH1900");
-            lineColor.push_back(kRed);
+            sigLineColor.push_back(kRed);
         }
 
         std::vector<TString> T5HH1700FilesNames;
@@ -404,7 +464,7 @@ T5HH1900FilesNames.push_back("root://cmseos.fnal.gov//store/user/fojensen/T5qqqq
             }
             signalNtuples.push_back(new RA2bTree(T5HH1700));
             signalSampleName.push_back("T5HH1700");
-            lineColor.push_back(kRed+1);
+            sigLineColor.push_back(kRed+1);
         }
     };
 
