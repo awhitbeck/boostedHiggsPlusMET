@@ -60,6 +60,49 @@ template<typename ntupleType>void ntupleBranchStatus(ntupleType* ntuple){
 }
 
 /***************************************************************/
+/* - - - - - - - - - - - - gen-level cuts - - - - - - - - - -  */
+/***************************************************************/
+template<typename ntupleType> int getNumGenHiggses(ntupleType* ntuple){
+    int numHiggses=0;
+    for( int i=0 ; i < ntuple->GenParticles->size() ; i++ ){
+        if( ntuple->GenParticles_PdgId->at(i) == 25 && 
+            ntuple->GenParticles_ParentId->at(i) == 1000023 && 
+            ntuple->GenParticles_Status->at(i) == 22 )
+            numHiggses++;
+    }
+    return numHiggses;
+}
+
+template<typename ntupleType> int getNumGenZs(ntupleType* ntuple){
+    int numZs=0;
+    for( int i=0 ; i < ntuple->GenParticles->size() ; i++ ){
+        if( ntuple->GenParticles_PdgId->at(i) == 25 && 
+            ntuple->GenParticles_ParentId->at(i) == 1000023 && 
+            ntuple->GenParticles_Status->at(i) == 22 )
+            numZs++;    
+    }
+    return numZs;
+}
+
+template<typename ntupleType> double genLevelHHcut(ntupleType* ntuple){
+    int numHiggses=getNumGenHiggses(ntuple),numZs=getNumGenZs(ntuple);
+    if(numHiggses==2 and numZs==0) return true;
+    else return false;
+}
+
+template<typename ntupleType> double genLevelZHcut(ntupleType* ntuple){
+    int numHiggses=getNumGenHiggses(ntuple),numZs=getNumGenZs(ntuple);
+    if(numHiggses==1 and numZs==1) return true;
+    else return false;
+}
+
+template<typename ntupleType> double genLevelZZcut(ntupleType* ntuple){
+    int numHiggses=getNumGenHiggses(ntuple),numZs=getNumGenZs(ntuple);
+    if(numHiggses==0 and numZs==2) return true;
+    else return false;
+}
+
+/***************************************************************/
 /* - - - - - - - - - - - - custom weights - - - - - - - - - -  */
 /***************************************************************/
 template<typename ntupleType> double customPUweights(ntupleType* ntuple){
