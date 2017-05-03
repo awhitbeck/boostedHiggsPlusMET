@@ -84,3 +84,11 @@ flavorFit photon 0 # lead jet
 flavorFit photon 1 # sub-leadjet
 ``` 
 
+#### Cut flow table
+
+To produce the cut flow table, you should run `cutFlow.cc` ([https://github.com/awhitbeck/boostedHiggsPlusMET/blob/RA2b_V12_v0/src/cutFlow.cc](here)).  This will print a latex-formatted table to the standard output.  To run:
+
+```bash
+make cutFlow
+cutFlow
+```
