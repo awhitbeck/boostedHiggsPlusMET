@@ -94,10 +94,8 @@ int main(int argc, char** argv){
       for( int iEvt = 0 ; iEvt < numEvents ; iEvt++ ){
           ntuple->GetEntry(iEvt);
           if( iEvt % 10000 == 0 ) cout << skims.sampleName[iSample] << ": " << iEvt << "/" << numEvents << endl;
-          //if( iEvt > 100000 ) break;
           if(! baselineCut(ntuple) ) continue;
           if( doubleTaggingLooseCut(ntuple) ) continue;
-          //if( ntuple->DeltaPhi1<0.5 || ntuple->DeltaPhi2<0.5 ) continue;
           if(! singleHiggsTagLooseCut(ntuple) ) continue;
           for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++ ){
               plots[iPlot].fill(ntuple);
@@ -121,17 +119,13 @@ int main(int argc, char** argv){
           if( iEvt % 1000000 == 0 ) cout << skims.signalSampleName[iSample] << ": " << iEvt << "/" << numEvents << endl;
           if(! baselineCut(ntuple) ) continue;
           if( doubleTaggingLooseCut(ntuple) ) continue;
-          //if( ntuple->DeltaPhi1<0.5 || ntuple->DeltaPhi2<0.5 ) continue;
           if(! singleHiggsTagLooseCut(ntuple) ) continue;
+          if( !genLevelHHcut(ntuple) ) continue;
           for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++){
-              if( skims.signalSampleName[iSample].Index("mHiggsino900") != -1 ){
-                  //cout << "mHiggsino900: " << ntuple->Weight*40000./59508. << endl;
-                  plots[iPlot].fillSignal(ntuple,ntuple->Weight*40000./59508.);
-              }else if( skims.signalSampleName[iSample].Index("mHiggsino1000") != -1 ){
-                  //cout << "mHiggsino1000: " << ntuple->Weight*40000./62968. << endl;
-                  plots[iPlot].fillSignal(ntuple,ntuple->Weight*40000./62968.);
-              }else
-                  plots[iPlot].fillSignal(ntuple);
+              if( skims.signalSampleName[iSample] == "T5HH1300" )
+                  plots[iPlot].fillSignal(ntuple,lumi/0.0460525/102482.);
+              if( skims.signalSampleName[iSample] == "T5HH1700" )
+                  plots[iPlot].fillSignal(ntuple,lumi/0.00470323/103791.);
           }
       }
   }

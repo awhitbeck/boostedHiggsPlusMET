@@ -121,24 +121,22 @@ int main(int argc, char** argv){
     int numEvents = ntuple->fChain->GetEntries();
     ntupleBranchStatus<RA2bTree>(ntuple);
     for( int iEvt = 0 ; iEvt < numEvents ; iEvt++ ){
-
-
         if( iEvt > 1000 ) continue;
-
-      ntuple->GetEntry(iEvt);
-      if( iEvt % 100000 == 0 ) cout << skims.signalSampleName[iSample] << ": " << iEvt << "/" << numEvents << endl;
-      for( int iCut = 0 ; iCut < cutFlow.size() ; iCut++ ){
-	if( ! cutFlow[iCut](ntuple) ) break;
-	for( int iPlot = 0 ; iPlot < plots[iCut].size() ; iPlot++ ){
-        if( skims.signalSampleName[iSample] == "T5HH1300" )
-            plots[iCut][iPlot].fillSignal(ntuple,1.0);//lumi*0.0460525/numEvents);
-        if( skims.signalSampleName[iSample] == "T5HH1700" )
-            plots[iCut][iPlot].fillSignal(ntuple,1.0);//lumi*0.00470323/numEvents);
-	}
-      }
+        ntuple->GetEntry(iEvt);
+        if( iEvt % 100000 == 0 ) cout << skims.signalSampleName[iSample] << ": " << iEvt << "/" << numEvents << endl;
+        if( !genLevelHHcut(ntuple) ) continue;
+        for( int iCut = 0 ; iCut < cutFlow.size() ; iCut++ ){
+            if( ! cutFlow[iCut](ntuple) ) break;
+            for( int iPlot = 0 ; iPlot < plots[iCut].size() ; iPlot++ ){
+                if( skims.signalSampleName[iSample] == "T5HH1300" )
+                    plots[iCut][iPlot].fillSignal(ntuple,lumi*0.0460525/102482.);
+                if( skims.signalSampleName[iSample] == "T5HH1700" )
+                    plots[iCut][iPlot].fillSignal(ntuple,lumi*0.00470323/103791.);
+            }
+        }
     }
   }
-
+  
   /*
   for( int iCut = 0 ; iCut < cutFlow.size() ; iCut++ ){
     for( int iPlot = 0 ; iPlot < plots[iCut].size() ; iPlot++){

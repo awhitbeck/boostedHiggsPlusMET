@@ -84,10 +84,8 @@ int main(int argc, char** argv){
     for( int iEvt = 0 ; iEvt < numEvents ; iEvt++ ){
         ntuple->GetEntry(iEvt);
         if( iEvt % 100000 == 0 ) cout << skims.sampleName[iSample] << ": " << iEvt << "/" << numEvents << endl;
-        //if( iEvt > 100000 ) break;
         if(! baselineCut(ntuple) ) continue;
         if(! doubleTaggingLooseCut(ntuple) ) continue;
-        //if(  ntuple->DeltaPhi1<0.5 || ntuple->DeltaPhi2<0.5 ) continue;
         for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++ ){
             plots[iPlot].fill(ntuple);
         }
@@ -110,30 +108,30 @@ int main(int argc, char** argv){
           if( iEvt % 100000 == 0 ) cout << skims.signalSampleName[iSample] << ": " << iEvt << "/" << numEvents << endl;
           if(! baselineCut(ntuple) ) continue;
           if(! doubleTaggingLooseCut(ntuple) ) continue;
-          //if(  ntuple->DeltaPhi1<0.5 || ntuple->DeltaPhi2<0.5 ) continue;
-          //if(ntuple->nGenHiggsBoson!=2) continue;
+          if( !genLevelHHcut(ntuple) ) continue;
           for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++){
-              plots[iPlot].fillSignal(ntuple);
+              if( skims.signalSampleName[iSample] == "T5HH1300" )
+                  plots[iPlot].fillSignal(ntuple,lumi/0.0460525/102482.);
+              if( skims.signalSampleName[iSample] == "T5HH1700" )
+                  plots[iPlot].fillSignal(ntuple,lumi/0.00470323/103791.);
           }
       }
   }
   
   // Data tree
   RA2bTree* ntuple = skims.dataNtuple;
-  for( int iPlot = 0 ; iPlot < 0 /*plots.size()*/ ; iPlot++){
+  for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++){
     plots[iPlot].addDataNtuple(ntuple,"data");
   }
 
   int numEvents = ntuple->fChain->GetEntries();
   ntupleBranchStatus<RA2bTree>(ntuple);
-  for( int iEvt = 0 ; iEvt < numEvents ; iEvt++ ){
+  for( int iEvt = 0 ; iEvt < 0/*numEvents*/ ; iEvt++ ){
       ntuple->GetEntry(iEvt);
       if(! baselineCut(ntuple) ) continue;
       if(! doubleTaggingLooseCut(ntuple) ) continue;
-      //if(  ntuple->DeltaPhi1<0.5 || ntuple->DeltaPhi2<0.5 ) continue;
-      //if(ntuple->HLT_BIT_HLT_PFMET100_PFMHT100_IDTight_v==0) continue;
+      if( ntuple->TriggerPass->size() < 44 || ( !ntuple->TriggerPass->at(41) && !ntuple->TriggerPass->at(42) && !ntuple->TriggerPass->at(43) && !ntuple->TriggerPass->at(44)) ) continue;
       if( iEvt % 1000000 == 0 ) cout << "DATA: " << iEvt << "/" << numEvents << endl;
-      //if( iEvt > 100000 ) break ;
       for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++){
           plots[iPlot].fillSignal(ntuple);
       }

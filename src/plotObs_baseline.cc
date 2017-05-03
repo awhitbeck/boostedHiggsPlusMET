@@ -128,12 +128,12 @@ int main(int argc, char** argv){
             ntuple->GetEntry(iEvt);
             if( iEvt % 1000000 == 0 ) cout << skims.signalSampleName[iSample] << ": " << iEvt << "/" << numEvents << endl;
             if(! baselineCut(ntuple) ) continue;
-            if(ntuple->DeltaPhi1<0.5 || ntuple->DeltaPhi2<0.5 || ntuple->DeltaPhi3<0.3 || ntuple->DeltaPhi4<0.3) continue;
+            if( !genLevelHHcut(ntuple) ) continue;
             for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++){
                 if( skims.signalSampleName[iSample] == "T5HH1300" )
-                    plots[iPlot].fillSignal(ntuple,lumi/44848*0.0460525);
+                    plots[iPlot].fillSignal(ntuple,lumi/0.0460525/102482.);
                 if( skims.signalSampleName[iSample] == "T5HH1700" )
-                    plots[iPlot].fillSignal(ntuple,lumi/47834*0.00470323);
+                    plots[iPlot].fillSignal(ntuple,lumi/0.00470323/103791.);
             }
         }
     }
@@ -150,7 +150,6 @@ int main(int argc, char** argv){
         ntuple->GetEntry(iEvt);
         if( iEvt % 1000000 == 0 ) cout << "data_HTMHT: " << iEvt << "/" << numEvents << endl;
         if(! baselineCut(ntuple) ) continue;
-        if(ntuple->DeltaPhi1<0.5 || ntuple->DeltaPhi2<0.5 || ntuple->DeltaPhi3<0.3 || ntuple->DeltaPhi4<0.3) continue;
         if( ntuple->TriggerPass->size() < 44 || ( !ntuple->TriggerPass->at(41) && !ntuple->TriggerPass->at(42) && !ntuple->TriggerPass->at(43) && !ntuple->TriggerPass->at(44)) ) continue;
         for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++){
             plots[iPlot].fillData(ntuple);

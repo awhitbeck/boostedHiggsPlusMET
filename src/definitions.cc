@@ -84,19 +84,19 @@ template<typename ntupleType> int getNumGenZs(ntupleType* ntuple){
     return numZs;
 }
 
-template<typename ntupleType> double genLevelHHcut(ntupleType* ntuple){
+template<typename ntupleType> bool genLevelHHcut(ntupleType* ntuple){
     int numHiggses=getNumGenHiggses(ntuple),numZs=getNumGenZs(ntuple);
     if(numHiggses==2 and numZs==0) return true;
     else return false;
 }
 
-template<typename ntupleType> double genLevelZHcut(ntupleType* ntuple){
+template<typename ntupleType> bool genLevelZHcut(ntupleType* ntuple){
     int numHiggses=getNumGenHiggses(ntuple),numZs=getNumGenZs(ntuple);
     if(numHiggses==1 and numZs==1) return true;
     else return false;
 }
 
-template<typename ntupleType> double genLevelZZcut(ntupleType* ntuple){
+template<typename ntupleType> bool genLevelZZcut(ntupleType* ntuple){
     int numHiggses=getNumGenHiggses(ntuple),numZs=getNumGenZs(ntuple);
     if(numHiggses==0 and numZs==2) return true;
     else return false;
