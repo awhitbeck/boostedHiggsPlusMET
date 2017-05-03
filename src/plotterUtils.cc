@@ -147,6 +147,9 @@ public:
         if( signalHistoMap.find(ntuple) != signalHistoMap.end() ){
             signalHistoMap[ntuple]->SetLineColor(color);
             signalHistoMap[ntuple]->SetLineWidth(2);
+        }else if(histoMap.find(ntuple) != histoMap.end() ){
+            histoMap[ntuple]->SetLineColor(color);
+            histoMap[ntuple]->SetLineWidth(2);
         }else{
             cout << "plot::setFillColor - ERROR: couldn't find key, " << ntuple << endl;
         }
