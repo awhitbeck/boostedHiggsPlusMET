@@ -25,11 +25,19 @@ template<typename ntupleType>void ntupleBranchStatus(ntupleType* ntuple){
   ntuple->fChain->SetBranchStatus("Electrons",1);
   ntuple->fChain->SetBranchStatus("Photon*",1);
   ntuple->fChain->SetBranchStatus("DeltaPhi*",1);
+
   ntuple->fChain->SetBranchStatus("HT",1);
   ntuple->fChain->SetBranchStatus("NJets",1);
   ntuple->fChain->SetBranchStatus("BTags",1);
   ntuple->fChain->SetBranchStatus("MET",1);
   ntuple->fChain->SetBranchStatus("METPhi",1);
+
+  ntuple->fChain->SetBranchStatus("HTclean",1);
+  ntuple->fChain->SetBranchStatus("NJetsclean",1);
+  ntuple->fChain->SetBranchStatus("BTagsclean",1);
+  ntuple->fChain->SetBranchStatus("METclean",1);
+  ntuple->fChain->SetBranchStatus("METPhiclean",1);
+
   ntuple->fChain->SetBranchStatus("JetsAK8*",1);
   ntuple->fChain->SetBranchStatus("Jets*",1);
   ntuple->fChain->SetBranchStatus("Weight",1);  
@@ -46,6 +54,9 @@ template<typename ntupleType>void ntupleBranchStatus(ntupleType* ntuple){
   ntuple->fChain->SetBranchStatus("JetID",1);
   ntuple->fChain->SetBranchStatus("madHT",1);
   ntuple->fChain->SetBranchStatus("NJetsISR",1);
+  ntuple->fChain->SetBranchStatus("madMinDeltaRStatus",1);
+  ntuple->fChain->SetBranchStatus("madMinPhotonDeltaR",1);
+  
 }
 
 /***************************************************************/
@@ -696,8 +707,8 @@ template<typename ntupleType> bool singleMuBaselineCut(ntupleType* ntuple){
              ntuple->MET > 100.             &&
              ntuple->HT > 300.                         &&
              ntuple->JetsAK8->size() >= 2 &&
-             muonLeadJetdR(ntuple) > 1.0 &&
-             muonSubleadJetdR(ntuple) > 1.0 &&
+             //muonLeadJetdR(ntuple) > 1.0 &&
+             //muonSubleadJetdR(ntuple) > 1.0 &&
              ntuple->JetsAK8->at(0).Pt() > 300. && 
              ntuple->JetsAK8_prunedMass->at(0) > 50. && 
              ntuple->JetsAK8_prunedMass->at(0) < 250. && 
@@ -788,62 +799,47 @@ template<typename ntupleType> void computeNumAK8jetsNoPhoton(ntupleType* ntuple,
 
 template<typename ntupleType> bool photonBaselineCut(ntupleType* ntuple){
 
-    //cout << "ntuple->Photons->size(): " << ntuple->Photons->size() << endl;
-    //cout << "ntuple->Photons_nonPrompt->size(): " << ntuple->Photons_nonPrompt->size() << endl;
-    //cout << "ntuple->Photons_fullID->size(): " << ntuple->Photons_fullID->size() << endl;
-
     if( ntuple->Photons->size() != 1 
-        //|| ntuple->Photons_nonPrompt->size() != 1
         || ntuple->Photons_fullID->size() != 1 
         ){
-        //cout << "vector size incorrect" << endl;
         return false ;
     }
-    ///cout << "found photon" << endl;
-    if( ! ( //ntuple->Photons_nonPrompt->at(0) == 0 && 
-            ntuple->Photons_fullID->at(0) == 1 &&
+    if( ! ( ntuple->Photons_fullID->at(0) == 1 &&
             ntuple->Photons->at(0).Pt() > 200.
             )
         ){
-        ///cout << "Photon 'ID' failed" << endl;
         return false;
     }
 
-    int numAK8jetsNoPhoton ;
-    int leadingJetNoPhoton ;
-    int subleadingJetNoPhoton ;
-    computeNumAK8jetsNoPhoton(ntuple,numAK8jetsNoPhoton,leadingJetNoPhoton,subleadingJetNoPhoton);
-    if( subleadingJetNoPhoton == -1 || leadingJetNoPhoton == -1 ){
-        //cout << "not enough fat jets" << endl;
-        return false;
-    }
+    if( ntuple->JetsAK8Clean->size() < 2 ) return false;
 
     /*
-    cout << "MET: " << ntuple->MET << endl;
-    cout << "HT: " << ntuple->HT << endl;
-    cout << "numAK8jetsNoPhoton: " << numAK8jetsNoPhoton << endl;
-    cout << "ntuple->JetsAK8->at(leadingJetNoPhoton).Pt(): " << ntuple->JetsAK8->at(leadingJetNoPhoton).Pt() << endl;
-    cout << "ntuple->JetsAK8_prunedMass->at(leadingJetNoPhoton): " << ntuple->JetsAK8_prunedMass->at(leadingJetNoPhoton) << endl;
-    cout << "ntuple->JetsAK8->at(subleadingJetNoPhoton).Pt(): " << ntuple->JetsAK8->at(subleadingJetNoPhoton).Pt() << endl;
-    cout << "ntuple->JetsAK8_prunedMass->at(subleadingJetNoPhoton): " << ntuple->JetsAK8_prunedMass->at(subleadingJetNoPhoton) << endl;
-    cout << "ntuple->DeltaPhi1: " << ntuple->DeltaPhi1 << endl;
-    cout << "ntuple->DeltaPhi2: " << ntuple->DeltaPhi2 << endl;
-    cout << "ntuple->DeltaPhi3: " << ntuple->DeltaPhi3 << endl;
-    cout << "ntuple->DeltaPhi4: " << ntuple->DeltaPhi4 << endl;
+    cout << "MET: " << ntuple->METclean << endl;
+    cout << "HT: " << ntuple->HTclean << endl;
+    cout << "numAK8jets: " << ntuple->JetsAK8Clean->size() << endl;
+    cout << "ntuple->JetsAK8Clean->at(0).Pt(): " << ntuple->JetsAK8Clean->at(0).Pt() << endl;
+    cout << "ntuple->JetsAK8Clean_prunedMass->at(0): " << ntuple->JetsAK8Clean_prunedMass->at(0) << endl;
+    cout << "ntuple->JetsAK8Clean->at(1).Pt(): " << ntuple->JetsAK8Clean->at(1).Pt() << endl;
+    cout << "ntuple->JetsAK8Clean_prunedMass->at(1): " << ntuple->JetsAK8Clean_prunedMass->at(1) << endl;
+    cout << "ntuple->DeltaPhi1: " << ntuple->DeltaPhi1clean << endl;
+    cout << "ntuple->DeltaPhi2: " << ntuple->DeltaPhi2clean << endl;
+    cout << "ntuple->DeltaPhi3: " << ntuple->DeltaPhi3clean << endl;
+    cout << "ntuple->DeltaPhi4: " << ntuple->DeltaPhi4clean << endl;
     */
-    return ( ntuple->MET > 200.             &&
-             ntuple->HT > 600.                         &&
-             numAK8jetsNoPhoton>=2 && 
-             ntuple->JetsAK8->at(leadingJetNoPhoton).Pt() > 300. && 
-             ntuple->JetsAK8_prunedMass->at(leadingJetNoPhoton) > 50. && 
-             ntuple->JetsAK8_prunedMass->at(leadingJetNoPhoton) < 250. && 
-             ntuple->JetsAK8->at(subleadingJetNoPhoton).Pt() > 300. &&
-             ntuple->JetsAK8_prunedMass->at(subleadingJetNoPhoton) > 50. && 
-             ntuple->JetsAK8_prunedMass->at(subleadingJetNoPhoton) < 250.&&
-             ntuple->DeltaPhi1>0.5 && 
-             ntuple->DeltaPhi2>0.5 &&
-             ntuple->DeltaPhi3>0.3 && 
-             ntuple->DeltaPhi4>0.3 &&
+
+    return ( ntuple->METclean > 200.             &&
+             ntuple->HTclean > 600.                         &&
+             ntuple->JetsAK8Clean->size()>=2 && 
+             ntuple->JetsAK8Clean->at(0).Pt() > 300. && 
+             ntuple->JetsAK8Clean_prunedMass->at(0) > 50. && 
+             ntuple->JetsAK8Clean_prunedMass->at(0) < 250. && 
+             ntuple->JetsAK8Clean->at(1).Pt() > 300. &&
+             ntuple->JetsAK8Clean_prunedMass->at(1) > 50. && 
+             ntuple->JetsAK8Clean_prunedMass->at(1) < 250.&&
+             ntuple->DeltaPhi1clean>0.5 && 
+             ntuple->DeltaPhi2clean>0.5 &&
+             ntuple->DeltaPhi3clean>0.3 && 
+             ntuple->DeltaPhi4clean>0.3 &&
              ntuple->HBHENoiseFilter==1 && 
              ntuple->HBHEIsoNoiseFilter==1 && 
              ntuple->eeBadScFilter==1 && 
