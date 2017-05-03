@@ -1,1 +1,0 @@
-g++ -g `root-config --cflags --glibs` -L $ROOTSYS/lib -lRooFit -lHtml -lMinuit -lRooFitCore -I$CMSSW_BASE/src/AnalysisTools/src/ -I$CMSSW_BASE/src/boostedHiggsHeppy/src/ -I$CMSSW_BASE/src/ $CMSSW_BASE/src/boostedHiggsHeppy/src/$1.cc -o $CMSSW_BASE/src/boostedHiggsHeppy/src/$1.exe
