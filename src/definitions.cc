@@ -23,6 +23,7 @@ template<typename ntupleType>void ntupleBranchStatus(ntupleType* ntuple){
   ntuple->fChain->SetBranchStatus("*",0);
   ntuple->fChain->SetBranchStatus("Muons",1);
   ntuple->fChain->SetBranchStatus("Electrons",1);
+  ntuple->fChain->SetBranchStatus("iso*Tracksclean",1);
   ntuple->fChain->SetBranchStatus("Photon*",1);
   ntuple->fChain->SetBranchStatus("DeltaPhi*",1);
 
@@ -56,7 +57,8 @@ template<typename ntupleType>void ntupleBranchStatus(ntupleType* ntuple){
   ntuple->fChain->SetBranchStatus("NJetsISR",1);
   ntuple->fChain->SetBranchStatus("madMinDeltaRStatus",1);
   ntuple->fChain->SetBranchStatus("madMinPhotonDeltaR",1);
-  
+
+  ntuple->fChain->SetBranchStatus("GenParticles*",1);
 }
 
 /***************************************************************/
@@ -76,7 +78,7 @@ template<typename ntupleType> int getNumGenHiggses(ntupleType* ntuple){
 template<typename ntupleType> int getNumGenZs(ntupleType* ntuple){
     int numZs=0;
     for( int i=0 ; i < ntuple->GenParticles->size() ; i++ ){
-        if( ntuple->GenParticles_PdgId->at(i) == 25 && 
+        if( ntuple->GenParticles_PdgId->at(i) == 23 && 
             ntuple->GenParticles_ParentId->at(i) == 1000023 && 
             ntuple->GenParticles_Status->at(i) == 22 )
             numZs++;    
@@ -86,19 +88,19 @@ template<typename ntupleType> int getNumGenZs(ntupleType* ntuple){
 
 template<typename ntupleType> bool genLevelHHcut(ntupleType* ntuple){
     int numHiggses=getNumGenHiggses(ntuple),numZs=getNumGenZs(ntuple);
-    if(numHiggses==2 and numZs==0) return true;
+    if(numHiggses==2 && numZs==0) return true;
     else return false;
 }
 
 template<typename ntupleType> bool genLevelZHcut(ntupleType* ntuple){
     int numHiggses=getNumGenHiggses(ntuple),numZs=getNumGenZs(ntuple);
-    if(numHiggses==1 and numZs==1) return true;
+    if(numHiggses==1 && numZs==1) return true;
     else return false;
 }
 
 template<typename ntupleType> bool genLevelZZcut(ntupleType* ntuple){
     int numHiggses=getNumGenHiggses(ntuple),numZs=getNumGenZs(ntuple);
-    if(numHiggses==0 and numZs==2) return true;
+    if(numHiggses==0 && numZs==2) return true;
     else return false;
 }
 
@@ -883,6 +885,11 @@ template<typename ntupleType> bool photonBaselineCut(ntupleType* ntuple){
              ntuple->DeltaPhi2clean>0.5 &&
              ntuple->DeltaPhi3clean>0.3 && 
              ntuple->DeltaPhi4clean>0.3 &&
+             ntuple->isoElectronTracksclean==0 &&
+             ntuple->isoMuonTracksclean == 0 && 
+             ntuple->isoPionTracksclean == 0 &&
+             ntuple->Electrons->size() == 0 &&
+             ntuple->Muons->size() == 0 && 
              ntuple->HBHENoiseFilter==1 && 
              ntuple->HBHEIsoNoiseFilter==1 && 
              ntuple->eeBadScFilter==1 && 
