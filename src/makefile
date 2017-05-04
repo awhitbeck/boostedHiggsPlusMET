@@ -3,7 +3,7 @@ CFLAGS=
 LIBS=`root-config --cflags --glibs` -L $(ROOTSYS)/lib -I$(ROOTSYS)/include
 ROOFITLIBS=-lRooFit -lHtml -lMinuit -lRooFitCore
 INCLUDES=-I$(CMSSW_BASE)/src/AnalysisTools/src/ -I$(CMSSW_BASE)/src/ -I$(CMSSW_BASE)/src/Analysis/btag/
-EXECS=flavorFit plotObs_photon_baseline plotObs_singleEleCR_baseline plotObs_photon_doubleHiggsTag plotObs_photon_antitag plotObs_lowDPhi_baseline plotObs_lowDPhi_antitag plotObs_lowDPhi_doubleHiggsTag plotObs_singleHiggsTag plotObs_doubleHiggsTag plotObs_antitag plotObs_baseline plotObs_singleMuCR_antitag plotObs_singleMuCR_singleHiggsTag plotObs_singleMuCR_doubleHiggsTag plotObs_singleMuCR_baseline baselineSkim singleMuCRSkim datacardInputs_MET datacardInputs_MET_BTag1_DeltaPhi12 cutFlow_HIggsinoOnly cutFlow NminusOne J1BB_NminusOne J2BB_NminusOne J1M_NminusOne J2M_NminusOne J1Pt_NminusOne J2Pt_NminusOne ALPHABET ALPHABET_photon plotObs_fastFullComp analyzeALPHABET analyzeRpassFail testBTagSF
+EXECS=flavorFit plotObs_photon_baseline plotObs_singleEleCR_baseline plotObs_photon_doubleHiggsTag plotObs_photon_antitag plotObs_lowDPhi_baseline plotObs_lowDPhi_antitag plotObs_lowDPhi_doubleHiggsTag plotObs_singleHiggsTag plotObs_doubleHiggsTag plotObs_antitag plotObs_baseline plotObs_singleMuCR_antitag plotObs_singleMuCR_singleHiggsTag plotObs_singleMuCR_doubleHiggsTag plotObs_singleMuCR_baseline baselineSkim singleMuCRSkim datacardInputs_MET datacardInputs_MET_BTag1_DeltaPhi12 cutFlow_HIggsinoOnly frankSynch cutFlow NminusOne J1BB_NminusOne J2BB_NminusOne J1M_NminusOne J2M_NminusOne J1Pt_NminusOne J2Pt_NminusOne ALPHABET ALPHABET_photon plotObs_fastFullComp analyzeALPHABET analyzeRpassFail testBTagSF
 $(EXECS):RA2bTree.cc definitions.cc skimSamples.cc plotterUtils.cc
 flavorFit:flavorFit.cc
 baselineSkim:sampleParser.cc selectBaseline.cc baselineSkim.cc
@@ -31,6 +31,7 @@ plotHiggsPt_TChiHH:plotHiggsPt_TChiHH.cc
 plotObs_doubleHiggsTag_HiggsinoOnly:plotObs_doubleHiggsTag_HiggsinoOnly.cc RA2bTree.cc skimSamplesHiggsinoOnly.cc
 cutFlow_HiggsinoOnly:cutFlow_HiggsinoOnly.cc RA2bTree.cc skimSamplesHiggsinoOnly.cc
 cutFlow:cutFlow.cc RA2bTree.cc skimSamples.cc
+frankSynch:frankSynch.cc RA2bTree.cc skimSamples.cc
 NminusOne:NminusOne.cc RA2bTree.cc skimSamples.cc
 J1Pt_NminusOne:J1Pt_NminusOne.cc RA2bTree.cc skimSamples.cc
 J2Pt_NminusOne:J2Pt_NminusOne.cc RA2bTree.cc skimSamples.cc
@@ -65,6 +66,8 @@ cutFlow_HiggsinoOnly:
 	$(CC) $(CFLAGS) $(LIBS) $(INCLUDES) cutFlow_HiggsinoOnly.cc -o ../bin/$@
 cutFlow:
 	$(CC) $(CFLAGS) $(LIBS) $(INCLUDES) cutFlow.cc -o ../bin/$@
+frankSynch:
+	$(CC) $(CFLAGS) $(LIBS) $(INCLUDES) frankSynch.cc -o ../bin/$@
 NminusOne:
 	$(CC) -g $(CFLAGS) $(LIBS) $(INCLUDES) NminusOne.cc -o ../bin/$@
 J1Pt_NminusOne:
