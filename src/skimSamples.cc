@@ -422,9 +422,9 @@ public :
             for( int i = 0 ; i < T5HH1000FilesNames.size() ; i++ ){
                 T5HH1000->Add(T5HH1000FilesNames[i]);
             }
-            signalNtuples.push_back(new RA2bTree(T5HH1000));
-            signalSampleName.push_back("T5HH1000");
-            sigLineColor.push_back(kRed);
+            //signalNtuples.push_back(new RA2bTree(T5HH1000));
+            //signalSampleName.push_back("T5HH1000");
+            //sigLineColor.push_back(kRed);
         }
 
         std::vector<TString> T5HH1900FilesNames;
@@ -443,9 +443,9 @@ T5HH1900FilesNames.push_back("root://cmseos.fnal.gov//store/user/fojensen/T5qqqq
             for( int i = 0 ; i < T5HH1900FilesNames.size() ; i++ ){
                 T5HH1900->Add(T5HH1900FilesNames[i]);
             }
-            signalNtuples.push_back(new RA2bTree(T5HH1900));
-            signalSampleName.push_back("T5HH1900");
-            sigLineColor.push_back(kRed);
+            //signalNtuples.push_back(new RA2bTree(T5HH1900));
+            //signalSampleName.push_back("T5HH1900");
+            //sigLineColor.push_back(kRed);
         }
 
         std::vector<TString> T5HH1700FilesNames;
