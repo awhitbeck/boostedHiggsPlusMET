@@ -106,7 +106,6 @@ int main(int argc, char** argv){
             if( iEvt % 1000000 == 0 ) cout << skims.sampleName[iSample] << ": " << iEvt << "/" << numEvents << endl;
             //if( iEvt > 100000 ) break;
             if(! baselineCut(ntuple) ) continue;
-            if(ntuple->DeltaPhi1<0.5 || ntuple->DeltaPhi2<0.5 || ntuple->DeltaPhi3<0.3 || ntuple->DeltaPhi4<0.3) continue;
             for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++ ){
                 plots[iPlot].fill(ntuple);
             }

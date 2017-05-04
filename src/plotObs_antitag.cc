@@ -106,7 +106,6 @@ int main(int argc, char** argv){
         for( int iEvt = 0 ; iEvt < numEvents ; iEvt++ ){
             ntuple->GetEntry(iEvt);
             if( iEvt % 1000000 == 0 ) cout << skims.sampleName[iSample] << ": " << iEvt << "/" << numEvents << endl;
-            //if( iEvt > 100000 ) break;
             if(! baselineCut(ntuple) ) continue;
             if(! antiTaggingLooseCut(ntuple) ) continue;
             for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++ ){
@@ -161,8 +160,8 @@ int main(int argc, char** argv){
     }
 
     TFile outputFile("antitagHistos.root","recreate");
-    TCanvas* can = new TCanvas("can","can",500,500);
     for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++){
+        TCanvas* can = new TCanvas("can","can",500,500);
         plots[iPlot].Draw(can,skims.ntuples,skims.signalNtuples,"../plots/plotObs_antitag_plots");
         plots[iPlot].Write();
     }
