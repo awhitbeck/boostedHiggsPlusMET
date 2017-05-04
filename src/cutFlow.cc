@@ -26,8 +26,6 @@ int main(int argc, char** argv){
   typedef bool(*cutFunc)(RA2bTree*);
   vector<cutFunc> cutFlow;
   vector<TString> cutName;
-  cutFlow.push_back(*FiltersCut<RA2bTree>);
-  cutName.push_back("Filters");
   cutFlow.push_back(*METHTCut<RA2bTree>);
   cutName.push_back("METHT");
   cutFlow.push_back(*DeltaPhi1Cut<RA2bTree>);
@@ -38,6 +36,8 @@ int main(int argc, char** argv){
   cutName.push_back("DeltaPhi3");
   cutFlow.push_back(*DeltaPhi4Cut<RA2bTree>);
   cutName.push_back("DeltaPhi4");
+  cutFlow.push_back(*FiltersCut<RA2bTree>);
+  cutName.push_back("Filters");
   cutFlow.push_back(*AK8MultCut<RA2bTree>);
   cutName.push_back("AK8Multiplicity");
   cutFlow.push_back(*AK8JetPtCut<RA2bTree>);
@@ -81,94 +81,89 @@ int main(int argc, char** argv){
   // background MC samples
   for( int iSample = 0 ; iSample < skims.ntuples.size() ; iSample++){
 
-    RA2bTree* ntuple = skims.ntuples[iSample];
+      RA2bTree* ntuple = skims.ntuples[iSample];
 
-    for( int iCut = 0 ; iCut < plots.size() ; iCut++){
-      for( int iPlot = 0 ; iPlot < plots[iCut].size() ; iPlot++){
-          plots[iCut][iPlot].addNtuple(ntuple,skims.sampleName[iSample]);
-          plots[iCut][iPlot].setFillColor(ntuple,skims.fillColor[iSample]);
-          plots[iCut][iPlot].dataHist=0;
+      for( int iCut = 0 ; iCut < plots.size() ; iCut++){
+          for( int iPlot = 0 ; iPlot < plots[iCut].size() ; iPlot++){
+              plots[iCut][iPlot].addNtuple(ntuple,skims.sampleName[iSample]);
+              plots[iCut][iPlot].setFillColor(ntuple,skims.fillColor[iSample]);
+              plots[iCut][iPlot].dataHist=0;
+          }
       }
-    }
 
-    int numEvents = ntuple->fChain->GetEntries();
-    ntupleBranchStatus<RA2bTree>(ntuple);
-    for( int iEvt = 0 ; iEvt < numEvents ; iEvt++ ){
-
-        if( skims.sampleName[iSample] != "TT" && iEvt > 1000 ) continue;
-      ntuple->GetEntry(iEvt);
-      if( iEvt % 100000 == 0 ) cout << skims.sampleName[iSample] << ": " << iEvt << "/" << numEvents << endl;
-      for( int iCut = 0 ; iCut < cutFlow.size() ; iCut++ ){
-	if( ! cutFlow[iCut](ntuple) ) break;
-	for( int iPlot = 0 ; iPlot < plots[iCut].size() ; iPlot++ ){
-        plots[iCut][iPlot].fill(ntuple,1.);
-	}
+      int numEvents = ntuple->fChain->GetEntries();
+      ntupleBranchStatus<RA2bTree>(ntuple);
+      for( int iEvt = 0 ; iEvt < numEvents ; iEvt++ ){
+          ntuple->GetEntry(iEvt);
+          if( iEvt % 100000 == 0 ) cout << skims.sampleName[iSample] << ": " << iEvt << "/" << numEvents << endl;
+          for( int iCut = 0 ; iCut < cutFlow.size() ; iCut++ ){
+              if( ! cutFlow[iCut](ntuple) ) break;
+              for( int iPlot = 0 ; iPlot < plots[iCut].size() ; iPlot++ ){
+                  plots[iCut][iPlot].fill(ntuple,lumi*ntuple->Weight*customPUweights(ntuple));
+              }
+          }
       }
-    }
   }
 
   // Signal samples
   for( int iSample = 0 ; iSample < skims.signalNtuples.size() ; iSample++){
 
-    RA2bTree* ntuple = skims.signalNtuples[iSample];
-    for( int iCut = 0 ; iCut < cutFlow.size() ; iCut++){
-      for( int iPlot = 0 ; iPlot < plots[iCut].size() ; iPlot++){
-	plots[iCut][iPlot].addSignalNtuple(ntuple,skims.signalSampleName[iSample]);
-	plots[iCut][iPlot].setLineColor(ntuple,skims.lineColor[iSample]);
+      RA2bTree* ntuple = skims.signalNtuples[iSample];
+      for( int iCut = 0 ; iCut < cutFlow.size() ; iCut++){
+          for( int iPlot = 0 ; iPlot < plots[iCut].size() ; iPlot++){
+              plots[iCut][iPlot].addSignalNtuple(ntuple,skims.signalSampleName[iSample]);
+              plots[iCut][iPlot].setLineColor(ntuple,skims.lineColor[iSample]);
+          }
       }
-    }
 
-    int numEvents = ntuple->fChain->GetEntries();
-    ntupleBranchStatus<RA2bTree>(ntuple);
-    for( int iEvt = 0 ; iEvt < numEvents ; iEvt++ ){
-        if( iEvt > 1000 ) continue;
-        ntuple->GetEntry(iEvt);
-        if( iEvt % 100000 == 0 ) cout << skims.signalSampleName[iSample] << ": " << iEvt << "/" << numEvents << endl;
-        if( !genLevelHHcut(ntuple) ) continue;
-        for( int iCut = 0 ; iCut < cutFlow.size() ; iCut++ ){
-            if( ! cutFlow[iCut](ntuple) ) break;
-            for( int iPlot = 0 ; iPlot < plots[iCut].size() ; iPlot++ ){
-                if( skims.signalSampleName[iSample] == "T5HH1300" )
-                    plots[iCut][iPlot].fillSignal(ntuple,lumi*0.0460525/102482.);
-                if( skims.signalSampleName[iSample] == "T5HH1700" )
-                    plots[iCut][iPlot].fillSignal(ntuple,lumi*0.00470323/103791.);
-            }
-        }
-    }
+      int numEvents = ntuple->fChain->GetEntries();
+      ntupleBranchStatus<RA2bTree>(ntuple);
+      for( int iEvt = 0 ; iEvt < numEvents ; iEvt++ ){
+          ntuple->GetEntry(iEvt);
+          if( iEvt % 100000 == 0 ) cout << skims.signalSampleName[iSample] << ": " << iEvt << "/" << numEvents << endl;
+          if( !genLevelHHcut(ntuple) ) continue;
+          for( int iCut = 0 ; iCut < cutFlow.size() ; iCut++ ){
+              if( ! cutFlow[iCut](ntuple) ) break;
+              for( int iPlot = 0 ; iPlot < plots[iCut].size() ; iPlot++ ){
+                  if( skims.signalSampleName[iSample] == "T5HH1300" )
+                      plots[iCut][iPlot].fillSignal(ntuple,lumi*0.0460525/102482.);
+                  if( skims.signalSampleName[iSample] == "T5HH1700" )
+                      plots[iCut][iPlot].fillSignal(ntuple,lumi*0.00470323/103791.);
+              }
+          }
+      }
   }
   
   /*
-  for( int iCut = 0 ; iCut < cutFlow.size() ; iCut++ ){
+    for( int iCut = 0 ; iCut < cutFlow.size() ; iCut++ ){
     for( int iPlot = 0 ; iPlot < plots[iCut].size() ; iPlot++){
-      TCanvas* can = new TCanvas("can","can",500,500);
-      plots[iCut][iPlot].DrawNoRatio(can,skims.ntuples,skims.signalNtuples,"../plots/cutFlow_plots");
+    TCanvas* can = new TCanvas("can","can",500,500);
+    plots[iCut][iPlot].DrawNoRatio(can,skims.ntuples,skims.signalNtuples,"../plots/cutFlow_plots");
     }
-  }
+    }
   */
 
+  cout << " & All Bkg. " << endl;
   for( int iSample = 0 ; iSample < skims.ntuples.size() ; iSample++){ 
-    cout << " & All Bkg. " << endl;
-    RA2bTree* ntuple = skims.ntuples[iSample];
-    cout << " & " << skims.sampleName[iSample] ; 
+      cout << " & " << skims.sampleName[iSample] ; 
   }
   for( int iSample = 0 ; iSample < skims.signalNtuples.size() ; iSample++){
-    RA2bTree* ntuple = skims.signalNtuples[iSample];
-    cout << " & " << skims.signalSampleName[iSample] ;
+      cout << " & " << skims.signalSampleName[iSample] ;
   }
   cout << endl;
   cout << "% ------------------------------------------------------------------" << endl;
   for( int iCut = 0 ; iCut < cutFlow.size() ; iCut++ ){
-    plots[iCut][0].buildSum();
-    cout << cutName[iCut] << " & " << plots[iCut][0].sum->Integral();
-    for( int iSample = 0 ; iSample < skims.ntuples.size() ; iSample++){ 
-      RA2bTree* ntuple = skims.ntuples[iSample];
-      cout << " & " << plots[iCut][0].histoMap[ntuple]->Integral() ;
-    }
-    for( int iSample = 0 ; iSample < skims.signalNtuples.size() ; iSample++){
-      RA2bTree* ntuple = skims.signalNtuples[iSample];
-      cout << " & " << plots[iCut][0].signalHistoMap[ntuple]->Integral() ;
-    }
-    cout << endl;
+      plots[iCut][0].buildSum();
+      cout << cutName[iCut] << " & " << plots[iCut][0].sum->Integral();
+      for( int iSample = 0 ; iSample < skims.ntuples.size() ; iSample++){ 
+          RA2bTree* ntuple = skims.ntuples[iSample];
+          cout << " & " << plots[iCut][0].histoMap[ntuple]->Integral();
+      }
+      for( int iSample = 0 ; iSample < skims.signalNtuples.size() ; iSample++){
+          RA2bTree* ntuple = skims.signalNtuples[iSample];
+          cout << " & " << plots[iCut][0].signalHistoMap[ntuple]->Integral();
+      }
+      cout << "\\\\ \\hline" << endl;
   }
 
 }
