@@ -13,10 +13,7 @@
 
 using namespace std;
 
-//double lumi=9200.;
-//double lumi=15000.;
-//double lumi=40000.;
-double lumi=36300.;
+double lumi=35862.824;
 
 template <typename ntupleType> class plot{
 
@@ -221,7 +218,7 @@ public:
         if( histoMap.size() ){
 
             buildSum();
-            max = sum->GetMaximum(); 
+            max = sum->GetMaximum()*2.0; 
 
             if( normalizeMCtoData )
                 buildStack(ntuples,dataHist->Integral()/sum->Integral());
@@ -276,7 +273,8 @@ public:
         can->RedrawAxis();
         can->GetFrame()->Draw();
 
-        TLegend* leg = new TLegend(0.8,.6,.9,.9);
+        TLegend* leg = new TLegend(0.3,.8,.9,.9);
+        leg->SetNColumns(5);
         leg->SetBorderSize(0);
         leg->SetFillColor(0);
         for(int iSample = 0 ; iSample < ntuples.size() ; iSample++){
