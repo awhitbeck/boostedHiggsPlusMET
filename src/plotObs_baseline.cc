@@ -118,7 +118,7 @@ int main(int argc, char** argv){
         RA2bTree* ntuple = skims.signalNtuples[iSample];
         for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++){
             plots[iPlot].addSignalNtuple(ntuple,skims.signalSampleName[iSample]);
-            plots[iPlot].setLineColor(ntuple,skims.lineColor[iSample]);
+            plots[iPlot].setLineColor(ntuple,skims.sigLineColor[iSample]);
         }
 
         int numEvents = ntuple->fChain->GetEntries();
@@ -130,9 +130,9 @@ int main(int argc, char** argv){
             if( !genLevelHHcut(ntuple) ) continue;
             for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++){
                 if( skims.signalSampleName[iSample] == "T5HH1300" )
-                    plots[iPlot].fillSignal(ntuple,lumi/0.0460525/102482.);
+                    plots[iPlot].fillSignal(ntuple,lumi*0.0460525/102482.);
                 if( skims.signalSampleName[iSample] == "T5HH1700" )
-                    plots[iPlot].fillSignal(ntuple,lumi/0.00470323/103791.);
+                    plots[iPlot].fillSignal(ntuple,lumi*0.00470323/103791.);
             }
         }
     }
