@@ -335,7 +335,7 @@ public :
    Double_t        PmssmId;
    Double_t        puSysDown;
    Double_t        puSysUp;
-   Double_t        puWeight;
+   Double_t        puWeightNew;
    vector<double>  *ScaleWeights;
    vector<TLorentzVector> *SoftJets;
    vector<double>  *SoftJets_bDiscriminatorCSV;
@@ -681,7 +681,7 @@ public :
    TBranch        *b_PmssmId;   //!
    TBranch        *b_puSysDown;   //!
    TBranch        *b_puSysUp;   //!
-   TBranch        *b_puWeight;   //!
+   TBranch        *b_puWeightNew;   //!
    TBranch        *b_ScaleWeights;   //!
    TBranch        *b_SoftJets;   //!
    TBranch        *b_SoftJets_bDiscriminatorCSV;   //!
@@ -1313,7 +1313,7 @@ void RA2bTree::Init(TTree *tree)
    fChain->SetBranchAddress("PmssmId", &PmssmId, &b_PmssmId);
    fChain->SetBranchAddress("puSysDown", &puSysDown, &b_puSysDown);
    fChain->SetBranchAddress("puSysUp", &puSysUp, &b_puSysUp);
-   fChain->SetBranchAddress("puWeight", &puWeight, &b_puWeight);
+   fChain->SetBranchAddress("puWeightNew", &puWeightNew, &b_puWeightNew);
    fChain->SetBranchAddress("ScaleWeights", &ScaleWeights, &b_ScaleWeights);
    fChain->SetBranchAddress("SoftJets", &SoftJets, &b_SoftJets);
    fChain->SetBranchAddress("SoftJets_bDiscriminatorCSV", &SoftJets_bDiscriminatorCSV, &b_SoftJets_bDiscriminatorCSV);
