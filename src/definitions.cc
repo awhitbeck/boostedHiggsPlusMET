@@ -23,7 +23,9 @@ template<typename ntupleType>void ntupleBranchStatus(ntupleType* ntuple){
   ntuple->fChain->SetBranchStatus("*",0);
   ntuple->fChain->SetBranchStatus("Muons",1);
   ntuple->fChain->SetBranchStatus("Electrons",1);
-  ntuple->fChain->SetBranchStatus("iso*Tracksclean",1);
+  ntuple->fChain->SetBranchStatus("isoElectronTracksclean",1);
+  ntuple->fChain->SetBranchStatus("isoMuonTracksclean",1);
+  ntuple->fChain->SetBranchStatus("isoPionTracksclean",1);
   ntuple->fChain->SetBranchStatus("Photon*",1);
   ntuple->fChain->SetBranchStatus("DeltaPhi*",1);
 
@@ -42,7 +44,8 @@ template<typename ntupleType>void ntupleBranchStatus(ntupleType* ntuple){
   ntuple->fChain->SetBranchStatus("JetsAK8*",1);
   ntuple->fChain->SetBranchStatus("Jets*",1);
   ntuple->fChain->SetBranchStatus("Weight",1);  
-  ntuple->fChain->SetBranchStatus("puWeight",1);  
+  ntuple->fChain->SetBranchStatus("puWeightNew",1);  
+  ntuple->fChain->SetBranchStatus("TrueNumInteractions",1);  
   ntuple->fChain->SetBranchStatus("TriggerPass",1);  
   ntuple->fChain->SetBranchStatus("HBHENoiseFilter",1);
   ntuple->fChain->SetBranchStatus("HBHEIsoNoiseFilter",1);
@@ -52,7 +55,7 @@ template<typename ntupleType>void ntupleBranchStatus(ntupleType* ntuple){
   ntuple->fChain->SetBranchStatus("BadChargedCandidateFilter",1);
   ntuple->fChain->SetBranchStatus("CaloMET",1);
   ntuple->fChain->SetBranchStatus("NVtx",1);
-  ntuple->fChain->SetBranchStatus("JetID",1);
+  ntuple->fChain->SetBranchStatus("JetID*",1);
   ntuple->fChain->SetBranchStatus("madHT",1);
   ntuple->fChain->SetBranchStatus("NJetsISR",1);
   ntuple->fChain->SetBranchStatus("madMinDeltaRStatus",1);
@@ -844,35 +847,11 @@ template<typename ntupleType> void computeNumAK8jetsNoPhoton(ntupleType* ntuple,
 
 template<typename ntupleType> bool photonBaselineCut(ntupleType* ntuple){
 
-    if( ntuple->Photons->size() != 1 
-        || ntuple->Photons_fullID->size() != 1 
-        ){
-        return false ;
-    }
-    if( ! ( ntuple->Photons_fullID->at(0) == 1 &&
-            ntuple->Photons->at(0).Pt() > 200.
-            )
-        ){
-        return false;
-    }
-
-    if( ntuple->JetsAK8Clean->size() < 2 ) return false;
-
-    /*
-    cout << "MET: " << ntuple->METclean << endl;
-    cout << "HT: " << ntuple->HTclean << endl;
-    cout << "numAK8jets: " << ntuple->JetsAK8Clean->size() << endl;
-    cout << "ntuple->JetsAK8Clean->at(0).Pt(): " << ntuple->JetsAK8Clean->at(0).Pt() << endl;
-    cout << "ntuple->JetsAK8Clean_prunedMass->at(0): " << ntuple->JetsAK8Clean_prunedMass->at(0) << endl;
-    cout << "ntuple->JetsAK8Clean->at(1).Pt(): " << ntuple->JetsAK8Clean->at(1).Pt() << endl;
-    cout << "ntuple->JetsAK8Clean_prunedMass->at(1): " << ntuple->JetsAK8Clean_prunedMass->at(1) << endl;
-    cout << "ntuple->DeltaPhi1: " << ntuple->DeltaPhi1clean << endl;
-    cout << "ntuple->DeltaPhi2: " << ntuple->DeltaPhi2clean << endl;
-    cout << "ntuple->DeltaPhi3: " << ntuple->DeltaPhi3clean << endl;
-    cout << "ntuple->DeltaPhi4: " << ntuple->DeltaPhi4clean << endl;
-    */
-
-    return ( ntuple->METclean > 200.             &&
+    return ( ntuple->Photons->size()==1 &&
+             ntuple->Photons->at(0).Pt() > 200. && 
+             ntuple->Photons_fullID->size() == 1 && 
+             ntuple->Photons_fullID->at(0) == 1 &&
+             ntuple->METclean > 200.             &&
              ntuple->HTclean > 600.                         &&
              ntuple->JetsAK8Clean->size()>=2 && 
              ntuple->JetsAK8Clean->at(0).Pt() > 300. && 
@@ -895,7 +874,7 @@ template<typename ntupleType> bool photonBaselineCut(ntupleType* ntuple){
              ntuple->eeBadScFilter==1 && 
              ntuple->EcalDeadCellTriggerPrimitiveFilter == 1 && 
              ntuple->NVtx>0 && 
-             ntuple->JetID == 1);
+             ntuple->JetIDclean == 1);
 }
 
 template<typename ntupleType> bool singleHiggsTagLooseCut(ntupleType* ntuple ){ 
