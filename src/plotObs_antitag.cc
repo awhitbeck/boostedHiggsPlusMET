@@ -55,10 +55,10 @@ int main(int argc, char** argv){
     plot J1bbtag_Tau21plot(*fillLeadingBBtagJetTau21<RA2bTree>,"J1bbtag_Tau21_antitag","#tau_{21}",20,0.,1.);
     plot J2bbtag_Tau21plot(*fillSubLeadingBBtagJetTau21<RA2bTree>,"J2bbtag_Tau21_antitag","#tau_{21}",20,0.,1.);
 
-    plot J1pt_Ptplot(*fillLeadingJetPt<RA2bTree>,"J1pt_Pt_antitag","p_{T,J} [GeV]",40,300.,2300.);
-    plot J2pt_Ptplot(*fillSubLeadingJetPt<RA2bTree>,"J2pt_Pt_antitag","p_{T,J} [GeV]",40,300.,2300.);
-    plot J1bbtag_Ptplot(*fillLeadingBBtagJetPt<RA2bTree>,"J1bbtag_Pt_antitag","p_{T,J} [GeV]",40,300.,2300.);
-    plot J2bbtag_Ptplot(*fillSubLeadingBBtagJetPt<RA2bTree>,"J2bbtag_Pt_antitag","p_{T,J} [GeV]",40,300.,2300.);
+    plot J1pt_Ptplot(*fillLeadingJetPt<RA2bTree>,"J1pt_Pt_antitag","p_{T,J} [GeV]",50,300.,1300.);
+    plot J2pt_Ptplot(*fillSubLeadingJetPt<RA2bTree>,"J2pt_Pt_antitag","p_{T,J} [GeV]",50,300.,1300.);
+    plot J1bbtag_Ptplot(*fillLeadingBBtagJetPt<RA2bTree>,"J1bbtag_Pt_antitag","p_{T,J} [GeV]",50,300.,1300.);
+    plot J2bbtag_Ptplot(*fillSubLeadingBBtagJetPt<RA2bTree>,"J2bbtag_Pt_antitag","p_{T,J} [GeV]",50,300.,1300.);
 
     vector<plot> plots;
     plots.push_back(METplot);
@@ -162,7 +162,7 @@ int main(int argc, char** argv){
     TFile outputFile("antitagHistos.root","recreate");
     for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++){
         TCanvas* can = new TCanvas("can","can",500,500);
-        plots[iPlot].Draw(can,skims.ntuples,skims.signalNtuples,"../plots/plotObs_antitag_plots");
+        plots[iPlot].Draw(can,skims.ntuples,skims.signalNtuples,"../plots/plotObs_antitag_plots",0.1,2.0,true);
         plots[iPlot].Write();
     }
     outputFile.Close();
