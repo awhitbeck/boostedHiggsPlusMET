@@ -427,8 +427,8 @@ public:
         can->cd();
         topPad->cd();
 
-        //TCanvas* legCan = new TCanvas("legCan","legCan",500,500);
-        TLegend* leg = new TLegend(0.8,.6,.9,.9);
+        TLegend* leg = new TLegend(0.3,.8,.9,.9);
+        leg->SetNColumns(5);
         leg->SetBorderSize(0);
         leg->SetFillColor(0);
         for(int iSample = 0 ; iSample < ntuples.size() ; iSample++){
@@ -440,7 +440,6 @@ public:
         if( dataHist ) 
             leg->AddEntry(dataHist,"data","p");
         leg->Draw();
-        //legCan->SaveAs(dir+"/legend.png");
 
         can->cd();
         topPad->cd();
