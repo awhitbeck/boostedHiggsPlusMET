@@ -263,7 +263,7 @@ int main(int argc, char** argv){
       HTversusNJetsplots[iPlot].sum->Write();
       TCanvas* can = new TCanvas("can","can",500,500);
       can->SetTopMargin(0.05);
-      HTversusNJetsplots[iPlot].Draw(can,skims.ntuples,skims.signalNtuples,"../plots/plotObs_singleMuCR_baseline_plots",0.1,3.0);
+      HTversusNJetsplots[iPlot].Draw(can,skims.ntuples,skims.signalNtuples,"../plots/plotObs_singleMuCR_baseline_plots",0.1,2.0,true);
   }
   for( int iPlot = 0 ; iPlot < LeadingBBdiscVersusNbHad.size() ; iPlot++){
       LeadingBBdiscVersusNbHad[iPlot].buildSum();
@@ -271,7 +271,7 @@ int main(int argc, char** argv){
       LeadingBBdiscVersusNbHad[iPlot].sum->Write();
       TCanvas* can = new TCanvas("can","can",500,500);
       can->SetTopMargin(0.05);
-      LeadingBBdiscVersusNbHad[iPlot].Draw(can,skims.ntuples,skims.signalNtuples,"../plots/plotObs_singleMuCR_baseline_plots",0.1,3.0);
+      LeadingBBdiscVersusNbHad[iPlot].Draw(can,skims.ntuples,skims.signalNtuples,"../plots/plotObs_singleMuCR_baseline_plots",0.1,2.0,true);
   }
   for( int iPlot = 0 ; iPlot < SubLeadingBBdiscVersusNbHad.size() ; iPlot++){
       SubLeadingBBdiscVersusNbHad[iPlot].buildSum();
@@ -279,12 +279,12 @@ int main(int argc, char** argv){
       SubLeadingBBdiscVersusNbHad[iPlot].sum->Write();
       TCanvas* can = new TCanvas("can","can",500,500);
       can->SetTopMargin(0.05);
-      SubLeadingBBdiscVersusNbHad[iPlot].Draw(can,skims.ntuples,skims.signalNtuples,"../plots/plotObs_singleMuCR_baseline_plots",0.1,3.0);
+      SubLeadingBBdiscVersusNbHad[iPlot].Draw(can,skims.ntuples,skims.signalNtuples,"../plots/plotObs_singleMuCR_baseline_plots",0.1,2.0,true);
   }
   for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++){
       plots[iPlot].Write();
       TCanvas* can = new TCanvas("can","can",500,500);
       can->SetTopMargin(0.05);
-      plots[iPlot].Draw(can,skims.ntuples,skims.signalNtuples,"../plots/plotObs_singleMuCR_baseline_plots",0.1,3.0);
+      plots[iPlot].Draw(can,skims.ntuples,skims.signalNtuples,"../plots/plotObs_singleMuCR_baseline_plots",0.1,2.0,true);
   }
 }
