@@ -81,6 +81,7 @@ int main(int argc, char** argv){
         for( int iEvt = 0 ; iEvt < numEvents ; iEvt++ ){
             ntuple->GetEntry(iEvt);
             if( iEvt % 100000 == 0 ) cout << skims.sampleName[iSample] << ": " << iEvt << "/" << numEvents << endl;
+	      if( skims.sampleName[iSample] == "TTExtra" && ntuple->madHT>600. )continue;
             if( region == 0 ){
                 if(! baselineCut(ntuple) ) continue;
             }else if( region == 1){

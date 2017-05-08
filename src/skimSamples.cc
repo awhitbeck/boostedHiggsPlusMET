@@ -24,8 +24,8 @@ public :
     std::vector<TString> dataSampleName; 
     std::vector<int> fillColor, lineColor, sigLineColor;
 
-    enum region {kSignal,kPhoton,kSLm,kSLe,kNumRegions};
-    TString regionNames[kNumRegions]={"signal","photon","SLm","SLe"};
+    enum region {kSignal,kPhoton,kSLm,kSLe,kLowDPhi,kNumRegions};
+    TString regionNames[kNumRegions]={"signal","photon","SLm","SLe","LDP"};
 
     TString skimType,skimTypeLDP;
 
@@ -36,7 +36,7 @@ public :
 
         if( r == kSignal ){
             skimType=BASE_DIR+"tree_signal/";
-            skimTypeLDP=BASE_DIR+"tree_LDP/";
+            //skimTypeLDP=BASE_DIR+"tree_LDP/";
         }
         if( r == kPhoton ){
             skimType="root://cmseos.fnal.gov//store/user/fojensen/boostedSkims/";
@@ -50,7 +50,9 @@ public :
             skimType=BASE_DIR+"tree_SLe/";
             skimTypeLDP=BASE_DIR+"tree_SLeLDP/";
         }
-
+	if(r == kLowDPhi){
+		skimTypeLDP=BASE_DIR+"tree_LDP/";
+        }
         ///////////////////////////////////////////////////////////////////////
         // - - - - - - - - - - BACKGROUND INPUTS - - - - - - - - - - - - - - //
         ///////////////////////////////////////////////////////////////////////
@@ -126,8 +128,8 @@ public :
         OtherFileNames.push_back("tree_TTZToQQ.root");
         Other = new TChain("tree");
         for( int i = 0 ; i < OtherFileNames.size() ; i++ ){
-            Other->Add(skimType+"/"+OtherFileNames[i]);
-            Other->Add(skimTypeLDP+"/"+OtherFileNames[i]);
+            if(r==kSignal)Other->Add(skimType+"/"+OtherFileNames[i]);
+           if(r==kLowDPhi)Other->Add(skimTypeLDP+"/"+OtherFileNames[i]);
         }
         if( r == kSignal || r == kSLm || r == kSLe ){
             ntuples.push_back(new RA2bTree(Other));
@@ -135,7 +137,6 @@ public :
             fillColor.push_back(kRed+1);
             lineColor.push_back(1);
         }
-
         std::vector<TString> ZJetsFileNames;
         ZJetsFileNames.push_back("tree_ZJetsToNuNu_HT-100to200.root");
         ZJetsFileNames.push_back("tree_ZJetsToNuNu_HT-200to400.root");
@@ -146,16 +147,15 @@ public :
         ZJetsFileNames.push_back("tree_ZJetsToNuNu_HT-2500toInf.root");
         ZJets = new TChain("tree");
         for( int i = 0 ; i < ZJetsFileNames.size() ; i++ ){
-            ZJets->Add(skimType+"/"+ZJetsFileNames[i]);
-            ZJets->Add(skimTypeLDP+"/"+ZJetsFileNames[i]);
+            if(r==kSignal)ZJets->Add(skimType+"/"+ZJetsFileNames[i]);
+            if(r==kLowDPhi)ZJets->Add(skimTypeLDP+"/"+ZJetsFileNames[i]);
         }
-        if( r == kSignal ){ 
+        if( r == kSignal || r==kLowDPhi ){ 
             ntuples.push_back(new RA2bTree(ZJets));
             sampleName.push_back("ZJets");
             fillColor.push_back(kGreen+1);
             lineColor.push_back(1);
         }
-
         std::vector<TString> WJetsFileNames;
         WJetsFileNames.push_back("tree_WJetsToLNu_HT-100to200.root");
         WJetsFileNames.push_back("tree_WJetsToLNu_HT-1200to2500.root");
@@ -166,16 +166,15 @@ public :
         WJetsFileNames.push_back("tree_WJetsToLNu_HT-800to1200.root");
         WJets = new TChain("tree");
         for( int i = 0 ; i < WJetsFileNames.size() ; i++ ){
-            WJets->Add(skimType+"/"+WJetsFileNames[i]);
-            WJets->Add(skimTypeLDP+"/"+WJetsFileNames[i]);
+            if(r==kSignal)WJets->Add(skimType+"/"+WJetsFileNames[i]);
+            if(r==kLowDPhi)WJets->Add(skimTypeLDP+"/"+WJetsFileNames[i]);
         }
-        if( r == kSignal || r == kSLm || r == kSLe ){
+        if( r == kSignal || r == kSLm || r == kSLe || r==kLowDPhi ){
             ntuples.push_back(new RA2bTree(WJets));
             sampleName.push_back("WJets");
             fillColor.push_back(kBlue);
             lineColor.push_back(1);
         }
-
         std::vector<TString> SnglTFileNames;
         SnglTFileNames.push_back("tree_ST_s-channel.root");
         SnglTFileNames.push_back("tree_ST_t-channel_antitop.root");
@@ -184,49 +183,47 @@ public :
         SnglTFileNames.push_back("tree_ST_tW_top.root");
         SnglT = new TChain("tree");
         for( int i = 0 ; i < SnglTFileNames.size() ; i++ ) {
-            SnglT->Add(skimType+"/"+SnglTFileNames[i]);
-            SnglT->Add(skimTypeLDP+"/"+SnglTFileNames[i]);
+         if(r==kSignal)SnglT->Add(skimType+"/"+SnglTFileNames[i]);
+         if(r==kLowDPhi) SnglT->Add(skimTypeLDP+"/"+SnglTFileNames[i]);
         }
-        if( r == kSignal || r == kSLm || r == kSLe ){
+        if( r == kSignal || r == kSLm || r == kSLe  || r==kLowDPhi){
             ntuples.push_back(new RA2bTree(SnglT));
             sampleName.push_back("SnglT");
             fillColor.push_back(kOrange);
             lineColor.push_back(1);
         }
-
         std::vector<TString> TTFileNames;
-        TTFileNames.push_back("tree_TTJets_HT-600to800.root");
+        //TTFileNames.push_back("tree_TTJets.root");
         TTFileNames.push_back("tree_TTJets_HT-800to1200.root");
         TTFileNames.push_back("tree_TTJets_HT-1200to2500.root");
         TTFileNames.push_back("tree_TTJets_HT-2500toInf.root");
         TT = new TChain("tree");
         for( int i = 0 ; i < TTFileNames.size() ; i++ ){
-            TT->Add(skimType+"/"+TTFileNames[i]);
-            TT->Add(skimTypeLDP+"/"+TTFileNames[i]);
+           if(r==kSignal) TT->Add(skimType+"/"+TTFileNames[i]);
+           if(r==kLowDPhi)TT->Add(skimTypeLDP+"/"+TTFileNames[i]);
+
         }
-        if( r == kSignal || r == kSLm || r == kSLe ){
+        if( r == kSignal || r == kSLm || r == kSLe ||r==kLowDPhi ){
             ntuples.push_back(new RA2bTree(TT));
             sampleName.push_back("TT");
             fillColor.push_back(kCyan);
             lineColor.push_back(kCyan);
         }
-
         std::vector<TString> TTExtraFileNames;
         TTExtraFileNames.push_back("tree_TTJets_SingleLeptFromT.root");
         TTExtraFileNames.push_back("tree_TTJets_SingleLeptFromTbar.root");
         TTExtraFileNames.push_back("tree_TTJets_DiLept.root");        
         TTExtra = new TChain("tree");
         for( int i = 0 ; i < TTExtraFileNames.size() ; i++ ){
-            TTExtra->Add(skimType+"/"+TTExtraFileNames[i]);
-            TTExtra->Add(skimTypeLDP+"/"+TTExtraFileNames[i]);
+          if(r==kSignal)TTExtra->Add(skimType+"/"+TTExtraFileNames[i]);
+          if(r==kLowDPhi)TTExtra->Add(skimTypeLDP+"/"+TTExtraFileNames[i]);
         }
-        if( r == kSignal || r == kSLm || r == kSLe ){
+        if( r == kSignal || r == kSLm || r == kSLe || r==kLowDPhi ){
             ntuples.push_back(new RA2bTree(TTExtra));
             sampleName.push_back("TTExtra");
             fillColor.push_back(kCyan);
             lineColor.push_back(1);
         }
-
         std::vector<TString> DYFileNames;
         DYFileNames.push_back("tree_DYJetsToLL_M-50_HT-100to200.root");
         DYFileNames.push_back("tree_DYJetsToLL_M-50_HT-200to400.root");
@@ -235,7 +232,7 @@ public :
         DY = new TChain("tree");
         for( int i = 0 ; i < DYFileNames.size() ; i++ ){
             DY->Add(skimType+"/"+DYFileNames[i]);
-            DY->Add(skimTypeLDP+"/"+DYFileNames[i]);
+         //   DY->Add(skimTypeLDP+"/"+DYFileNames[i]);
         }
         //ntuples.push_back(new RA2bTree(DY));
         //sampleName.push_back("DY");
@@ -250,7 +247,7 @@ public :
         GJets0p4 = new TChain("tree");
         for( int i = 0 ; i < GJets0p4FileNames.size() ; i++ ){
             GJets0p4->Add(skimType+"/"+GJets0p4FileNames[i]);
-            GJets0p4->Add(skimTypeLDP+"/"+GJets0p4FileNames[i]);
+          //  GJets0p4->Add(skimTypeLDP+"/"+GJets0p4FileNames[i]);
         }
         //if( r == kPhoton || r== kPhotonLDP ){
         //ntuples.push_back(new RA2bTree(GJets0p4));
@@ -267,9 +264,10 @@ public :
         GJets = new TChain("tree");
         for( int i = 0 ; i < GJetsFileNames.size() ; i++ ){
             GJets->Add(skimType+"/"+GJetsFileNames[i]);
-            GJets->Add(skimTypeLDP+"/"+GJetsFileNames[i]);
+         //   GJets->Add(skimTypeLDP+"/"+GJetsFileNames[i]);
         }
-        /*if( r == kPhoton ){
+/*
+        if( r == kPhoton ){
             ntuples.push_back(new RA2bTree(GJets));
             sampleName.push_back("GJets");
             fillColor.push_back(kGreen);
@@ -287,10 +285,10 @@ public :
         QCDFileNames.push_back("tree_QCD_HT-2000toInf.root");
         QCD = new TChain("tree");
         for( int i = 0 ; i < QCDFileNames.size() ; i++ ){
-            QCD->Add(skimType+"/"+QCDFileNames[i]);
-            QCD->Add(skimTypeLDP+"/"+QCDFileNames[i]);
+            if(r==kSignal)QCD->Add(skimType+"/"+QCDFileNames[i]);
+            if(r==kLowDPhi)QCD->Add(skimTypeLDP+"/"+QCDFileNames[i]);
         }
-        if( r == kSignal /*|| r == kPhoton*/ ){
+        if( r == kSignal || r == kLowDPhi ){
             ntuples.push_back(new RA2bTree(QCD));
             sampleName.push_back("QCD");
             fillColor.push_back(kGray);
@@ -303,6 +301,15 @@ public :
         ////////////////////////////////////////////////////////////
 
         std::vector<TString> HTMHTFileNames;
+        HTMHTFileNames.push_back("tree_JetHT_re2016B.root");
+        HTMHTFileNames.push_back("tree_JetHT_re2016C.root");
+        HTMHTFileNames.push_back("tree_JetHT_re2016D.root");
+        HTMHTFileNames.push_back("tree_JetHT_re2016E.root");
+        HTMHTFileNames.push_back("tree_JetHT_re2016F.root");
+        HTMHTFileNames.push_back("tree_JetHT_re2016G.root");
+        HTMHTFileNames.push_back("tree_JetHT_re2016H2.root");
+        HTMHTFileNames.push_back("tree_JetHT_re2016H3.root");
+/*
         HTMHTFileNames.push_back("tree_HTMHT_re2016B.root");
         HTMHTFileNames.push_back("tree_HTMHT_re2016C.root");
         HTMHTFileNames.push_back("tree_HTMHT_re2016D.root");
@@ -311,11 +318,12 @@ public :
         HTMHTFileNames.push_back("tree_HTMHT_re2016G.root");
         HTMHTFileNames.push_back("tree_HTMHT_re2016H2.root");
         HTMHTFileNames.push_back("tree_HTMHT_re2016H3.root");
-        if( r == kSignal ){
+*/
+        if( r == kSignal || r==kLowDPhi ){
             data = new TChain("tree");
             for( int i = 0 ; i < HTMHTFileNames.size() ; i++ ){
-                data->Add(skimType+"/"+HTMHTFileNames[i]);
-                data->Add(skimTypeLDP+"/"+HTMHTFileNames[i]);
+                if(r==kSignal)data->Add(skimType+"/"+HTMHTFileNames[i]);
+		if(r==kLowDPhi)data->Add(skimTypeLDP+"/"+HTMHTFileNames[i]);
             }    
             dataNtuple = new RA2bTree(data); 
         }
@@ -332,7 +340,7 @@ public :
             data = new TChain("tree");
             for( int i = 0 ; i < SingleElectronNames.size() ; i++ ){
                 data->Add(skimType+"/"+SingleElectronNames[i]);
-                data->Add(skimTypeLDP+"/"+SingleElectronNames[i]);
+              //  data->Add(skimTypeLDP+"/"+SingleElectronNames[i]);
             }
             dataNtuple = new RA2bTree(data);
         }
@@ -350,7 +358,7 @@ public :
             data = new TChain("tree");
             for( int i = 0 ; i < SingleMuonNames.size() ; i++ ){
                 data->Add(skimType+"/"+SingleMuonNames[i]);
-                data->Add(skimTypeLDP+"/"+SingleMuonNames[i]);
+           //     data->Add(skimTypeLDP+"/"+SingleMuonNames[i]);
             }
             dataNtuple = new RA2bTree(data);
         }
@@ -422,9 +430,9 @@ public :
             for( int i = 0 ; i < T5HH1000FilesNames.size() ; i++ ){
                 T5HH1000->Add(T5HH1000FilesNames[i]);
             }
-            //signalNtuples.push_back(new RA2bTree(T5HH1000));
-            //signalSampleName.push_back("T5HH1000");
-            //sigLineColor.push_back(kRed);
+            signalNtuples.push_back(new RA2bTree(T5HH1000));
+            signalSampleName.push_back("T5HH1000");
+            sigLineColor.push_back(kRed);
         }
 
         std::vector<TString> T5HH1900FilesNames;
@@ -443,9 +451,9 @@ T5HH1900FilesNames.push_back("root://cmseos.fnal.gov//store/user/fojensen/T5qqqq
             for( int i = 0 ; i < T5HH1900FilesNames.size() ; i++ ){
                 T5HH1900->Add(T5HH1900FilesNames[i]);
             }
-            //signalNtuples.push_back(new RA2bTree(T5HH1900));
-            //signalSampleName.push_back("T5HH1900");
-            //sigLineColor.push_back(kRed);
+            signalNtuples.push_back(new RA2bTree(T5HH1900));
+            signalSampleName.push_back("T5HH1900");
+            sigLineColor.push_back(kRed);
         }
 
         std::vector<TString> T5HH1700FilesNames;
