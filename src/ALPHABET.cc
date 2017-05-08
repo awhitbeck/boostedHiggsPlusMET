@@ -76,6 +76,8 @@ int main(int argc, char** argv){
 
         int numEvents = ntuple->fChain->GetEntries();
         ntupleBranchStatus<RA2bTree>(ntuple);
+        int bin = -1;
+        double weight=0.;
         for( int iEvt = 0 ; iEvt < numEvents ; iEvt++ ){
             ntuple->GetEntry(iEvt);
             if( iEvt % 100000 == 0 ) cout << skims.sampleName[iSample] << ": " << iEvt << "/" << numEvents << endl;
@@ -88,7 +90,10 @@ int main(int argc, char** argv){
             }else if( region == 3){ 
                 if(! lowDphiBaselineCut(ntuple) ) continue;
             }
-            int bin = -1;
+            bin = -1;
+            weight = ntuple->Weight*lumi*customPUweights(ntuple);
+            if( skims.sampleName[iSample] == "TTExtra" || skims.sampleName[iSample] == "TTJets" )
+                weight *= ISRweights(ntuple);
             for( int iBin = 0 ; iBin < numMETbins ; iBin++ ){
                 if( ntuple->MET > lowestMET ){
                     if( ntuple->MET > numMETbins*(binWidth-1)+lowestMET )
@@ -103,27 +108,27 @@ int main(int argc, char** argv){
                 double jetMass1 = fillLeadingJetMass(ntuple);
                 double jetMass2 = fillSubLeadingJetMass(ntuple);
                 if( ( jetMass1 > 85 && jetMass1 < 135 ) /*&& ( jetMass2 > 85 && jetMass2 < 135 )*/ ){
-                    plots[bin][4].fill(ntuple);
+                    plots[bin][4].fill(ntuple,weight);
                 }else /*if( ( ( jetMass1 > 50 && jetMass1 < 85 ) || ( jetMass1 > 135 && jetMass1 < 250 ) ) !=  ( ( jetMass2 > 50 && jetMass2 < 85 ) || ( jetMass2 > 135 && jetMass2 < 250 ) ) )*/{ 
-                    plots[bin][5].fill(ntuple);
+                    plots[bin][5].fill(ntuple,weight);
                 }
             }else{
                 if( singleHiggsTagLooseCut(ntuple) ){
                     double jetMass1 = fillLeadingJetMass(ntuple);
                     double jetMass2 = fillSubLeadingJetMass(ntuple);
                     if( ( jetMass1 > 85 && jetMass1 < 135 ) /*&& ( jetMass2 > 85 && jetMass2 < 135 )*/ ){
-                        plots[bin][0].fill(ntuple);
+                        plots[bin][0].fill(ntuple,weight);
                     }else /*if( ( ( jetMass1 > 50 && jetMass1 < 85 ) || ( jetMass1 > 135 && jetMass1 < 250 ) ) !=  ( ( jetMass2 > 50 && jetMass2 < 85 ) || ( jetMass2 > 135 && jetMass2 < 250 ) ) )*/{ 
-                        plots[bin][1].fill(ntuple);
+                        plots[bin][1].fill(ntuple,weight);
                     }
                 }
                 if( antiTaggingLooseCut(ntuple) ){
                     double jetMass1 = fillLeadingJetMass(ntuple);
                     double jetMass2 = fillSubLeadingJetMass(ntuple);
                     if( ( jetMass1 > 85 && jetMass1 < 135 ) /*&& ( jetMass2 > 85 && jetMass2 < 135 )*/ ){
-                        plots[bin][2].fill(ntuple);
+                        plots[bin][2].fill(ntuple,weight);
                     }else /*if( ( ( jetMass1 > 50 && jetMass1 < 85 ) || ( jetMass1 > 135 && jetMass1 < 250 ) ) !=  ( ( jetMass2 > 50 && jetMass2 < 85 ) || ( jetMass2 > 135 && jetMass2 < 250 ) ) )*/{ 
-                        plots[bin][3].fill(ntuple);
+                        plots[bin][3].fill(ntuple,weight);
                     }
                 }
             }
@@ -147,12 +152,16 @@ int main(int argc, char** argv){
         if( iEvt % 100000 == 0 ) cout << "data: " << iEvt << "/" << numEvents << endl;
         if( region == 0 ){
             if(! baselineCut(ntuple) ) continue;
+            // need triggers
         }else if( region == 1){
             if(! singleMuBaselineCut(ntuple) ) continue;
+            // need triggers
         }else if( region == 2){
             if(! singleEleBaselineCut(ntuple) ) continue;
+            // need triggers
         }else if( region == 3 ){ 
             if(! lowDphiBaselineCut(ntuple) ) continue;
+            // need triggers 
         }
         int bin = -1;
         for( int iBin = 0 ; iBin < numMETbins ; iBin++ ){
