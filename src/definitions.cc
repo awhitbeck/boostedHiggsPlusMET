@@ -291,8 +291,28 @@ template<typename ntupleType> double fillDeltaPhi4(ntupleType* ntuple){
   return ntuple->DeltaPhi4;
 }
 
+template<typename ntupleType> double fillDeltaPhi1clean(ntupleType* ntuple){
+  return ntuple->DeltaPhi1clean;
+}
+
+template<typename ntupleType> double fillDeltaPhi2clean(ntupleType* ntuple){
+  return ntuple->DeltaPhi2clean;
+}
+
+template<typename ntupleType> double fillDeltaPhi3clean(ntupleType* ntuple){
+  return ntuple->DeltaPhi3clean;
+}
+
+template<typename ntupleType> double fillDeltaPhi4clean(ntupleType* ntuple){
+  return ntuple->DeltaPhi4clean;
+}
+
 template<typename ntupleType> double fillHT(ntupleType* ntuple){
   return ntuple->HT;
+}
+
+template<typename ntupleType> double fillHTclean(ntupleType* ntuple){
+  return ntuple->HTclean;
 }
 
 template<typename ntupleType> double fillMHT(ntupleType* ntuple){
@@ -303,12 +323,20 @@ template<typename ntupleType> double fillMET(ntupleType* ntuple){
   return ntuple->MET;
 }
 
+template<typename ntupleType> double fillMETclean(ntupleType* ntuple){
+  return ntuple->METclean;
+}
+
 template<typename ntupleType> double fillOne(ntupleType* ntuple){
   return 1.;
 }
 
 template<typename ntupleType> double fillNJets(ntupleType* ntuple){
   return ntuple->NJets;
+}
+
+template<typename ntupleType> double fillNJetsclean(ntupleType* ntuple){
+  return ntuple->NJetsclean;
 }
 
 template<typename ntupleType> double fillBTags(ntupleType* ntuple){
@@ -753,7 +781,7 @@ template<typename ntupleType> bool singleMuBaselineCut(ntupleType* ntuple){
     return ( ntuple->Muons->at(0).Pt()>25. &&
              MT < 100. &&
              ntuple->MET > 100.             &&
-             ntuple->HT > 300.                         &&
+             ntuple->HT > 600.                         &&
              ntuple->JetsAK8->size() >= 2 &&
              //muonLeadJetdR(ntuple) > 1.0 &&
              //muonSubleadJetdR(ntuple) > 1.0 &&
@@ -784,7 +812,7 @@ template<typename ntupleType> bool singleEleBaselineCut(ntupleType* ntuple){
     return ( ntuple->Electrons->at(0).Pt()>25. && 
              MT < 100. &&
              ntuple->MET > 100.             &&
-             ntuple->HT > 300.                         &&
+             ntuple->HT > 600.                         &&
              ntuple->JetsAK8->size() >= 2 &&
              ntuple->JetsAK8->at(0).Pt() > 300. && 
              ntuple->JetsAK8_prunedMass->at(0) > 50. && 
