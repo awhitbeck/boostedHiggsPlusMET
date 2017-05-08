@@ -24,7 +24,7 @@ int main(int argc, char** argv){
   skimSamples skims(skimSamples::kSLe);
   typedef plot<RA2bTree> plot;
 
-  plot METplot(*fillMET<RA2bTree>,"MET_singleEleCR_baseline","MET [GeV]",15,100.,1600.);
+  plot METplot(*fillMET<RA2bTree>,"MET_singleEleCR_baseline","MET [GeV]",16,100.,900.);
   plot HTplot(*fillHT<RA2bTree>,"HT_singleEleCR_baseline","H_{T} [GeV]",15,300,2800.);
   plot NJetsplot(*fillNJets<RA2bTree>,"NJets_singleEleCR_baseline","n_{j}",14,1.5,15.5);
   plot BTagsplot(*fillBTags<RA2bTree>,"BTags_singleEleCR_baseline","n_{b}",6,-0.5,5.5);
@@ -53,10 +53,10 @@ int main(int argc, char** argv){
   plot J1bbtag_Tau21plot(*fillLeadingBBtagJetTau21<RA2bTree>,"J1bbtag_Tau21_singleEleCR_baseline","#tau_{21}",20,0.,1.);
   plot J2bbtag_Tau21plot(*fillSubLeadingBBtagJetTau21<RA2bTree>,"J2bbtag_Tau21_singleEleCR_baseline","#tau_{21}",20,0.,1.);
 
-  plot J1pt_Ptplot(*fillLeadingJetPt<RA2bTree>,"J1pt_Pt_singleEleCR_baseline","p_{T,J} [GeV]",40,300.,2300.);
-  plot J2pt_Ptplot(*fillSubLeadingJetPt<RA2bTree>,"J2pt_Pt_singleEleCR_baseline","p_{T,J} [GeV]",40,300.,2300.);
-  plot J1bbtag_Ptplot(*fillLeadingBBtagJetPt<RA2bTree>,"J1bbtag_Pt_singleEleCR_baseline","p_{T,J} [GeV]",40,300.,2300.);
-  plot J2bbtag_Ptplot(*fillSubLeadingBBtagJetPt<RA2bTree>,"J2bbtag_Pt_singleEleCR_baseline","p_{T,J} [GeV]",40,300.,2300.);
+  plot J1pt_Ptplot(*fillLeadingJetPt<RA2bTree>,"J1pt_Pt_singleEleCR_baseline","p_{T,J} [GeV]",50,300.,1300.);
+  plot J2pt_Ptplot(*fillSubLeadingJetPt<RA2bTree>,"J2pt_Pt_singleEleCR_baseline","p_{T,J} [GeV]",50,300.,900.);
+  plot J1bbtag_Ptplot(*fillLeadingBBtagJetPt<RA2bTree>,"J1bbtag_Pt_singleEleCR_baseline","p_{T,J} [GeV]",50,300.,1300.);
+  plot J2bbtag_Ptplot(*fillSubLeadingBBtagJetPt<RA2bTree>,"J2bbtag_Pt_singleEleCR_baseline","p_{T,J} [GeV]",50,300.,1300.);
 
   plot J1pt_JetFlavorPlot(*fillLeadingJetFlavor<RA2bTree>,"J1pt_JetFlavorPlot","Jet Flavor",22,0.5,21.5);
   plot J2pt_JetFlavorPlot(*fillSubLeadingJetFlavor<RA2bTree>,"J2pt_JetFlavorPlot","Jet Flavor",22,0.5,21.5);
@@ -109,13 +109,17 @@ int main(int argc, char** argv){
 
     int numEvents = ntuple->fChain->GetEntries();
     ntupleBranchStatus<RA2bTree>(ntuple);
+    double weight=0.;
     for( int iEvt = 0 ; iEvt < numEvents ; iEvt++ ){
       ntuple->GetEntry(iEvt);
       if( iEvt % 1000000 == 0 ) cout << skims.sampleName[iSample] << ": " << iEvt << "/" << numEvents << endl;
-      //if( iEvt > 100000 ) break;
+      if( skims.sampleName[iSample] == "TTExtra" && ntuple->madHT>600. )continue;      
       if(! singleEleBaselineCut(ntuple) ) continue;
       for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++ ){
-          plots[iPlot].fill(ntuple,ntuple->Weight*lumi*ntuple->puWeight);
+          weight = ntuple->Weight*lumi*customPUweights(ntuple);
+          if( skims.sampleName[iSample] == "TTExtra" || skims.sampleName[iSample] == "TTJets" )
+              weight *= ISRweights(ntuple);
+          plots[iPlot].fill(ntuple,weight);
       }
     }
   }
@@ -162,10 +166,9 @@ int main(int argc, char** argv){
       }
   }
   
-
   for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++){
       TCanvas* can = new TCanvas("can","can",500,500);
       can->SetTopMargin(0.05);
-      plots[iPlot].Draw(can,skims.ntuples,skims.signalNtuples,"../plots/plotObs_singleEleCR_baseline_plots");
+      plots[iPlot].Draw(can,skims.ntuples,skims.signalNtuples,"../plots/plotObs_singleEleCR_baseline_plots",0.1,2.0,true);
   }
 }
