@@ -24,11 +24,10 @@ int main(int argc, char** argv){
   skimSamples skims(skimSamples::kPhoton);
   typedef plot<RA2bTree> plot;
 
-  plot METplot(*fillMET<RA2bTree>,"MET_photon_baseline","MET [GeV]",15,100.,1600.);
-  plot HTplot(*fillHT<RA2bTree>,"HT_photon_baseline","H_{T} [GeV]",15,300,2800.);
-  plot NJetsplot(*fillNJets<RA2bTree>,"NJets_photon_baseline","n_{j}",14,1.5,15.5);
+  plot METplot(*fillMETclean<RA2bTree>,"MET_photon_baseline","MET [GeV]",15,100.,1600.);
+  plot HTplot(*fillHTclean<RA2bTree>,"HT_photon_baseline","H_{T} [GeV]",15,300,2800.);
+  plot NJetsplot(*fillNJetsclean<RA2bTree>,"NJets_photon_baseline","n_{j}",14,1.5,15.5);
   plot BTagsplot(*fillBTags<RA2bTree>,"BTags_photon_baseline","n_{b}",6,-0.5,5.5);
-  plot Binsplot(*fillAnalysisBins<RA2bTree>,"AnalysisBins_photon_baseline","i^th Bin",8,0.5,8.5);
 
   plot J2NbhadronPlot(*fillLeadingNbHadrons<RA2bTree>,"J1pt_numBhadrons_baseline","n_{b-had}",5,-0.5,4.5);
   plot J1NbhadronPlot(*fillSubLeadingNbHadrons<RA2bTree>,"J2pt_numBhadrons_baseline","n_{b-had}",5,-0.5,4.5);
@@ -151,7 +150,7 @@ int main(int argc, char** argv){
       if( skims.sampleName[iSample] == "GJets" && ntuple->Photons_nonPrompt->at(0) == 1 ) continue;
 
       for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++ ){
-          iBin=plots[iPlot].fill(ntuple,ntuple->Weight*lumi*ntuple->puWeight);
+          iBin=plots[iPlot].fill(ntuple,ntuple->Weight*lumi*customPUweights(ntuple));
           if( plots[iPlot].label == "NJets_singleMuCR_baseline" && iBin>0 && iBin <=14 )
               HTversusNJetsplots[iBin-1].fill(ntuple,ntuple->Weight*lumi*customPUweights(ntuple));
           if( plots[iPlot].label == "J1pt_numBhadrons_baseline" && iBin > 0 && iBin <= 5 ){
@@ -180,7 +179,7 @@ int main(int argc, char** argv){
       if( iEvt % 1000000 == 0 ) cout << skims.signalSampleName[iSample] << ": " << iEvt << "/" << numEvents << endl;
       if(! singleMuBaselineCut(ntuple) ) continue;
       for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++){
-	plots[iPlot].fillSignal(ntuple,ntuple->Weight*lumi*ntuple->puWeight);
+	plots[iPlot].fillSignal(ntuple,ntuple->Weight*lumi);
       }
     }
   }
