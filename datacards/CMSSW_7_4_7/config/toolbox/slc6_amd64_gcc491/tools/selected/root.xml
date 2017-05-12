@@ -1,0 +1,4 @@
+<tool name="root" version="6.02.00-odfocd5">
+  <info url="http://root.cern.ch/root/"/>
+  <use name="rootphysics"/>
+</tool>
