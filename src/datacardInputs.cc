@@ -12,6 +12,7 @@
 #include "plotterUtils.cc"
 #include "skimSamples.cc"
 #include "definitions.cc"
+#include "TriggerEfficiencySextet.cp"
 #include "RA2bTree.cc"
 using namespace std;
 
@@ -119,20 +120,23 @@ int main(int argc, char** argv){
       if(!baselineCut(ntuple) ) continue;
 	//std::cout<<"Gen Higgs Content "<<getNumGenHiggses(ntuple)<<std::endl;
 //      if(getNumGenHiggses(ntuple)!=2) continue;
-	float MET=ntuple->MET;
+      float MET=ntuple->MET;
+      std::vector<double> EfficiencyCenterUpDown = Eff_MetMhtSextetReal_CenterUpDown(ntuple->HT, ntuple->MHT, ntuple->NJets);
+      float trigWeight=EfficiencyCenterUpDown[0];
+      float weight = ntuple->Weight*lumi*customPUweights(ntuple)*trigWeight;	
       if( doubleTaggingLooseCut(ntuple) ){
                 double jetMass1 = fillLeadingJetMass(ntuple);
                 double jetMass2 = fillSubLeadingJetMass(ntuple);
                 if( ( jetMass1 > 85 && jetMass1 < 135 ) /*&& ( jetMass2 > 85 && jetMass2 < 135 )*/ ){
-		 if(getNumGenHiggses(ntuple)==2)AnalysisMETT5HH_doubletagSR->Fill(MET);
-		 if(getNumGenHiggses(ntuple)==1)AnalysisMETT5HZ_doubletagSR->Fill(MET);  
-		 if(getNumGenHiggses(ntuple)==0)AnalysisMETT5ZZ_doubletagSR->Fill(MET); 
+		 if(getNumGenHiggses(ntuple)==2)AnalysisMETT5HH_doubletagSR->Fill(MET,weight);
+		 if(getNumGenHiggses(ntuple)==1)AnalysisMETT5HZ_doubletagSR->Fill(MET,weight);  
+		 if(getNumGenHiggses(ntuple)==0)AnalysisMETT5ZZ_doubletagSR->Fill(MET,weight); 
                    // plots[bin][4].fill(ntuple);
                 }else /*if( ( ( jetMass1 > 50 && jetMass1 < 85 ) || ( jetMass1 > 135 && jetMass1 < 250 ) ) !=  ( ( jetMass2 > 50 && jetMass2 < 85 ) || ( jetMass2 > 135 && jetMass2 < 250 ) ) )*/{ 
                  //   plots[bin][5].fill(ntuple);
-		 if(getNumGenHiggses(ntuple)==2)AnalysisMETT5HH_doubletagSB->Fill(MET);
-		 if(getNumGenHiggses(ntuple)==1)AnalysisMETT5HZ_doubletagSB->Fill(MET);  
-		 if(getNumGenHiggses(ntuple)==0)AnalysisMETT5ZZ_doubletagSB->Fill(MET); 
+		 if(getNumGenHiggses(ntuple)==2)AnalysisMETT5HH_doubletagSB->Fill(MET,weight);
+		 if(getNumGenHiggses(ntuple)==1)AnalysisMETT5HZ_doubletagSB->Fill(MET,weight);  
+		 if(getNumGenHiggses(ntuple)==0)AnalysisMETT5ZZ_doubletagSB->Fill(MET,weight); 
 
                 }
             }else{
@@ -140,15 +144,15 @@ int main(int argc, char** argv){
                     double jetMass1 = fillLeadingJetMass(ntuple);
                     double jetMass2 = fillSubLeadingJetMass(ntuple);
                     if( ( jetMass1 > 85 && jetMass1 < 135 ) /*&& ( jetMass2 > 85 && jetMass2 < 135 )*/ ){
-		 		if(getNumGenHiggses(ntuple)==2)AnalysisMETT5HH_tagSR->Fill(MET);
-		 		if(getNumGenHiggses(ntuple)==1)AnalysisMETT5HZ_tagSR->Fill(MET);  
-		 		if(getNumGenHiggses(ntuple)==0)AnalysisMETT5ZZ_tagSR->Fill(MET); 
+		 		if(getNumGenHiggses(ntuple)==2)AnalysisMETT5HH_tagSR->Fill(MET,weight);
+		 		if(getNumGenHiggses(ntuple)==1)AnalysisMETT5HZ_tagSR->Fill(MET,weight);  
+		 		if(getNumGenHiggses(ntuple)==0)AnalysisMETT5ZZ_tagSR->Fill(MET,weight); 
                  //       plots[bin][0].fill(ntuple);
                     }else /*if( ( ( jetMass1 > 50 && jetMass1 < 85 ) || ( jetMass1 > 135 && jetMass1 < 250 ) ) !=  ( ( jetMass2 > 50 && jetMass2 < 85 ) || ( jetMass2 > 135 && jetMass2 < 250 ) ) )*/{ 
                    //     plots[bin][1].fill(ntuple);
-		 		if(getNumGenHiggses(ntuple)==2)AnalysisMETT5HH_tagSB->Fill(MET);
-		 		if(getNumGenHiggses(ntuple)==1)AnalysisMETT5HZ_tagSB->Fill(MET);  
-		 		if(getNumGenHiggses(ntuple)==0)AnalysisMETT5ZZ_tagSB->Fill(MET); 
+		 		if(getNumGenHiggses(ntuple)==2)AnalysisMETT5HH_tagSB->Fill(MET,weight);
+		 		if(getNumGenHiggses(ntuple)==1)AnalysisMETT5HZ_tagSB->Fill(MET,weight);  
+		 		if(getNumGenHiggses(ntuple)==0)AnalysisMETT5ZZ_tagSB->Fill(MET,weight); 
 
                     }
                 }
@@ -156,13 +160,13 @@ int main(int argc, char** argv){
                     double jetMass1 = fillLeadingJetMass(ntuple);
                     double jetMass2 = fillSubLeadingJetMass(ntuple);
                     if( ( jetMass1 > 85 && jetMass1 < 135 ) /*&& ( jetMass2 > 85 && jetMass2 < 135 )*/ ){
-                                if(getNumGenHiggses(ntuple)==2)AnalysisMETT5HH_antitagSR->Fill(MET);
-                                if(getNumGenHiggses(ntuple)==1)AnalysisMETT5HZ_antitagSR->Fill(MET);
-                                if(getNumGenHiggses(ntuple)==0)AnalysisMETT5ZZ_antitagSR->Fill(MET);	
+                                if(getNumGenHiggses(ntuple)==2)AnalysisMETT5HH_antitagSR->Fill(MET,weight);
+                                if(getNumGenHiggses(ntuple)==1)AnalysisMETT5HZ_antitagSR->Fill(MET,weight);
+                                if(getNumGenHiggses(ntuple)==0)AnalysisMETT5ZZ_antitagSR->Fill(MET,weight);	
                     }else /*if( ( ( jetMass1 > 50 && jetMass1 < 85 ) || ( jetMass1 > 135 && jetMass1 < 250 ) ) !=  ( ( jetMass2 > 50 && jetMass2 < 85 ) || ( jetMass2 > 135 && jetMass2 < 250 ) ) )*/{ 
-                                if(getNumGenHiggses(ntuple)==2)AnalysisMETT5HH_antitagSB->Fill(MET);
-                                if(getNumGenHiggses(ntuple)==1)AnalysisMETT5HZ_antitagSB->Fill(MET);
-                                if(getNumGenHiggses(ntuple)==0)AnalysisMETT5ZZ_antitagSB->Fill(MET);	
+                                if(getNumGenHiggses(ntuple)==2)AnalysisMETT5HH_antitagSB->Fill(MET,weight);
+                                if(getNumGenHiggses(ntuple)==1)AnalysisMETT5HZ_antitagSB->Fill(MET,weight);
+                                if(getNumGenHiggses(ntuple)==0)AnalysisMETT5ZZ_antitagSB->Fill(MET,weight);	
 
                     }
                 }
