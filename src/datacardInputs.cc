@@ -82,22 +82,117 @@ int main(int argc, char** argv){
 	plots.push_back(AnalysisMETBins_doubletagSB);
 }
   // background MC samples
-/*
   // Signal samples
   for( int iSample = 0 ; iSample < skims.signalNtuples.size() ; iSample++){
+	TH1D*AnalysisMETT5HH_tagSR=new TH1D("AnalysisMETT5HH_tagSR_"+skims.signalSampleName[iSample],"MET",3,METBins) ;
+	TH1D*AnalysisMETT5HH_antitagSR=new TH1D("AnalysisMETT5HH_antitagSR_"+skims.signalSampleName[iSample],"MET",3,METBins) ;
+	TH1D*AnalysisMETT5HH_tagSB=new TH1D("AnalysisMETT5HH_tagSB_"+skims.signalSampleName[iSample],"MET",3,METBins) ;
+	TH1D*AnalysisMETT5HH_antitagSB=new TH1D("AnalysisMETT5HH_antitagSB_"+skims.signalSampleName[iSample],"MET",3,METBins) ;
+	TH1D*AnalysisMETT5HH_doubletagSB=new TH1D("AnalysisMETT5HH_doubletagSB_"+skims.signalSampleName[iSample],"MET",3,METBins) ;
+	TH1D*AnalysisMETT5HH_doubletagSR=new TH1D("AnalysisMETT5HH_doubletagSR_"+skims.signalSampleName[iSample],"MET",3,METBins) ;
 
-    heppySkimTree* ntuple = skims.signalNtuples[iSample];
+	TH1D*AnalysisMETT5HZ_tagSR=new TH1D("AnalysisMETT5HZ_tagSR_"+skims.signalSampleName[iSample],"MET",3,METBins) ;
+	TH1D*AnalysisMETT5HZ_antitagSR=new TH1D("AnalysisMETT5HZ_antitagSR_"+skims.signalSampleName[iSample],"MET",3,METBins) ;
+	TH1D*AnalysisMETT5HZ_tagSB=new TH1D("AnalysisMETT5HZ_tagSB_"+skims.signalSampleName[iSample],"MET",3,METBins) ;
+	TH1D*AnalysisMETT5HZ_antitagSB=new TH1D("AnalysisMETT5HZ_antitagSB_"+skims.signalSampleName[iSample],"MET",3,METBins) ;
+	TH1D*AnalysisMETT5HZ_doubletagSB=new TH1D("AnalysisMETT5HZ_doubletagSB_"+skims.signalSampleName[iSample],"MET",3,METBins) ;
+	TH1D*AnalysisMETT5HZ_doubletagSR=new TH1D("AnalysisMETT5HZ_doubletagSR_"+skims.signalSampleName[iSample],"MET",3,METBins) ;
+
+	TH1D*AnalysisMETT5ZZ_tagSR=new TH1D("AnalysisMETT5ZZ_tagSR_"+skims.signalSampleName[iSample],"MET",3,METBins) ;
+	TH1D*AnalysisMETT5ZZ_antitagSR=new TH1D("AnalysisMETT5ZZ_antitagSR_"+skims.signalSampleName[iSample],"MET",3,METBins) ;
+	TH1D*AnalysisMETT5ZZ_tagSB=new TH1D("AnalysisMETT5ZZ_tagSB_"+skims.signalSampleName[iSample],"MET",3,METBins) ;
+	TH1D*AnalysisMETT5ZZ_antitagSB=new TH1D("AnalysisMETT5ZZ_antitagSB_"+skims.signalSampleName[iSample],"MET",3,METBins) ;
+	TH1D*AnalysisMETT5ZZ_doubletagSB=new TH1D("AnalysisMETT5ZZ_doubletagSB_"+skims.signalSampleName[iSample],"MET",3,METBins) ;
+	TH1D*AnalysisMETT5ZZ_doubletagSR=new TH1D("AnalysisMETT5ZZ_doubletagSR_"+skims.signalSampleName[iSample],"MET",3,METBins) ;
+      RA2bTree* ntuple = skims.signalNtuples[iSample];
+  //  heppySkimTree* ntuple = skims.signalNtuples[iSample];
+	/*
     for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++){
       plots[iPlot].addSignalNtuple(ntuple,skims.signalSampleName[iSample]);
       plots[iPlot].setLineColor(ntuple,skims.lineColor[iSample]);
     }
-
+	*/
     int numEvents = ntuple->fChain->GetEntries();
     for( int iEvt = 0 ; iEvt < numEvents ; iEvt++ ){
       ntuple->GetEntry(iEvt);
       if( iEvt % 1000000 == 0 ) cout << skims.signalSampleName[iSample] << ": " << iEvt << "/" << numEvents << endl;
       if(!baselineCut(ntuple) ) continue;
-      if(ntuple->nGenHiggsBoson!=2) continue;
+	//std::cout<<"Gen Higgs Content "<<getNumGenHiggses(ntuple)<<std::endl;
+//      if(getNumGenHiggses(ntuple)!=2) continue;
+	float MET=ntuple->MET;
+      if( doubleTaggingLooseCut(ntuple) ){
+                double jetMass1 = fillLeadingJetMass(ntuple);
+                double jetMass2 = fillSubLeadingJetMass(ntuple);
+                if( ( jetMass1 > 85 && jetMass1 < 135 ) /*&& ( jetMass2 > 85 && jetMass2 < 135 )*/ ){
+		 if(getNumGenHiggses(ntuple)==2)AnalysisMETT5HH_doubletagSR->Fill(MET);
+		 if(getNumGenHiggses(ntuple)==1)AnalysisMETT5HZ_doubletagSR->Fill(MET);  
+		 if(getNumGenHiggses(ntuple)==0)AnalysisMETT5ZZ_doubletagSR->Fill(MET); 
+                   // plots[bin][4].fill(ntuple);
+                }else /*if( ( ( jetMass1 > 50 && jetMass1 < 85 ) || ( jetMass1 > 135 && jetMass1 < 250 ) ) !=  ( ( jetMass2 > 50 && jetMass2 < 85 ) || ( jetMass2 > 135 && jetMass2 < 250 ) ) )*/{ 
+                 //   plots[bin][5].fill(ntuple);
+		 if(getNumGenHiggses(ntuple)==2)AnalysisMETT5HH_doubletagSB->Fill(MET);
+		 if(getNumGenHiggses(ntuple)==1)AnalysisMETT5HZ_doubletagSB->Fill(MET);  
+		 if(getNumGenHiggses(ntuple)==0)AnalysisMETT5ZZ_doubletagSB->Fill(MET); 
+
+                }
+            }else{
+                if( singleHiggsTagLooseCut(ntuple) ){
+                    double jetMass1 = fillLeadingJetMass(ntuple);
+                    double jetMass2 = fillSubLeadingJetMass(ntuple);
+                    if( ( jetMass1 > 85 && jetMass1 < 135 ) /*&& ( jetMass2 > 85 && jetMass2 < 135 )*/ ){
+		 		if(getNumGenHiggses(ntuple)==2)AnalysisMETT5HH_tagSR->Fill(MET);
+		 		if(getNumGenHiggses(ntuple)==1)AnalysisMETT5HZ_tagSR->Fill(MET);  
+		 		if(getNumGenHiggses(ntuple)==0)AnalysisMETT5ZZ_tagSR->Fill(MET); 
+                 //       plots[bin][0].fill(ntuple);
+                    }else /*if( ( ( jetMass1 > 50 && jetMass1 < 85 ) || ( jetMass1 > 135 && jetMass1 < 250 ) ) !=  ( ( jetMass2 > 50 && jetMass2 < 85 ) || ( jetMass2 > 135 && jetMass2 < 250 ) ) )*/{ 
+                   //     plots[bin][1].fill(ntuple);
+		 		if(getNumGenHiggses(ntuple)==2)AnalysisMETT5HH_tagSB->Fill(MET);
+		 		if(getNumGenHiggses(ntuple)==1)AnalysisMETT5HZ_tagSB->Fill(MET);  
+		 		if(getNumGenHiggses(ntuple)==0)AnalysisMETT5ZZ_tagSB->Fill(MET); 
+
+                    }
+                }
+                if( antiTaggingLooseCut(ntuple) ){
+                    double jetMass1 = fillLeadingJetMass(ntuple);
+                    double jetMass2 = fillSubLeadingJetMass(ntuple);
+                    if( ( jetMass1 > 85 && jetMass1 < 135 ) /*&& ( jetMass2 > 85 && jetMass2 < 135 )*/ ){
+                                if(getNumGenHiggses(ntuple)==2)AnalysisMETT5HH_antitagSR->Fill(MET);
+                                if(getNumGenHiggses(ntuple)==1)AnalysisMETT5HZ_antitagSR->Fill(MET);
+                                if(getNumGenHiggses(ntuple)==0)AnalysisMETT5ZZ_antitagSR->Fill(MET);	
+                    }else /*if( ( ( jetMass1 > 50 && jetMass1 < 85 ) || ( jetMass1 > 135 && jetMass1 < 250 ) ) !=  ( ( jetMass2 > 50 && jetMass2 < 85 ) || ( jetMass2 > 135 && jetMass2 < 250 ) ) )*/{ 
+                                if(getNumGenHiggses(ntuple)==2)AnalysisMETT5HH_antitagSB->Fill(MET);
+                                if(getNumGenHiggses(ntuple)==1)AnalysisMETT5HZ_antitagSB->Fill(MET);
+                                if(getNumGenHiggses(ntuple)==0)AnalysisMETT5ZZ_antitagSB->Fill(MET);	
+
+                    }
+                }
+	   }
+
+    }
+	plots.push_back(AnalysisMETT5HH_tagSR);
+	plots.push_back(AnalysisMETT5HH_antitagSR);
+	plots.push_back(AnalysisMETT5HH_tagSB);
+	plots.push_back(AnalysisMETT5HH_antitagSB);
+	plots.push_back(AnalysisMETT5HH_doubletagSB);
+	plots.push_back(AnalysisMETT5HH_doubletagSR);
+
+	plots.push_back(AnalysisMETT5HZ_tagSR);
+	plots.push_back(AnalysisMETT5HZ_antitagSR);
+	plots.push_back(AnalysisMETT5HZ_tagSB);
+	plots.push_back(AnalysisMETT5HZ_antitagSB);
+	plots.push_back(AnalysisMETT5HZ_doubletagSB);
+	plots.push_back(AnalysisMETT5HZ_doubletagSR);
+
+	plots.push_back(AnalysisMETT5ZZ_tagSR);
+	plots.push_back(AnalysisMETT5ZZ_antitagSR);
+	plots.push_back(AnalysisMETT5ZZ_tagSB);
+	plots.push_back(AnalysisMETT5ZZ_antitagSB);
+	plots.push_back(AnalysisMETT5ZZ_doubletagSB);
+	plots.push_back(AnalysisMETT5ZZ_doubletagSR);
+
+}
+
+/*
       if( taggingCut(ntuple) ){
 	double jetMass = fillLeadingBBtagJetMass(ntuple);
 	if( jetMass > 85 && jetMass < 135 ){ 
@@ -114,11 +209,10 @@ int main(int argc, char** argv){
 	  plots[3].fillSignal(ntuple);
 	}
       }
-    }
-  }
 */
+    //}
+ // }
   TFile* outputFile = new TFile("datacardInputs.root","RECREATE");
-  TCanvas* can = new TCanvas("can","can",500,500);
   for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++){
     //plots[iPlot].Draw(can,skims.ntuples,skims.signalNtuples);
     outputFile->cd();
