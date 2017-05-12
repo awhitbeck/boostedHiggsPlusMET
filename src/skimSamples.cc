@@ -302,16 +302,15 @@ public :
         ////////////////////////////////////////////////////////////
 
         std::vector<TString> HTMHTFileNames;
-/*
-        HTMHTFileNames.push_back("tree_JetHT_re2016B.root");
-        HTMHTFileNames.push_back("tree_JetHT_re2016C.root");
-        HTMHTFileNames.push_back("tree_JetHT_re2016D.root");
-        HTMHTFileNames.push_back("tree_JetHT_re2016E.root");
-        HTMHTFileNames.push_back("tree_JetHT_re2016F.root");
-        HTMHTFileNames.push_back("tree_JetHT_re2016G.root");
-        HTMHTFileNames.push_back("tree_JetHT_re2016H2.root");
-        HTMHTFileNames.push_back("tree_JetHT_re2016H3.root");
-*/
+        std::vector<TString> HTFileNames;
+        HTFileNames.push_back("tree_JetHT_re2016B.root");
+        HTFileNames.push_back("tree_JetHT_re2016C.root");
+        HTFileNames.push_back("tree_JetHT_re2016D.root");
+        HTFileNames.push_back("tree_JetHT_re2016E.root");
+        HTFileNames.push_back("tree_JetHT_re2016F.root");
+        HTFileNames.push_back("tree_JetHT_re2016G.root");
+        HTFileNames.push_back("tree_JetHT_re2016H2.root");
+        HTFileNames.push_back("tree_JetHT_re2016H3.root");
         HTMHTFileNames.push_back("tree_HTMHT_re2016B.root");
         HTMHTFileNames.push_back("tree_HTMHT_re2016C.root");
         HTMHTFileNames.push_back("tree_HTMHT_re2016D.root");
@@ -324,7 +323,7 @@ public :
             data = new TChain("tree");
             for( int i = 0 ; i < HTMHTFileNames.size() ; i++ ){
                 if(r==kSignal)data->Add(skimType+"/"+HTMHTFileNames[i]);
-		if(r==kLowDPhi)data->Add(skimTypeLDP+"/"+HTMHTFileNames[i]);
+		if(r==kLowDPhi)data->Add(skimTypeLDP+"/"+HTFileNames[i]);
             }    
             dataNtuple = new RA2bTree(data); 
         }
@@ -381,7 +380,7 @@ public :
             }
             dataNtuple = new RA2bTree(data);
         }*/
-
+/*
         std::vector<TString> T5HH1300FilesNames;
         T5HH1300FilesNames.push_back("root://cmseos.fnal.gov//store/user/fojensen/T5qqqqZHProduction/Summer16.SMS-T5qqqqZH-mGluino1300_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_0_RA2AnalysisTree.root");
         T5HH1300FilesNames.push_back("root://cmseos.fnal.gov///store/user/fojensen/T5qqqqZHProduction/Summer16.SMS-T5qqqqZH-mGluino1300_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_10_RA2AnalysisTree.root");
@@ -475,6 +474,8 @@ T5HH1900FilesNames.push_back("root://cmseos.fnal.gov//store/user/fojensen/T5qqqq
             signalSampleName.push_back("T5HH1700");
             sigLineColor.push_back(kRed+1);
         }
+*/
+
     };
 
     RA2bTree* findNtuple(TString name){
@@ -488,5 +489,4 @@ T5HH1900FilesNames.push_back("root://cmseos.fnal.gov//store/user/fojensen/T5qqqq
         }
         return NULL;
     };
-
 };

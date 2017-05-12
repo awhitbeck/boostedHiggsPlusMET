@@ -734,8 +734,11 @@ template<typename ntupleType> bool baselineCut(ntupleType* ntuple){
            ntuple->DeltaPhi1>0.5 && 
            ntuple->DeltaPhi2>0.5 &&
            ntuple->DeltaPhi3>0.3 && 
-           ntuple->DeltaPhi4>0.3 &&
-           /*
+           ntuple->DeltaPhi4>0.3
+	   && ntuple->Electrons->size()+ntuple->Muons->size()==0
+	   && (ntuple->isoElectronTracks+ntuple->isoMuonTracks+ntuple->isoPionTracks==0)  
+
+          /*
 	   ntuple->HBHENoiseFilter==1 && 
            ntuple->HBHEIsoNoiseFilter==1 && 
            ntuple->eeBadScFilter==1 && 
@@ -743,7 +746,7 @@ template<typename ntupleType> bool baselineCut(ntupleType* ntuple){
            ntuple->NVtx>0 && 
            ntuple->JetID == 1
 	   */
-	   FiltersCut(ntuple)
+	   && FiltersCut(ntuple)
 	   );
 
 }

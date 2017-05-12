@@ -97,7 +97,18 @@ int main(int argc, char** argv){
                 if(! lowDphiBaselineCut(ntuple) ) continue;
             }
             bin = -1;
-            weight = ntuple->Weight*lumi*customPUweights(ntuple);
+ 	float trigWeight=1.0;	     
+         if(region==3){
+                std::vector<double> EfficiencyCenterUpDown = Eff_MetMhtSextetReal_CenterUpDown(ntuple->HT, ntuple->MHT, ntuple->NJets);
+                trigWeight=EfficiencyCenterUpDown[0];
+            }
+            if(region==0){
+            double central[4] = {0.982, 0.985, 0.995, 1.00};  
+            if(ntuple->MHT>200 && ntuple->MHT<300)trigWeight=central[0];
+            if(ntuple->MHT>=300 && ntuple->MHT<350)trigWeight=central[1];
+            if(ntuple->MHT>=350 && ntuple->MHT<500)trigWeight=central[2];
+	}
+            weight = ntuple->Weight*lumi*customPUweights(ntuple)*trigWeight;
             if( skims.sampleName[iSample] == "TTExtra" || skims.sampleName[iSample] == "TTJets" )
                 weight *= ISRweights(ntuple);
             for( int iBin = 0 ; iBin < numMETbins ; iBin++ ){

@@ -8,12 +8,11 @@
 #include <vector>
 #include <map>
 #include <iostream>
-
+#include "ALPHABET.h"
 #include "plotterUtils.cc"
 #include "skimSamples.cc"
 #include "definitions.cc"
-#include "RA2bTree.h"
-
+#include "RA2bTree.cc"
 using namespace std;
 
 int main(int argc, char** argv){
@@ -23,11 +22,12 @@ int main(int argc, char** argv){
   
   skimSamples skims;
   typedef plot<RA2bTree> plot;
-
-  plot BinsSRSingleHiggsPlot(*fillAnalysisBins<RA2bTree>,"AnalysisBins_tagSR","i^th Bin",8,0.5,8.5);
-  plot BinsSRAntiTagPlot(*fillAnalysisBins<RA2bTree>,"AnalysisBins_antitagSR","i^th Bin",8,0.5,8.5);
-  plot BinsSBSingleHiggsPlot(*fillAnalysisBins<RA2bTree>,"AnalysisBins_tagSB","i^th Bin",8,0.5,8.5);
-  plot BinsSBAntiTagPlot(*fillAnalysisBins<RA2bTree>,"AnalysisBins_antitagSB","i^th Bin",8,0.5,8.5);
+  double METBins[4] = {300.,500.,700.,2500.};
+  TFile*inputFile = new TFile("ALPHABEThistos.root","read");
+  plot BinsSRSingleHiggsPlot(*fillAnalysisBins<RA2bTree>,"AnalysisMETBins_tagSR","MET",3,METBins);
+  plot BinsSRAntiTagPlot(*fillAnalysisBins<RA2bTree>,"AnalysisMETBins_antitagSR","MET",3,METBins);
+  plot BinsSBSingleHiggsPlot(*fillAnalysisBins<RA2bTree>,"AnalysisMETBins_tagSB","MET",3,METBins);
+  plot BinsSBAntiTagPlot(*fillAnalysisBins<RA2bTree>,"AnalysisMETBins_antitagSB","MET",3,METBins);
 
   vector<plot> plots;
   plots.push_back(BinsSRSingleHiggsPlot);
@@ -36,9 +36,10 @@ int main(int argc, char** argv){
   plots.push_back(BinsSBAntiTagPlot);
 
   // background MC samples
+/*
   for( int iSample = 0 ; iSample < skims.ntuples.size() ; iSample++){
 
-    heppySkimTree* ntuple = skims.ntuples[iSample];
+    skimSamples* ntuple = skims.ntuples[iSample];
 
     for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++){
       plots[iPlot].addNtuple(ntuple,skims.sampleName[iSample]);
@@ -103,7 +104,7 @@ int main(int argc, char** argv){
       }
     }
   }
-
+*/
   TFile* outputFile = new TFile("datacardInputs.root","RECREATE");
   TCanvas* can = new TCanvas("can","can",500,500);
   for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++){
