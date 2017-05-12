@@ -53,6 +53,7 @@ template<typename ntupleType>void ntupleBranchStatus(ntupleType* ntuple){
   ntuple->fChain->SetBranchStatus("CaloMET",1);
   ntuple->fChain->SetBranchStatus("NVtx",1);
   ntuple->fChain->SetBranchStatus("JetID",1);
+  ntuple->fChain->SetBranchStatus("JetIDclean",1);
   ntuple->fChain->SetBranchStatus("madHT",1);
   ntuple->fChain->SetBranchStatus("NJetsISR",1);
   ntuple->fChain->SetBranchStatus("madMinDeltaRStatus",1);
@@ -734,12 +735,16 @@ template<typename ntupleType> bool baselineCut(ntupleType* ntuple){
            ntuple->DeltaPhi2>0.5 &&
            ntuple->DeltaPhi3>0.3 && 
            ntuple->DeltaPhi4>0.3 &&
-           ntuple->HBHENoiseFilter==1 && 
+           /*
+	   ntuple->HBHENoiseFilter==1 && 
            ntuple->HBHEIsoNoiseFilter==1 && 
            ntuple->eeBadScFilter==1 && 
            ntuple->EcalDeadCellTriggerPrimitiveFilter == 1 && 
            ntuple->NVtx>0 && 
-           ntuple->JetID == 1);
+           ntuple->JetID == 1
+	   */
+	   FiltersCut(ntuple)
+	   );
 
 }
 
@@ -765,14 +770,15 @@ template<typename ntupleType> bool singleMuBaselineCut(ntupleType* ntuple){
              ntuple->DeltaPhi2>0.5 &&
              ntuple->DeltaPhi3>0.3 && 
              ntuple->DeltaPhi4>0.3 &&
-             ntuple->HBHENoiseFilter==1 && 
-             ntuple->HBHEIsoNoiseFilter==1 && 
-             ntuple->eeBadScFilter==1 && 
-             ntuple->EcalDeadCellTriggerPrimitiveFilter == 1 && 
-             ntuple->NVtx>0 && 
-             ntuple->JetID == 1 &&
-	     ntuple->PFCaloMETRatio<5. &&
-             ntuple->globalTightHalo2016Filter==1 
+             //ntuple->HBHENoiseFilter==1 && 
+             //ntuple->HBHEIsoNoiseFilter==1 && 
+             //ntuple->eeBadScFilter==1 && 
+             //ntuple->EcalDeadCellTriggerPrimitiveFilter == 1 && 
+             //ntuple->NVtx>0 && 
+             //ntuple->JetID == 1 &&
+	     //ntuple->PFCaloMETRatio<5. &&
+             //ntuple->globalTightHalo2016Filter==1 
+	     FiltersCut(ntuple)
 		);
     
 }
@@ -797,15 +803,17 @@ template<typename ntupleType> bool singleEleBaselineCut(ntupleType* ntuple){
              ntuple->DeltaPhi2>0.5 &&
              ntuple->DeltaPhi3>0.3 && 
              ntuple->DeltaPhi4>0.3 &&
-             ntuple->HBHENoiseFilter==1 && 
+             /*
+	     ntuple->HBHENoiseFilter==1 && 
              ntuple->HBHEIsoNoiseFilter==1 && 
              ntuple->eeBadScFilter==1 && 
              ntuple->EcalDeadCellTriggerPrimitiveFilter == 1 && 
              ntuple->NVtx>0 && 
              ntuple->JetID == 1
-	    && ntuple->PFCaloMETRatio<5. &&
-           ntuple->globalTightHalo2016Filter==1 
-
+	     && ntuple->PFCaloMETRatio<5. &&
+             ntuple->globalTightHalo2016Filter==1 
+	     */
+	     FiltersCut(ntuple)
 );    
 }
 
@@ -824,6 +832,7 @@ template<typename ntupleType> bool lowDphiBaselineCut(ntupleType* ntuple){
              ntuple->DeltaPhi2<0.5 ||
              ntuple->DeltaPhi3<0.3 || 
              ntuple->DeltaPhi4<0.3 ) &&
+	   /*
            ntuple->HBHENoiseFilter==1 && 
            ntuple->HBHEIsoNoiseFilter==1 && 
            ntuple->eeBadScFilter==1 && 
@@ -834,7 +843,10 @@ template<typename ntupleType> bool lowDphiBaselineCut(ntupleType* ntuple){
            ntuple->globalTightHalo2016Filter==1 &&
 	   ntuple->BadChargedCandidateFilter==1 && 
 	   ntuple->BadPFMuonFilter==1 && 
+	   */
+	   FiltersCut(ntuple) && 
            (ntuple->isoElectronTracks+ntuple->isoMuonTracks+ntuple->isoPionTracks==0) 
+	   
 	   );
 }
 
@@ -903,8 +915,9 @@ template<typename ntupleType> bool photonBaselineCut(ntupleType* ntuple){
              ntuple->eeBadScFilter==1 && 
              ntuple->EcalDeadCellTriggerPrimitiveFilter == 1 && 
              ntuple->NVtx>0 && 
-             ntuple->JetID == 1
-	    && ntuple->PFCaloMETRatio<5. &&
+	     ntuple->JetIDclean && 
+             //ntuple->JetID == 1
+	    ntuple->PFCaloMETRatio<5. &&
            ntuple->globalTightHalo2016Filter==1 
 
 );

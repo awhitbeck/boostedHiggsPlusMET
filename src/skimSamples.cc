@@ -44,11 +44,11 @@ public :
         }
         if( r == kSLm ){
             skimType=BASE_DIR+"tree_SLm/";
-            skimTypeLDP=BASE_DIR+"tree_SLmLDP/";
+            //skimTypeLDP=BASE_DIR+"tree_SLmLDP/";
         }
         if( r == kSLe ){
             skimType=BASE_DIR+"tree_SLe/";
-            skimTypeLDP=BASE_DIR+"tree_SLeLDP/";
+            //skimTypeLDP=BASE_DIR+"tree_SLeLDP/";
         }
 	if(r == kLowDPhi){
 		skimTypeLDP=BASE_DIR+"tree_LDP/";
@@ -149,7 +149,7 @@ public :
         for( int i = 0 ; i < ZJetsFileNames.size() ; i++ ){
             if(r==kSignal)ZJets->Add(skimType+"/"+ZJetsFileNames[i]);
             if(r==kLowDPhi)ZJets->Add(skimTypeLDP+"/"+ZJetsFileNames[i]);
-        }
+            }
         if( r == kSignal || r==kLowDPhi ){ 
             ntuples.push_back(new RA2bTree(ZJets));
             sampleName.push_back("ZJets");
@@ -238,7 +238,7 @@ public :
         //sampleName.push_back("DY");
         //fillColor.push_back(kGreen);
         //lineColor.push_back(1);
-
+	/*
         std::vector<TString> GJets0p4FileNames;
         GJets0p4FileNames.push_back("tree_GJets_DR-0p4_HT-100to200.root");
         GJets0p4FileNames.push_back("tree_GJets_DR-0p4_HT-200to400.root");
@@ -266,6 +266,7 @@ public :
             GJets->Add(skimType+"/"+GJetsFileNames[i]);
          //   GJets->Add(skimTypeLDP+"/"+GJetsFileNames[i]);
         }
+	*/
 /*
         if( r == kPhoton ){
             ntuples.push_back(new RA2bTree(GJets));
@@ -301,6 +302,7 @@ public :
         ////////////////////////////////////////////////////////////
 
         std::vector<TString> HTMHTFileNames;
+/*
         HTMHTFileNames.push_back("tree_JetHT_re2016B.root");
         HTMHTFileNames.push_back("tree_JetHT_re2016C.root");
         HTMHTFileNames.push_back("tree_JetHT_re2016D.root");
@@ -309,7 +311,7 @@ public :
         HTMHTFileNames.push_back("tree_JetHT_re2016G.root");
         HTMHTFileNames.push_back("tree_JetHT_re2016H2.root");
         HTMHTFileNames.push_back("tree_JetHT_re2016H3.root");
-/*
+*/
         HTMHTFileNames.push_back("tree_HTMHT_re2016B.root");
         HTMHTFileNames.push_back("tree_HTMHT_re2016C.root");
         HTMHTFileNames.push_back("tree_HTMHT_re2016D.root");
@@ -318,7 +320,6 @@ public :
         HTMHTFileNames.push_back("tree_HTMHT_re2016G.root");
         HTMHTFileNames.push_back("tree_HTMHT_re2016H2.root");
         HTMHTFileNames.push_back("tree_HTMHT_re2016H3.root");
-*/
         if( r == kSignal || r==kLowDPhi ){
             data = new TChain("tree");
             for( int i = 0 ; i < HTMHTFileNames.size() ; i++ ){
