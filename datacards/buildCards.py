@@ -47,7 +47,7 @@ if __name__ == '__main__':
 	TTJetsLeptonsMCSideband2H=inputfile.Get("AnalysisMETBins_doubletagSB_TTExtra");
 	TTJetsMCSideband2H.Add(TTJetsLeptonsMCSideband2H);
 				     
-	SignalT5HH_2H=inputfile.Get("AnalysisMETT5HH_doubletagSB_T5HH%s" %options.mGo)
+	SidebandT5HH_2H=inputfile.Get("AnalysisMETT5HH_doubletagSB_T5HH%s" %options.mGo)
 	#Signal Region 1H
 	QCDMCSideband1H=inputfile.Get("AnalysisMETBins_tagSB_QCD");
 	WJetsMCSideband1H=inputfile.Get("AnalysisMETBins_tagSB_WJets");
@@ -55,15 +55,15 @@ if __name__ == '__main__':
 	TTJetsMCSideband1H=inputfile.Get("AnalysisMETBins_tagSB_TT");
 	TTJetsLeptonsMCSideband1H=inputfile.Get("AnalysisMETBins_tagSB_TTExtra");
 	TTJetsMCSideband1H.Add(TTJetsLeptonsMCSideband1H);
-	SignalT5HH_1H=inputfile.Get("AnalysisMETT5HH_tagSB_T5HH%s" %options.mGo)
+	SidebandT5HH_1H=inputfile.Get("AnalysisMETT5HH_tagSB_T5HH%s" %options.mGo)
 	
 	#Antitag Region 
-	QCDMCAntitagRegion2H=inputfile.Get("AnalysisMETBins_antitagSR_QCD");
-	WJetsMCAntitagRegion2H=inputfile.Get("AnalysisMETBins_antitagSR_WJets");
-	ZJetsMCAntitagRegion2H=inputfile.Get("AnalysisMETBins_antitagSR_ZJets");
-	TTJetsMCAntitagRegion2H=inputfile.Get("AnalysisMETBins_antitagSR_TT");
-	TTJetsLeptonsMCAntitagRegion2H=inputfile.Get("AnalysisMETBins_antitagSR_TTExtra");
-	TTJetsMCAntitagRegion2H.Add(TTJetsLeptonsMCAntitagRegion2H);
+	QCDMCAntitagRegion=inputfile.Get("AnalysisMETBins_antitagSR_QCD");
+	WJetsMCAntitagRegion=inputfile.Get("AnalysisMETBins_antitagSR_WJets");
+	ZJetsMCAntitagRegion=inputfile.Get("AnalysisMETBins_antitagSR_ZJets");
+	TTJetsMCAntitagRegion=inputfile.Get("AnalysisMETBins_antitagSR_TT");
+	TTJetsLeptonsMCAntitagRegion=inputfile.Get("AnalysisMETBins_antitagSR_TTExtra");
+	TTJetsMCAntitagRegion.Add(TTJetsLeptonsMCAntitagRegion);
 	AntitagT5HH=inputfile.Get("AnalysisMETT5HH_antitagSR_T5HH%s" %options.mGo)
 
 	#Sideband Antitag Region 
@@ -94,6 +94,12 @@ if __name__ == '__main__':
 
 	signalRegion_Rates = [];
 	signalRegion_Obs = [];
+	antitagRegion_Rates = [];
+	antitagRegion_Obs = [];
+	sideband_Rates=[]
+	sideband_Obs=[]
+	sideband1H_Rates=[]
+	sideband1H_Obs=[]
 	for i in range(signalRegion._nBins):
 		tmpList = [];
 		srobs = 0;
@@ -114,12 +120,60 @@ if __name__ == '__main__':
                 srobs=QCDMCSignalRegion1H.GetBinContent(i+1)+ZJetsMCSignalRegion1H.GetBinContent(i+1)+WJetsMCSignalRegion1H.GetBinContent(i+1)+TTJetsMCSignalRegion1H.GetBinContent(i+1)
                 signalRegion1H_Rates.append(tmpList)
                 signalRegion1H_Obs.append(srobs)
+        for i in range(antitagRegion._nBins):
+		tmpList = [];
+                srobs = 0;
+		tmpList.append(AntitagT5HH.GetBinContent(i+1));
+		tmpList.append(QCDMCAntitagRegion.GetBinContent(i+1));		
+		tmpList.append(ZJetsMCAntitagRegion.GetBinContent(i+1));		
+		tmpList.append(WJetsMCAntitagRegion.GetBinContent(i+1));		
+		tmpList.append(TTJetsMCAntitagRegion.GetBinContent(i+1));
+		srobs=QCDMCAntitagRegion.GetBinContent(i+1)+ZJetsMCAntitagRegion.GetBinContent(i+1)+WJetsMCAntitagRegion.GetBinContent(i+1)+TTJetsMCAntitagRegion.GetBinContent(i+1)
+                antitagRegion_Rates.append(tmpList)
+                antitagRegion_Obs.append(srobs)	
+	for i in range(sidebandRegion._nBins):
+		tmpList = [];
+		srobs = 0;
+		tmpList.append(SidebandT5HH_2H.GetBinContent(i+1));	
+		tmpList.append(QCDMCSideband2H.GetBinContent(i+1));	
+		tmpList.append(ZJetsMCSideband2H.GetBinContent(i+1));	
+		tmpList.append(WJetsMCSideband2H.GetBinContent(i+1));	
+		tmpList.append(TTJetsMCSideband2H.GetBinContent(i+1));	
+		srobs=QCDMCSideband2H.GetBinContent(i+1)+ZJetsMCSideband2H.GetBinContent(i+1)+WJetsMCSideband2H.GetBinContent(i+1)+TTJetsMCSideband2H.GetBinContent(i+1)
+		sideband_Rates.append(tmpList)
+		sideband_Obs.append(srobs)
+		tmpList = [];
+		tmpList.append(SidebandT5HH_1H.GetBinContent(i+1));
+                tmpList.append(QCDMCSideband1H.GetBinContent(i+1));
+                tmpList.append(ZJetsMCSideband1H.GetBinContent(i+1));
+                tmpList.append(WJetsMCSideband1H.GetBinContent(i+1));
+                tmpList.append(TTJetsMCSideband1H.GetBinContent(i+1));
+                srobs=QCDMCSideband1H.GetBinContent(i+1)+ZJetsMCSideband1H.GetBinContent(i+1)+WJetsMCSideband1H.GetBinContent(i+1)+TTJetsMCSideband1H.GetBinContent(i+1)
+                sideband1H_Rates.append(tmpList)
+                sideband1H_Obs.append(srobs)
 	signalRegion.fillRates(signalRegion_Rates );
 	signalRegion.setObservedManually(signalRegion_Obs)
 	signalRegion1H.fillRates(signalRegion1H_Rates );
 	signalRegion1H.setObservedManually(signalRegion1H_Obs)
+	sidebandRegion1H.fillRates(sideband1H_Rates)
+	sidebandRegion1H.setObservedManually(sideband1H_Obs)
+	sidebandRegion1H.writeCards( odir );
+	sidebandRegion.fillRates(sideband_Rates);
+	sidebandRegion.setObservedManually(sideband_Obs)
+	sidebandRegion.writeCards( odir );
+	
 	signalRegion.writeRates();
 	signalRegion.writeCards( odir );
 	signalRegion1H.writeRates();
 	signalRegion1H.writeCards( odir );
 
+	sidebandRegion1H.writeRates();
+	sidebandRegion.writeRates();
+	sidebandRegion1H.writeCards(odir);
+	sidebandRegion.writeCards(odir);
+	
+	antitagRegion.fillRates(antitagRegion_Rates);
+	antitagRegion.setObservedManually(antitagRegion_Obs);
+	antitagRegion.writeRates();
+	antitagRegion.writeCards(odir);
+	
