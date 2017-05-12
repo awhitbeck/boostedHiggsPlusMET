@@ -24,53 +24,65 @@ int main(int argc, char** argv){
   typedef plot<RA2bTree> plot;
   double METBins[4] = {300.,500.,700.,2500.};
   TFile*inputFile = new TFile("ALPHABEThistos.root","read");
+  /*
   plot BinsSRSingleHiggsPlot(*fillAnalysisBins<RA2bTree>,"AnalysisMETBins_tagSR","MET",3,METBins);
   plot BinsSRAntiTagPlot(*fillAnalysisBins<RA2bTree>,"AnalysisMETBins_antitagSR","MET",3,METBins);
   plot BinsSBSingleHiggsPlot(*fillAnalysisBins<RA2bTree>,"AnalysisMETBins_tagSB","MET",3,METBins);
   plot BinsSBAntiTagPlot(*fillAnalysisBins<RA2bTree>,"AnalysisMETBins_antitagSB","MET",3,METBins);
-
-  vector<plot> plots;
-  plots.push_back(BinsSRSingleHiggsPlot);
-  plots.push_back(BinsSRAntiTagPlot);
-  plots.push_back(BinsSBSingleHiggsPlot);
-  plots.push_back(BinsSBAntiTagPlot);
-
+*/
+  vector<TH1D*> plots;
+  //plots.push_back(BinsSRSingleHiggsPlot);
+  //plots.push_back(BinsSRAntiTagPlot);
+  //plots.push_back(BinsSBSingleHiggsPlot);
+ // plots.push_back(BinsSBAntiTagPlot);
+ for( int iSample = 0 ; iSample < skims.ntuples.size() ; iSample++){
+	std::cout<<"Sample Name "<<skims.sampleName[iSample]<<std::endl;
+	TH1D*AnalysisMETBins_tagSR=new TH1D("AnalysisMETBins_tagSR_"+skims.sampleName[iSample],"MET",3,METBins) ;
+	TH1D*AnalysisMETBins_antitagSR=new TH1D("AnalysisMETBins_antitagSR_"+skims.sampleName[iSample],"MET",3,METBins) ;
+	TH1D*AnalysisMETBins_tagSB=new TH1D("AnalysisMETBins_tagSB_"+skims.sampleName[iSample],"MET",3,METBins) ;
+	TH1D*AnalysisMETBins_antitagSB=new TH1D("AnalysisMETBins_antitagSB_"+skims.sampleName[iSample],"MET",3,METBins) ;
+	TH1D*AnalysisMETBins_doubletagSB=new TH1D("AnalysisMETBins_doubletagSB_"+skims.sampleName[iSample],"MET",3,METBins) ;
+	TH1D*AnalysisMETBins_doubletagSR=new TH1D("AnalysisMETBins_doubletagSR_"+skims.sampleName[iSample],"MET",3,METBins) ;
+    for( int i = 1 ; i < alphabet::numMETbins ; i++ ) {
+        TString tag="_";
+        tag+=TString::Format("%d",alphabet::lowestMET+i*alphabet::binWidth)+"_"+skims.sampleName[iSample];
+	TString signalantitag="mJ_antitagSR"+tag;
+	TString signal1Htag="mJ_tagSR"+tag;
+	TString signal2Htag="mJ_doubletagSR"+tag;
+	TString sideband1Htag="mJ_tagSB"+tag;
+	TString sideband2Htag="mJ_doubletagSB"+tag;
+	TString sidebandantitag="mJ_antitagSB"+tag;
+	double error=0;
+	//std::cout<<tag<<std::endl;
+	double MetBin=((TH1F*)inputFile->Get(signal2Htag))->IntegralAndError(1,40,error);
+	AnalysisMETBins_doubletagSR->SetBinContent(i, MetBin);
+	AnalysisMETBins_doubletagSR->SetBinError(i, error);
+	MetBin=((TH1F*)inputFile->Get(signal1Htag))->IntegralAndError(1,40,error);
+	AnalysisMETBins_tagSR->SetBinContent(i, MetBin);
+	AnalysisMETBins_tagSR->SetBinError(i, error);
+	MetBin=((TH1F*)inputFile->Get(signalantitag))->IntegralAndError(1,40,error);
+	AnalysisMETBins_antitagSR->SetBinContent(i, MetBin);
+	AnalysisMETBins_antitagSR->SetBinError(i, error);
+	MetBin=((TH1F*)inputFile->Get(signal2Htag))->IntegralAndError(1,40,error);
+	AnalysisMETBins_doubletagSB->SetBinContent(i, MetBin);
+	AnalysisMETBins_doubletagSB->SetBinError(i, error);
+	MetBin=((TH1F*)inputFile->Get(signal1Htag))->IntegralAndError(1,40,error);
+	AnalysisMETBins_tagSB->SetBinContent(i, MetBin);
+	AnalysisMETBins_tagSB->SetBinError(i, error);
+	MetBin=((TH1F*)inputFile->Get(sidebandantitag))->IntegralAndError(1,40,error);
+	AnalysisMETBins_antitagSB->SetBinContent(i, MetBin);
+	AnalysisMETBins_antitagSB->SetBinError(i, error);
+	}
+	
+	plots.push_back(AnalysisMETBins_tagSR);
+	plots.push_back(AnalysisMETBins_antitagSR);
+	plots.push_back(AnalysisMETBins_doubletagSR);
+	plots.push_back(AnalysisMETBins_tagSB);
+	plots.push_back(AnalysisMETBins_antitagSB);
+	plots.push_back(AnalysisMETBins_doubletagSB);
+}
   // background MC samples
 /*
-  for( int iSample = 0 ; iSample < skims.ntuples.size() ; iSample++){
-
-    skimSamples* ntuple = skims.ntuples[iSample];
-
-    for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++){
-      plots[iPlot].addNtuple(ntuple,skims.sampleName[iSample]);
-      plots[iPlot].setFillColor(ntuple,skims.fillColor[iSample]);
-    }
-
-    int numEvents = ntuple->fChain->GetEntries();
-    for( int iEvt = 0 ; iEvt < numEvents ; iEvt++ ){
-      ntuple->GetEntry(iEvt);
-      if( iEvt % 1000000 == 0 ) cout << skims.sampleName[iSample] << ": " << iEvt << "/" << numEvents << endl;
-      //if( iEvt > 100000 ) break;
-      if(! baselineCut(ntuple) ) continue;
-      if( taggingCut(ntuple) ){
-	double jetMass = fillLeadingBBtagJetMass(ntuple);
-	if( jetMass > 85 && jetMass < 135 ){ 
-	  plots[0].fill(ntuple);
-	}else if( jetMass > 55 && jetMass < 205){
-	  plots[2].fill(ntuple);
-	}
-      }
-      if( antiTaggingCut(ntuple) ){
-	double jetMass = fillLeadingBBtagJetMass(ntuple);
-	if( jetMass > 85 && jetMass < 135 ){
-	  plots[1].fill(ntuple);
-	}else if( jetMass > 55 && jetMass < 205){
-	  plots[3].fill(ntuple);
-	}
-      }
-    }
-  }
-
   // Signal samples
   for( int iSample = 0 ; iSample < skims.signalNtuples.size() ; iSample++){
 
@@ -108,9 +120,9 @@ int main(int argc, char** argv){
   TFile* outputFile = new TFile("datacardInputs.root","RECREATE");
   TCanvas* can = new TCanvas("can","can",500,500);
   for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++){
-    plots[iPlot].Draw(can,skims.ntuples,skims.signalNtuples);
+    //plots[iPlot].Draw(can,skims.ntuples,skims.signalNtuples);
     outputFile->cd();
-    plots[iPlot].Write();
+    plots[iPlot]->Write();
   }
   outputFile->Close();
 
