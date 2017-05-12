@@ -86,14 +86,17 @@ if __name__ == '__main__':
 	signalRegion = searchRegion('signal', contributionsPerBin, tagsForSignalRegion)	
 	signalRegion1H = searchRegion('signal1H', contributionsPerBin, tagsForSignalRegion)	
 	antitagRegion = searchRegion('antitagRegion', contributionsPerBin, tagsForSignalRegion)	
-	sidebandRegion = searchRegion('sidebandRegion', contributionsPerBin, tagsForSignalRegion)	
+	sidebandATRegion = searchRegion('sidebandATRegion', contributionsPerBin, tagsForSignalRegion)	
 	sidebandRegion1H = searchRegion('sidebandRegion1H', contributionsPerBin, tagsForSignalRegion)	
+	sidebandRegion = searchRegion('sidebandRegion', contributionsPerBin, tagsForSignalRegion)	
 	
 	signalRegion1H_Rates = [];
 	signalRegion1H_Obs = [];
 
 	signalRegion_Rates = [];
 	signalRegion_Obs = [];
+	antitagRegionSB_Rates = [];
+	antitagRegionSB_Obs = [];
 	antitagRegion_Rates = [];
 	antitagRegion_Obs = [];
 	sideband_Rates=[]
@@ -131,6 +134,16 @@ if __name__ == '__main__':
 		srobs=QCDMCAntitagRegion.GetBinContent(i+1)+ZJetsMCAntitagRegion.GetBinContent(i+1)+WJetsMCAntitagRegion.GetBinContent(i+1)+TTJetsMCAntitagRegion.GetBinContent(i+1)
                 antitagRegion_Rates.append(tmpList)
                 antitagRegion_Obs.append(srobs)	
+		tmpList = [];
+                srobs = 0;
+		tmpList.append(AntitagSBT5HH.GetBinContent(i+1));
+		tmpList.append(QCDMCAntitagRegionSB.GetBinContent(i+1));		
+		tmpList.append(ZJetsMCAntitagRegionSB.GetBinContent(i+1));		
+		tmpList.append(WJetsMCAntitagRegionSB.GetBinContent(i+1));		
+		tmpList.append(TTJetsMCAntitagRegionSB.GetBinContent(i+1));
+		srobs=QCDMCAntitagRegionSB.GetBinContent(i+1)+ZJetsMCAntitagRegionSB.GetBinContent(i+1)+WJetsMCAntitagRegionSB.GetBinContent(i+1)+TTJetsMCAntitagRegionSB.GetBinContent(i+1)
+                antitagRegionSB_Rates.append(tmpList)
+                antitagRegionSB_Obs.append(srobs)	
 	for i in range(sidebandRegion._nBins):
 		tmpList = [];
 		srobs = 0;
@@ -151,29 +164,98 @@ if __name__ == '__main__':
                 srobs=QCDMCSideband1H.GetBinContent(i+1)+ZJetsMCSideband1H.GetBinContent(i+1)+WJetsMCSideband1H.GetBinContent(i+1)+TTJetsMCSideband1H.GetBinContent(i+1)
                 sideband1H_Rates.append(tmpList)
                 sideband1H_Obs.append(srobs)
+	
 	signalRegion.fillRates(signalRegion_Rates );
 	signalRegion.setObservedManually(signalRegion_Obs)
 	signalRegion1H.fillRates(signalRegion1H_Rates );
 	signalRegion1H.setObservedManually(signalRegion1H_Obs)
 	sidebandRegion1H.fillRates(sideband1H_Rates)
 	sidebandRegion1H.setObservedManually(sideband1H_Obs)
-	sidebandRegion1H.writeCards( odir );
 	sidebandRegion.fillRates(sideband_Rates);
 	sidebandRegion.setObservedManually(sideband_Obs)
-	sidebandRegion.writeCards( odir );
 	
 	signalRegion.writeRates();
-	signalRegion.writeCards( odir );
 	signalRegion1H.writeRates();
-	signalRegion1H.writeCards( odir );
 
 	sidebandRegion1H.writeRates();
 	sidebandRegion.writeRates();
-	sidebandRegion1H.writeCards(odir);
-	sidebandRegion.writeCards(odir);
 	
 	antitagRegion.fillRates(antitagRegion_Rates);
 	antitagRegion.setObservedManually(antitagRegion_Obs);
 	antitagRegion.writeRates();
+	sidebandATRegion.fillRates(antitagRegionSB_Rates);
+	sidebandATRegion.setObservedManually(antitagRegionSB_Obs);
+	sidebandATRegion.writeRates();
+	
+	#Code up the ABCD FIT
+	for i in range(sidebandRegion._nBins):
+		antitagRegion.addSingleSystematic("ABCDExtrapQCD"+str(i), 'lnU', ['qcd'], 10000, '', i)
+		antitagRegion.addSingleSystematic("ABCDExtrapZ"+str(i), 'lnU', ['zvv'], 10000, '', i)
+		antitagRegion.addSingleSystematic("ABCDExtrapW"+str(i), 'lnU', ['W'], 10000, '', i)
+		antitagRegion.addSingleSystematic("ABCDExtrapTop"+str(i), 'lnU', ['Top'], 10000, '', i)			
+
+		antitagRegion.addSingleSystematic("ABCDExtrapQCD1H"+str(i), 'lnU', ['qcd'], 10000, '', i)
+		antitagRegion.addSingleSystematic("ABCDExtrapZ1H"+str(i), 'lnU', ['zvv'], 10000, '', i)
+		antitagRegion.addSingleSystematic("ABCDExtrapW1H"+str(i), 'lnU', ['W'], 10000, '', i)
+		antitagRegion.addSingleSystematic("ABCDExtrapTop1H"+str(i), 'lnU', ['Top'], 10000, '', i)			
+
+		signalRegion1H.addSingleSystematic("ABCDExtrapQCD1H"+str(i), 'lnU', ['qcd'], 10000, '', i)
+		signalRegion1H.addSingleSystematic("ABCDExtrapZ1H"+str(i), 'lnU', ['zvv'], 10000, '', i)
+		signalRegion1H.addSingleSystematic("ABCDExtrapW1H"+str(i), 'lnU', ['W'], 10000, '', i)
+		signalRegion1H.addSingleSystematic("ABCDExtrapTop1H"+str(i), 'lnU', ['Top'], 10000, '', i)			
+
+
+		signalRegion.addSingleSystematic("ABCDExtrapQCD"+str(i), 'lnU', ['qcd'], 10000, '', i)
+		signalRegion.addSingleSystematic("ABCDExtrapZ"+str(i), 'lnU', ['zvv'], 10000, '', i)
+		signalRegion.addSingleSystematic("ABCDExtrapW"+str(i), 'lnU', ['W'], 10000, '', i)
+		signalRegion.addSingleSystematic("ABCDExtrapTop"+str(i), 'lnU', ['Top'], 10000, '', i)			
+	
+	#Extrapolate from C/D to B
+		antitagRegion.addSingleSystematic("SidebandExtrapQCD"+str(i), 'lnU', ['qcd'], 10000, '', i)
+		antitagRegion.addSingleSystematic("SidebandExtrapZ"+str(i), 'lnU', ['zvv'], 10000, '', i)
+		antitagRegion.addSingleSystematic("SidebandExtrapW"+str(i), 'lnU', ['W'], 10000, '', i)
+		antitagRegion.addSingleSystematic("SidebandExtrapTop"+str(i), 'lnU', ['Top'], 10000, '', i)			
+
+		sidebandRegion.addSingleSystematic("SidebandExtrapQCD"+str(i), 'lnU', ['qcd'], 10000, '', i)
+		sidebandRegion.addSingleSystematic("SidebandExtrapZ"+str(i), 'lnU', ['zvv'], 10000, '', i)
+		sidebandRegion.addSingleSystematic("SidebandExtrapW"+str(i), 'lnU', ['W'], 10000, '', i)
+		sidebandRegion.addSingleSystematic("SidebandExtrapTop"+str(i), 'lnU', ['Top'], 10000, '', i)		
+
+		sidebandRegion1H.addSingleSystematic("SidebandExtrapQCD1H"+str(i), 'lnU', ['qcd'], 10000, '', i)
+		sidebandRegion1H.addSingleSystematic("SidebandExtrapZ1H"+str(i), 'lnU', ['zvv'], 10000, '', i)
+		sidebandRegion1H.addSingleSystematic("SidebandExtrapW1H"+str(i), 'lnU', ['W'], 10000, '', i)
+		sidebandRegion1H.addSingleSystematic("SidebandExtrapTop1H"+str(i), 'lnU', ['Top'], 10000, '', i)		
+
+		antitagRegion.addSingleSystematic("SidebandExtrapQCD1H"+str(i), 'lnU', ['qcd'], 10000, '', i)
+		antitagRegion.addSingleSystematic("SidebandExtrapZ1H"+str(i), 'lnU', ['zvv'], 10000, '', i)
+		antitagRegion.addSingleSystematic("SidebandExtrapW1H"+str(i), 'lnU', ['W'], 10000, '', i)
+		antitagRegion.addSingleSystematic("SidebandExtrapTop1H"+str(i), 'lnU', ['Top'], 10000, '', i)			
+
+	#C/D
+		sidebandRegion.addSingleSystematic("SidebandRatioQCD"+str(i), 'lnU', ['qcd'], 10000, '', i)
+		sidebandRegion.addSingleSystematic("SidebandRatioZ"+str(i), 'lnU', ['zvv'], 10000, '', i)
+		sidebandRegion.addSingleSystematic("SidebandRatioW"+str(i), 'lnU', ['W'], 10000, '', i)
+		sidebandRegion.addSingleSystematic("SidebandRatioTop"+str(i), 'lnU', ['Top'], 10000, '', i)		
+		sidebandATRegion.addSingleSystematic("SidebandRatioQCD"+str(i), 'lnU', ['qcd'], 10000, '', i)
+		sidebandATRegion.addSingleSystematic("SidebandRatioZ"+str(i), 'lnU', ['zvv'], 10000, '', i)
+		sidebandATRegion.addSingleSystematic("SidebandRatioW"+str(i), 'lnU', ['W'], 10000, '', i)
+		sidebandATRegion.addSingleSystematic("SidebandRatioTop"+str(i), 'lnU', ['Top'], 10000, '', i)		
+
+		sidebandATRegion.addSingleSystematic("SidebandRatioQCD1H"+str(i), 'lnU', ['qcd'], 10000, '', i)
+		sidebandATRegion.addSingleSystematic("SidebandRatioZ1H"+str(i), 'lnU', ['zvv'], 10000, '', i)
+		sidebandATRegion.addSingleSystematic("SidebandRatioW1H"+str(i), 'lnU', ['W'], 10000, '', i)
+		sidebandATRegion.addSingleSystematic("SidebandRatioTop1H"+str(i), 'lnU', ['Top'], 10000, '', i)		
+
+		sidebandRegion1H.addSingleSystematic("SidebandRatioQCD1H"+str(i), 'lnU', ['qcd'], 10000, '', i)
+		sidebandRegion1H.addSingleSystematic("SidebandRatioZ1H"+str(i), 'lnU', ['zvv'], 10000, '', i)
+		sidebandRegion1H.addSingleSystematic("SidebandRatioW1H"+str(i), 'lnU', ['W'], 10000, '', i)
+		sidebandRegion1H.addSingleSystematic("SidebandRatioTop1H"+str(i), 'lnU', ['Top'], 10000, '', i)		
 	antitagRegion.writeCards(odir);
+	sidebandATRegion.writeCards(odir);
+	sidebandRegion1H.writeCards(odir);
+	sidebandRegion.writeCards(odir);
+	signalRegion1H.writeCards( odir );
+	signalRegion.writeCards( odir );
+	sidebandRegion1H.writeCards( odir );
+	sidebandRegion.writeCards( odir );
 	

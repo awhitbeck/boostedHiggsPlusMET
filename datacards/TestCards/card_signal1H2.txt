@@ -11,3 +11,7 @@ process sig qcd zvv W Top
 process 0 1 2 3 4 
 rate 2337.0000 0.0001 0.3842 0.0841 0.0120 
 ------------ 
+ABCDExtrapQCD1H2 lnU - 10000 - - - 
+ABCDExtrapZ1H2 lnU - - 10000 - - 
+ABCDExtrapW1H2 lnU - - - 10000 - 
+ABCDExtrapTop1H2 lnU - - - - 10000 
