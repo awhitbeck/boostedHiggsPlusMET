@@ -1,0 +1,17 @@
+#the tag = MET500 
+imax 1 #number of channels 
+jmax 4 #number of backgrounds 
+kmax * nuissance 
+shapes * * FAKE 
+------------ 
+bin Binsignal1H1
+observation 1.44315984321
+bin Binsignal1H1 Binsignal1H1 Binsignal1H1 Binsignal1H1 Binsignal1H1 
+process sig qcd zvv W Top 
+process 0 1 2 3 4 
+rate 1163.0000 0.0001 0.9259 0.3141 0.2031 
+------------ 
+ABCDExtrapQCD1H1 lnU - 10000 - - - 
+ABCDExtrapZ1H1 lnU - - 10000 - - 
+ABCDExtrapW1H1 lnU - - - 10000 - 
+ABCDExtrapTop1H1 lnU - - - - 10000 

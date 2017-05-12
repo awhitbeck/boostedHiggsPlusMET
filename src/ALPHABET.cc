@@ -15,7 +15,7 @@
 #include "definitions.cc"
 #include "RA2bTree.cc"
 #include "ALPHABET.h"
-
+#include "TriggerEfficiencySextet.cp"
 using namespace std;
 using namespace alphabet;
 
@@ -25,7 +25,7 @@ int main(int argc, char** argv){
     if( argc >= 2 ) 
         region = atoi(argv[1]);
 
-    gROOT->ProcessLine(".L ~/tdrstyle.C");
+    gROOT->ProcessLine("./tdrstyle.C");
     gROOT->ProcessLine("setTDRStyle()");
     
     skimSamples* skims_;
@@ -36,7 +36,9 @@ int main(int argc, char** argv){
     else if( region == 2 )
         skims_ = new skimSamples(skimSamples::kSLe);
     else if( region == 3 )
-        skims_ = new skimSamples(skimSamples::kSignal);
+        skims_ = new skimSamples(skimSamples::kLowDPhi);
+    else if (region==4)
+	skims_ = new skimSamples(skimSamples::kPhoton);
     else        
         assert(1);
     
@@ -81,6 +83,8 @@ int main(int argc, char** argv){
         for( int iEvt = 0 ; iEvt < numEvents ; iEvt++ ){
             ntuple->GetEntry(iEvt);
             if( iEvt % 100000 == 0 ) cout << skims.sampleName[iSample] << ": " << iEvt << "/" << numEvents << endl;
+	      if( skims.sampleName[iSample] == "TTExtra" && ntuple->madHT>600. )continue;
+	    std::vector<double> EfficiencyCenterUpDown = Eff_MetMhtSextetReal_CenterUpDown(ntuple->HT, ntuple->MHT, ntuple->NJets);
             if( region == 0 ){
                 if(! baselineCut(ntuple) ) continue;
             }else if( region == 1){
@@ -89,9 +93,16 @@ int main(int argc, char** argv){
                 if(! singleEleBaselineCut(ntuple) ) continue;
             }else if( region == 3){ 
                 if(! lowDphiBaselineCut(ntuple) ) continue;
+            }else if( region == 4){ 
+                if(! lowDphiBaselineCut(ntuple) ) continue;
             }
             bin = -1;
-            weight = ntuple->Weight*lumi*customPUweights(ntuple);
+ 	float trigWeight=1.0;	     
+         if(region==3 or region==0){
+                std::vector<double> EfficiencyCenterUpDown = Eff_MetMhtSextetReal_CenterUpDown(ntuple->HT, ntuple->MHT, ntuple->NJets);
+                trigWeight=EfficiencyCenterUpDown[0];
+            }
+            weight = ntuple->Weight*lumi*customPUweights(ntuple)*trigWeight;
             if( skims.sampleName[iSample] == "TTExtra" || skims.sampleName[iSample] == "TTJets" )
                 weight *= ISRweights(ntuple);
             for( int iBin = 0 ; iBin < numMETbins ; iBin++ ){

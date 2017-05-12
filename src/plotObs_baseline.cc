@@ -106,6 +106,7 @@ int main(int argc, char** argv){
             if( iEvt % 1000000 == 0 ) cout << skims.sampleName[iSample] << ": " << iEvt << "/" << numEvents << endl;
             if( skims.sampleName[iSample] == "TTExtra" && ntuple->madHT>600. )continue;
             if(! baselineCut(ntuple) ) continue;
+        if( skims.sampleName[iSample] == "TTExtra" && ntuple->madHT>600. )continue;
             for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++ ){
                 plots[iPlot].fill(ntuple);
             }
