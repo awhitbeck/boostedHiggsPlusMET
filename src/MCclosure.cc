@@ -1,4 +1,14 @@
 #include "CMS_lumi.cc"
+#include "TH1F.h"
+#include "TFile.h"
+#include "TString.h"
+#include "TROOT.h"
+#include "TCanvas.h"
+#include "TPad.h"
+#include "TLegend.h"
+#include <iostream>
+#include <iomanip>
+#include "TStyle.h"
 
 void MCclosure(TString tag = "", bool doubleHiggsRegion = true){
 
@@ -25,12 +35,11 @@ void MCclosure(TString tag = "", bool doubleHiggsRegion = true){
     TH1F* MC[numRegions];
 
     for( int r = 0 ; r < numRegions ; r++ ){
-        cout << "region: " << regionLabels[r] << endl;
         temp[r] = (TH1F*) f->Get("MET_"+regionLabels[r]+"_sum");
         //temp[r]->Add((TH1F*)f->Get("MET_"+regionLabels[r]+"_TTExtra"));
         temp[r]->Scale(35900.);
         MC[r] = new TH1F("MC_"+regionLabels[r],"MC_"+regionLabels[r],numMETbins+1,METbins);
-        MC[r]->Sumw2();
+
         MC[r]->SetFillStyle(3490);
         MC[r]->SetLineColor(2);
         MC[r]->SetFillColor(2);
@@ -47,11 +56,10 @@ void MCclosure(TString tag = "", bool doubleHiggsRegion = true){
         MC[r]->GetXaxis()->SetTitleFont(43);
         MC[r]->GetXaxis()->SetTitleSize(20);
         MC[r]->GetXaxis()->SetTitleOffset(1.6);
-
         for( int b = 1 ; b <= numMETbins+1 ; b++ ){
             MC[r]->SetBinContent(b,temp[r]->GetBinContent(b));
             MC[r]->SetBinError(b,temp[r]->GetBinError(b));
-            cout << "MC yield: " << temp[r]->GetBinContent(b) << " +/- " << temp[r]->GetBinError(b) << endl;
+            //cout << " & " <<  MC[r]->GetBinContent(b) << " $\\pm$ " << MC[r]->GetBinError(b) ;
         }
     }
 
@@ -62,15 +70,11 @@ void MCclosure(TString tag = "", bool doubleHiggsRegion = true){
     MCprediction->SetMarkerColor(1);
     MCprediction->SetMarkerStyle(8);
     MCprediction->SetLineColor(1);
-    cout << "MC prediction (B*C/D)" << endl;
-    for( int b = 1 ; b <= numMETbins+1 ; b++ ){
-        cout << MCprediction->GetBinContent(b) << " +/- " << MCprediction->GetBinError(b) << endl;
-    }
 
     TH1F* Closure = new TH1F(*MC[0]);
+    Closure->SetNameTitle("Closure","Closure");
     Closure->Divide(MCprediction);
     Closure->GetYaxis()->SetTitle("#kappa");
-    Closure->SetNameTitle("Closure","Closure");
     Closure->SetMarkerStyle(8);
     Closure->SetLineColor(1);
     Closure->GetYaxis()->SetRangeUser(0.,2.);
@@ -86,11 +90,6 @@ void MCclosure(TString tag = "", bool doubleHiggsRegion = true){
     Closure->GetXaxis()->SetTitleFont(43);
     Closure->GetXaxis()->SetTitleSize(20);
     Closure->GetXaxis()->SetTitleOffset(2.);
-
-    cout << "Closure A/(B*C/D)" << endl;
-    for( int b = 1 ; b <= numMETbins+1 ; b++ ){
-        cout << "bin " << b << ": " << Closure->GetBinContent(b) << " +/- " << Closure->GetBinError(b) << endl;
-    }
 
     TCanvas* can = new TCanvas("can","can",500,500);
     gStyle->SetErrorX(0.5);
@@ -126,6 +125,25 @@ void MCclosure(TString tag = "", bool doubleHiggsRegion = true){
     botPad->cd();
     Closure->Draw("p,e1");
 
+    cout << "\\begin{table}" << endl;
+    cout << "\\begin{tabular}{c|c|c|c|c|c|c}" << endl;
+    cout << "\\\\ \\hline" << endl;
+    if( doubleHiggsRegion ) 
+        cout << " bin & 2H SR & 0H SR & 2H SB & 0H SB & Pred. & Closure \\\\ \\hline" << endl;
+    else 
+        cout << " bin & 1H SR & 0H SR & 1H SB & 0H SB & Pred. & Closure \\\\ \\hline" << endl;
+    for( int b = 1 ; b <= numMETbins+1 ; b++ ){
+        cout << std::setprecision(3) << MC[0]->GetBinLowEdge(b) << "-" << MC[0]->GetBinLowEdge(b+1) ;
+        for( int r = 0 ; r < numRegions ; r++ ){
+            cout << " & " << temp[r]->GetBinContent(b) << " $\\pm$ " << temp[r]->GetBinError(b);
+        }
+        cout << " & " <<  MCprediction->GetBinContent(b) << " $\\pm$ " << MCprediction->GetBinError(b) ;
+        cout << " & " << Closure->GetBinContent(b) << " $\\pm$ " << Closure->GetBinError(b) ;
+        cout << "\\\\ \\hline" << endl;
+    }
+    cout << "\\end{tabular}" << endl;
+    cout << "\\end{table}" << endl;
+
     if( doubleHiggsRegion ){
         can->SaveAs("MCclosure_doubleHiggsRegion.png");
         can->SaveAs("MCclosure_doubleHiggsRegion.pdf");
@@ -135,4 +153,5 @@ void MCclosure(TString tag = "", bool doubleHiggsRegion = true){
         can->SaveAs("MCclosure_singleHiggsRegion.pdf");
         can->SaveAs("MCclosure_singleHiggsRegion.eps");        
     }
+
 }
