@@ -90,7 +90,6 @@ int main(int argc, char** argv){
   plots.push_back(HTplot);
   plots.push_back(NJetsplot);
   plots.push_back(BTagsplot);
-  plots.push_back(Binsplot);
   plots.push_back(J1dR_Massplot);
   plots.push_back(J2dR_Massplot);
   plots.push_back(J1dR_BBplot);
