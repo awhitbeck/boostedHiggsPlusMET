@@ -205,7 +205,6 @@ int main(int argc, char** argv){
       ntuple->GetEntry(iEvt);
       if( iEvt % 1000000 == 0 ) cout << "data: " << iEvt << "/" << numEvents << endl;
       if(! photonBaselineCut(ntuple) ) continue;
-      cout << "pass baseline (data)" << endl;
       if( !ntuple->TriggerPass->at(51)==1 ) continue;
       for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++){
           iBin=plots[iPlot].fillData(ntuple);
