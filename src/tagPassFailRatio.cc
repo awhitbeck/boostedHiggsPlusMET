@@ -22,7 +22,7 @@ using namespace std;
 //void plotter(){
 int main(int argc, char** argv){
 
-  gROOT->ProcessLine(".L ~/tdrstyle.C");
+  gROOT->ProcessLine(".L tdrstyle.C");
   gROOT->ProcessLine("setTDRStyle()");
 
   skimSamples skims;

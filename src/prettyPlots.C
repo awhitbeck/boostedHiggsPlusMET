@@ -102,7 +102,7 @@ int main(int argc, char** argv){
   sampleColors.push_back(kMagenta);
   sampleColors.push_back(kRed+1);
 
-  gROOT->ProcessLine(".L ~/tdrstyle.C");
+  gROOT->ProcessLine(".L tdrstyle.C");
   gROOT->ProcessLine("setTDRStyle()");
 
   TCanvas* can = new TCanvas("can","can",500,500);

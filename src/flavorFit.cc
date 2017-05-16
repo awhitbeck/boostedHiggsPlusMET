@@ -30,7 +30,7 @@ int main( int argc , char** argv ){
     TString region = "";
     region += argv[1];
 
-    gROOT->ProcessLine(".L ~/tdrstyle.C");
+    gROOT->ProcessLine(".L tdrstyle.C");
     gROOT->ProcessLine("setTDRStyle()");
 
     //enum jets {kLead,kSublead,kNumJets};

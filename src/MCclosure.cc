@@ -12,7 +12,7 @@
 
 void MCclosure(TString tag = "", bool doubleHiggsRegion = true){
 
-    gROOT->ProcessLine(".L ~/tdrstyle.C");
+    gROOT->ProcessLine(".L tdrstyle.C");
     gROOT->ProcessLine("setTDRStyle()");
 
     TFile* f = new TFile("ALPHABEThistos"+tag+".root","READ");

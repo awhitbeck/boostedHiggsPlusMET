@@ -17,7 +17,7 @@ using namespace alphabet;
 int main(int argc, char** argv){
 
     gROOT->SetBatch(true);
-    gROOT->ProcessLine(".L ~/tdrstyle.C");
+    gROOT->ProcessLine(".L tdrstyle.C");
     gROOT->ProcessLine("setTDRStyle()");
 
     TFile* inputFile = new TFile("ALPHABEThistos_singleMu.root","read");

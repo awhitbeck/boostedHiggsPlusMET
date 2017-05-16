@@ -30,7 +30,7 @@ int main(int argc, char** argv){
 
   TFile* inputFile = new TFile("taggingEfficiency.root","read");
 
-  gROOT->ProcessLine(".L ~/tdrstyle.C");
+  gROOT->ProcessLine(".L tdrstyle.C");
   gROOT->ProcessLine("setTDRStyle()");
 
   TCanvas* can = new TCanvas("can","can",500,500);

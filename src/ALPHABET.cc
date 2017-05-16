@@ -25,7 +25,7 @@ int main(int argc, char** argv){
     if( argc >= 2 ) 
         region = atoi(argv[1]);
 
-    gROOT->ProcessLine(".L ~/tdrstyle.C");
+    gROOT->ProcessLine(".L tdrstyle.C");
     gROOT->ProcessLine("setTDRStyle()");
     
     skimSamples* skims_;

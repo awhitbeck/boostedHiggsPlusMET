@@ -16,7 +16,7 @@ void computeScaleFactor(TH1F* hdata,TH1F* hmc){
 
 void checkScaleFactors(TString tag = "_singleMu"){
 
-    gROOT->ProcessLine(".L ~/tdrstyle.C");
+    gROOT->ProcessLine(".L tdrstyle.C");
     gROOT->ProcessLine("setTDRStyle()");
 
     TFile* f = new TFile("ALPHABEThistos"+tag+".root","READ");
