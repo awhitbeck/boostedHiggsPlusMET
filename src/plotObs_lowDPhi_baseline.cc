@@ -199,7 +199,7 @@ int main(int argc, char** argv){
         ntuple->GetEntry(iEvt);
         if( iEvt % 1000000 == 0 ) cout << "data_HTMHT: " << iEvt << "/" << numEvents << endl;
         if(! lowDphiBaselineCut(ntuple) ) continue;
-        //if( ntuple->TriggerPass->size() < 44 || ( !ntuple->TriggerPass->at(41) && !ntuple->TriggerPass->at(42) && !ntuple->TriggerPass->at(43) && !ntuple->TriggerPass->at(44)) ) continue;
+        if( ntuple->TriggerPass->at(41)!=1 && ntuple->TriggerPass->at(42)!=1 && ntuple->TriggerPass->at(43)!=1 && ntuple->TriggerPass->at(44)!=1 ) continue;
         for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++){
             iBin = plots[iPlot].fillData(ntuple);
             if( plots[iPlot].label == "NJets_lowDPhi_baseline" && iBin>0 && iBin <=14 )
