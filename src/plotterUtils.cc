@@ -310,8 +310,10 @@ public:
     
         TPad* topPad = new TPad("topPad","topPad",0.,0.4,.99,.99);
         TPad* botPad = new TPad("botPad","botPad",0.,0.01,.99,.39);
-        botPad->SetBottomMargin(0.2);
+        botPad->SetBottomMargin(0.25);
+        botPad->SetTopMargin(0.02);
         topPad->SetTopMargin(0.06);
+        topPad->SetBottomMargin(0.17);
         topPad->Draw();
         botPad->Draw();
         topPad->cd();
