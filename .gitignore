@@ -12,4 +12,7 @@ src/**/*.png
 **/*dag*
 **/*pyc
 src/*/
+**/*.d
+**/*.so
+**/*.pcm
 !data/PileupHistograms_0121_69p2mb_pm4p6.root
