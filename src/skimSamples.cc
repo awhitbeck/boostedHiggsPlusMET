@@ -194,6 +194,7 @@ public :
         }
         std::vector<TString> TTFileNames;
         //TTFileNames.push_back("tree_TTJets.root");
+        TTFileNames.push_back("tree_TTJets_HT-600to800.root");
         TTFileNames.push_back("tree_TTJets_HT-800to1200.root");
         TTFileNames.push_back("tree_TTJets_HT-1200to2500.root");
         TTFileNames.push_back("tree_TTJets_HT-2500toInf.root");
