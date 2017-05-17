@@ -764,11 +764,14 @@ template<typename ntupleType> bool baselineCut(ntupleType* ntuple){
            ntuple->DeltaPhi2>0.5 &&
            ntuple->DeltaPhi3>0.3 && 
            ntuple->DeltaPhi4>0.3 &&
+/*
            ntuple->HBHENoiseFilter==1 && 
            ntuple->HBHEIsoNoiseFilter==1 && 
            ntuple->eeBadScFilter==1 && 
            ntuple->EcalDeadCellTriggerPrimitiveFilter == 1 && 
            ntuple->NVtx>0 && 
+*/
+	   FiltersCut(ntuple) &&
            ntuple->JetID == 1);
 
 }
@@ -795,11 +798,14 @@ template<typename ntupleType> bool singleMuBaselineCut(ntupleType* ntuple){
              ntuple->DeltaPhi2>0.5 &&
              ntuple->DeltaPhi3>0.3 && 
              ntuple->DeltaPhi4>0.3 &&
+	     /*
              ntuple->HBHENoiseFilter==1 && 
              ntuple->HBHEIsoNoiseFilter==1 && 
              ntuple->eeBadScFilter==1 && 
              ntuple->EcalDeadCellTriggerPrimitiveFilter == 1 && 
              ntuple->NVtx>0 && 
+	     */
+	      FiltersCut(ntuple) &&
              ntuple->JetID == 1);
     
 }
@@ -824,11 +830,14 @@ template<typename ntupleType> bool singleEleBaselineCut(ntupleType* ntuple){
              ntuple->DeltaPhi2>0.5 &&
              ntuple->DeltaPhi3>0.3 && 
              ntuple->DeltaPhi4>0.3 &&
-             ntuple->HBHENoiseFilter==1 && 
+	     /* 
+            ntuple->HBHENoiseFilter==1 && 
              ntuple->HBHEIsoNoiseFilter==1 && 
              ntuple->eeBadScFilter==1 && 
              ntuple->EcalDeadCellTriggerPrimitiveFilter == 1 && 
              ntuple->NVtx>0 && 
+	     */
+             FiltersCut(ntuple) &&
              ntuple->JetID == 1);
     
 }
@@ -848,11 +857,14 @@ template<typename ntupleType> bool lowDphiBaselineCut(ntupleType* ntuple){
              ntuple->DeltaPhi2<0.5 ||
              ntuple->DeltaPhi3<0.3 || 
              ntuple->DeltaPhi4<0.3 ) &&
+	   /*
            ntuple->HBHENoiseFilter==1 && 
            ntuple->HBHEIsoNoiseFilter==1 && 
            ntuple->eeBadScFilter==1 && 
            ntuple->EcalDeadCellTriggerPrimitiveFilter == 1 && 
            ntuple->NVtx>0 && 
+	   */ 
+	    FiltersCut(ntuple) &&
            ntuple->JetID == 1);
 }
 
@@ -897,11 +909,14 @@ template<typename ntupleType> bool photonBaselineCut(ntupleType* ntuple){
              ntuple->isoPionTracksclean == 0 &&
              ntuple->Electrons->size() == 0 &&
              ntuple->Muons->size() == 0 && 
+ 	     /*
              ntuple->HBHENoiseFilter==1 && 
              ntuple->HBHEIsoNoiseFilter==1 && 
              ntuple->eeBadScFilter==1 && 
              ntuple->EcalDeadCellTriggerPrimitiveFilter == 1 && 
              ntuple->NVtx>0 && 
+	     */
+	      FiltersCut(ntuple) &&
              ntuple->JetIDclean == 1);
 }
 
