@@ -6,7 +6,7 @@ from singleBin import *
 from cardUtilities import *
 import random
 from optparse import OptionParser
-
+from array import array
 
 parser = OptionParser()
 parser.add_option("--mGo", dest="mGo", default='1300', help="Mass of Gluino", metavar="mGo")
@@ -17,11 +17,11 @@ parser.add_option("--mGo", dest="mGo", default='1300', help="Mass of Gluino", me
 if __name__ == '__main__':
 
 	#open ABCD Signal and Bkg
-	odir="TestCards/"
+	odir="SignalT5HH%s" %options.mGo
 	if os.path.exists(odir): os.system( "rm -rf %s" % (odir) );
 	os.makedirs(odir);
 	tagsForSignalRegion=["MET300", "MET500","MET700"]
-	inputfile =TFile.Open("datacardInputsTest.root")
+	inputfile =TFile.Open("datacardInputs.root")
 	#Signal Region 2H
 	QCDMCSignalRegion2H=inputfile.Get("AnalysisMETBins_doubletagSR_QCD");
 	WJetsMCSignalRegion2H=inputfile.Get("AnalysisMETBins_doubletagSR_WJets");
@@ -29,7 +29,22 @@ if __name__ == '__main__':
 	TTJetsMCSignalRegion2H=inputfile.Get("AnalysisMETBins_doubletagSR_TT");
 	TTJetsLeptonsMCSignalRegion2H=inputfile.Get("AnalysisMETBins_doubletagSR_TTExtra");
 	TTJetsMCSignalRegion2H.Add(TTJetsLeptonsMCSignalRegion2H);
-	SignalT5HH_2H=inputfile.Get("AnalysisMETT5HH_doubletagSR_T5HH%s" %options.mGo)
+	SignalT5HH_2H=inputfile.Get("AnalysisMETT5HZ_doubletagSR_T5HH%s" %options.mGo)
+	Sigweight=35862.824*0.0460525/(408233.*0.25);
+	if options.mGo=="750": Sigweight=35862.824*2.26585/(400307*0.5);
+	if options.mGo=="1000": Sigweight=35862.824*0.325388/(396239*0.5);
+	if options.mGo=="1100": Sigweight=35862.824*0.163491 /(413868*0.5);
+	if options.mGo=="1200": Sigweight=35862.824*0.0856418/(400482*0.5);
+	if options.mGo=="1300": Sigweight=35862.824*0.0460525/(408233*0.5);
+	if options.mGo=="1400": Sigweight=35862.824*0.0252977/(400887*0.5);
+	if options.mGo=="1500": Sigweight=35862.824*0.0141903/(394281*0.5);
+	if options.mGo=="1600": Sigweight=35862.824*0.00810078/(397668*0.5);
+	if options.mGo=="1700": Sigweight=35862.824*0.00470323 /(414063*0.5);
+	if options.mGo=="1800": Sigweight=35862.824*0.00276133/(389625*0.5);
+	if options.mGo=="1900": Sigweight=35862.824*0.00163547/(404812*0.5);
+	if options.mGo=="2100": Sigweight=35862.824*0.000591918/(391445*0.5);
+	SignalT5HH_2H.Scale(Sigweight)
+	print SignalT5HH_2H.GetBinContent(1);
 	#Signal Region 1H
 	QCDMCSignalRegion1H=inputfile.Get("AnalysisMETBins_tagSR_QCD");
 	WJetsMCSignalRegion1H=inputfile.Get("AnalysisMETBins_tagSR_WJets");
@@ -37,8 +52,8 @@ if __name__ == '__main__':
 	TTJetsMCSignalRegion1H=inputfile.Get("AnalysisMETBins_tagSR_TT");
 	TTJetsLeptonsMCSignalRegion1H=inputfile.Get("AnalysisMETBins_tagSR_TTExtra");
 	TTJetsMCSignalRegion1H.Add(TTJetsLeptonsMCSignalRegion1H);
-	SignalT5HH_1H=inputfile.Get("AnalysisMETT5HH_tagSR_T5HH%s" %options.mGo)
-	
+	SignalT5HH_1H=inputfile.Get("AnalysisMETT5HZ_tagSR_T5HH%s" %options.mGo)
+	SignalT5HH_1H.Scale(Sigweight)		
 	#Sideband Region 
 	QCDMCSideband2H=inputfile.Get("AnalysisMETBins_doubletagSB_QCD");
 	WJetsMCSideband2H=inputfile.Get("AnalysisMETBins_doubletagSB_WJets");
@@ -47,7 +62,8 @@ if __name__ == '__main__':
 	TTJetsLeptonsMCSideband2H=inputfile.Get("AnalysisMETBins_doubletagSB_TTExtra");
 	TTJetsMCSideband2H.Add(TTJetsLeptonsMCSideband2H);
 				     
-	SidebandT5HH_2H=inputfile.Get("AnalysisMETT5HH_doubletagSB_T5HH%s" %options.mGo)
+	SidebandT5HH_2H=inputfile.Get("AnalysisMETT5HZ_doubletagSB_T5HH%s" %options.mGo)
+	SidebandT5HH_2H.Scale(Sigweight)	
 	#Signal Region 1H
 	QCDMCSideband1H=inputfile.Get("AnalysisMETBins_tagSB_QCD");
 	WJetsMCSideband1H=inputfile.Get("AnalysisMETBins_tagSB_WJets");
@@ -55,8 +71,8 @@ if __name__ == '__main__':
 	TTJetsMCSideband1H=inputfile.Get("AnalysisMETBins_tagSB_TT");
 	TTJetsLeptonsMCSideband1H=inputfile.Get("AnalysisMETBins_tagSB_TTExtra");
 	TTJetsMCSideband1H.Add(TTJetsLeptonsMCSideband1H);
-	SidebandT5HH_1H=inputfile.Get("AnalysisMETT5HH_tagSB_T5HH%s" %options.mGo)
-	
+	SidebandT5HH_1H=inputfile.Get("AnalysisMETT5HZ_tagSB_T5HH%s" %options.mGo)
+	SidebandT5HH_1H.Scale(Sigweight)	
 	#Antitag Region 
 	QCDMCAntitagRegion=inputfile.Get("AnalysisMETBins_antitagSR_QCD");
 	WJetsMCAntitagRegion=inputfile.Get("AnalysisMETBins_antitagSR_WJets");
@@ -64,8 +80,8 @@ if __name__ == '__main__':
 	TTJetsMCAntitagRegion=inputfile.Get("AnalysisMETBins_antitagSR_TT");
 	TTJetsLeptonsMCAntitagRegion=inputfile.Get("AnalysisMETBins_antitagSR_TTExtra");
 	TTJetsMCAntitagRegion.Add(TTJetsLeptonsMCAntitagRegion);
-	AntitagT5HH=inputfile.Get("AnalysisMETT5HH_antitagSR_T5HH%s" %options.mGo)
-
+	AntitagT5HH=inputfile.Get("AnalysisMETT5HZ_antitagSR_T5HH%s" %options.mGo)
+	AntitagT5HH.Scale(Sigweight)	
 	#Sideband Antitag Region 
 	QCDMCAntitagRegionSB=inputfile.Get("AnalysisMETBins_antitagSB_QCD");
 	WJetsMCAntitagRegionSB=inputfile.Get("AnalysisMETBins_antitagSB_WJets");
@@ -73,7 +89,7 @@ if __name__ == '__main__':
 	TTJetsMCAntitagRegionSB=inputfile.Get("AnalysisMETBins_antitagSB_TT");
 	TTJetsLeptonsMCAntitagRegionSB=inputfile.Get("AnalysisMETBins_antitagSB_TTExtra");
 	TTJetsMCAntitagRegionSB.Add(TTJetsLeptonsMCAntitagRegionSB);
-	AntitagSBT5HH=inputfile.Get("AnalysisMETT5HH_antitagSR_T5HH%s" %options.mGo)
+	AntitagSBT5HH=inputfile.Get("AnalysisMETT5HZ_antitagSR_T5HH%s" %options.mGo)
 	contributionsPerBin = [];
 	for i in range(len(tagsForSignalRegion)): 
 		tmpcontributions = [];
@@ -103,6 +119,22 @@ if __name__ == '__main__':
 	sideband_Obs=[]
 	sideband1H_Rates=[]
 	sideband1H_Obs=[]
+        fout=TFile("DatacardYields.root", "RECREATE")
+    	#root_data = TVectorD(4)
+        #METBins = [300.,500.,700.,2500.];
+	#for i in range(0,4):
+	#	root_data[0]=METBins[i]
+        METBins = array('d',[300.,500.,700.,2500.]);
+        Signal2H=TH1D("Signal2H","E_{T}^{miss}", 3, METBins);
+        Signal1H=TH1D("Signal1H","E_{T}^{miss}", 3, METBins);
+        QCD_2H=TH1D("QCD_2H","E_{T}^{miss}", 3, METBins);
+        TTJets_2H=TH1D("TTJets_2H","E_{T}^{miss}", 3, METBins);
+        WJets_2H=TH1D("WJets_2H","E_{T}^{miss}", 3, METBins);
+        ZJets_2H=TH1D("ZJets_2H","E_{T}^{miss}", 3, METBins);
+        QCD_1H=TH1D("QCD_1H","E_{T}^{miss}", 3, METBins);
+        TTJets_1H=TH1D("TTJets_1H","E_{T}^{miss}", 3, METBins);
+        WJets_1H=TH1D("WJets_1H","E_{T}^{miss}", 3, METBins);
+        ZJets_1H=TH1D("ZJets_1H","E_{T}^{miss}", 3, METBins);
 	for i in range(signalRegion._nBins):
 		tmpList = [];
 		srobs = 0;
@@ -123,6 +155,29 @@ if __name__ == '__main__':
                 srobs=QCDMCSignalRegion1H.GetBinContent(i+1)+ZJetsMCSignalRegion1H.GetBinContent(i+1)+WJetsMCSignalRegion1H.GetBinContent(i+1)+TTJetsMCSignalRegion1H.GetBinContent(i+1)
                 signalRegion1H_Rates.append(tmpList)
                 signalRegion1H_Obs.append(srobs)
+		Signal2H.SetBinContent(i+1,SignalT5HH_2H.GetBinContent(i+1));
+		Signal1H.SetBinContent(i+1,SignalT5HH_1H.GetBinContent(i+1));
+                QCD_2H.SetBinContent(i+1,QCDMCSignalRegion2H.GetBinContent(i+1))
+                TTJets_2H.SetBinContent(i+1,TTJetsMCSignalRegion2H.GetBinContent(i+1))
+                ZJets_2H.SetBinContent(i+1,ZJetsMCSignalRegion2H.GetBinContent(i+1))
+                WJets_2H.SetBinContent(i+1,WJetsMCSignalRegion2H.GetBinContent(i+1))
+                QCD_1H.SetBinContent(i+1,QCDMCSignalRegion1H.GetBinContent(i+1))
+                TTJets_1H.SetBinContent(i+1,TTJetsMCSignalRegion1H.GetBinContent(i+1))
+                ZJets_1H.SetBinContent(i+1,ZJetsMCSignalRegion1H.GetBinContent(i+1))
+                WJets_1H.SetBinContent(i+1,WJetsMCSignalRegion1H.GetBinContent(i+1))
+        fout.cd();
+        Signal1H.Write("signal_tag");
+        QCD_1H.Write("QCD_tag");
+        TTJets_1H.Write("TTJets_tag");
+        ZJets_1H.Write("ZJets_tag");
+        WJets_1H.Write("WJets_tag");
+        Signal2H.Write("signal_doubletag");
+        QCD_2H.Write("QCD_doubletag");
+        TTJets_2H.Write("TTJets_doubletag");
+        ZJets_2H.Write("ZJets_doubletag");
+        WJets_2H.Write("WJets_doubletag");
+        fout.Close()
+	os.system("cp DatacardYields.root ./%s " %odir) 
         for i in range(antitagRegion._nBins):
 		tmpList = [];
                 srobs = 0;
