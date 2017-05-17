@@ -44,7 +44,7 @@ int main(int argc, char** argv){
 
     typedef plot<RA2bTree> plot;
     
-    double mJbins[4]={50.,185.,135.,250.};
+    double mJbins[4]={50.,85.,135.,250.};
     vector<vector<plot> > plots;
 
     for( int i = 0 ; i < numMETbins ; i++ ) {
@@ -94,13 +94,15 @@ int main(int argc, char** argv){
         int bin = -1;
         double weight=0.;
         float trigWeight=1.0;
-         if(region==3 or region==0){
-                std::vector<double> EfficiencyCenterUpDown = Eff_MetMhtSextetReal_CenterUpDown(ntuple->HT, ntuple->MHT, ntuple->NJets);
-                trigWeight=EfficiencyCenterUpDown[0];
-            }
         for( int iEvt = 0 ; iEvt < numEvents ; iEvt++ ){
             ntuple->GetEntry(iEvt);
             if( iEvt % 100000 == 0 ) cout << skims.sampleName[iSample] << ": " << iEvt << "/" << numEvents << endl;
+         if(region==3 or region==0){
+                std::vector<double> EfficiencyCenterUpDown = Eff_MetMhtSextetReal_CenterUpDown(ntuple->HT, ntuple->MHT, ntuple->NJets);
+       		//std::cout<<"HT, MHT, NJets "<<ntuple->HT<<" , "<<ntuple->MHT<<", "<<ntuple->NJets<<std::endl;    
+		//std::cout<<"trig Weight "<<EfficiencyCenterUpDown[0]<<std::endl;
+	     trigWeight=EfficiencyCenterUpDown[0];
+            }
             if( region == 0 ){
                 if(! baselineCut(ntuple) ) continue;
             }else if( region == 1){
@@ -112,7 +114,8 @@ int main(int argc, char** argv){
             }
             if( skims.sampleName[iSample] == "TTExtra" && ntuple->madHT>600. )continue;
             bin = -1;
-            weight = ntuple->Weight*lumi;//*customPUweights(ntuple);
+            weight = ntuple->Weight*lumi*trigWeight;
+	   
             //if( skims.sampleName[iSample] == "TTExtra" || skims.sampleName[iSample] == "TTJets" )
             //    weight *= ISRweights(ntuple);
             for( int iBin = 0 ; iBin < numMETbins ; iBin++ ){
@@ -246,7 +249,7 @@ int main(int argc, char** argv){
 
     TFile* outputFile;
     if( region == 0 )
-        outputFile = new TFile("ALPHABEThistos.root","RECREATE");
+        outputFile = new TFile("ALPHABEThistosWeights.root","RECREATE");
     if( region == 1 )
         outputFile = new TFile("ALPHABEThistos_singleMu.root","RECREATE");
     if( region == 2 )

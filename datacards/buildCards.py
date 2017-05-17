@@ -143,7 +143,7 @@ if __name__ == '__main__':
 		tmpList.append(ZJetsMCSignalRegion2H.GetBinContent(i+1));	
 		tmpList.append(WJetsMCSignalRegion2H.GetBinContent(i+1));	
 		tmpList.append(TTJetsMCSignalRegion2H.GetBinContent(i+1));	
-		srobs=QCDMCSignalRegion2H.GetBinContent(i+1)+ZJetsMCSignalRegion2H.GetBinContent(i+1)+WJetsMCSignalRegion2H.GetBinContent(i+1)+TTJetsMCSignalRegion2H.GetBinContent(i+1)
+		srobs=SignalT5HH_2H.GetBinContent(i+1)+QCDMCSignalRegion2H.GetBinContent(i+1)+ZJetsMCSignalRegion2H.GetBinContent(i+1)+WJetsMCSignalRegion2H.GetBinContent(i+1)+TTJetsMCSignalRegion2H.GetBinContent(i+1)
 		signalRegion_Rates.append(tmpList)
 		signalRegion_Obs.append(srobs)
 		tmpList = [];
@@ -152,7 +152,7 @@ if __name__ == '__main__':
                 tmpList.append(ZJetsMCSignalRegion1H.GetBinContent(i+1));
                 tmpList.append(WJetsMCSignalRegion1H.GetBinContent(i+1));
                 tmpList.append(TTJetsMCSignalRegion1H.GetBinContent(i+1));
-                srobs=QCDMCSignalRegion1H.GetBinContent(i+1)+ZJetsMCSignalRegion1H.GetBinContent(i+1)+WJetsMCSignalRegion1H.GetBinContent(i+1)+TTJetsMCSignalRegion1H.GetBinContent(i+1)
+                srobs=SignalT5HH_1H.GetBinContent(i+1)+QCDMCSignalRegion1H.GetBinContent(i+1)+ZJetsMCSignalRegion1H.GetBinContent(i+1)+WJetsMCSignalRegion1H.GetBinContent(i+1)+TTJetsMCSignalRegion1H.GetBinContent(i+1)
                 signalRegion1H_Rates.append(tmpList)
                 signalRegion1H_Obs.append(srobs)
 		Signal2H.SetBinContent(i+1,SignalT5HH_2H.GetBinContent(i+1));

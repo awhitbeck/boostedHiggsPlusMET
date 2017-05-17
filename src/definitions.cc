@@ -29,6 +29,7 @@ template<typename ntupleType>void ntupleBranchStatus(ntupleType* ntuple){
   ntuple->fChain->SetBranchStatus("Photon*",1);
   ntuple->fChain->SetBranchStatus("DeltaPhi*",1);
 
+  ntuple->fChain->SetBranchStatus("MHT",1);
   ntuple->fChain->SetBranchStatus("HT",1);
   ntuple->fChain->SetBranchStatus("NJets",1);
   ntuple->fChain->SetBranchStatus("BTags",1);

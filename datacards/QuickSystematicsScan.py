@@ -34,10 +34,16 @@ for g in mGluinos:
 				#if "W" in bkgProcess: fout.write("WUnc lnN - - - %s - \n" %bkgUnc)
 				#if "Top" in bkgProcess: fout.write("TopUnc lnN - - - - %s  \n" %bkgUnc)
 				#print line
+				'''
 				fout.write("QCDUnc lnN - %s - - - \n" %bkgUnc)
 				fout.write("ZUnc lnN - - %s - - \n" %bkgUnc)
 				fout.write("WUnc lnN - - - %s - \n" %bkgUnc)
 				fout.write("TopUnc lnN - - - - %s  \n" %bkgUnc)
+				'''
+				fout.write("QCDUnc lnN - 1.5 - - - \n")
+				fout.write("ZUnc lnN - - 1.15  - - \n")
+				fout.write("WUnc lnN - - -1.15  - \n")
+				fout.write("TopUnc lnN - - - - 1.15  \n")
 			else:
 				fout.write("%s" %line)
 
