@@ -15,7 +15,7 @@
 #include "definitions.cc"
 #include "RA2bTree.cc"
 #include "ALPHABET.h"
-#include "TriggerEfficiencySextet.cp"
+#include "TriggerEfficiencySextet.cc"
 using namespace std;
 using namespace alphabet;
 
@@ -94,12 +94,12 @@ int main(int argc, char** argv){
         int bin = -1;
         double weight=0.;
         float trigWeight=1.0;
-         if(region==3 or region==0){
+        for( int iEvt = 0 ; iEvt < numEvents ; iEvt++ ){
+            ntuple->GetEntry(iEvt);
+            if(region==3 or region==0){
                 std::vector<double> EfficiencyCenterUpDown = Eff_MetMhtSextetReal_CenterUpDown(ntuple->HT, ntuple->MHT, ntuple->NJets);
                 trigWeight=EfficiencyCenterUpDown[0];
             }
-        for( int iEvt = 0 ; iEvt < numEvents ; iEvt++ ){
-            ntuple->GetEntry(iEvt);
             if( iEvt % 100000 == 0 ) cout << skims.sampleName[iSample] << ": " << iEvt << "/" << numEvents << endl;
             if( region == 0 ){
                 if(! baselineCut(ntuple) ) continue;

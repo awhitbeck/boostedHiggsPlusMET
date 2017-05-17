@@ -13,6 +13,7 @@
 #include <vector>
 #include <iostream>
 #include <stdlib.h>
+#include <algorithm>
 //-----------------------------------------------------------------------------
 // Make following visible only to this programming unit
 namespace {

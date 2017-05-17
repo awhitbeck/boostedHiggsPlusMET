@@ -33,6 +33,7 @@ template<typename ntupleType>void ntupleBranchStatus(ntupleType* ntuple){
   ntuple->fChain->SetBranchStatus("NJets",1);
   ntuple->fChain->SetBranchStatus("BTags",1);
   ntuple->fChain->SetBranchStatus("MET",1);
+  ntuple->fChain->SetBranchStatus("MHT",1);
   ntuple->fChain->SetBranchStatus("METPhi",1);
 
   ntuple->fChain->SetBranchStatus("HTclean",1);
@@ -115,11 +116,51 @@ template<typename ntupleType> double customPUweights(ntupleType* ntuple){
     return puWeightHist->GetBinContent(puWeightHist->GetXaxis()->FindBin(min(ntuple->TrueNumInteractions,puWeightHist->GetBinLowEdge(puWeightHist->GetNbinsX()+1))));
 }
 
-template<typename ntupleType> double ISRweights(ntupleType* ntuple){
-    double D = 1.071;
+enum ISRweightType {kNom,kUp,kDn};
+template<typename ntupleType> double ISRweights(ntupleType* ntuple, ISRweightType wType = kNom ){
+
+    double wanted_w_isr=1.;
+    double wanted_sys_isr[2]={1.,1.};
+
+    TString sample = ntuple->fChain->GetFile()->GetName();
+
+    // these are taken from here:
+    // https://github.com/manuelfs/babymaker/blob/3a57e1bace6c52832fe40e401cf37bc6b50923c3/bmaker/genfiles/src/change_weights.cxx#L156-L175
+    // via Manuel Franco Sevilla
+    if(sample.Contains("TTJets_HT-600to800")) {
+        wanted_w_isr = 0.7838;
+        wanted_sys_isr[0] = 0.8965;
+        wanted_sys_isr[1] = 0.6604;
+    }
+    if(sample.Contains("TTJets_HT-800to1200")) {
+        wanted_w_isr = 0.7600;
+        wanted_sys_isr[0] = 0.8851;
+        wanted_sys_isr[1] = 0.6230;
+    }
+    if(sample.Contains("TTJets_HT-1200to2500")) {
+        wanted_w_isr = 0.7365;
+        wanted_sys_isr[0] = 0.8739;
+        wanted_sys_isr[1] = 0.5861;
+    }
+    if(sample.Contains("TTJets_HT-2500toInf")) {
+        wanted_w_isr = 0.7254;
+        wanted_sys_isr[0] = 0.8686;
+        wanted_sys_isr[1] = 0.5687;
+    }
+    // these are totally made up!!!!! -- but shouldn't have a big event (small number of events)
+    if(sample.Contains("TTJets_SingleLept") or sample.Contains("TTJets_DiLept") ){
+        wanted_w_isr = 1.071;
+        wanted_sys_isr[0] = 1.071;
+        wanted_sys_isr[1] = 1.071;
+    }
+    
+    double D;
+    if( wType == kNom ) D = wanted_w_isr;
+    else D = wanted_sys_isr[wType-1];
+
     double w[6]={0.920,0.821,0.715,0.662,0.561,0.511};
     if( ntuple->NJetsISR == 0 )
-        return 0.0;
+        return D;
     else if( ntuple->NJetsISR >= 6 )
         return w[5]*D;
     else 

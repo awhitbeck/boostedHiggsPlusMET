@@ -18,7 +18,7 @@
 using namespace std;
 class RA2bTree {
 public :
-   TTree          *fChain;   //!pointer to the analyzed TTree or TChain
+   TChain          *fChain;   //!pointer to the analyzed TTree or TChain
    Int_t           fCurrent; //!current Tree number in a TChain
 
 // Fixed size dimensions of array or collections stored in the TTree if any.
@@ -715,12 +715,12 @@ public :
    TBranch        *b_Weight;   //!
    TBranch        *b_ZCandidates;   //!
 
-   RA2bTree(TTree *tree=0);
+   RA2bTree(TChain *tree=0);
    virtual ~RA2bTree();
    virtual Int_t    Cut(Long64_t entry);
    virtual Int_t    GetEntry(Long64_t entry);
    virtual Long64_t LoadTree(Long64_t entry);
-   virtual void     Init(TTree *tree);
+   virtual void     Init(TChain *tree);
    virtual void     Loop();
    virtual Bool_t   Notify();
    virtual void     Show(Long64_t entry = -1);
@@ -729,7 +729,7 @@ public :
 #endif
 
 #ifdef RA2bTree_cxx
-RA2bTree::RA2bTree(TTree *tree) : fChain(0) 
+RA2bTree::RA2bTree(TChain *tree) : fChain(0) 
 {
 // if parameter tree is not specified (or zero), connect the file
 // used to generate this class and read the Tree.
@@ -769,7 +769,7 @@ Long64_t RA2bTree::LoadTree(Long64_t entry)
    return centry;
 }
 
-void RA2bTree::Init(TTree *tree)
+void RA2bTree::Init(TChain *tree)
 {
    // The Init() function is called when the selector needs to initialize
    // a new tree or chain. Typically here the branch addresses and branch
