@@ -135,14 +135,12 @@ int main(int argc, char** argv){
       }
   }
   
-  /*
-    for( int iCut = 0 ; iCut < cutFlow.size() ; iCut++ ){
-    for( int iPlot = 0 ; iPlot < plots[iCut].size() ; iPlot++){
-    TCanvas* can = new TCanvas("can","can",500,500);
-    plots[iCut][iPlot].DrawNoRatio(can,skims.ntuples,skims.signalNtuples,"../plots/cutFlow_plots");
-    }
-    }
-  */
+  for( int iCut = 0 ; iCut < cutFlow.size() ; iCut++ ){
+      for( int iPlot = 0 ; iPlot < plots[iCut].size() ; iPlot++){
+          TCanvas* can = new TCanvas("can","can",500,500);
+          plots[iCut][iPlot].DrawNoRatio(can,skims.ntuples,skims.signalNtuples,"../plots/cutFlow_plots");
+      }
+  }
 
   cout << " & All Bkg. " << endl;
   for( int iSample = 0 ; iSample < skims.ntuples.size() ; iSample++){ 
