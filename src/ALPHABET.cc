@@ -44,7 +44,7 @@ int main(int argc, char** argv){
 
     typedef plot<RA2bTree> plot;
     
-    double mJbins[4]={50.,185.,135.,250.};
+    double mJbins[4]={50.,85.,135.,250.};
     vector<vector<plot> > plots;
 
     for( int i = 0 ; i < numMETbins ; i++ ) {
