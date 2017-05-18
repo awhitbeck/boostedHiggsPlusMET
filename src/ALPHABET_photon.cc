@@ -46,6 +46,16 @@ int main(int argc, char** argv){
         plots.push_back(plotsTemp);
     }
 
+    vector<plot> METprojPlots;
+    METprojPlots.push_back(plot(*fillMET<RA2bTree>,"MET_tagSR","m_{J} [GeV]",2,300,700));
+    METprojPlots.push_back(plot(*fillMET<RA2bTree>,"MET_tagSB","m_{J} [GeV]",2,300,700));
+    
+    METprojPlots.push_back(plot(*fillMET<RA2bTree>,"MET_antitagSR","m_{J} [GeV]",2,300,700));
+    METprojPlots.push_back(plot(*fillMET<RA2bTree>,"MET_antitagSB","m_{J} [GeV]",2,300,700));
+    
+    METprojPlots.push_back(plot(*fillMET<RA2bTree>,"MET_doubletagSR","m_{J} [GeV]",2,300,700));
+    METprojPlots.push_back(plot(*fillMET<RA2bTree>,"MET_doubletagSB","m_{J} [GeV]",2,300,700));
+    
     // background MC samples - 0 lepton regions
     for( int iSample = 0 ; iSample < skims.ntuples.size() ; iSample++){
 
@@ -56,6 +66,11 @@ int main(int argc, char** argv){
                 plots[iBin][iPlot].addNtuple(ntuple,skims.sampleName[iSample]);
                 plots[iBin][iPlot].setFillColor(ntuple,skims.fillColor[iSample]);
             }
+                        for( int iPlot = 0 ; iPlot < METprojPlots.size() ; iPlot++){
+                METprojPlots[iPlot].addNtuple(ntuple,skims.sampleName[iSample]);
+                METprojPlots[iPlot].setFillColor(ntuple,skims.fillColor[iSample]);       
+            }
+
         }
 
         int numEvents = ntuple->fChain->GetEntries();
@@ -82,33 +97,39 @@ int main(int argc, char** argv){
             if( doubleTaggingLooseCut_photon(ntuple) ){
                 double jetMass1 = fillLeadingJetMass_photon(ntuple);
                 //double jetMass2 = fillSubLeadingJetMass(ntuple);
-                if( ( jetMass1 > 85 && jetMass1 < 135 ) /*&& ( jetMass2 > 85 && jetMass2 < 135 )*/ ){
+                if( jetMass1 > 85 && jetMass1 < 135 ){ 
                     plots[bin][4].fill(ntuple,weight);
-                }else /*if( ( ( jetMass1 > 50 && jetMass1 < 85 ) || ( jetMass1 > 135 && jetMass1 < 250 ) ) !=  ( ( jetMass2 > 50 && jetMass2 < 85 ) || ( jetMass2 > 135 && jetMass2 < 250 ) ) )*/{ 
+                    METprojPlots[4].fill(ntuple,weight);
+                }else{
                     plots[bin][5].fill(ntuple,weight);
+                    METprojPlots[5].fill(ntuple,weight);
                 }
             }else{
                 if( singleHiggsTagLooseCut_photon(ntuple) ){
                     double jetMass1 = fillLeadingJetMass_photon(ntuple);
                     //double jetMass2 = fillSubLeadingJetMass(ntuple);
-                    if( ( jetMass1 > 85 && jetMass1 < 135 ) /*&& ( jetMass2 > 85 && jetMass2 < 135 )*/ ){
+                    if( jetMass1 > 85 && jetMass1 < 135 ){
                         plots[bin][0].fill(ntuple,weight);
-                    }else /*if( ( ( jetMass1 > 50 && jetMass1 < 85 ) || ( jetMass1 > 135 && jetMass1 < 250 ) ) !=  ( ( jetMass2 > 50 && jetMass2 < 85 ) || ( jetMass2 > 135 && jetMass2 < 250 ) ) )*/{ 
+                        METprojPlots[0].fill(ntuple,weight);
+                    }else{
                         plots[bin][1].fill(ntuple,weight);
+                        METprojPlots[1].fill(ntuple,weight);
                     }
                 }
                 if( antiTaggingLooseCut_photon(ntuple) ){
                     double jetMass1 = fillLeadingJetMass_photon(ntuple);
                     //double jetMass2 = fillSubLeadingJetMass(ntuple);
-                    if( ( jetMass1 > 85 && jetMass1 < 135 ) /*&& ( jetMass2 > 85 && jetMass2 < 135 )*/ ){
+                    if( jetMass1 > 85 && jetMass1 < 135 ){
                         plots[bin][2].fill(ntuple,weight);
-                    }else /*if( ( ( jetMass1 > 50 && jetMass1 < 85 ) || ( jetMass1 > 135 && jetMass1 < 250 ) ) !=  ( ( jetMass2 > 50 && jetMass2 < 85 ) || ( jetMass2 > 135 && jetMass2 < 250 ) ) )*/{ 
+                        METprojPlots[2].fill(ntuple,weight);
+                    }else{
                         plots[bin][3].fill(ntuple,weight);
+                        METprojPlots[3].fill(ntuple,weight);
                     }
-                }
-            }
-        }
-    }
+                }// end antitag
+            }// end double tag else
+        }// end event loop 
+    }// end sample loop 
 
 
     // data 
@@ -117,6 +138,9 @@ int main(int argc, char** argv){
     for( int iBin = 0 ; iBin < numMETbins ; iBin++){
         for( int iPlot = 0 ; iPlot < plots[iBin].size() ; iPlot++){
             plots[iBin][iPlot].addDataNtuple(ntuple,"data");
+        }
+        for( int iPlot = 0 ; iPlot < plots[iBin].size() ; iPlot++){
+            METprojPlots[iPlot].addDataNtuple(ntuple,"data");
         }
     }
 
@@ -141,28 +165,34 @@ int main(int argc, char** argv){
         if( doubleTaggingLooseCut_photon(ntuple) ){
             double jetMass1 = fillLeadingJetMass_photon(ntuple);
             //double jetMass2 = fillSubLeadingJetMass(ntuple);
-            if( ( jetMass1 > 85 && jetMass1 < 135 ) /*&& ( jetMass2 > 85 && jetMass2 < 135 )*/ ){
+            if( jetMass1 > 85 && jetMass1 < 135 ){
                 plots[bin][4].fillData(ntuple);
-            }else /*if( ( ( jetMass1 > 50 && jetMass1 < 85 ) || ( jetMass1 > 135 && jetMass1 < 250 ) ) !=  ( ( jetMass2 > 50 && jetMass2 < 85 ) || ( jetMass2 > 135 && jetMass2 < 250 ) ) )*/{ 
+                METprojPlots[4].fillData(ntuple);
+            }else{
                 plots[bin][5].fillData(ntuple);
+                METprojPlots[5].fillData(ntuple);
             }
         }else{
             if( singleHiggsTagLooseCut_photon(ntuple) ){
                 double jetMass1 = fillLeadingJetMass_photon(ntuple);
                 //double jetMass2 = fillSubLeadingJetMass(ntuple);
-                if( ( jetMass1 > 85 && jetMass1 < 135 ) /*&& ( jetMass2 > 85 && jetMass2 < 135 )*/ ){ 
+                if( jetMass1 > 85 && jetMass1 < 135 ){
                     plots[bin][0].fillData(ntuple);
-                }else /*if( ( ( jetMass1 > 50 && jetMass1 < 85 ) || ( jetMass1 > 135 && jetMass1 < 250 ) ) !=  ( ( jetMass2 > 50 && jetMass2 < 85 ) || ( jetMass2 > 135 && jetMass2 < 250 ) ) )*/{ 
+                    METprojPlots[0].fillData(ntuple);
+                }else{
                     plots[bin][1].fillData(ntuple);
+                    METprojPlots[1].fillData(ntuple);
                 }
             }
             if( antiTaggingLooseCut_photon(ntuple) ){
                 double jetMass1 = fillLeadingJetMass_photon(ntuple);
                 //double jetMass2 = fillSubLeadingJetMass(ntuple);
-                if( ( jetMass1 > 85 && jetMass1 < 135 ) /*&& ( jetMass2 > 85 && jetMass2 < 135 )*/ ){
+                if( jetMass1 > 85 && jetMass1 < 135 ){
                     plots[bin][2].fillData(ntuple);
-                }else /*if( ( ( jetMass1 > 50 && jetMass1 < 85 ) || ( jetMass1 > 135 && jetMass1 < 250 ) ) !=  ( ( jetMass2 > 50 && jetMass2 < 85 ) || ( jetMass2 > 135 && jetMass2 < 250 ) ) )*/{ 
+                    METprojPlots[2].fillData(ntuple);
+                }else{
                     plots[bin][3].fillData(ntuple);
+                    METprojPlots[3].fillData(ntuple);
                 }
             }
         }
@@ -177,6 +207,11 @@ int main(int argc, char** argv){
             plots[iBin][iPlot].buildSum();
             plots[iBin][iPlot].sum->Write();
         }
+    }
+    for( int iPlot = 0 ; iPlot < METprojPlots.size() ; iPlot++){
+        METprojPlots[iPlot].Write();
+        METprojPlots[iPlot].buildSum();
+        METprojPlots[iPlot].sum->Write();
     }
     outputFile->Close();
 }
