@@ -232,9 +232,6 @@ if __name__ == '__main__':
 	signalRegion.writeRates();
 	signalRegion1H.writeRates();
 
-	sidebandRegion1H.writeRates();
-	sidebandRegion.writeRates();
-	
 	antitagRegion.fillRates(antitagRegion_Rates);
 	antitagRegion.setObservedManually(antitagRegion_Obs);
 	antitagRegion.writeRates();
