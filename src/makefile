@@ -3,7 +3,7 @@ CFLAGS=
 LIBS=`root-config --cflags --glibs` -L $(ROOTSYS)/lib -I$(ROOTSYS)/include
 ROOFITLIBS=-lRooFit -lHtml -lMinuit -lRooFitCore
 INCLUDES=-I$(CMSSW_BASE)/src/AnalysisTools/src/ -I$(CMSSW_BASE)/src/ -I$(CMSSW_BASE)/src/Analysis/btag/
-EXECS=flavorFit plotObs_photon_baseline plotObs_singleEleCR_baseline plotObs_photon_doubleHiggsTag plotObs_photon_antitag plotObs_lowDPhi_baseline plotObs_lowDPhi_antitag plotObs_lowDPhi_doubleHiggsTag plotObs_singleHiggsTag plotObs_doubleHiggsTag plotObs_antitag plotObs_baseline plotObs_singleMuCR_antitag plotObs_singleMuCR_singleHiggsTag plotObs_singleMuCR_doubleHiggsTag plotObs_singleMuCR_baseline baselineSkim singleMuCRSkim datacardInputs datacardInputs_MET_BTag1_DeltaPhi12 cutFlow_HIggsinoOnly frankSynch cutFlow NminusOne J1BB_NminusOne J2BB_NminusOne J1M_NminusOne J2M_NminusOne J1Pt_NminusOne J2Pt_NminusOne ALPHABET ALPHABET_photon plotObs_fastFullComp analyzeALPHABET analyzeRpassFail testBTagSF
+EXECS=flavorFit plotObs_photon_baseline plotObs_singleEleCR_baseline plotObs_photon_doubleHiggsTag plotObs_photon_antitag plotObs_lowDPhi_baseline plotObs_lowDPhi_antitag plotObs_lowDPhi_doubleHiggsTag plotObs_singleHiggsTag plotObs_doubleHiggsTag plotObs_antitag plotObs_baseline plotObs_singleMuCR_antitag plotObs_singleMuCR_singleHiggsTag plotObs_singleMuCR_doubleHiggsTag plotObs_singleMuCR_baseline baselineSkim singleMuCRSkim datacardInputs datacardInputs_MET_BTag1_DeltaPhi12 cutFlow_HIggsinoOnly frankSynch cutFlow NminusOne J1BB_NminusOne J2BB_NminusOne J1M_NminusOne J2M_NminusOne J1Pt_NminusOne J2Pt_NminusOne ALPHABET ALPHABET_photon plotObs_fastFullComp analyzeALPHABET analyzeRpassFail testBTagSF checkScaleFactors
 $(EXECS):RA2bTree.cc definitions.cc skimSamples.cc plotterUtils.cc
 flavorFit:flavorFit.cc
 baselineSkim:sampleParser.cc selectBaseline.cc baselineSkim.cc
@@ -46,7 +46,7 @@ analyzeALPHABET:analyzeALPHABET.cc
 analyzeRpassFail:analyzeRpassFail.cc
 plotObs_fastFullComp:plotObs_fastFullComp.cc fastFullSamples.cc
 testBTagSF:testBTagSF.cc
-
+checkScaleFactors: checkScaleFactors.cc
 all:$(EXECS) FulltoyValidation plotHiggsPt_TChiHH
 
 testBTagSF:
@@ -115,7 +115,8 @@ singleMuCRSkim:
 	$(CC) $(CFLAGS) $(LIBS) $(INCLUDES) singleMuCRSkim.cc -o ../bin/$@
 datacardInputs:
 	$(CC) $(CFLAGS) $(LIBS) $(INCLUDES) datacardInputs.cc -o ../bin/$@
-
+checkScaleFactors:
+	$(CC) $(CFLAGS) $(LIBS) $(INCLUDES) checkScaleFactors.cc -o ../bin/$@
 datacardInputs_MET:
 	$(CC) $(CFLAGS) $(LIBS) $(INCLUDES) datacardInputs_MET.cc -o ../bin/$@
 

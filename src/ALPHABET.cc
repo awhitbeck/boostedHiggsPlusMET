@@ -101,6 +101,8 @@ int main(int argc, char** argv){
                 std::vector<double> EfficiencyCenterUpDown = Eff_MetMhtSextetReal_CenterUpDown(ntuple->HT, ntuple->MHT, ntuple->NJets);
        		//std::cout<<"HT, MHT, NJets "<<ntuple->HT<<" , "<<ntuple->MHT<<", "<<ntuple->NJets<<std::endl;    
 		//std::cout<<"trig Weight "<<EfficiencyCenterUpDown[0]<<std::endl;
+		//std::cout<<"PU Weight "<<customPUweights(ntuple)<<std::endl;
+
 	     trigWeight=EfficiencyCenterUpDown[0];
             }
             if( region == 0 ){
@@ -114,10 +116,11 @@ int main(int argc, char** argv){
             }
             if( skims.sampleName[iSample] == "TTExtra" && ntuple->madHT>600. )continue;
             bin = -1;
-            weight = ntuple->Weight*lumi*trigWeight;
-	   
-            //if( skims.sampleName[iSample] == "TTExtra" || skims.sampleName[iSample] == "TTJets" )
-            //    weight *= ISRweights(ntuple);
+            weight = ntuple->Weight*lumi*trigWeight *customPUweights(ntuple);	   
+            if( skims.sampleName[iSample] == "TTExtra" || skims.sampleName[iSample] == "TTJets" ){
+                weight *= ISRweights(ntuple);
+		//std::cout<<"ISRweights "<<ISRweights(ntuple)<<std::endl;
+	    }
             for( int iBin = 0 ; iBin < numMETbins ; iBin++ ){
                 if( ntuple->MET > lowestMET ){
                     if( ntuple->MET > numMETbins*(binWidth-1)+lowestMET )
