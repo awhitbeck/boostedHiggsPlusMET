@@ -11,6 +11,6 @@ Output = $(exec_name).stdout
 Error = $(exec_name).stderr
 Log = $(exec_name).condor
 notification = Error
-notify_user = awhitbe1@FNAL.GOV
+notify_user = $ENV(awhitbe1)@FNAL.GOV
 x509userproxy = $ENV(X509_USER_PROXY)
 Queue 1

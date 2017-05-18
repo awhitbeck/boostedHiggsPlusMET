@@ -22,11 +22,11 @@ make all
 
 for file in $(ls *root)
 do
-    xrdcp -f $file root://cmseos.fnal.gov//store/user/awhitbe1/boostedHiggsPlusMET/$output_dir/$file
+    xrdcp -f $file root://cmseos.fnal.gov//store/user/${USER}/boostedHiggsPlusMET/$output_dir/$file
 done
 
 cd ../
 for file in $(ls plots/*/*)
 do 
-    xrdcp -f $file root://cmseos.fnal.gov//store/user/awhitbe1/boostedHiggsPlusMET/$output_dir/$file
+    xrdcp -f $file root://cmseos.fnal.gov//store/user/${USER}/boostedHiggsPlusMET/$output_dir/$file
 done
