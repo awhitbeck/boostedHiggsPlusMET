@@ -19,18 +19,23 @@ NEEDS UPDATING
  
 #### Batch:
 
-Before submitting any batch jobs, be sure to retar your working area and copy it into the <code>src/</code> directory.
+All batch submissions are done through `submitBatch.sh`.  Code is tar'ed sent to worker nodes and outputs are transferd to EOS.  
+You will need to have a directory in your eos called boostedHiggsPlusMET.  This script by default takes a branch as input
+and will create a new EOS area with the name of the latest commit hash from the remote repository (origin is used).
 
 <pre>
 bash makeTar.sh        
 </pre>
 
-NEEDS UPDATING -- ALSO NEEDS CODE TO STREAMLINE BATCH SUBMISSION
+In case you want to submit jobs one by one, you can re-tar your area with `makeTag.sh` and generate the relevant directory
+structure in your target EOS area using `makeOutputDir.sh`.  The latter should be passed the target directory.  Individual
+jobs can then be submitted with e.g.:
 
-Example:
-<pre>
----
-</pre>
+```bash
+condor_submit batchExecute.jdl exec_name="plotObs_baseline" arguments="${hash} plotObs_baseline"
+```
+
+Argument for the executable can be tacked onto the end of `arguments`.  The variable hash should be your target EOS directory.
 
 #### Things to run
 
