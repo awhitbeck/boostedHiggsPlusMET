@@ -14,12 +14,12 @@ void computeScaleFactor(TH1F* hdata,TH1F* hmc){
 }
 
 
-void checkScaleFactors(TString tag = "_singleMu"){
+void checkScaleFactors(TString tag = "_singleMu", TString baseDir="./"){
 
     gROOT->ProcessLine(".L tdrstyle.C");
     gROOT->ProcessLine("setTDRStyle()");
 
-    TFile* f = new TFile("ALPHABEThistos"+tag+".root","READ");
+    TFile* f = new TFile(baseDir+"ALPHABEThistos"+tag+".root","READ");
     TH1F* hdata,*hmc;
 
     TH1F* doubletagSRdata = new TH1F("doubletagSRdata","doubletagSRdata",4,100,900);
@@ -162,7 +162,7 @@ void checkScaleFactors(TString tag = "_singleMu"){
     cout << " \\\\ \\hline" << endl;
 
     // ---------------------------------------------
-    cout << "\\multicolumn{2}{c}{MET $<$ 700} \\\\ \\hline" << endl;
+    cout << "\\multicolumn{2}{c}{MET $>$ 700} \\\\ \\hline" << endl;
     hdata = (TH1F*) f->Get("mJ_doubletagSR_700_data");
     hmc = (TH1F*) f->Get("mJ_doubletagSR_700_sum");
     cout << "$\\alpha_{}$ & ";
