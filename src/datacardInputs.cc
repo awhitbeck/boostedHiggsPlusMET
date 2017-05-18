@@ -55,22 +55,22 @@ int main(int argc, char** argv){
 	TString sidebandantitag="mJ_antitagSB"+tag;
 	double error=0;
 	//std::cout<<tag<<std::endl;
-	double MetBin=((TH1F*)inputFile->Get(signal2Htag))->IntegralAndError(1,40,error);
+	double MetBin=((TH1F*)inputFile->Get(signal2Htag))->IntegralAndError(1,3,error);
 	AnalysisMETBins_doubletagSR->SetBinContent(i, MetBin);
 	AnalysisMETBins_doubletagSR->SetBinError(i, error);
-	MetBin=((TH1F*)inputFile->Get(signal1Htag))->IntegralAndError(1,40,error);
+	MetBin=((TH1F*)inputFile->Get(signal1Htag))->IntegralAndError(1,3,error);
 	AnalysisMETBins_tagSR->SetBinContent(i, MetBin);
 	AnalysisMETBins_tagSR->SetBinError(i, error);
-	MetBin=((TH1F*)inputFile->Get(signalantitag))->IntegralAndError(1,40,error);
+	MetBin=((TH1F*)inputFile->Get(signalantitag))->IntegralAndError(1,3,error);
 	AnalysisMETBins_antitagSR->SetBinContent(i, MetBin);
 	AnalysisMETBins_antitagSR->SetBinError(i, error);
-	MetBin=((TH1F*)inputFile->Get(signal2Htag))->IntegralAndError(1,40,error);
+	MetBin=((TH1F*)inputFile->Get(signal2Htag))->IntegralAndError(1,3,error);
 	AnalysisMETBins_doubletagSB->SetBinContent(i, MetBin);
 	AnalysisMETBins_doubletagSB->SetBinError(i, error);
-	MetBin=((TH1F*)inputFile->Get(signal1Htag))->IntegralAndError(1,40,error);
+	MetBin=((TH1F*)inputFile->Get(signal1Htag))->IntegralAndError(1,3,error);
 	AnalysisMETBins_tagSB->SetBinContent(i, MetBin);
 	AnalysisMETBins_tagSB->SetBinError(i, error);
-	MetBin=((TH1F*)inputFile->Get(sidebandantitag))->IntegralAndError(1,40,error);
+	MetBin=((TH1F*)inputFile->Get(sidebandantitag))->IntegralAndError(1,3,error);
 	AnalysisMETBins_antitagSB->SetBinContent(i, MetBin);
 	AnalysisMETBins_antitagSB->SetBinError(i, error);
 	}
