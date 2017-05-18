@@ -1010,69 +1010,45 @@ template<typename ntupleType> bool doubleHiggsTagCut(ntupleType* ntuple ){
 // - - - - - - - - - - photon specializations - - - - - - - - - - - - //
 ////////////////////////////////////////////////////////////////////////
 template<typename ntupleType> bool singleHiggsTagLooseCut_photon(ntupleType* ntuple ){ 
-    int numAK8jetsNoPhoton ;
-    int leadingJetNoPhoton ;
-    int subleadingJetNoPhoton ;
-    computeNumAK8jetsNoPhoton(ntuple,numAK8jetsNoPhoton,leadingJetNoPhoton,subleadingJetNoPhoton);
-  return ( ( ntuple->JetsAK8_doubleBDiscriminator->at(leadingJetNoPhoton) > bbtagCut ) 
-           && ( ntuple->JetsAK8_doubleBDiscriminator->at(subleadingJetNoPhoton) < bbtagCut )
+  return ( ( ntuple->JetsAK8Clean_doubleBDiscriminator->at(0) > bbtagCut ) 
+           && ( ntuple->JetsAK8Clean_doubleBDiscriminator->at(1) < bbtagCut )
            //|| ( ntuple->JetsAK8_doubleBDiscriminator->at(subleadingJetNoPhoton) > bbtagCut )
            );
 }
 
 template<typename ntupleType> bool antiTaggingLooseCut_photon(ntupleType* ntuple ){
-    int numAK8jetsNoPhoton ;
-    int leadingJetNoPhoton ;
-    int subleadingJetNoPhoton ;
-    computeNumAK8jetsNoPhoton(ntuple,numAK8jetsNoPhoton,leadingJetNoPhoton,subleadingJetNoPhoton);
-    return ( ( ( ntuple->JetsAK8_doubleBDiscriminator->at(leadingJetNoPhoton) < bbtagCut
+    return ( ( ( ntuple->JetsAK8Clean_doubleBDiscriminator->at(0) < bbtagCut
                ) &&
-             ( ntuple->JetsAK8_doubleBDiscriminator->at(subleadingJetNoPhoton) < bbtagCut 
+             ( ntuple->JetsAK8Clean_doubleBDiscriminator->at(1) < bbtagCut 
                ) ) ) ;
 }
 
 template<typename ntupleType> bool doubleTaggingLooseCut_photon(ntupleType* ntuple ){
-    int numAK8jetsNoPhoton ;
-    int leadingJetNoPhoton ;
-    int subleadingJetNoPhoton ;
-    computeNumAK8jetsNoPhoton(ntuple,numAK8jetsNoPhoton,leadingJetNoPhoton,subleadingJetNoPhoton);
-    return ( ntuple->JetsAK8_doubleBDiscriminator->at(leadingJetNoPhoton) > bbtagCut && 
-             ntuple->JetsAK8_doubleBDiscriminator->at(subleadingJetNoPhoton) > bbtagCut );
+    return ( ntuple->JetsAK8Clean_doubleBDiscriminator->at(0) > bbtagCut && 
+             ntuple->JetsAK8Clean_doubleBDiscriminator->at(1) > bbtagCut );
 }
 
 template<typename ntupleType> bool doubleMassCut_photon(ntupleType* ntuple ){
-    int numAK8jetsNoPhoton ;
-    int leadingJetNoPhoton ;
-    int subleadingJetNoPhoton ;
-    computeNumAK8jetsNoPhoton(ntuple,numAK8jetsNoPhoton,leadingJetNoPhoton,subleadingJetNoPhoton);
-    return ( ntuple->JetsAK8_prunedMass->at(leadingJetNoPhoton) > 85. &&
-             ntuple->JetsAK8_prunedMass->at(leadingJetNoPhoton) < 135. &&
-             ntuple->JetsAK8_prunedMass->at(subleadingJetNoPhoton) > 85. &&
-             ntuple->JetsAK8_prunedMass->at(subleadingJetNoPhoton) < 135. );
+    return ( ntuple->JetsAK8Clean_prunedMass->at(0) > 85. &&
+             ntuple->JetsAK8Clean_prunedMass->at(0) < 135. &&
+             ntuple->JetsAK8Clean_prunedMass->at(1) > 85. &&
+             ntuple->JetsAK8Clean_prunedMass->at(1) < 135. );
 }
 
 template<typename ntupleType> bool singleHiggsTagCut_photon(ntupleType* ntuple ){
-    int numAK8jetsNoPhoton ;
-    int leadingJetNoPhoton ;
-    int subleadingJetNoPhoton ;
-    computeNumAK8jetsNoPhoton(ntuple,numAK8jetsNoPhoton,leadingJetNoPhoton,subleadingJetNoPhoton);
-    return ( (ntuple->JetsAK8_prunedMass->at(leadingJetNoPhoton) > 85. && 
-              ntuple->JetsAK8_prunedMass->at(leadingJetNoPhoton) < 135. && 
-              ntuple->JetsAK8_doubleBDiscriminator->at(leadingJetNoPhoton) > bbtagCut ) ||
-             (ntuple->JetsAK8_prunedMass->at(subleadingJetNoPhoton) > 85. && 
-              ntuple->JetsAK8_prunedMass->at(subleadingJetNoPhoton) < 135. && 
-              ntuple->JetsAK8_doubleBDiscriminator->at(subleadingJetNoPhoton) > bbtagCut ) );
+    return ( (ntuple->JetsAK8Clean_prunedMass->at(0) > 85. && 
+              ntuple->JetsAK8Clean_prunedMass->at(0) < 135. && 
+              ntuple->JetsAK8Clean_doubleBDiscriminator->at(0) > bbtagCut ) ||
+             (ntuple->JetsAK8Clean_prunedMass->at(1) > 85. && 
+              ntuple->JetsAK8Clean_prunedMass->at(1) < 135. && 
+              ntuple->JetsAK8Clean_doubleBDiscriminator->at(1) > bbtagCut ) );
 }
 
 template<typename ntupleType> bool doubleHiggsTagCut_photon(ntupleType* ntuple ){
-    int numAK8jetsNoPhoton ;
-    int leadingJetNoPhoton ;
-    int subleadingJetNoPhoton ;
-    computeNumAK8jetsNoPhoton(ntuple,numAK8jetsNoPhoton,leadingJetNoPhoton,subleadingJetNoPhoton);
-    return ( ntuple->JetsAK8_prunedMass->at(leadingJetNoPhoton) > 85. && 
-             ntuple->JetsAK8_prunedMass->at(leadingJetNoPhoton) < 135. && 
-             ntuple->JetsAK8_doubleBDiscriminator->at(leadingJetNoPhoton) > bbtagCut &&
-             ntuple->JetsAK8_prunedMass->at(subleadingJetNoPhoton) > 85. && 
-             ntuple->JetsAK8_prunedMass->at(subleadingJetNoPhoton) < 135. && 
-             ntuple->JetsAK8_doubleBDiscriminator->at(subleadingJetNoPhoton) > bbtagCut ) ;
+    return ( ntuple->JetsAK8Clean_prunedMass->at(0) > 85. && 
+             ntuple->JetsAK8Clean_prunedMass->at(0) < 135. && 
+             ntuple->JetsAK8Clean_doubleBDiscriminator->at(0) > bbtagCut &&
+             ntuple->JetsAK8Clean_prunedMass->at(1) > 85. && 
+             ntuple->JetsAK8Clean_prunedMass->at(1) < 135. && 
+             ntuple->JetsAK8Clean_doubleBDiscriminator->at(1) > bbtagCut ) ;
 }
