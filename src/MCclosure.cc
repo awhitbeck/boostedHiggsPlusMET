@@ -10,12 +10,12 @@
 #include <iomanip>
 #include "TStyle.h"
 
-void MCclosure(TString tag = "", bool doubleHiggsRegion = true){
+void MCclosure(TString tag = "", bool doubleHiggsRegion = true, TString baseDir="./"){
 
     gROOT->ProcessLine(".L tdrstyle.C");
     gROOT->ProcessLine("setTDRStyle()");
 
-    TFile* f = new TFile("ALPHABEThistos"+tag+".root","READ");
+    TFile* f = new TFile(baseDir+"ALPHABEThistos"+tag+".root","READ");
     TH1F* hdata,*hmc;
 
     const int numSamples = 2;
@@ -37,7 +37,6 @@ void MCclosure(TString tag = "", bool doubleHiggsRegion = true){
     for( int r = 0 ; r < numRegions ; r++ ){
         temp[r] = (TH1F*) f->Get("MET_"+regionLabels[r]+"_sum");
         //temp[r]->Add((TH1F*)f->Get("MET_"+regionLabels[r]+"_TTExtra"));
-        temp[r]->Scale(35900.);
         MC[r] = new TH1F("MC_"+regionLabels[r],"MC_"+regionLabels[r],numMETbins+1,METbins);
 
         MC[r]->SetFillStyle(3490);
