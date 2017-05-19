@@ -26,9 +26,13 @@ template<typename ntupleType>void ntupleBranchStatus(ntupleType* ntuple){
   ntuple->fChain->SetBranchStatus("isoElectronTracksclean",1);
   ntuple->fChain->SetBranchStatus("isoMuonTracksclean",1);
   ntuple->fChain->SetBranchStatus("isoPionTracksclean",1);
+  ntuple->fChain->SetBranchStatus("isoElectronTracks",1);
+  ntuple->fChain->SetBranchStatus("isoMuonTracks",1);
+  ntuple->fChain->SetBranchStatus("isoPionTracks",1);
   ntuple->fChain->SetBranchStatus("Photon*",1);
   ntuple->fChain->SetBranchStatus("DeltaPhi*",1);
 
+  ntuple->fChain->SetBranchStatus("MHT",1);
   ntuple->fChain->SetBranchStatus("HT",1);
   ntuple->fChain->SetBranchStatus("NJets",1);
   ntuple->fChain->SetBranchStatus("BTags",1);
@@ -805,6 +809,9 @@ template<typename ntupleType> bool baselineCut(ntupleType* ntuple){
            ntuple->DeltaPhi2>0.5 &&
            ntuple->DeltaPhi3>0.3 && 
            ntuple->DeltaPhi4>0.3 &&
+	    ntuple->Muons->size()+ntuple->Electrons->size()==0 
+           && ntuple->isoElectronTracks+ntuple->isoMuonTracks +ntuple->isoPionTracks==0 &&
+	   
 /*
            ntuple->HBHENoiseFilter==1 && 
            ntuple->HBHEIsoNoiseFilter==1 && 

@@ -96,11 +96,11 @@ int main(int argc, char** argv){
         float trigWeight=1.0;
         for( int iEvt = 0 ; iEvt < numEvents ; iEvt++ ){
             ntuple->GetEntry(iEvt);
+            if( iEvt % 100000 == 0 ) cout << skims.sampleName[iSample] << ": " << iEvt << "/" << numEvents << endl;
             if(region==3 or region==0){
                 std::vector<double> EfficiencyCenterUpDown = Eff_MetMhtSextetReal_CenterUpDown(ntuple->HT, ntuple->MHT, ntuple->NJets);
                 trigWeight=EfficiencyCenterUpDown[0];
             }
-            if( iEvt % 100000 == 0 ) cout << skims.sampleName[iSample] << ": " << iEvt << "/" << numEvents << endl;
             if( region == 0 ){
                 if(! baselineCut(ntuple) ) continue;
             }else if( region == 1){
@@ -112,9 +112,11 @@ int main(int argc, char** argv){
             }
             if( skims.sampleName[iSample] == "TTExtra" && ntuple->madHT>600. )continue;
             bin = -1;
-            weight = ntuple->Weight*lumi;//*customPUweights(ntuple);
-            //if( skims.sampleName[iSample] == "TTExtra" || skims.sampleName[iSample] == "TTJets" )
-            //    weight *= ISRweights(ntuple);
+            weight = ntuple->Weight*lumi*trigWeight *customPUweights(ntuple);	   
+            if( skims.sampleName[iSample] == "TTExtra" || skims.sampleName[iSample] == "TTJets" ){
+                weight *= ISRweights(ntuple);
+		//std::cout<<"ISRweights "<<ISRweights(ntuple)<<std::endl;
+	    }
             for( int iBin = 0 ; iBin < numMETbins ; iBin++ ){
                 if( ntuple->MET > lowestMET ){
                     if( ntuple->MET > numMETbins*(binWidth-1)+lowestMET )
@@ -246,7 +248,7 @@ int main(int argc, char** argv){
 
     TFile* outputFile;
     if( region == 0 )
-        outputFile = new TFile("ALPHABEThistos.root","RECREATE");
+        outputFile = new TFile("ALPHABEThistosWeights.root","RECREATE");
     if( region == 1 )
         outputFile = new TFile("ALPHABEThistos_singleMu.root","RECREATE");
     if( region == 2 )
