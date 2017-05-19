@@ -2,6 +2,8 @@
 **/*#
 **/roostats*
 src/**/*.png
+src/**/*.pdf
+src/**/*.eps
 **/*~
 **/*root
 **/*exe
@@ -15,4 +17,7 @@ src/*/
 **/*.d
 **/*.so
 **/*.pcm
+plots/*
+scripts/*
+bin/*
 !data/PileupHistograms_0121_69p2mb_pm4p6.root
