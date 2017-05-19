@@ -18,7 +18,7 @@ using namespace std;
 
 int main(int argc, char** argv){
 
-  gROOT->ProcessLine(".L ~/tdrstyle.C");
+  gROOT->ProcessLine(".L ./tdrstyle.C");
   gROOT->ProcessLine("setTDRStyle()");
   
   skimSamples skims;
