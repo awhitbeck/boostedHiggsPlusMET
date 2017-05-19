@@ -35,3 +35,6 @@ condor_submit batchExecute.jdl exec_name="ALPHABET_singleMu" arguments="${hash} 
 condor_submit batchExecute.jdl exec_name="ALPHABET_singleEle" arguments="${hash} ALPHABET 2"
 condor_submit batchExecute.jdl exec_name="ALPHABET_lowDPhi" arguments="${hash} ALPHABET 3"
 condor_submit batchExecute.jdl exec_name="ALPHABET_photon" arguments="${hash} ALPHABET_photon"
+
+condor_submit batchExecute.jdl exec_name="datacardInputs" arguments="${hash} datacardInputs
+
