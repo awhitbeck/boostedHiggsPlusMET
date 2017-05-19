@@ -26,6 +26,9 @@ template<typename ntupleType>void ntupleBranchStatus(ntupleType* ntuple){
   ntuple->fChain->SetBranchStatus("isoElectronTracksclean",1);
   ntuple->fChain->SetBranchStatus("isoMuonTracksclean",1);
   ntuple->fChain->SetBranchStatus("isoPionTracksclean",1);
+  ntuple->fChain->SetBranchStatus("isoElectronTracks",1);
+  ntuple->fChain->SetBranchStatus("isoMuonTracks",1);
+  ntuple->fChain->SetBranchStatus("isoPionTracks",1);
   ntuple->fChain->SetBranchStatus("Photon*",1);
   ntuple->fChain->SetBranchStatus("DeltaPhi*",1);
 
