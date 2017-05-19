@@ -66,7 +66,7 @@ int main(int argc, char** argv){
                 plots[iBin][iPlot].addNtuple(ntuple,skims.sampleName[iSample]);
                 plots[iBin][iPlot].setFillColor(ntuple,skims.fillColor[iSample]);
             }
-                        for( int iPlot = 0 ; iPlot < METprojPlots.size() ; iPlot++){
+            for( int iPlot = 0 ; iPlot < METprojPlots.size() ; iPlot++){
                 METprojPlots[iPlot].addNtuple(ntuple,skims.sampleName[iSample]);
                 METprojPlots[iPlot].setFillColor(ntuple,skims.fillColor[iSample]);       
             }
@@ -75,6 +75,9 @@ int main(int argc, char** argv){
 
         int numEvents = ntuple->fChain->GetEntries();
         ntupleBranchStatus<RA2bTree>(ntuple);
+        int bin;
+        double jetMass1;
+        float weight;
         for( int iEvt = 0 ; iEvt < numEvents ; iEvt++ ){
             ntuple->GetEntry(iEvt);
             if( iEvt % 100000 == 0 ) cout << skims.sampleName[iSample] << ": " << iEvt << "/" << numEvents << endl;
@@ -82,21 +85,18 @@ int main(int argc, char** argv){
             if( skims.sampleName[iSample] == "QCD" && ntuple->Photons_nonPrompt->at(0) == 0 && ntuple->madMinPhotonDeltaR>0.4 && ntuple->madMinDeltaRStatus==1 ) continue;
             if( skims.sampleName[iSample] == "GJets" && ntuple->Photons_nonPrompt->at(0) == 1 ) continue;
 
-            int bin = -1;
-            int weight = 0 ;
-            for( int iBin = 0 ; iBin < numMETbins ; iBin++ ){
-                if( ntuple->MET > lowestMET ){
-                    if( ntuple->MET > numMETbins*(binWidth-1)+lowestMET )
-                        bin = numMETbins-1;
-                    else
-                        bin = int((ntuple->MET-lowestMET)/binWidth);
-                }
-            }
-            if( bin < 0 ) continue;
+            bin = -1;
+            weight = 0. ;
+            if( ntuple->METclean < lowestMET ) continue;
+            if( ntuple->METclean > lowestMET+binWidth*(numMETbins-1) )
+                bin = numMETbins-1;
+            else
+                bin = int((ntuple->METclean-lowestMET)/binWidth);
+
             weight = ntuple->Weight*lumi*customPUweights(ntuple);
             if( doubleTaggingLooseCut_photon(ntuple) ){
-                double jetMass1 = fillLeadingJetMass_photon(ntuple);
-                //double jetMass2 = fillSubLeadingJetMass(ntuple);
+                jetMass1 = fillLeadingJetMass_photon(ntuple);
+                //double jetMass2 = fillSubLeadingJetMass_photon(ntuple);
                 if( jetMass1 > 85 && jetMass1 < 135 ){ 
                     plots[bin][4].fill(ntuple,weight);
                     METprojPlots[4].fill(ntuple,weight);
@@ -106,8 +106,8 @@ int main(int argc, char** argv){
                 }
             }else{
                 if( singleHiggsTagLooseCut_photon(ntuple) ){
-                    double jetMass1 = fillLeadingJetMass_photon(ntuple);
-                    //double jetMass2 = fillSubLeadingJetMass(ntuple);
+                    jetMass1 = fillLeadingJetMass_photon(ntuple);
+                   //double jetMass2 = fillSubLeadingJetMass_photon(ntuple);
                     if( jetMass1 > 85 && jetMass1 < 135 ){
                         plots[bin][0].fill(ntuple,weight);
                         METprojPlots[0].fill(ntuple,weight);
@@ -117,8 +117,8 @@ int main(int argc, char** argv){
                     }
                 }
                 if( antiTaggingLooseCut_photon(ntuple) ){
-                    double jetMass1 = fillLeadingJetMass_photon(ntuple);
-                    //double jetMass2 = fillSubLeadingJetMass(ntuple);
+                    jetMass1 = fillLeadingJetMass_photon(ntuple);
+                    //double jetMass2 = fillSubLeadingJetMass_photon(ntuple);
                     if( jetMass1 > 85 && jetMass1 < 135 ){
                         plots[bin][2].fill(ntuple,weight);
                         METprojPlots[2].fill(ntuple,weight);
@@ -146,24 +146,23 @@ int main(int argc, char** argv){
 
     int numEvents = ntuple->fChain->GetEntries();
     ntupleBranchStatus<RA2bTree>(ntuple);
+    int bin;
+    double jetMass1;
     for( int iEvt = 0 ; iEvt < numEvents ; iEvt++ ){
         ntuple->GetEntry(iEvt);
         if( iEvt % 100000 == 0 ) cout << "data: " << iEvt << "/" << numEvents << endl;
         if(! photonBaselineCut(ntuple) ) continue;
         if( !ntuple->TriggerPass->at(51)==1 ) continue;
-        int bin = -1;
-        for( int iBin = 0 ; iBin < numMETbins ; iBin++ ){
-            if( ntuple->MET > lowestMET ){
-                if( ntuple->MET > lowestMET+binWidth*(numMETbins-1) )
-                    bin = numMETbins-1;
-                else
-                    bin = int((ntuple->MET-lowestMET)/binWidth);
-            }
-        }
-        if( bin < 0 ) continue;
-      
+
+        bin = -1;
+        if( ntuple->METclean < lowestMET ) continue;
+        if( ntuple->METclean > lowestMET+binWidth*(numMETbins-1) )
+            bin = numMETbins-1;
+        else
+            bin = int((ntuple->METclean-lowestMET)/binWidth);
+
         if( doubleTaggingLooseCut_photon(ntuple) ){
-            double jetMass1 = fillLeadingJetMass_photon(ntuple);
+            jetMass1 = fillLeadingJetMass_photon(ntuple);
             //double jetMass2 = fillSubLeadingJetMass(ntuple);
             if( jetMass1 > 85 && jetMass1 < 135 ){
                 plots[bin][4].fillData(ntuple);
@@ -174,7 +173,7 @@ int main(int argc, char** argv){
             }
         }else{
             if( singleHiggsTagLooseCut_photon(ntuple) ){
-                double jetMass1 = fillLeadingJetMass_photon(ntuple);
+                jetMass1 = fillLeadingJetMass_photon(ntuple);
                 //double jetMass2 = fillSubLeadingJetMass(ntuple);
                 if( jetMass1 > 85 && jetMass1 < 135 ){
                     plots[bin][0].fillData(ntuple);
@@ -185,7 +184,7 @@ int main(int argc, char** argv){
                 }
             }
             if( antiTaggingLooseCut_photon(ntuple) ){
-                double jetMass1 = fillLeadingJetMass_photon(ntuple);
+                jetMass1 = fillLeadingJetMass_photon(ntuple);
                 //double jetMass2 = fillSubLeadingJetMass(ntuple);
                 if( jetMass1 > 85 && jetMass1 < 135 ){
                     plots[bin][2].fillData(ntuple);
