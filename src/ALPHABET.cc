@@ -182,16 +182,16 @@ int main(int argc, char** argv){
         if( iEvt % 100000 == 0 ) cout << "data: " << iEvt << "/" << numEvents << endl;
         if( region == 0 ){
             if(! baselineCut(ntuple) ) continue;
-            // need triggers
+            if( ntuple->TriggerPass->at(41)!=1 && ntuple->TriggerPass->at(42)!=1 && ntuple->TriggerPass->at(43)!=1 && ntuple->TriggerPass->at(44)!=1 ) continue;
         }else if( region == 1){
             if(! singleMuBaselineCut(ntuple) ) continue;
-            // need triggers
+            if( ntuple->TriggerPass->at(21)!=1 && ntuple->TriggerPass->at(22)!=1 && ntuple->TriggerPass->at(23)!=1 && ntuple->TriggerPass->at(24)!=1 && ntuple->TriggerPass->at(28)!=1 ) continue;
         }else if( region == 2){
             if(! singleEleBaselineCut(ntuple) ) continue;
-            // need triggers
+            if( ntuple->TriggerPass->at(5) != 1 && ntuple->TriggerPass->at(6)!=1 && ntuple->TriggerPass->at(7)!=1 && ntuple->TriggerPass->at(8)!=1) continue;
         }else if( region == 3 ){ 
             if(! lowDphiBaselineCut(ntuple) ) continue;
-            // need triggers 
+            if( ntuple->TriggerPass->at(41)!=1 && ntuple->TriggerPass->at(42)!=1 && ntuple->TriggerPass->at(43)!=1 && ntuple->TriggerPass->at(44)!=1 ) continue;
         }
         int bin = -1;
         for( int iBin = 0 ; iBin < numMETbins ; iBin++ ){
