@@ -397,13 +397,11 @@ template<typename ntupleType> double fillLeadingJetMass(ntupleType* ntuple){
 }
 
 template<typename ntupleType> double fillLeadingJetMass_photon(ntupleType* ntuple){
-  int numAK8jetsNoPhoton ;
-  int leadingJetNoPhoton ;
-  int subleadingJetNoPhoton ;
-  computeNumAK8jetsNoPhoton(ntuple,numAK8jetsNoPhoton,leadingJetNoPhoton,subleadingJetNoPhoton);
-  if( leadingJetNoPhoton == -1 ) return -99999.;
-  else
-      return ntuple->JetsAK8_prunedMass->at(leadingJetNoPhoton);
+    return ntuple->JetsAK8Clean_prunedMass->at(0);
+}
+
+template<typename ntupleType> double fillSubLeadingJetMass_photon(ntupleType* ntuple){
+    return ntuple->JetsAK8Clean_prunedMass->at(1);
 }
 
 template<typename ntupleType> double fillLeadingJetFlavor(ntupleType* ntuple){
@@ -430,14 +428,7 @@ template<typename ntupleType> double fillLeadingBBtag(ntupleType* ntuple){
 }
 
 template<typename ntupleType> double fillLeadingBBtag_photon(ntupleType* ntuple){
-  int numAK8jetsNoPhoton ;
-  int leadingJetNoPhoton ;
-  int subleadingJetNoPhoton ;
-  computeNumAK8jetsNoPhoton(ntuple,numAK8jetsNoPhoton,leadingJetNoPhoton,subleadingJetNoPhoton);
-  if( leadingJetNoPhoton == -1 ) 
-      return -99999;
-  else 
-      return ntuple->JetsAK8_doubleBDiscriminator->at(leadingJetNoPhoton);
+    return ntuple->JetsAK8Clean_doubleBDiscriminator->at(0);
 }
 
 template<typename ntupleType> double fillLeadingTau21(ntupleType* ntuple){
@@ -477,14 +468,7 @@ template<typename ntupleType> double fillSubLeadingBBtag(ntupleType* ntuple){
 }
 
 template<typename ntupleType> double fillSubLeadingBBtag_photon(ntupleType* ntuple){
-  int numAK8jetsNoPhoton ;
-  int leadingJetNoPhoton ;
-  int subleadingJetNoPhoton ;
-  computeNumAK8jetsNoPhoton(ntuple,numAK8jetsNoPhoton,leadingJetNoPhoton,subleadingJetNoPhoton);
-  if( subleadingJetNoPhoton == -1 ) 
-      return -99999.;
-  else
-      return ntuple->JetsAK8_doubleBDiscriminator->at(subleadingJetNoPhoton);
+    return ntuple->JetsAK8Clean_doubleBDiscriminator->at(1);
 }
 
 template<typename ntupleType> double fillSubLeadingTau21(ntupleType* ntuple){
@@ -748,8 +732,7 @@ template<typename ntupleType> bool FiltersCut(ntupleType* ntuple){
            ntuple->NVtx>0 && 
            ntuple->MET/ntuple->CaloMET < 5. &&
            ntuple->BadPFMuonFilter == 1 &&
-           ntuple->BadChargedCandidateFilter == 1 && 
-           ntuple->JetID == 1;
+        ntuple->BadChargedCandidateFilter == 1;
 }
 
 template<typename ntupleType> bool AK8MultCut(ntupleType* ntuple){
@@ -819,7 +802,7 @@ template<typename ntupleType> bool baselineCut(ntupleType* ntuple){
            ntuple->EcalDeadCellTriggerPrimitiveFilter == 1 && 
            ntuple->NVtx>0 && 
 */
-	   FiltersCut(ntuple) &&
+           FiltersCut(ntuple) &&
            ntuple->JetID == 1);
 
 }
@@ -853,7 +836,7 @@ template<typename ntupleType> bool singleMuBaselineCut(ntupleType* ntuple){
              ntuple->EcalDeadCellTriggerPrimitiveFilter == 1 && 
              ntuple->NVtx>0 && 
 	     */
-	      FiltersCut(ntuple) &&
+             FiltersCut(ntuple) &&
              ntuple->JetID == 1);
     
 }
@@ -912,29 +895,11 @@ template<typename ntupleType> bool lowDphiBaselineCut(ntupleType* ntuple){
            ntuple->EcalDeadCellTriggerPrimitiveFilter == 1 && 
            ntuple->NVtx>0 && 
 	   */ 
-	    FiltersCut(ntuple) &&
+           FiltersCut(ntuple) &&
            ntuple->JetID == 1);
 }
 
-template<typename ntupleType> void computeNumAK8jetsNoPhoton(ntupleType* ntuple, int &nJets, int &leadIndex, int &subleadIndex){
-
-    TLorentzVector photon = ntuple->Photons->at(0);
-    subleadIndex = -1;
-    leadIndex = -1;
-    nJets = 0;
-    for( int iJet = 0 ; iJet < ntuple->JetsAK8->size() ; iJet++ ){
-        if( ntuple->JetsAK8->at(iJet).DeltaR(photon) > 0.8 ){ 
-            nJets++;
-            if( nJets == 1 ) 
-                leadIndex = iJet;
-            if( nJets == 2 )
-                subleadIndex = iJet;
-        }
-    }
-}
-
 template<typename ntupleType> bool photonBaselineCut(ntupleType* ntuple){
-
     return ( ntuple->Photons->size()==1 &&
              ntuple->Photons->at(0).Pt() > 200. && 
              ntuple->Photons_fullID->size() == 1 && 
@@ -957,14 +922,7 @@ template<typename ntupleType> bool photonBaselineCut(ntupleType* ntuple){
              ntuple->isoPionTracksclean == 0 &&
              ntuple->Electrons->size() == 0 &&
              ntuple->Muons->size() == 0 && 
- 	     /*
-             ntuple->HBHENoiseFilter==1 && 
-             ntuple->HBHEIsoNoiseFilter==1 && 
-             ntuple->eeBadScFilter==1 && 
-             ntuple->EcalDeadCellTriggerPrimitiveFilter == 1 && 
-             ntuple->NVtx>0 && 
-	     */
-	      FiltersCut(ntuple) &&
+             FiltersCut(ntuple) &&
              ntuple->JetIDclean == 1);
 }
 
