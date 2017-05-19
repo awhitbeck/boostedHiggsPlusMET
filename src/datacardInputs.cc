@@ -12,7 +12,7 @@
 #include "plotterUtils.cc"
 #include "skimSamples.cc"
 #include "definitions.cc"
-#include "TriggerEfficiencySextet.cp"
+#include "TriggerEfficiencySextet.cc"
 #include "RA2bTree.cc"
 using namespace std;
 
