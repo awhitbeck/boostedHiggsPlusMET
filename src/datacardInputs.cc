@@ -24,8 +24,8 @@ int main(int argc, char** argv){
   skimSamples skims;
   typedef plot<RA2bTree> plot;
   double METBins[4] = {300.,500.,700.,2500.};
-  TFile*inputFile = new TFile("ALPHABEThistos.root","read");
-  /*
+  TFile*inputFile = new TFile("ALPHABEThistos.root","read");  
+/*
   plot BinsSRSingleHiggsPlot(*fillAnalysisBins<RA2bTree>,"AnalysisMETBins_tagSR","MET",3,METBins);
   plot BinsSRAntiTagPlot(*fillAnalysisBins<RA2bTree>,"AnalysisMETBins_antitagSR","MET",3,METBins);
   plot BinsSBSingleHiggsPlot(*fillAnalysisBins<RA2bTree>,"AnalysisMETBins_tagSB","MET",3,METBins);
@@ -36,6 +36,7 @@ int main(int argc, char** argv){
   //plots.push_back(BinsSRAntiTagPlot);
   //plots.push_back(BinsSBSingleHiggsPlot);
  // plots.push_back(BinsSBAntiTagPlot);
+
  for( int iSample = 0 ; iSample < skims.ntuples.size() ; iSample++){
 	std::cout<<"Sample Name "<<skims.sampleName[iSample]<<std::endl;
 	TH1D*AnalysisMETBins_tagSR=new TH1D("AnalysisMETBins_tagSR_"+skims.sampleName[iSample],"MET",3,METBins) ;
@@ -216,7 +217,7 @@ int main(int argc, char** argv){
 */
     //}
  // }
-  TFile* outputFile = new TFile("datacardInputs.root","RECREATE");
+  TFile* outputFile = new TFile("datacardInputsTest.root","RECREATE");
   for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++){
     //plots[iPlot].Draw(can,skims.ntuples,skims.signalNtuples);
     outputFile->cd();

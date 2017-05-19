@@ -21,7 +21,7 @@ if __name__ == '__main__':
 	if os.path.exists(odir): os.system( "rm -rf %s" % (odir) );
 	os.makedirs(odir);
 	tagsForSignalRegion=["MET300", "MET500","MET700"]
-	inputfile =TFile.Open("datacardInputs.root")
+	inputfile =TFile.Open("datacardInputsTest.root")
 	#Signal Region 2H
 	QCDMCSignalRegion2H=inputfile.Get("AnalysisMETBins_doubletagSR_QCD");
 	WJetsMCSignalRegion2H=inputfile.Get("AnalysisMETBins_doubletagSR_WJets");
@@ -29,22 +29,21 @@ if __name__ == '__main__':
 	TTJetsMCSignalRegion2H=inputfile.Get("AnalysisMETBins_doubletagSR_TT");
 	TTJetsLeptonsMCSignalRegion2H=inputfile.Get("AnalysisMETBins_doubletagSR_TTExtra");
 	TTJetsMCSignalRegion2H.Add(TTJetsLeptonsMCSignalRegion2H);
-	SignalT5HH_2H=inputfile.Get("AnalysisMETT5HZ_doubletagSR_T5HH%s" %options.mGo)
+	SignalT5HH_2H=inputfile.Get("AnalysisMETT5HH_doubletagSR_T5HH%s" %options.mGo)
 	Sigweight=35862.824*0.0460525/(408233.*0.25);
-	if options.mGo=="750": Sigweight=35862.824*2.26585/(400307*0.5);
-	if options.mGo=="1000": Sigweight=35862.824*0.325388/(396239*0.5);
-	if options.mGo=="1100": Sigweight=35862.824*0.163491 /(413868*0.5);
-	if options.mGo=="1200": Sigweight=35862.824*0.0856418/(400482*0.5);
-	if options.mGo=="1300": Sigweight=35862.824*0.0460525/(408233*0.5);
-	if options.mGo=="1400": Sigweight=35862.824*0.0252977/(400887*0.5);
-	if options.mGo=="1500": Sigweight=35862.824*0.0141903/(394281*0.5);
-	if options.mGo=="1600": Sigweight=35862.824*0.00810078/(397668*0.5);
-	if options.mGo=="1700": Sigweight=35862.824*0.00470323 /(414063*0.5);
-	if options.mGo=="1800": Sigweight=35862.824*0.00276133/(389625*0.5);
-	if options.mGo=="1900": Sigweight=35862.824*0.00163547/(404812*0.5);
-	if options.mGo=="2100": Sigweight=35862.824*0.000591918/(391445*0.5);
+	if options.mGo=="750": Sigweight=35862.824*2.26585/(400307*0.25);
+	if options.mGo=="1000": Sigweight=35862.824*0.325388/(396239*0.25);
+	if options.mGo=="1100": Sigweight=35862.824*0.163491 /(413868*0.25);
+	if options.mGo=="1200": Sigweight=35862.824*0.0856418/(400482*0.25);
+	if options.mGo=="1300": Sigweight=35862.824*0.0460525/(408233*0.25);
+	if options.mGo=="1400": Sigweight=35862.824*0.0252977/(400887*0.25);
+	if options.mGo=="1500": Sigweight=35862.824*0.0141903/(394281*0.25);
+	if options.mGo=="1600": Sigweight=35862.824*0.00810078/(397668*0.25);
+	if options.mGo=="1700": Sigweight=35862.824*0.00470323 /(414063*0.25);
+	if options.mGo=="1800": Sigweight=35862.824*0.00276133/(389625*0.25);
+	if options.mGo=="1900": Sigweight=35862.824*0.00163547/(404812*0.25);
+	if options.mGo=="2100": Sigweight=35862.824*0.000591918/(391445*0.25);
 	SignalT5HH_2H.Scale(Sigweight)
-	print SignalT5HH_2H.GetBinContent(1);
 	#Signal Region 1H
 	QCDMCSignalRegion1H=inputfile.Get("AnalysisMETBins_tagSR_QCD");
 	WJetsMCSignalRegion1H=inputfile.Get("AnalysisMETBins_tagSR_WJets");
@@ -52,7 +51,7 @@ if __name__ == '__main__':
 	TTJetsMCSignalRegion1H=inputfile.Get("AnalysisMETBins_tagSR_TT");
 	TTJetsLeptonsMCSignalRegion1H=inputfile.Get("AnalysisMETBins_tagSR_TTExtra");
 	TTJetsMCSignalRegion1H.Add(TTJetsLeptonsMCSignalRegion1H);
-	SignalT5HH_1H=inputfile.Get("AnalysisMETT5HZ_tagSR_T5HH%s" %options.mGo)
+	SignalT5HH_1H=inputfile.Get("AnalysisMETT5HH_tagSR_T5HH%s" %options.mGo)
 	SignalT5HH_1H.Scale(Sigweight)		
 	#Sideband Region 
 	QCDMCSideband2H=inputfile.Get("AnalysisMETBins_doubletagSB_QCD");
@@ -62,7 +61,7 @@ if __name__ == '__main__':
 	TTJetsLeptonsMCSideband2H=inputfile.Get("AnalysisMETBins_doubletagSB_TTExtra");
 	TTJetsMCSideband2H.Add(TTJetsLeptonsMCSideband2H);
 				     
-	SidebandT5HH_2H=inputfile.Get("AnalysisMETT5HZ_doubletagSB_T5HH%s" %options.mGo)
+	SidebandT5HH_2H=inputfile.Get("AnalysisMETT5HH_doubletagSB_T5HH%s" %options.mGo)
 	SidebandT5HH_2H.Scale(Sigweight)	
 	#Signal Region 1H
 	QCDMCSideband1H=inputfile.Get("AnalysisMETBins_tagSB_QCD");
@@ -71,7 +70,7 @@ if __name__ == '__main__':
 	TTJetsMCSideband1H=inputfile.Get("AnalysisMETBins_tagSB_TT");
 	TTJetsLeptonsMCSideband1H=inputfile.Get("AnalysisMETBins_tagSB_TTExtra");
 	TTJetsMCSideband1H.Add(TTJetsLeptonsMCSideband1H);
-	SidebandT5HH_1H=inputfile.Get("AnalysisMETT5HZ_tagSB_T5HH%s" %options.mGo)
+	SidebandT5HH_1H=inputfile.Get("AnalysisMETT5HH_tagSB_T5HH%s" %options.mGo)
 	SidebandT5HH_1H.Scale(Sigweight)	
 	#Antitag Region 
 	QCDMCAntitagRegion=inputfile.Get("AnalysisMETBins_antitagSR_QCD");
@@ -80,8 +79,8 @@ if __name__ == '__main__':
 	TTJetsMCAntitagRegion=inputfile.Get("AnalysisMETBins_antitagSR_TT");
 	TTJetsLeptonsMCAntitagRegion=inputfile.Get("AnalysisMETBins_antitagSR_TTExtra");
 	TTJetsMCAntitagRegion.Add(TTJetsLeptonsMCAntitagRegion);
-	AntitagT5HH=inputfile.Get("AnalysisMETT5HZ_antitagSR_T5HH%s" %options.mGo)
-	AntitagT5HH.Scale(Sigweight)	
+	AntitagT5HH=inputfile.Get("AnalysisMETT5HH_antitagSR_T5HH%s" %options.mGo)
+	AntitagT5HH.Scale(Sigweight)
 	#Sideband Antitag Region 
 	QCDMCAntitagRegionSB=inputfile.Get("AnalysisMETBins_antitagSB_QCD");
 	WJetsMCAntitagRegionSB=inputfile.Get("AnalysisMETBins_antitagSB_WJets");
@@ -89,7 +88,8 @@ if __name__ == '__main__':
 	TTJetsMCAntitagRegionSB=inputfile.Get("AnalysisMETBins_antitagSB_TT");
 	TTJetsLeptonsMCAntitagRegionSB=inputfile.Get("AnalysisMETBins_antitagSB_TTExtra");
 	TTJetsMCAntitagRegionSB.Add(TTJetsLeptonsMCAntitagRegionSB);
-	AntitagSBT5HH=inputfile.Get("AnalysisMETT5HZ_antitagSR_T5HH%s" %options.mGo)
+	AntitagSBT5HH=inputfile.Get("AnalysisMETT5HH_antitagSB_T5HH%s" %options.mGo)
+	AntitagSBT5HH.Scale(Sigweight)
 	contributionsPerBin = [];
 	for i in range(len(tagsForSignalRegion)): 
 		tmpcontributions = [];
@@ -143,7 +143,8 @@ if __name__ == '__main__':
 		tmpList.append(ZJetsMCSignalRegion2H.GetBinContent(i+1));	
 		tmpList.append(WJetsMCSignalRegion2H.GetBinContent(i+1));	
 		tmpList.append(TTJetsMCSignalRegion2H.GetBinContent(i+1));	
-		srobs=SignalT5HH_2H.GetBinContent(i+1)+QCDMCSignalRegion2H.GetBinContent(i+1)+ZJetsMCSignalRegion2H.GetBinContent(i+1)+WJetsMCSignalRegion2H.GetBinContent(i+1)+TTJetsMCSignalRegion2H.GetBinContent(i+1)
+		#srobs=SignalT5HH_2H.GetBinContent(i+1)+QCDMCSignalRegion2H.GetBinContent(i+1)+ZJetsMCSignalRegion2H.GetBinContent(i+1)+WJetsMCSignalRegion2H.GetBinContent(i+1)+TTJetsMCSignalRegion2H.GetBinContent(i+1)
+		srobs=QCDMCSignalRegion2H.GetBinContent(i+1)+ZJetsMCSignalRegion2H.GetBinContent(i+1)+WJetsMCSignalRegion2H.GetBinContent(i+1)+TTJetsMCSignalRegion2H.GetBinContent(i+1)
 		signalRegion_Rates.append(tmpList)
 		signalRegion_Obs.append(srobs)
 		tmpList = [];
@@ -152,7 +153,8 @@ if __name__ == '__main__':
                 tmpList.append(ZJetsMCSignalRegion1H.GetBinContent(i+1));
                 tmpList.append(WJetsMCSignalRegion1H.GetBinContent(i+1));
                 tmpList.append(TTJetsMCSignalRegion1H.GetBinContent(i+1));
-                srobs=SignalT5HH_1H.GetBinContent(i+1)+QCDMCSignalRegion1H.GetBinContent(i+1)+ZJetsMCSignalRegion1H.GetBinContent(i+1)+WJetsMCSignalRegion1H.GetBinContent(i+1)+TTJetsMCSignalRegion1H.GetBinContent(i+1)
+                #srobs=SignalT5HH_1H.GetBinContent(i+1)+QCDMCSignalRegion1H.GetBinContent(i+1)+ZJetsMCSignalRegion1H.GetBinContent(i+1)+WJetsMCSignalRegion1H.GetBinContent(i+1)+TTJetsMCSignalRegion1H.GetBinContent(i+1)
+                srobs=QCDMCSignalRegion1H.GetBinContent(i+1)+ZJetsMCSignalRegion1H.GetBinContent(i+1)+WJetsMCSignalRegion1H.GetBinContent(i+1)+TTJetsMCSignalRegion1H.GetBinContent(i+1)
                 signalRegion1H_Rates.append(tmpList)
                 signalRegion1H_Obs.append(srobs)
 		Signal2H.SetBinContent(i+1,SignalT5HH_2H.GetBinContent(i+1));
@@ -166,11 +168,11 @@ if __name__ == '__main__':
                 ZJets_1H.SetBinContent(i+1,ZJetsMCSignalRegion1H.GetBinContent(i+1))
                 WJets_1H.SetBinContent(i+1,WJetsMCSignalRegion1H.GetBinContent(i+1))
         fout.cd();
-        Signal1H.Write("signal_tag");
-        QCD_1H.Write("QCD_tag");
-        TTJets_1H.Write("TTJets_tag");
-        ZJets_1H.Write("ZJets_tag");
-        WJets_1H.Write("WJets_tag");
+        Signal1H.Write("signal_doubletag");
+        QCD_1H.Write("QCD_doubletag");
+        TTJets_1H.Write("TTJets_doubletag");
+        ZJets_1H.Write("ZJets_doubletag");
+        WJets_1H.Write("WJets_doubletag");
         Signal2H.Write("signal_doubletag");
         QCD_2H.Write("QCD_doubletag");
         TTJets_2H.Write("TTJets_doubletag");
@@ -182,6 +184,7 @@ if __name__ == '__main__':
 		tmpList = [];
                 srobs = 0;
 		tmpList.append(AntitagT5HH.GetBinContent(i+1));
+		#tmpList.append(0.0);
 		tmpList.append(QCDMCAntitagRegion.GetBinContent(i+1));		
 		tmpList.append(ZJetsMCAntitagRegion.GetBinContent(i+1));		
 		tmpList.append(WJetsMCAntitagRegion.GetBinContent(i+1));		
@@ -192,6 +195,7 @@ if __name__ == '__main__':
 		tmpList = [];
                 srobs = 0;
 		tmpList.append(AntitagSBT5HH.GetBinContent(i+1));
+		#tmpList.append(0.0);
 		tmpList.append(QCDMCAntitagRegionSB.GetBinContent(i+1));		
 		tmpList.append(ZJetsMCAntitagRegionSB.GetBinContent(i+1));		
 		tmpList.append(WJetsMCAntitagRegionSB.GetBinContent(i+1));		
@@ -203,6 +207,7 @@ if __name__ == '__main__':
 		tmpList = [];
 		srobs = 0;
 		tmpList.append(SidebandT5HH_2H.GetBinContent(i+1));	
+		#tmpList.append(0.0);	
 		tmpList.append(QCDMCSideband2H.GetBinContent(i+1));	
 		tmpList.append(ZJetsMCSideband2H.GetBinContent(i+1));	
 		tmpList.append(WJetsMCSideband2H.GetBinContent(i+1));	
@@ -212,6 +217,7 @@ if __name__ == '__main__':
 		sideband_Obs.append(srobs)
 		tmpList = [];
 		tmpList.append(SidebandT5HH_1H.GetBinContent(i+1));
+		#tmpList.append(0.0);
                 tmpList.append(QCDMCSideband1H.GetBinContent(i+1));
                 tmpList.append(ZJetsMCSideband1H.GetBinContent(i+1));
                 tmpList.append(WJetsMCSideband1H.GetBinContent(i+1));
@@ -231,7 +237,9 @@ if __name__ == '__main__':
 	
 	signalRegion.writeRates();
 	signalRegion1H.writeRates();
-
+	sidebandRegion.writeRates();
+	sidebandRegion1H.writeRates();
+	
 	antitagRegion.fillRates(antitagRegion_Rates);
 	antitagRegion.setObservedManually(antitagRegion_Obs);
 	antitagRegion.writeRates();
@@ -241,10 +249,23 @@ if __name__ == '__main__':
 	
 	#Code up the ABCD FIT
 	for i in range(sidebandRegion._nBins):
+		antitagRegion.addSingleSystematic("ABCDExtrap"+str(i), 'lnU', ['qcd','zvv','W','Top'], 10000, '', i)
+		signalRegion.addSingleSystematic("ABCDExtrap"+str(i),'lnU', ['qcd','zvv','W','Top'], 10000, '', i)
+		signalRegion1H.addSingleSystematic("ABCDExtrap1H"+str(i), 'lnU', ['qcd','zvv','W','Top'], 10000, '', i)	
+		antitagRegion.addSingleSystematic("ABCDExtrap1H"+str(i), 'lnU', ['qcd','zvv','W','Top'], 10000, '', i)	
+		sidebandRegion.addSingleSystematic("SidebandExtrap"+str(i), 'lnU', ['qcd','zvv','W','Top'], 10000, '', i)
+		sidebandRegion1H.addSingleSystematic("SidebandExtrap1H"+str(i), 'lnU', ['qcd','zvv','W','Top'], 10000, '', i)
+		sidebandRegion.addSingleSystematic("SidebandRatio"+str(i), 'lnU', ['qcd','zvv','W','Top'], 10000, '', i)
+		sidebandATRegion.addSingleSystematic("SidebandRatio"+str(i), 'lnU', ['qcd','zvv','W','Top'], 10000, '', i)
+		'''
 		antitagRegion.addSingleSystematic("ABCDExtrapQCD"+str(i), 'lnU', ['qcd'], 10000, '', i)
 		antitagRegion.addSingleSystematic("ABCDExtrapZ"+str(i), 'lnU', ['zvv'], 10000, '', i)
 		antitagRegion.addSingleSystematic("ABCDExtrapW"+str(i), 'lnU', ['W'], 10000, '', i)
 		antitagRegion.addSingleSystematic("ABCDExtrapTop"+str(i), 'lnU', ['Top'], 10000, '', i)			
+		signalRegion.addSingleSystematic("ABCDExtrapQCD"+str(i), 'lnU', ['qcd'], 10000, '', i)
+		signalRegion.addSingleSystematic("ABCDExtrapZ"+str(i), 'lnU', ['zvv'], 10000, '', i)
+		signalRegion.addSingleSystematic("ABCDExtrapW"+str(i), 'lnU', ['W'], 10000, '', i)
+		signalRegion.addSingleSystematic("ABCDExtrapTop"+str(i), 'lnU', ['Top'], 10000, '', i)			
 
 		antitagRegion.addSingleSystematic("ABCDExtrapQCD1H"+str(i), 'lnU', ['qcd'], 10000, '', i)
 		antitagRegion.addSingleSystematic("ABCDExtrapZ1H"+str(i), 'lnU', ['zvv'], 10000, '', i)
@@ -257,16 +278,11 @@ if __name__ == '__main__':
 		signalRegion1H.addSingleSystematic("ABCDExtrapTop1H"+str(i), 'lnU', ['Top'], 10000, '', i)			
 
 
-		signalRegion.addSingleSystematic("ABCDExtrapQCD"+str(i), 'lnU', ['qcd'], 10000, '', i)
-		signalRegion.addSingleSystematic("ABCDExtrapZ"+str(i), 'lnU', ['zvv'], 10000, '', i)
-		signalRegion.addSingleSystematic("ABCDExtrapW"+str(i), 'lnU', ['W'], 10000, '', i)
-		signalRegion.addSingleSystematic("ABCDExtrapTop"+str(i), 'lnU', ['Top'], 10000, '', i)			
-	
 	#Extrapolate from C/D to B
-		antitagRegion.addSingleSystematic("SidebandExtrapQCD"+str(i), 'lnU', ['qcd'], 10000, '', i)
-		antitagRegion.addSingleSystematic("SidebandExtrapZ"+str(i), 'lnU', ['zvv'], 10000, '', i)
-		antitagRegion.addSingleSystematic("SidebandExtrapW"+str(i), 'lnU', ['W'], 10000, '', i)
-		antitagRegion.addSingleSystematic("SidebandExtrapTop"+str(i), 'lnU', ['Top'], 10000, '', i)			
+		signalRegion.addSingleSystematic("SidebandExtrapQCD"+str(i), 'lnU', ['qcd'], 10000, '', i)
+		signalRegion.addSingleSystematic("SidebandExtrapZ"+str(i), 'lnU', ['zvv'], 10000, '', i)
+		signalRegion.addSingleSystematic("SidebandExtrapW"+str(i), 'lnU', ['W'], 10000, '', i)
+		signalRegion.addSingleSystematic("SidebandExtrapTop"+str(i), 'lnU', ['Top'], 10000, '', i)			
 
 		sidebandRegion.addSingleSystematic("SidebandExtrapQCD"+str(i), 'lnU', ['qcd'], 10000, '', i)
 		sidebandRegion.addSingleSystematic("SidebandExtrapZ"+str(i), 'lnU', ['zvv'], 10000, '', i)
@@ -278,10 +294,10 @@ if __name__ == '__main__':
 		sidebandRegion1H.addSingleSystematic("SidebandExtrapW1H"+str(i), 'lnU', ['W'], 10000, '', i)
 		sidebandRegion1H.addSingleSystematic("SidebandExtrapTop1H"+str(i), 'lnU', ['Top'], 10000, '', i)		
 
-		antitagRegion.addSingleSystematic("SidebandExtrapQCD1H"+str(i), 'lnU', ['qcd'], 10000, '', i)
-		antitagRegion.addSingleSystematic("SidebandExtrapZ1H"+str(i), 'lnU', ['zvv'], 10000, '', i)
-		antitagRegion.addSingleSystematic("SidebandExtrapW1H"+str(i), 'lnU', ['W'], 10000, '', i)
-		antitagRegion.addSingleSystematic("SidebandExtrapTop1H"+str(i), 'lnU', ['Top'], 10000, '', i)			
+		signalRegion1H.addSingleSystematic("SidebandExtrapQCD1H"+str(i), 'lnU', ['qcd'], 10000, '', i)
+		signalRegion1H.addSingleSystematic("SidebandExtrapZ1H"+str(i), 'lnU', ['zvv'], 10000, '', i)
+		signalRegion1H.addSingleSystematic("SidebandExtrapW1H"+str(i), 'lnU', ['W'], 10000, '', i)
+		signalRegion1H.addSingleSystematic("SidebandExtrapTop1H"+str(i), 'lnU', ['Top'], 10000, '', i)			
 
 	#C/D
 		sidebandRegion.addSingleSystematic("SidebandRatioQCD"+str(i), 'lnU', ['qcd'], 10000, '', i)
@@ -302,12 +318,11 @@ if __name__ == '__main__':
 		sidebandRegion1H.addSingleSystematic("SidebandRatioZ1H"+str(i), 'lnU', ['zvv'], 10000, '', i)
 		sidebandRegion1H.addSingleSystematic("SidebandRatioW1H"+str(i), 'lnU', ['W'], 10000, '', i)
 		sidebandRegion1H.addSingleSystematic("SidebandRatioTop1H"+str(i), 'lnU', ['Top'], 10000, '', i)		
+		'''
 	antitagRegion.writeCards(odir);
 	sidebandATRegion.writeCards(odir);
 	sidebandRegion1H.writeCards(odir);
 	sidebandRegion.writeCards(odir);
 	signalRegion1H.writeCards( odir );
 	signalRegion.writeCards( odir );
-	sidebandRegion1H.writeCards( odir );
-	sidebandRegion.writeCards( odir );
 	
