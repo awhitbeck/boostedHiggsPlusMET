@@ -3,7 +3,7 @@ CFLAGS=
 LIBS=`root-config --cflags --glibs` -L $(ROOTSYS)/lib -I$(ROOTSYS)/include
 ROOFITLIBS=-lRooFit -lHtml -lMinuit -lRooFitCore
 INCLUDES=-I$(CMSSW_BASE)/src/AnalysisTools/src/ -I$(CMSSW_BASE)/src/ -I$(CMSSW_BASE)/src/Analysis/btag/
-EXECS=flavorFit plotObs_photon_baseline plotObs_singleEleCR_baseline plotObs_lowDPhi_baseline plotObs_lowDPhi_antitag plotObs_lowDPhi_doubleHiggsTag plotObs_singleHiggsTag plotObs_doubleHiggsTag plotObs_antitag plotObs_baseline plotObs_singleMuCR_baseline frankSynch cutFlow NminusOne ALPHABET ALPHABET_photon plotObs_fastFullComp analyzeALPHABET analyzeRpassFail plotHiggsPt_TChiHH
+EXECS=flavorFit plotObs_photon_baseline plotObs_singleEleCR_baseline plotObs_lowDPhi_baseline plotObs_singleHiggsTag plotObs_doubleHiggsTag plotObs_antitag plotObs_baseline plotObs_singleMuCR_baseline frankSynch cutFlow NminusOne ALPHABET ALPHABET_photon plotHiggsPt_TChiHH
 $(EXECS):RA2bTree.cc definitions.cc skimSamples.cc plotterUtils.cc
 flavorFit:flavorFit.cc
 plotObs_singleEleCR_baseline:plotObs_singleEleCR_baseline.cc
@@ -12,8 +12,6 @@ plotObs_baseline:plotObs_baseline.cc
 plotObs_antitag:plotObs_antitag.cc
 plotObs_photon_baseline:plotObs_photon_baseline.cc
 plotObs_lowDPhi_baseline:plotObs_lowDPhi_baseline.cc
-plotObs_lowDPhi_antitag:plotObs_lowDPhi_antitag.cc
-plotObs_lowDPhi_doubleHiggsTag:plotObs_lowDPhi_doubleHiggsTag.cc
 plotObs_doubleHiggsTag:plotObs_doubleHiggsTag.cc
 plotObs_singleHiggsTag:
 plotHiggsPt_TChiHH:plotHiggsPt_TChiHH.cc
@@ -22,9 +20,6 @@ frankSynch:frankSynch.cc RA2bTree.cc skimSamples.cc
 NminusOne:NminusOne.cc RA2bTree.cc skimSamples.cc
 ALPHABET:ALPHABET.cc
 ALPHABET_photon:ALPHABET_photon.cc
-analyzeALPHABET:analyzeALPHABET.cc
-analyzeRpassFail:analyzeRpassFail.cc
-plotObs_fastFullComp:plotObs_fastFullComp.cc fastFullSamples.cc
 
 all:$(EXECS) 
 
@@ -36,36 +31,16 @@ ALPHABET:
 	$(CC) -g $(CFLAGS) $(LIBS) $(INCLUDES) ALPHABET.cc -o ../bin/$@
 ALPHABET_photon:
 	$(CC) -g $(CFLAGS) $(LIBS) $(INCLUDES) ALPHABET_photon.cc -o ../bin/$@
-analyzeALPHABET:
-	$(CC) -g $(CFLAGS) $(LIBS) $(INCLUDES) analyzeALPHABET.cc -o ../bin/$@
-analyzeRpassFail:
-	$(CC) -g $(CFLAGS) $(LIBS) $(INCLUDES) analyzeRpassFail.cc -o ../bin/$@
 cutFlow:
 	$(CC) $(CFLAGS) $(LIBS) $(INCLUDES) cutFlow.cc -o ../bin/$@
 frankSynch:
 	$(CC) $(CFLAGS) $(LIBS) $(INCLUDES) frankSynch.cc -o ../bin/$@
 NminusOne:
 	$(CC) -g $(CFLAGS) $(LIBS) $(INCLUDES) NminusOne.cc -o ../bin/$@
-J1Pt_NminusOne:
-	$(CC) $(CFLAGS) $(LIBS) $(INCLUDES) J1Pt_NminusOne.cc -o ../bin/$@
-J2Pt_NminusOne:
-	$(CC) $(CFLAGS) $(LIBS) $(INCLUDES) J2Pt_NminusOne.cc -o ../bin/$@
-J1M_NminusOne:
-	$(CC) $(CFLAGS) $(LIBS) $(INCLUDES) J1M_NminusOne.cc -o ../bin/$@
-J2M_NminusOne:
-	$(CC) $(CFLAGS) $(LIBS) $(INCLUDES) J2M_NminusOne.cc -o ../bin/$@
-J1BB_NminusOne:
-	$(CC) $(CFLAGS) $(LIBS) $(INCLUDES) J1BB_NminusOne.cc -o ../bin/$@
-J2BB_NminusOne:
-	$(CC) $(CFLAGS) $(LIBS) $(INCLUDES) J2BB_NminusOne.cc -o ../bin/$@
 plotObs_photon_baseline:
 	$(CC) -g $(CFLAGS) $(LIBS) $(INCLUDES) plotObs_photon_baseline.cc -o ../bin/$@
 plotObs_lowDPhi_baseline:
 	$(CC) $(CFLAGS) $(LIBS) $(INCLUDES) plotObs_lowDPhi_baseline.cc -o ../bin/$@
-plotObs_lowDPhi_doubleHiggsTag:
-	$(CC) $(CFLAGS) $(LIBS) $(INCLUDES) plotObs_lowDPhi_doubleHiggsTag.cc -o ../bin/$@
-plotObs_lowDPhi_antitag:
-	$(CC) $(CFLAGS) $(LIBS) $(INCLUDES) plotObs_lowDPhi_antitag.cc -o ../bin/$@
 plotObs_singleHiggsTag:
 	$(CC) $(CFLAGS) $(LIBS) $(INCLUDES) plotObs_singleHiggsTag.cc -o ../bin/$@
 plotObs_doubleHiggsTag:
@@ -80,7 +55,5 @@ plotObs_singleMuCR_baseline:
 	$(CC) -g $(CFLAGS) $(LIBS) $(INCLUDES) plotObs_singleMuCR_baseline.cc -o ../bin/$@	
 plotHiggsPt_TChiHH:
 	$(CC) $(CFLAGS) $(LIBS) $(ROOFITLIBS) $(INCLUDES) plotHiggsPt_TChiHH.cc -o ../bin/$@
-plotObs_doubleHiggsTag_HiggsinoOnly:
-	$(CC) $(CFLAGS) $(LIBS) $(ROOFITLIBS) $(INCLUDES) plotObs_doubleHiggsTag_HiggsinoOnly.cc -o ../bin/$@
 clean : 
-	rm $(EXECS) 
+	rm ../bin/*
