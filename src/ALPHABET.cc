@@ -16,8 +16,11 @@
 #include "RA2bTree.cc"
 #include "ALPHABET.h"
 #include "TriggerEfficiencySextet.cc"
+
 using namespace std;
 using namespace alphabet;
+
+static const int MAX_EVENTS=99999999;
 
 int main(int argc, char** argv){
 
@@ -36,7 +39,7 @@ int main(int argc, char** argv){
     else if( region == 2 )
         skims_ = new skimSamples(skimSamples::kSLe);
     else if( region == 3 )
-        skims_ = new skimSamples(skimSamples::kSignal);
+        skims_ = new skimSamples(skimSamples::kLowDphi);
     else        
         assert(1);
     
@@ -94,9 +97,9 @@ int main(int argc, char** argv){
         int bin = -1;
         double weight=0.;
         float trigWeight=1.0;
-        for( int iEvt = 0 ; iEvt < numEvents ; iEvt++ ){
+        for( int iEvt = 0 ; iEvt < min(MAX_EVENTS,numEvents) ; iEvt++ ){
             ntuple->GetEntry(iEvt);
-            if( iEvt % 100000 == 0 ) cout << skims.sampleName[iSample] << ": " << iEvt << "/" << numEvents << endl;
+            if( iEvt % 100000 == 0 ) cout << skims.sampleName[iSample] << ": " << iEvt << "/" << min(MAX_EVENTS,numEvents) << endl;
             if(region==3 or region==0){
                 std::vector<double> EfficiencyCenterUpDown = Eff_MetMhtSextetReal_CenterUpDown(ntuple->HT, ntuple->MHT, ntuple->NJets);
                 trigWeight=EfficiencyCenterUpDown[0];
@@ -179,9 +182,9 @@ int main(int argc, char** argv){
 
     int numEvents = ntuple->fChain->GetEntries();
     ntupleBranchStatus<RA2bTree>(ntuple);
-    for( int iEvt = 0 ; iEvt < numEvents ; iEvt++ ){
+    for( int iEvt = 0 ; iEvt < min(MAX_EVENTS,numEvents) ; iEvt++ ){
         ntuple->GetEntry(iEvt);
-        if( iEvt % 100000 == 0 ) cout << "data: " << iEvt << "/" << numEvents << endl;
+        if( iEvt % 100000 == 0 ) cout << "data: " << iEvt << "/" << min(MAX_EVENTS,numEvents) << endl;
         if( region == 0 ){
             if(! baselineCut(ntuple) ) continue;
             if( ntuple->TriggerPass->at(41)!=1 && ntuple->TriggerPass->at(42)!=1 && ntuple->TriggerPass->at(43)!=1 && ntuple->TriggerPass->at(44)!=1 ) continue;
