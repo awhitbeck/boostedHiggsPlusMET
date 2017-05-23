@@ -19,6 +19,8 @@
 using namespace std;
 using namespace alphabet;
 
+static const int MAX_EVENTS=99999999;
+
 int main(int argc, char** argv){
 
     gROOT->ProcessLine(".L tdrstyle.C");
@@ -27,21 +29,21 @@ int main(int argc, char** argv){
     skimSamples skims(skimSamples::kPhoton);
 
     typedef plot<RA2bTree> plot;
-
+    double mJbins[4]={50.,85.,135.,250.};
     vector<vector<plot> > plots;
 
     for( int i = 0 ; i < numMETbins ; i++ ) {
         TString tag="_";
         tag+=lowestMET+i*binWidth;
         vector<plot> plotsTemp;
-        plotsTemp.push_back(plot(*fillLeadingJetMass_photon<RA2bTree>,"mJ_tagSR"+tag,"m_{J} [GeV]",40,50.,250.));
-        plotsTemp.push_back(plot(*fillLeadingJetMass_photon<RA2bTree>,"mJ_tagSB"+tag,"m_{J} [GeV]",40,50.,250.));
+        plotsTemp.push_back(plot(*fillLeadingJetMass_photon<RA2bTree>,"mJ_tagSR"+tag,"m_{J} [GeV]",3,mJbins));
+        plotsTemp.push_back(plot(*fillLeadingJetMass_photon<RA2bTree>,"mJ_tagSB"+tag,"m_{J} [GeV]",3,mJbins));
     
-        plotsTemp.push_back(plot(*fillLeadingJetMass_photon<RA2bTree>,"mJ_antitagSR"+tag,"m_{J} [GeV]",40,50.,250.));
-        plotsTemp.push_back(plot(*fillLeadingJetMass_photon<RA2bTree>,"mJ_antitagSB"+tag,"m_{J} [GeV]",40,50.,250.));
+        plotsTemp.push_back(plot(*fillLeadingJetMass_photon<RA2bTree>,"mJ_antitagSR"+tag,"m_{J} [GeV]",3,mJbins));
+        plotsTemp.push_back(plot(*fillLeadingJetMass_photon<RA2bTree>,"mJ_antitagSB"+tag,"m_{J} [GeV]",3,mJbins));
     
-        plotsTemp.push_back(plot(*fillLeadingJetMass_photon<RA2bTree>,"mJ_doubletagSR"+tag,"m_{J} [GeV]",40,50.,250.));
-        plotsTemp.push_back(plot(*fillLeadingJetMass_photon<RA2bTree>,"mJ_doubletagSB"+tag,"m_{J} [GeV]",40,50.,250.));
+        plotsTemp.push_back(plot(*fillLeadingJetMass_photon<RA2bTree>,"mJ_doubletagSR"+tag,"m_{J} [GeV]",3,mJbins));
+        plotsTemp.push_back(plot(*fillLeadingJetMass_photon<RA2bTree>,"mJ_doubletagSB"+tag,"m_{J} [GeV]",3,mJbins));
 
         plots.push_back(plotsTemp);
     }
@@ -78,9 +80,9 @@ int main(int argc, char** argv){
         int bin;
         double jetMass1;
         float weight;
-        for( int iEvt = 0 ; iEvt < numEvents ; iEvt++ ){
+        for( int iEvt = 0 ; iEvt < min(MAX_EVENTS,numEvents) ; iEvt++ ){
             ntuple->GetEntry(iEvt);
-            if( iEvt % 100000 == 0 ) cout << skims.sampleName[iSample] << ": " << iEvt << "/" << numEvents << endl;
+            if( iEvt % 100000 == 0 ) cout << skims.sampleName[iSample] << ": " << iEvt << "/" << min(MAX_EVENTS,numEvents) << endl;
             if(! photonBaselineCut(ntuple) ) continue;
             if( skims.sampleName[iSample] == "QCD" && ntuple->Photons_nonPrompt->at(0) == 0 && ntuple->madMinPhotonDeltaR>0.4 && ntuple->madMinDeltaRStatus==1 ) continue;
             if( skims.sampleName[iSample] == "GJets" && ntuple->Photons_nonPrompt->at(0) == 1 ) continue;
@@ -148,9 +150,9 @@ int main(int argc, char** argv){
     ntupleBranchStatus<RA2bTree>(ntuple);
     int bin;
     double jetMass1;
-    for( int iEvt = 0 ; iEvt < numEvents ; iEvt++ ){
+    for( int iEvt = 0 ; iEvt < min(MAX_EVENTS,numEvents) ; iEvt++ ){
         ntuple->GetEntry(iEvt);
-        if( iEvt % 100000 == 0 ) cout << "data: " << iEvt << "/" << numEvents << endl;
+        if( iEvt % 100000 == 0 ) cout << "data: " << iEvt << "/" << min(MAX_EVENTS,numEvents) << endl;
         if(! photonBaselineCut(ntuple) ) continue;
         if( !ntuple->TriggerPass->at(51)==1 ) continue;
 
