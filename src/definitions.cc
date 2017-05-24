@@ -1091,7 +1091,7 @@ template<typename ntupleType> bool doubletagSRCut(ntupleType* ntuple){
 }
 
 template<typename ntupleType> bool doubletagSBCut(ntupleType* ntuple){
-    return tagSR(ntuple,0)&&tagSR(ntuple,1);
+    return tagSB(ntuple,0)&&tagSB(ntuple,1);
 }
 
 ////////////////////////////////////////////////////////////////////////
