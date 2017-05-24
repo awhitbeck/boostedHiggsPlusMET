@@ -179,7 +179,10 @@ public:
              ++it){
             if( sum == NULL ){
                 sum = new TH1F(*(it->second));
-                sum->SetNameTitle(label+"_"+tag+"_sum",label+"_"+tag+"_sum");
+                if( tag == "" )
+                    sum->SetNameTitle(label+"_sum",label+"_sum");
+                else
+                    sum->SetNameTitle(label+"_"+tag+"_sum",label+"_"+tag+"_sum");
             }else
                 sum->Add(it->second);
         }
