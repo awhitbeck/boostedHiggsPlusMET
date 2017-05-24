@@ -39,6 +39,11 @@ int main(int argc, char** argv){
   plot BTagsplot(*fillBTags<RA2bTree>,"BTags_singleMuCR_baseline","n_{b}",6,-0.5,5.5);
   plot Binsplot(*fillAnalysisBins<RA2bTree>,"AnalysisBins_singleMuCR_baseline","i^th Bin",8,0.5,8.5);
 
+  plot Ak4JetPt1(*fillJetPt1<RA2bTree>,"Ak4JetPt1_singleMuCR_baseline","p_{T,j1} [GeV]",40,0,600);
+  plot Ak4JetPt2(*fillJetPt2<RA2bTree>,"Ak4JetPt2_singleMuCR_baseline","p_{T,j2} [GeV]",40,0,600);
+  plot Ak4JetPt3(*fillJetPt3<RA2bTree>,"Ak4JetPt3_singleMuCR_baseline","p_{T,j3} [GeV]",40,0,600);
+  plot Ak4JetPt4(*fillJetPt4<RA2bTree>,"Ak4JetPt4_singleMuCR_baseline","p_{T,j4} [GeV]",40,0,600);
+
   plot J2NbhadronPlot(*fillLeadingNbHadrons<RA2bTree>,"J1pt_numBhadrons_baseline","n_{b-had}",5,-0.5,4.5);
   plot J1NbhadronPlot(*fillSubLeadingNbHadrons<RA2bTree>,"J2pt_numBhadrons_baseline","n_{b-had}",5,-0.5,4.5);
 
@@ -103,6 +108,10 @@ int main(int argc, char** argv){
   plot leptonEtaPlot(*fillLepEta<RA2bTree>,"muonEta","#eta_{#mu}",20,-3.,3.);
 
   vector<plot> plots;
+  plots.push_back(Ak4JetPt1);
+  plots.push_back(Ak4JetPt2);
+  plots.push_back(Ak4JetPt3);
+  plots.push_back(Ak4JetPt4);
   plots.push_back(J1NbhadronPlot);
   plots.push_back(J2NbhadronPlot);
   plots.push_back(leptonDRj1Plot);
@@ -182,7 +191,7 @@ int main(int argc, char** argv){
       if(! singleMuBaselineCut(ntuple) ) continue;
       for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++ ){
           weight = ntuple->Weight*lumi*customPUweights(ntuple);
-          if( skims.sampleName[iSample] == "TTExtra" || skims.sampleName[iSample] == "TTJets" )
+          if( skims.sampleName[iSample] == "TTExtra" || skims.sampleName[iSample] == "TT" )
               weight *= ISRweights(ntuple);
           iBin=plots[iPlot].fill(ntuple,weight);
           if( plots[iPlot].label == "NJets_singleMuCR_baseline" && iBin>0 && iBin <=14 )
