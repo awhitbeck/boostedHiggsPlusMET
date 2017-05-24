@@ -150,7 +150,7 @@ int main(int argc, char** argv){
             doubletagSRPlots[i].setFillColor(ntuple,skims.fillColor[iSample]);
         }
         for( int i = 0 ; i < doubletagSBPlots.size() ; i++ ){
-            doubletagSBPlots[i].addNtuple(ntuple,"doubletagSR_"+skims.sampleName[iSample]); 
+            doubletagSBPlots[i].addNtuple(ntuple,"doubletagSB_"+skims.sampleName[iSample]); 
             doubletagSBPlots[i].setFillColor(ntuple,skims.fillColor[iSample]);
         }
         for( int i = 0 ; i < tagSRPlots.size() ; i++ ){
