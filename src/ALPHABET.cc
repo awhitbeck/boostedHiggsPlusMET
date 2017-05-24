@@ -113,7 +113,7 @@ int main(int argc, char** argv){
             if( skims.sampleName[iSample] == "TTExtra" && ntuple->madHT>600. )continue;
             bin = -1;
             weight = ntuple->Weight*lumi*trigWeight *customPUweights(ntuple);	   
-            if( skims.sampleName[iSample] == "TTExtra" || skims.sampleName[iSample] == "TTJets" ){
+            if( skims.sampleName[iSample] == "TTExtra" || skims.sampleName[iSample] == "TT" ){
                 weight *= ISRweights(ntuple);
 		//std::cout<<"ISRweights "<<ISRweights(ntuple)<<std::endl;
 	    }
