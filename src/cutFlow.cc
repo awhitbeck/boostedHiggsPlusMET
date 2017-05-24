@@ -134,7 +134,7 @@ int main(int argc, char** argv){
             // ----------- compute weights --------------
             weight = ntuple->Weight*lumi*customPUweights(ntuple);
             //cout << "xsec weight: " << ntuple->Weight*lumi << endl;
-            if( skims.sampleName[iSample] == "TTExtra" || skims.sampleName[iSample] == "TTJets" ){
+            if( skims.sampleName[iSample] == "TTExtra" || skims.sampleName[iSample] == "TT" ){
                 weight *= ISRweights(ntuple);
                 //cout << "ISR: " << ISRweights(ntuple) << endl;
             }
