@@ -208,48 +208,31 @@ int main(int argc, char** argv){
             }
             if( bin < 0 ) continue;
       
-            if( doubleTaggingLooseCut(ntuple) ){
-                jetMass1 = fillLeadingJetMass(ntuple);
-                jetMass2 = fillSubLeadingJetMass(ntuple);
-                if( jetMass1 > 85 && jetMass1 < 135 ) { 
-                    plots[bin][4].fill(ntuple,weight);
-                    for( int i = 0 ; i < doubletagSRPlots.size() ; i++ )
-                        doubletagSRPlots[i].fill (ntuple,weight);
-                }else{
-                    plots[bin][5].fill(ntuple,weight);
-                    for( int i = 0 ; i < doubletagSBPlots.size() ; i++ )
-                        doubletagSBPlots[i].fill (ntuple,weight);
-                }
-            }else{
-                if( singleHiggsTagLooseCut(ntuple) ){
-                    jetMass1 = fillLeadingJetMass(ntuple);
-                    jetMass2 = fillSubLeadingJetMass(ntuple);
-                    if( jetMass1 > 85 && jetMass1 < 135 ){
-                        plots[bin][0].fill(ntuple,weight);
-                        for( int i = 0 ; i < tagSRPlots.size() ; i++ )
-                            tagSRPlots[i].fill (ntuple,weight);
-                    }else{
-                        plots[bin][1].fill(ntuple,weight);
-                        for( int i = 0 ; i < tagSBPlots.size() ; i++ )
-                            tagSBPlots[i].fill (ntuple,weight);
-
-                    }
-                }
-                if( antiTaggingLooseCut(ntuple) ){
-                    jetMass1 = fillLeadingJetMass(ntuple);
-                    jetMass2 = fillSubLeadingJetMass(ntuple);
-                    if( jetMass1 > 85 && jetMass1 < 135 ){
-                        plots[bin][2].fill(ntuple,weight);
-                        for( int i = 0 ; i < antitagSRPlots.size() ; i++ )
-                            antitagSRPlots[i].fill (ntuple,weight);
-
-                    }else{
-                        plots[bin][3].fill(ntuple,weight);
-                        for( int i = 0 ; i < antitagSBPlots.size() ; i++ )
-                            antitagSBPlots[i].fill (ntuple,weight);
-                    }
-                }// end antitag
-            }// end double tag else
+            if( doubletagSRCut(ntuple) ){
+                plots[bin][4].fill(ntuple,weight);
+                for( int i = 0 ; i < doubletagSRPlots.size() ; i++ )
+                    doubletagSRPlots[i].fill (ntuple,weight);
+            }else if( doubletagSBCut( ntuple ) ){
+                plots[bin][5].fill(ntuple,weight);
+                for( int i = 0 ; i < doubletagSBPlots.size() ; i++ )
+                    doubletagSBPlots[i].fill (ntuple,weight);
+            }else if( tagSRCut( ntuple ) ){
+                plots[bin][0].fill(ntuple,weight);
+                for( int i = 0 ; i < tagSRPlots.size() ; i++ )
+                    tagSRPlots[i].fill (ntuple,weight);
+            }else if( tagSBCut( ntuple ) ){
+                plots[bin][1].fill(ntuple,weight);
+                for( int i = 0 ; i < tagSBPlots.size() ; i++ )
+                    tagSBPlots[i].fill (ntuple,weight);
+            }else if( antitagSRCut( ntuple ) ){
+                plots[bin][2].fill(ntuple,weight);
+                for( int i = 0 ; i < antitagSRPlots.size() ; i++ )
+                    antitagSRPlots[i].fill (ntuple,weight);
+            }else if( antitagSBCut( ntuple ) ){
+                plots[bin][3].fill(ntuple,weight);
+                for( int i = 0 ; i < antitagSBPlots.size() ; i++ )
+                    antitagSBPlots[i].fill (ntuple,weight);
+            }// end if-else-if block for tagging regions
         }// end event loop
     }// end sample loop
     
@@ -315,52 +298,37 @@ int main(int argc, char** argv){
             }
         }
         if( bin < 0 ) continue;
-      
-        if( doubleTaggingLooseCut(ntuple) ){
-            jetMass1 = fillLeadingJetMass(ntuple);
-            jetMass2 = fillSubLeadingJetMass(ntuple);
-            if( jetMass1 > 85 && jetMass1 < 135 ){
-                if( region != 0 ){
-                    plots[bin][4].fillData(ntuple);
-                    for( int i = 0 ; i < doubletagSRPlots.size() ; i++ )
-                        doubletagSRPlots[i].fillData(ntuple);
-                }
-            }else{
-                plots[bin][5].fillData(ntuple);
-                for( int i = 0 ; i < doubletagSBPlots.size() ; i++ )
-                    doubletagSBPlots[i].fillData(ntuple);
+
+        if( doubletagSRCut( ntuple ) ){
+            if( region != 0 ){
+                plots[bin][4].fillData(ntuple);
+                for( int i = 0 ; i < doubletagSRPlots.size() ; i++ )
+                    doubletagSRPlots[i].fillData(ntuple);
             }
-        }else{
-            if( singleHiggsTagLooseCut(ntuple) ){
-                jetMass1 = fillLeadingJetMass(ntuple);
-                jetMass2 = fillSubLeadingJetMass(ntuple);
-                if( jetMass1 > 85 && jetMass1 < 135 ){
-                    if( region != 0 ){
-                        plots[bin][0].fillData(ntuple);
-                        for( int i = 0 ; i < tagSRPlots.size() ; i++ )
-                            tagSRPlots[i].fillData(ntuple);
-                    }
-                }else{
-                    plots[bin][1].fillData(ntuple);
-                    for( int i = 0 ; i < tagSBPlots.size() ; i++ )
-                        tagSBPlots[i].fillData(ntuple);
-                }
+        }else if( doubletagSBCut( ntuple ) ){
+            plots[bin][5].fillData(ntuple);
+            for( int i = 0 ; i < doubletagSBPlots.size() ; i++ )
+                doubletagSBPlots[i].fillData(ntuple);
+        }else if( tagSRCut( ntuple ) ){
+            if( region != 0 ){
+                plots[bin][0].fillData(ntuple);
+                for( int i = 0 ; i < tagSRPlots.size() ; i++ )
+                    tagSRPlots[i].fillData(ntuple);
             }
-            if( antiTaggingLooseCut(ntuple) ){
-                jetMass1 = fillLeadingJetMass(ntuple);
-                jetMass2 = fillSubLeadingJetMass(ntuple);
-                if( jetMass1 > 85 && jetMass1 < 135 ){
-                    plots[bin][2].fillData(ntuple);
-                    for( int i = 0 ; i < antitagSRPlots.size() ; i++ )
-                        antitagSRPlots[i].fillData(ntuple);
-                }else{
-                    plots[bin][3].fillData(ntuple);
-                    for( int i = 0 ; i < antitagSBPlots.size() ; i++ )
-                        antitagSBPlots[i].fillData(ntuple);
-                }
-            }
-        }
-    }
+        }else if( tagSBCut( ntuple ) ){
+            plots[bin][1].fillData(ntuple);
+            for( int i = 0 ; i < tagSBPlots.size() ; i++ )
+                tagSBPlots[i].fillData(ntuple);
+        }else if( antitagSRCut( ntuple ) ){
+                plots[bin][2].fillData(ntuple);
+                for( int i = 0 ; i < antitagSRPlots.size() ; i++ )
+                    antitagSRPlots[i].fillData(ntuple);
+        }else if( antitagSBCut( ntuple ) ){
+            plots[bin][3].fillData(ntuple);
+            for( int i = 0 ; i < antitagSBPlots.size() ; i++ )
+                antitagSBPlots[i].fillData(ntuple);
+        }// end if-else-if block for tagging regions
+    }// end event loop 
 
     TFile* outputFile;
     TString regionName;

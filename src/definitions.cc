@@ -1028,6 +1028,72 @@ template<typename ntupleType> bool doubleHiggsTagCut(ntupleType* ntuple ){
            ntuple->JetsAK8_doubleBDiscriminator->at(1) > bbtagCut ) ;
 }
 
+template<typename ntupleType> bool tagSR(ntupleType* ntuple, int i){
+    if( ntuple->JetsAK8_doubleBDiscriminator->size() <= i || 
+        ntuple->JetsAK8_prunedMass->size() <= i ) return false;
+    return ( ntuple->JetsAK8_doubleBDiscriminator->at(i) > bbtagCut &&
+             ntuple->JetsAK8_prunedMass->at(i) > 85. && 
+             ntuple->JetsAK8_prunedMass->at(i) < 135. );
+}
+
+template<typename ntupleType> bool tagSB(ntupleType* ntuple, int i ){
+    if( ntuple->JetsAK8_doubleBDiscriminator->size() <= i || 
+        ntuple->JetsAK8_prunedMass->size() <= i ) return false;
+    return ( ntuple->JetsAK8_doubleBDiscriminator->at(i) > bbtagCut && 
+             ( ntuple->JetsAK8_prunedMass->at(i) < 85. &&
+               ntuple->JetsAK8_prunedMass->at(i) > 50. ) ||
+             ( ntuple->JetsAK8_prunedMass->at(i) > 135. &&
+               ntuple->JetsAK8_prunedMass->at(i) < 250. ) );
+}
+
+template<typename ntupleType> bool antitagSR(ntupleType* ntuple, int i){
+        if( ntuple->JetsAK8_doubleBDiscriminator->size() <= i || 
+        ntuple->JetsAK8_prunedMass->size() <= i ) return false;
+    return ( ntuple->JetsAK8_doubleBDiscriminator->at(i) < bbtagCut &&
+             ( ntuple->JetsAK8_prunedMass->at(i) > 85. &&
+               ntuple->JetsAK8_prunedMass->at(i) > 135. ) );
+}
+        
+template<typename ntupleType> bool antitagSB(ntupleType* ntuple, int i){
+    if( ntuple->JetsAK8_doubleBDiscriminator->size() <= i || 
+        ntuple->JetsAK8_prunedMass->size() <= i ) return false;
+    return ( ntuple->JetsAK8_doubleBDiscriminator->at(i) < bbtagCut &&
+             ( ntuple->JetsAK8_prunedMass->at(i) < 85. &&
+               ntuple->JetsAK8_prunedMass->at(i) > 50. ) ||
+             ( ntuple->JetsAK8_prunedMass->at(i) > 135. &&
+               ntuple->JetsAK8_prunedMass->at(i) < 250. ) );
+}
+
+template<typename ntupleType> bool antitagSRCut(ntupleType* ntuple){
+    return antitagSR(ntuple,0)||antitagSR(ntuple,1);
+}
+
+template<typename ntupleType> bool antitagSBCut(ntupleType* ntuple){
+    return antitagSB(ntuple,0)&&antitagSB(ntuple,1);
+}
+
+template<typename ntupleType> bool tagSRCut(ntupleType* ntuple){
+    return ( ( tagSR(ntuple,0)&&antitagSR(ntuple,1) ) || 
+             ( tagSR(ntuple,0)&&antitagSB(ntuple,1) ) ||
+             ( tagSB(ntuple,0)&&antitagSR(ntuple,1) ) ||
+             ( antitagSR(ntuple,0)&&tagSR(ntuple,1) ) ||
+             ( antitagSR(ntuple,0)&&tagSB(ntuple,1) ) ||
+             ( antitagSB(ntuple,0)&&tagSR(ntuple,1) ) );
+}
+
+template<typename ntupleType> bool tagSBCut(ntupleType* ntuple){
+    return ( ( tagSB(ntuple,0)&&antitagSB(ntuple,1) ) ||
+             ( antitagSB(ntuple,0)&&tagSB(ntuple,1) ) );
+}
+
+template<typename ntupleType> bool doubletagSRCut(ntupleType* ntuple){
+    return tagSR(ntuple,0)||tagSR(ntuple,1);
+}
+
+template<typename ntupleType> bool doubletagSBCut(ntupleType* ntuple){
+    return tagSR(ntuple,0)&&tagSR(ntuple,1);
+}
+
 ////////////////////////////////////////////////////////////////////////
 // - - - - - - - - - - photon specializations - - - - - - - - - - - - //
 ////////////////////////////////////////////////////////////////////////
