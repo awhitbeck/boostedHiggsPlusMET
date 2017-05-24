@@ -246,22 +246,22 @@ int main(int argc, char** argv){
         }
     }
     for( int i = 0 ; i < doubletagSRPlots.size() ; i++ ){
-        doubletagSRPlots[i].addDataNtuple(ntuple,"data");
+        doubletagSRPlots[i].addDataNtuple(ntuple,"doubletagSR_data");
     }
     for( int i = 0 ; i < doubletagSBPlots.size() ; i++ ){
-        doubletagSBPlots[i].addDataNtuple(ntuple,"data");
+        doubletagSBPlots[i].addDataNtuple(ntuple,"doubletagSB_data");
     }
     for( int i = 0 ; i < tagSRPlots.size() ; i++ ){
-        tagSRPlots[i].addDataNtuple(ntuple,"data");
+        tagSRPlots[i].addDataNtuple(ntuple,"tagSR_data");
     }
     for( int i = 0 ; i < tagSBPlots.size() ; i++ ){
-        tagSBPlots[i].addDataNtuple(ntuple,"data");
+        tagSBPlots[i].addDataNtuple(ntuple,"tagSB_data");
     }
     for( int i = 0 ; i < antitagSRPlots.size() ; i++ ){
-        antitagSRPlots[i].addDataNtuple(ntuple,"data");
+        antitagSRPlots[i].addDataNtuple(ntuple,"antitagSR_data");
     }
     for( int i = 0 ; i < antitagSBPlots.size() ; i++ ){
-        antitagSBPlots[i].addDataNtuple(ntuple,"data");
+        antitagSBPlots[i].addDataNtuple(ntuple,"antitagSB_data");
     }
 
     int numEvents = ntuple->fChain->GetEntries();
@@ -357,37 +357,37 @@ int main(int argc, char** argv){
     
     for( int i = 0 ; i < doubletagSRPlots.size() ; i++ ){
         outputFile->cd();
-        doubletagSRPlots[i].buildSum();
+        doubletagSRPlots[i].buildSum("doubletagSR");
         doubletagSRPlots[i].Write();
         doubletagSRPlots[i].sum->Write();
     }
     for( int i = 0 ; i < doubletagSBPlots.size() ; i++ ){
         outputFile->cd();
-        doubletagSBPlots[i].buildSum();
+        doubletagSBPlots[i].buildSum("doubletagSB");
         doubletagSBPlots[i].Write();
         doubletagSBPlots[i].sum->Write();
     }
     for( int i = 0 ; i < tagSRPlots.size() ; i++ ){
         outputFile->cd();
-        doubletagSBPlots[i].buildSum();
+        doubletagSBPlots[i].buildSum("tagSR");
         doubletagSBPlots[i].Write();
         doubletagSBPlots[i].sum->Write();
     }
     for( int i = 0 ; i < tagSBPlots.size() ; i++ ){
         outputFile->cd();
-        tagSBPlots[i].buildSum();
+        tagSBPlots[i].buildSum("tagSB");
         tagSBPlots[i].Write();
         tagSBPlots[i].sum->Write();
     }
     for( int i = 0 ; i < antitagSRPlots.size() ; i++ ){
         outputFile->cd();
-        antitagSRPlots[i].buildSum();
+        antitagSRPlots[i].buildSum("antitagSR");
         antitagSRPlots[i].Write();
         antitagSRPlots[i].sum->Write();
     }
     for( int i = 0 ; i < antitagSBPlots.size() ; i++ ){
         outputFile->cd();
-        antitagSBPlots[i].buildSum();
+        antitagSBPlots[i].buildSum("antitagSB");
         antitagSBPlots[i].Write();
         antitagSBPlots[i].sum->Write();
     }
