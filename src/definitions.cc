@@ -341,6 +341,35 @@ template<typename ntupleType> double fillLepActivity(ntupleType* ntuple){
 ////////////////////////////////////////////////////////////
 // - - - - - - - - EVENT LEVEL VARIABLES - - - - - - - -  //
 ////////////////////////////////////////////////////////////
+
+template<typename ntupleType> double fillJetPt1(ntupleType* ntuple){
+    if( ntuple->Jets->size() >= 1) 
+        return ntuple->Jets->at(0).Pt();
+    else 
+        return -999.;
+}
+
+template<typename ntupleType> double fillJetPt2(ntupleType* ntuple){
+    if( ntuple->Jets->size() >= 2) 
+        return ntuple->Jets->at(1).Pt();
+    else 
+        return -999.;
+}
+
+template<typename ntupleType> double fillJetPt3(ntupleType* ntuple){
+    if( ntuple->Jets->size() >= 3) 
+        return ntuple->Jets->at(2).Pt();
+    else 
+        return -999.;
+}
+
+template<typename ntupleType> double fillJetPt4(ntupleType* ntuple){
+    if( ntuple->Jets->size() >= 4) 
+        return ntuple->Jets->at(3).Pt();
+    else 
+        return -999.;
+}
+
 template<typename ntupleType> double fillNVtx(ntupleType* ntuple){
   return ntuple->NVtx;
 }
@@ -429,15 +458,17 @@ template<typename ntupleType> double fillBTags(ntupleType* ntuple){
 // HIGHEST PT JET PROPERTIES  //
 ////////////////////////////////
 template<typename ntupleType> double fillLeadingJetMass(ntupleType* ntuple){
-  if(ntuple->JetsAK8->size()==0) return-99999.;
+  if(ntuple->JetsAK8->size()==0) return -99999.;
   return ntuple->JetsAK8_prunedMass->at(0);
 }
 
 template<typename ntupleType> double fillLeadingJetMass_photon(ntupleType* ntuple){
+    if(ntuple->JetsAK8Clean_prunedMass->size()==0) return -99999.;
     return ntuple->JetsAK8Clean_prunedMass->at(0);
 }
 
 template<typename ntupleType> double fillSubLeadingJetMass_photon(ntupleType* ntuple){
+    if(ntuple->JetsAK8Clean_prunedMass->size()<2) return -99999.;
     return ntuple->JetsAK8Clean_prunedMass->at(1);
 }
 
@@ -495,7 +526,7 @@ template<typename ntupleType> double fillSubLeadingNbHadrons(ntupleType* ntuple)
 }
 
 template<typename ntupleType> double fillSubLeadingJetPt(ntupleType* ntuple){
-  if(ntuple->JetsAK8->size()<=1) return-99999.;
+  if(ntuple->JetsAK8->size()<=1) return -99999.;
   return ntuple->JetsAK8->at(1).Pt();
 }
 
@@ -805,6 +836,10 @@ template<typename ntupleType> bool DeltaPhiCuts(ntupleType* ntuple){
 
 template<typename ntupleType> bool lowDPhiCuts(ntupleType* ntuple){
     return !DeltaPhiCuts(ntuple);
+}
+
+template<typename ntupleType> bool METHTlooseCut(ntupleType* ntuple){
+  return ( ntuple->MET > 200. && ntuple->HT > 500. );
 }
 
 template<typename ntupleType> bool METHTCut(ntupleType* ntuple){
