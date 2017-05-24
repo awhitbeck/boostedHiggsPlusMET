@@ -176,6 +176,7 @@ int main(int argc, char** argv){
         double weight=0.;
         float trigWeight=1.0;
         bool passBaseline;
+        double jetMass1,jetMass2;
         for( int iEvt = 0 ; iEvt < min(MAX_EVENTS,numEvents) ; iEvt++ ){
             ntuple->GetEntry(iEvt);
             if( iEvt % 100000 == 0 ) cout << skims.sampleName[iSample] << ": " << iEvt << "/" << min(MAX_EVENTS,numEvents) << endl;
@@ -185,7 +186,7 @@ int main(int argc, char** argv){
             }
 
             passBaseline=true;
-            for( auto baselineCut : baselineCuts ){//int iCut = 0 ; iCut < baselineCuts.size() ; iCut++ ){
+            for( auto baselineCut : baselineCuts ){
                 passBaseline&=baselineCut(ntuple);
             }
             if( ! passBaseline ) continue;
@@ -196,7 +197,6 @@ int main(int argc, char** argv){
             weight = ntuple->Weight*lumi*trigWeight *customPUweights(ntuple);	   
             if( skims.sampleName[iSample] == "TTExtra" || skims.sampleName[iSample] == "TT" ){
                 weight *= ISRweights(ntuple);
-		//std::cout<<"ISRweights "<<ISRweights(ntuple)<<std::endl;
 	    }
             for( int iBin = 0 ; iBin < numMETbins ; iBin++ ){
                 if( ntuple->MET > lowestMET ){
@@ -209,49 +209,42 @@ int main(int argc, char** argv){
             if( bin < 0 ) continue;
       
             if( doubleTaggingLooseCut(ntuple) ){
-                double jetMass1 = fillLeadingJetMass(ntuple);
-                double jetMass2 = fillSubLeadingJetMass(ntuple);
+                jetMass1 = fillLeadingJetMass(ntuple);
+                jetMass2 = fillSubLeadingJetMass(ntuple);
                 if( jetMass1 > 85 && jetMass1 < 135 ) { 
                     plots[bin][4].fill(ntuple,weight);
-                    //METprojPlots[4].fill(ntuple,weight);
                     for( int i = 0 ; i < doubletagSRPlots.size() ; i++ )
                         doubletagSRPlots[i].fill (ntuple,weight);
                 }else{
                     plots[bin][5].fill(ntuple,weight);
-                    //METprojPlots[5].fill(ntuple,weight);
                     for( int i = 0 ; i < doubletagSBPlots.size() ; i++ )
                         doubletagSBPlots[i].fill (ntuple,weight);
                 }
             }else{
                 if( singleHiggsTagLooseCut(ntuple) ){
-                    double jetMass1 = fillLeadingJetMass(ntuple);
-                    double jetMass2 = fillSubLeadingJetMass(ntuple);
+                    jetMass1 = fillLeadingJetMass(ntuple);
+                    jetMass2 = fillSubLeadingJetMass(ntuple);
                     if( jetMass1 > 85 && jetMass1 < 135 ){
                         plots[bin][0].fill(ntuple,weight);
-                        //METprojPlots[0].fill(ntuple,weight);
                         for( int i = 0 ; i < tagSRPlots.size() ; i++ )
                             tagSRPlots[i].fill (ntuple,weight);
-
                     }else{
                         plots[bin][1].fill(ntuple,weight);
-                        //METprojPlots[1].fill(ntuple,weight);
                         for( int i = 0 ; i < tagSBPlots.size() ; i++ )
                             tagSBPlots[i].fill (ntuple,weight);
 
                     }
                 }
                 if( antiTaggingLooseCut(ntuple) ){
-                    double jetMass1 = fillLeadingJetMass(ntuple);
-                    double jetMass2 = fillSubLeadingJetMass(ntuple);
+                    jetMass1 = fillLeadingJetMass(ntuple);
+                    jetMass2 = fillSubLeadingJetMass(ntuple);
                     if( jetMass1 > 85 && jetMass1 < 135 ){
                         plots[bin][2].fill(ntuple,weight);
-                        //METprojPlots[2].fill(ntuple,weight);
                         for( int i = 0 ; i < antitagSRPlots.size() ; i++ )
                             antitagSRPlots[i].fill (ntuple,weight);
 
                     }else{
                         plots[bin][3].fill(ntuple,weight);
-                        //METprojPlots[3].fill(ntuple,weight);
                         for( int i = 0 ; i < antitagSBPlots.size() ; i++ )
                             antitagSBPlots[i].fill (ntuple,weight);
                     }
@@ -291,12 +284,13 @@ int main(int argc, char** argv){
     int numEvents = ntuple->fChain->GetEntries();
     ntupleBranchStatus<RA2bTree>(ntuple);
     bool passBaseline;
+    double jetMass1,jetMass2;
     for( int iEvt = 0 ; iEvt < min(MAX_EVENTS,numEvents) ; iEvt++ ){
         ntuple->GetEntry(iEvt);
         if( iEvt % 100000 == 0 ) cout << "data: " << iEvt << "/" << min(MAX_EVENTS,numEvents) << endl;
 
         passBaseline=true;
-        for( auto baselineCut : baselineCuts ){//int iCut = 0 ; iCut < baselineCuts.size() ; iCut++ ){
+        for( auto baselineCut : baselineCuts ){
             passBaseline&=baselineCut(ntuple);
         }
         if( ! passBaseline ) continue;
@@ -323,8 +317,8 @@ int main(int argc, char** argv){
         if( bin < 0 ) continue;
       
         if( doubleTaggingLooseCut(ntuple) ){
-            double jetMass1 = fillLeadingJetMass(ntuple);
-            double jetMass2 = fillSubLeadingJetMass(ntuple);
+            jetMass1 = fillLeadingJetMass(ntuple);
+            jetMass2 = fillSubLeadingJetMass(ntuple);
             if( jetMass1 > 85 && jetMass1 < 135 ){
                 if( region != 0 ){
                     plots[bin][4].fillData(ntuple);
@@ -338,8 +332,8 @@ int main(int argc, char** argv){
             }
         }else{
             if( singleHiggsTagLooseCut(ntuple) ){
-                double jetMass1 = fillLeadingJetMass(ntuple);
-                double jetMass2 = fillSubLeadingJetMass(ntuple);
+                jetMass1 = fillLeadingJetMass(ntuple);
+                jetMass2 = fillSubLeadingJetMass(ntuple);
                 if( jetMass1 > 85 && jetMass1 < 135 ){
                     if( region != 0 ){
                         plots[bin][0].fillData(ntuple);
@@ -353,8 +347,8 @@ int main(int argc, char** argv){
                 }
             }
             if( antiTaggingLooseCut(ntuple) ){
-                double jetMass1 = fillLeadingJetMass(ntuple);
-                double jetMass2 = fillSubLeadingJetMass(ntuple);
+                jetMass1 = fillLeadingJetMass(ntuple);
+                jetMass2 = fillSubLeadingJetMass(ntuple);
                 if( jetMass1 > 85 && jetMass1 < 135 ){
                     plots[bin][2].fillData(ntuple);
                     for( int i = 0 ; i < antitagSRPlots.size() ; i++ )
