@@ -1051,7 +1051,7 @@ template<typename ntupleType> bool antitagSR(ntupleType* ntuple, int i){
         ntuple->JetsAK8_prunedMass->size() <= i ) return false;
     return ( ntuple->JetsAK8_doubleBDiscriminator->at(i) < bbtagCut &&
              ( ntuple->JetsAK8_prunedMass->at(i) > 85. &&
-               ntuple->JetsAK8_prunedMass->at(i) > 135. ) );
+               ntuple->JetsAK8_prunedMass->at(i) < 135. ) );
 }
         
 template<typename ntupleType> bool antitagSB(ntupleType* ntuple, int i){
