@@ -20,11 +20,16 @@ int main(int argc, char** argv){
 
     gROOT->ProcessLine(".L ./tdrstyle.C");
     gROOT->ProcessLine("setTDRStyle()");
+
+    TString baseDir="./";
+    if( argc > 0 ){
+        baseDir = argv[1];
+    }
   
     skimSamples skims;
     typedef plot<RA2bTree> plot;
     double METBins[4] = {300.,500.,700.,2500.};
-    TFile*inputFile = new TFile("ALPHABEThistos.root","read");  
+    TFile*inputFile = new TFile(baseDir+"ALPHABEThistosWeights.root","read");  
     /*
       plot BinsSRSingleHiggsPlot(*fillAnalysisBins<RA2bTree>,"AnalysisMETBins_tagSR","MET",3,METBins);
       plot BinsSRAntiTagPlot(*fillAnalysisBins<RA2bTree>,"AnalysisMETBins_antitagSR","MET",3,METBins);

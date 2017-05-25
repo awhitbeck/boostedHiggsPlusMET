@@ -16,14 +16,24 @@
 #include "RA2bTree.cc"
 #include "ALPHABET.h"
 #include "TriggerEfficiencySextet.cc"
+
 using namespace std;
 using namespace alphabet;
 
 int main(int argc, char** argv){
 
     int region(0);
-    if( argc >= 2 ) 
+    bool looseCuts(false);
+    int MAX_EVENTS(99999999);
+
+    if( argc >= 2 ){
         region = atoi(argv[1]);
+        if( argc >= 3 )
+            looseCuts = atoi(argv[2]);    
+        if( argc >= 4 )
+            MAX_EVENTS = atoi(argv[3]);
+    }else
+        cout << "Running over the defautl (signal) region ... " << endl;
 
     gROOT->ProcessLine(".L tdrstyle.C");
     gROOT->ProcessLine("setTDRStyle()");
@@ -36,10 +46,41 @@ int main(int argc, char** argv){
     else if( region == 2 )
         skims_ = new skimSamples(skimSamples::kSLe);
     else if( region == 3 )
-        skims_ = new skimSamples(skimSamples::kSignal);
+        skims_ = new skimSamples(skimSamples::kLowDphi);
     else        
         assert(1);
     
+    typedef bool(*cuts)(RA2bTree*);
+    vector<cuts> baselineCuts;
+
+    if( looseCuts ){
+        baselineCuts.push_back(*FiltersCut<RA2bTree>);
+        if( region == 3 ){ 
+            baselineCuts.push_back(*lowDPhiCuts<RA2bTree>);
+        }else{
+            baselineCuts.push_back(*DeltaPhiCuts<RA2bTree>);
+        }
+        if( region == 1 ){
+            baselineCuts.push_back(*singleMuCut<RA2bTree>);
+        }
+        if( region == 2 ){
+            baselineCuts.push_back(*singleEleCut<RA2bTree>);
+        }
+        baselineCuts.push_back(*METHTlooseCut<RA2bTree>);
+        baselineCuts.push_back(*AK8MultCut<RA2bTree>);
+    }else{
+        if( region == 0 ){
+            baselineCuts.push_back(*baselineCut<RA2bTree>);
+        }else if( region == 1){
+            baselineCuts.push_back(*singleMuBaselineCut<RA2bTree>);
+        }else if( region == 2){
+            baselineCuts.push_back(*singleEleBaselineCut<RA2bTree>);
+        }else if( region == 3){ 
+            baselineCuts.push_back(*lowDphiBaselineCut<RA2bTree>);
+        }else
+            assert(1);
+    }
+
     skimSamples skims = *skims_;
 
     typedef plot<RA2bTree> plot;
@@ -63,16 +104,36 @@ int main(int argc, char** argv){
         plots.push_back(plotsTemp);
     }
 
-    vector<plot> METprojPlots;
-    METprojPlots.push_back(plot(*fillMET<RA2bTree>,"MET_tagSR","m_{J} [GeV]",2,300,700));
-    METprojPlots.push_back(plot(*fillMET<RA2bTree>,"MET_tagSB","m_{J} [GeV]",2,300,700));
-    
-    METprojPlots.push_back(plot(*fillMET<RA2bTree>,"MET_antitagSR","m_{J} [GeV]",2,300,700));
-    METprojPlots.push_back(plot(*fillMET<RA2bTree>,"MET_antitagSB","m_{J} [GeV]",2,300,700));
-    
-    METprojPlots.push_back(plot(*fillMET<RA2bTree>,"MET_doubletagSR","m_{J} [GeV]",2,300,700));
-    METprojPlots.push_back(plot(*fillMET<RA2bTree>,"MET_doubletagSB","m_{J} [GeV]",2,300,700));
-    
+    //vector<plot> tempPlots;
+    plot MET_Plot(*fillMET<RA2bTree>,"MET","m_{J} [GeV]",2,300,700);
+    plot J1pt_Ptplot(*fillLeadingJetPt<RA2bTree>,"J1pt_Pt","p_{T,J} [GeV]",50,300.,1300.);
+    plot J2pt_Ptplot(*fillSubLeadingJetPt<RA2bTree>,"J2pt_Pt","p_{T,J} [GeV]",50,300.,1300.);
+
+    vector<plot> doubletagSRPlots;
+    doubletagSRPlots.push_back(plot(MET_Plot));
+    doubletagSRPlots.push_back(plot(J1pt_Ptplot));
+    doubletagSRPlots.push_back(plot(J2pt_Ptplot));
+    vector<plot> doubletagSBPlots;
+    doubletagSBPlots.push_back(plot(MET_Plot));
+    doubletagSBPlots.push_back(plot(J1pt_Ptplot));
+    doubletagSBPlots.push_back(plot(J2pt_Ptplot));    
+    vector<plot> tagSRPlots;
+    tagSRPlots.push_back(plot(MET_Plot));
+    tagSRPlots.push_back(plot(J1pt_Ptplot));
+    tagSRPlots.push_back(plot(J2pt_Ptplot));    
+    vector<plot> tagSBPlots;
+    tagSBPlots.push_back(plot(MET_Plot));
+    tagSBPlots.push_back(plot(J1pt_Ptplot));
+    tagSBPlots.push_back(plot(J2pt_Ptplot));    
+    vector<plot> antitagSRPlots;
+    antitagSRPlots.push_back(plot(MET_Plot));
+    antitagSRPlots.push_back(plot(J1pt_Ptplot));
+    antitagSRPlots.push_back(plot(J2pt_Ptplot));    
+    vector<plot> antitagSBPlots;
+    antitagSBPlots.push_back(plot(MET_Plot));
+    antitagSBPlots.push_back(plot(J1pt_Ptplot));
+    antitagSBPlots.push_back(plot(J2pt_Ptplot));    
+
     // background MC samples - 0 lepton regions
     for( int iSample = 0 ; iSample < skims.ntuples.size() ; iSample++){
 
@@ -83,10 +144,30 @@ int main(int argc, char** argv){
                 plots[iBin][iPlot].addNtuple(ntuple,skims.sampleName[iSample]);
                 plots[iBin][iPlot].setFillColor(ntuple,skims.fillColor[iSample]);
             }
-            for( int iPlot = 0 ; iPlot < METprojPlots.size() ; iPlot++){
-                METprojPlots[iPlot].addNtuple(ntuple,skims.sampleName[iSample]);
-                METprojPlots[iPlot].setFillColor(ntuple,skims.fillColor[iSample]);                
-            }
+        }
+        for( int i = 0 ; i < doubletagSRPlots.size() ; i++ ){
+            doubletagSRPlots[i].addNtuple(ntuple,"doubletagSR"+skims.sampleName[iSample]); 
+            doubletagSRPlots[i].setFillColor(ntuple,skims.fillColor[iSample]);
+        }
+        for( int i = 0 ; i < doubletagSBPlots.size() ; i++ ){
+            doubletagSBPlots[i].addNtuple(ntuple,"doubletagSR_"+skims.sampleName[iSample]); 
+            doubletagSBPlots[i].setFillColor(ntuple,skims.fillColor[iSample]);
+        }
+        for( int i = 0 ; i < tagSRPlots.size() ; i++ ){
+            tagSRPlots[i].addNtuple(ntuple,"tagSR_"+skims.sampleName[iSample]); 
+            tagSRPlots[i].setFillColor(ntuple,skims.fillColor[iSample]);
+        }
+        for( int i = 0 ; i < tagSBPlots.size() ; i++ ){
+            tagSBPlots[i].addNtuple(ntuple,"tagSB_"+skims.sampleName[iSample]); 
+            tagSBPlots[i].setFillColor(ntuple,skims.fillColor[iSample]);
+        }
+        for( int i = 0 ; i < antitagSRPlots.size() ; i++ ){
+            antitagSRPlots[i].addNtuple(ntuple,"antitagSR_"+skims.sampleName[iSample]); 
+            antitagSRPlots[i].setFillColor(ntuple,skims.fillColor[iSample]);
+        }
+        for( int i = 0 ; i < antitagSBPlots.size() ; i++ ){
+            antitagSBPlots[i].addNtuple(ntuple,"antitagSB_"+skims.sampleName[iSample]); 
+            antitagSBPlots[i].setFillColor(ntuple,skims.fillColor[iSample]);
         }
 
         int numEvents = ntuple->fChain->GetEntries();
@@ -94,28 +175,28 @@ int main(int argc, char** argv){
         int bin = -1;
         double weight=0.;
         float trigWeight=1.0;
-        for( int iEvt = 0 ; iEvt < numEvents ; iEvt++ ){
+        bool passBaseline;
+        double jetMass1,jetMass2;
+        for( int iEvt = 0 ; iEvt < min(MAX_EVENTS,numEvents) ; iEvt++ ){
             ntuple->GetEntry(iEvt);
-            if( iEvt % 100000 == 0 ) cout << skims.sampleName[iSample] << ": " << iEvt << "/" << numEvents << endl;
+            if( iEvt % 100000 == 0 ) cout << skims.sampleName[iSample] << ": " << iEvt << "/" << min(MAX_EVENTS,numEvents) << endl;
             if(region==3 or region==0){
                 std::vector<double> EfficiencyCenterUpDown = Eff_MetMhtSextetReal_CenterUpDown(ntuple->HT, ntuple->MHT, ntuple->NJets);
                 trigWeight=EfficiencyCenterUpDown[0];
             }
-            if( region == 0 ){
-                if(! baselineCut(ntuple) ) continue;
-            }else if( region == 1){
-                if(! singleMuBaselineCut(ntuple) ) continue;
-            }else if( region == 2){
-                if(! singleEleBaselineCut(ntuple) ) continue;
-            }else if( region == 3){ 
-                if(! lowDphiBaselineCut(ntuple) ) continue;
+
+            passBaseline=true;
+            for( auto baselineCut : baselineCuts ){
+                passBaseline&=baselineCut(ntuple);
             }
+            if( ! passBaseline ) continue;
+
+
             if( skims.sampleName[iSample] == "TTExtra" && ntuple->madHT>600. )continue;
             bin = -1;
             weight = ntuple->Weight*lumi*trigWeight *customPUweights(ntuple);	   
             if( skims.sampleName[iSample] == "TTExtra" || skims.sampleName[iSample] == "TT" ){
                 weight *= ISRweights(ntuple);
-		//std::cout<<"ISRweights "<<ISRweights(ntuple)<<std::endl;
 	    }
             for( int iBin = 0 ; iBin < numMETbins ; iBin++ ){
                 if( ntuple->MET > lowestMET ){
@@ -128,36 +209,44 @@ int main(int argc, char** argv){
             if( bin < 0 ) continue;
       
             if( doubleTaggingLooseCut(ntuple) ){
-                double jetMass1 = fillLeadingJetMass(ntuple);
-                double jetMass2 = fillSubLeadingJetMass(ntuple);
+                jetMass1 = fillLeadingJetMass(ntuple);
+                jetMass2 = fillSubLeadingJetMass(ntuple);
                 if( jetMass1 > 85 && jetMass1 < 135 ) { 
                     plots[bin][4].fill(ntuple,weight);
-                    METprojPlots[4].fill(ntuple,weight);
+                    for( int i = 0 ; i < doubletagSRPlots.size() ; i++ )
+                        doubletagSRPlots[i].fill (ntuple,weight);
                 }else{
                     plots[bin][5].fill(ntuple,weight);
-                    METprojPlots[5].fill(ntuple,weight);
+                    for( int i = 0 ; i < doubletagSBPlots.size() ; i++ )
+                        doubletagSBPlots[i].fill (ntuple,weight);
                 }
             }else{
                 if( singleHiggsTagLooseCut(ntuple) ){
-                    double jetMass1 = fillLeadingJetMass(ntuple);
-                    double jetMass2 = fillSubLeadingJetMass(ntuple);
+                    jetMass1 = fillLeadingJetMass(ntuple);
+                    jetMass2 = fillSubLeadingJetMass(ntuple);
                     if( jetMass1 > 85 && jetMass1 < 135 ){
                         plots[bin][0].fill(ntuple,weight);
-                        METprojPlots[0].fill(ntuple,weight);
+                        for( int i = 0 ; i < tagSRPlots.size() ; i++ )
+                            tagSRPlots[i].fill (ntuple,weight);
                     }else{
                         plots[bin][1].fill(ntuple,weight);
-                        METprojPlots[1].fill(ntuple,weight);
+                        for( int i = 0 ; i < tagSBPlots.size() ; i++ )
+                            tagSBPlots[i].fill (ntuple,weight);
+
                     }
                 }
                 if( antiTaggingLooseCut(ntuple) ){
-                    double jetMass1 = fillLeadingJetMass(ntuple);
-                    double jetMass2 = fillSubLeadingJetMass(ntuple);
+                    jetMass1 = fillLeadingJetMass(ntuple);
+                    jetMass2 = fillSubLeadingJetMass(ntuple);
                     if( jetMass1 > 85 && jetMass1 < 135 ){
                         plots[bin][2].fill(ntuple,weight);
-                        METprojPlots[2].fill(ntuple,weight);
+                        for( int i = 0 ; i < antitagSRPlots.size() ; i++ )
+                            antitagSRPlots[i].fill (ntuple,weight);
+
                     }else{
                         plots[bin][3].fill(ntuple,weight);
-                        METprojPlots[3].fill(ntuple,weight);
+                        for( int i = 0 ; i < antitagSBPlots.size() ; i++ )
+                            antitagSBPlots[i].fill (ntuple,weight);
                     }
                 }// end antitag
             }// end double tag else
@@ -172,29 +261,50 @@ int main(int argc, char** argv){
         for( int iPlot = 0 ; iPlot < plots[iBin].size() ; iPlot++){
             plots[iBin][iPlot].addDataNtuple(ntuple,"data");
         }
-        for( int iPlot = 0 ; iPlot < plots[iBin].size() ; iPlot++){
-            METprojPlots[iPlot].addDataNtuple(ntuple,"data");
-        }
+    }
+    for( int i = 0 ; i < doubletagSRPlots.size() ; i++ ){
+        doubletagSRPlots[i].addDataNtuple(ntuple,"data");
+    }
+    for( int i = 0 ; i < doubletagSBPlots.size() ; i++ ){
+        doubletagSBPlots[i].addDataNtuple(ntuple,"data");
+    }
+    for( int i = 0 ; i < tagSRPlots.size() ; i++ ){
+        tagSRPlots[i].addDataNtuple(ntuple,"data");
+    }
+    for( int i = 0 ; i < tagSBPlots.size() ; i++ ){
+        tagSBPlots[i].addDataNtuple(ntuple,"data");
+    }
+    for( int i = 0 ; i < antitagSRPlots.size() ; i++ ){
+        antitagSRPlots[i].addDataNtuple(ntuple,"data");
+    }
+    for( int i = 0 ; i < antitagSBPlots.size() ; i++ ){
+        antitagSBPlots[i].addDataNtuple(ntuple,"data");
     }
 
     int numEvents = ntuple->fChain->GetEntries();
     ntupleBranchStatus<RA2bTree>(ntuple);
-    for( int iEvt = 0 ; iEvt < numEvents ; iEvt++ ){
+    bool passBaseline;
+    double jetMass1,jetMass2;
+    for( int iEvt = 0 ; iEvt < min(MAX_EVENTS,numEvents) ; iEvt++ ){
         ntuple->GetEntry(iEvt);
-        if( iEvt % 100000 == 0 ) cout << "data: " << iEvt << "/" << numEvents << endl;
+        if( iEvt % 100000 == 0 ) cout << "data: " << iEvt << "/" << min(MAX_EVENTS,numEvents) << endl;
+
+        passBaseline=true;
+        for( auto baselineCut : baselineCuts ){
+            passBaseline&=baselineCut(ntuple);
+        }
+        if( ! passBaseline ) continue;
+
         if( region == 0 ){
-            if(! baselineCut(ntuple) ) continue;
             if( ntuple->TriggerPass->at(41)!=1 && ntuple->TriggerPass->at(42)!=1 && ntuple->TriggerPass->at(43)!=1 && ntuple->TriggerPass->at(44)!=1 ) continue;
         }else if( region == 1){
-            if(! singleMuBaselineCut(ntuple) ) continue;
             if( ntuple->TriggerPass->at(21)!=1 && ntuple->TriggerPass->at(22)!=1 && ntuple->TriggerPass->at(23)!=1 && ntuple->TriggerPass->at(24)!=1 && ntuple->TriggerPass->at(28)!=1 ) continue;
         }else if( region == 2){
-            if(! singleEleBaselineCut(ntuple) ) continue;
             if( ntuple->TriggerPass->at(5) != 1 && ntuple->TriggerPass->at(6)!=1 && ntuple->TriggerPass->at(7)!=1 && ntuple->TriggerPass->at(8)!=1) continue;
         }else if( region == 3 ){ 
-            if(! lowDphiBaselineCut(ntuple) ) continue;
             if( ntuple->TriggerPass->at(41)!=1 && ntuple->TriggerPass->at(42)!=1 && ntuple->TriggerPass->at(43)!=1 && ntuple->TriggerPass->at(44)!=1 ) continue;
         }
+
         int bin = -1;
         for( int iBin = 0 ; iBin < numMETbins ; iBin++ ){
             if( ntuple->MET > lowestMET ){
@@ -207,68 +317,111 @@ int main(int argc, char** argv){
         if( bin < 0 ) continue;
       
         if( doubleTaggingLooseCut(ntuple) ){
-            double jetMass1 = fillLeadingJetMass(ntuple);
-            double jetMass2 = fillSubLeadingJetMass(ntuple);
+            jetMass1 = fillLeadingJetMass(ntuple);
+            jetMass2 = fillSubLeadingJetMass(ntuple);
             if( jetMass1 > 85 && jetMass1 < 135 ){
                 if( region != 0 ){
                     plots[bin][4].fillData(ntuple);
-                    METprojPlots[4].fillData(ntuple);
+                    for( int i = 0 ; i < doubletagSRPlots.size() ; i++ )
+                        doubletagSRPlots[i].fillData(ntuple);
                 }
             }else{
                 plots[bin][5].fillData(ntuple);
-                METprojPlots[5].fillData(ntuple);
+                for( int i = 0 ; i < doubletagSBPlots.size() ; i++ )
+                    doubletagSBPlots[i].fillData(ntuple);
             }
         }else{
             if( singleHiggsTagLooseCut(ntuple) ){
-                double jetMass1 = fillLeadingJetMass(ntuple);
-                double jetMass2 = fillSubLeadingJetMass(ntuple);
+                jetMass1 = fillLeadingJetMass(ntuple);
+                jetMass2 = fillSubLeadingJetMass(ntuple);
                 if( jetMass1 > 85 && jetMass1 < 135 ){
                     if( region != 0 ){
                         plots[bin][0].fillData(ntuple);
-                        METprojPlots[0].fillData(ntuple);
+                        for( int i = 0 ; i < tagSRPlots.size() ; i++ )
+                            tagSRPlots[i].fillData(ntuple);
                     }
                 }else{
                     plots[bin][1].fillData(ntuple);
-                    METprojPlots[1].fillData(ntuple);
+                    for( int i = 0 ; i < tagSBPlots.size() ; i++ )
+                        tagSBPlots[i].fillData(ntuple);
                 }
             }
             if( antiTaggingLooseCut(ntuple) ){
-                double jetMass1 = fillLeadingJetMass(ntuple);
-                double jetMass2 = fillSubLeadingJetMass(ntuple);
+                jetMass1 = fillLeadingJetMass(ntuple);
+                jetMass2 = fillSubLeadingJetMass(ntuple);
                 if( jetMass1 > 85 && jetMass1 < 135 ){
                     plots[bin][2].fillData(ntuple);
-                    METprojPlots[2].fillData(ntuple);
+                    for( int i = 0 ; i < antitagSRPlots.size() ; i++ )
+                        antitagSRPlots[i].fillData(ntuple);
                 }else{
                     plots[bin][3].fillData(ntuple);
-                    METprojPlots[3].fillData(ntuple);
+                    for( int i = 0 ; i < antitagSBPlots.size() ; i++ )
+                        antitagSBPlots[i].fillData(ntuple);
                 }
             }
         }
     }
 
     TFile* outputFile;
+    TString regionName;
+    TString cutName="";
+    if( looseCuts )
+        cutName="_looseCuts";
     if( region == 0 )
-        outputFile = new TFile("ALPHABEThistosWeights.root","RECREATE");
+        regionName="";
     if( region == 1 )
-        outputFile = new TFile("ALPHABEThistos_singleMu.root","RECREATE");
+        regionName="_singleMu";
     if( region == 2 )
-        outputFile = new TFile("ALPHABEThistos_singleEle.root","RECREATE");
+        regionName="_singleEle";
     if( region == 3 )
-        outputFile = new TFile("ALPHABEThistos_lowDphi.root","RECREATE");
+        regionName="_lowDphi";
+    outputFile = new TFile("ALPHABEThistos"+cutName+regionName+".root","RECREATE");
 
     for( int iBin = 0 ; iBin < numMETbins; iBin++){
         for( int iPlot = 0 ; iPlot < plots[iBin].size() ; iPlot++){
             outputFile->cd();
-            plots[iBin][iPlot].Write();
             plots[iBin][iPlot].buildSum();
+            plots[iBin][iPlot].Write();
             plots[iBin][iPlot].sum->Write();
             
         }
     }
-    for( int iPlot = 0 ; iPlot < METprojPlots.size() ; iPlot++){
-        METprojPlots[iPlot].Write();
-        METprojPlots[iPlot].buildSum();
-        METprojPlots[iPlot].sum->Write();
+    
+    for( int i = 0 ; i < doubletagSRPlots.size() ; i++ ){
+        outputFile->cd();
+        doubletagSRPlots[i].buildSum();
+        doubletagSRPlots[i].Write();
+        doubletagSRPlots[i].sum->Write();
+    }
+    for( int i = 0 ; i < doubletagSBPlots.size() ; i++ ){
+        outputFile->cd();
+        doubletagSBPlots[i].buildSum();
+        doubletagSBPlots[i].Write();
+        doubletagSBPlots[i].sum->Write();
+    }
+    for( int i = 0 ; i < tagSRPlots.size() ; i++ ){
+        outputFile->cd();
+        doubletagSBPlots[i].buildSum();
+        doubletagSBPlots[i].Write();
+        doubletagSBPlots[i].sum->Write();
+    }
+    for( int i = 0 ; i < tagSBPlots.size() ; i++ ){
+        outputFile->cd();
+        tagSBPlots[i].buildSum();
+        tagSBPlots[i].Write();
+        tagSBPlots[i].sum->Write();
+    }
+    for( int i = 0 ; i < antitagSRPlots.size() ; i++ ){
+        outputFile->cd();
+        antitagSRPlots[i].buildSum();
+        antitagSRPlots[i].Write();
+        antitagSRPlots[i].sum->Write();
+    }
+    for( int i = 0 ; i < antitagSBPlots.size() ; i++ ){
+        outputFile->cd();
+        antitagSBPlots[i].buildSum();
+        antitagSBPlots[i].Write();
+        antitagSBPlots[i].sum->Write();
     }
 
     outputFile->Close();

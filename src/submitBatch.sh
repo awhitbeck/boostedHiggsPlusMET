@@ -16,7 +16,10 @@ source makeOutputDir.sh $hash     # setup directories in eos for output
 source makeTar.sh                 # package up code to transfer to worker nodes
 cd $submitDir
 
-condor_submit batchExecute.jdl exec_name="cutFlow" arguments="${hash} cutFlow"
+condor_submit batchExecute.jdl exec_name="cutFlow_signal" arguments="${hash} cutFlow 0"
+condor_submit batchExecute.jdl exec_name="cutFlow_singleMu" arguments="${hash} cutFlow 1"
+condor_submit batchExecute.jdl exec_name="cutFlow_singleEle" arguments="${hash} cutFlow 2"
+condor_submit batchExecute.jdl exec_name="cutFlow_photon" arguments="${hash} cutFlow 3"
 
 condor_submit batchExecute.jdl exec_name="plotObs_baseline" arguments="${hash} plotObs_baseline"
 condor_submit batchExecute.jdl exec_name="plotObs_antitag" arguments="${hash} plotObs_antitag"

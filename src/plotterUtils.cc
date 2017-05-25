@@ -172,14 +172,14 @@ public:
         buildStack(ntuples,scale);
     };
 
-    void buildSum(){
+    void buildSum(TString tag=""){
         sum = NULL;
         for( typename map<ntupleType*,TH1F*>::iterator it = histoMap.begin() ;
              it != histoMap.end() ; 
              ++it){
             if( sum == NULL ){
                 sum = new TH1F(*(it->second));
-                sum->SetNameTitle(label+"_sum",label+"_sum");
+                sum->SetNameTitle(label+"_"+tag+"_sum",label+"_"+tag+"_sum");
             }else
                 sum->Add(it->second);
         }
