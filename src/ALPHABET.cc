@@ -369,9 +369,9 @@ int main(int argc, char** argv){
     }
     for( int i = 0 ; i < tagSRPlots.size() ; i++ ){
         outputFile->cd();
-        doubletagSBPlots[i].buildSum("tagSR");
-        doubletagSBPlots[i].Write();
-        doubletagSBPlots[i].sum->Write();
+        tagSRPlots[i].buildSum("tagSR");
+        tagSRPlots[i].Write();
+        tagSRPlots[i].sum->Write();
     }
     for( int i = 0 ; i < tagSBPlots.size() ; i++ ){
         outputFile->cd();
