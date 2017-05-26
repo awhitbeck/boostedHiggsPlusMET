@@ -652,6 +652,133 @@ template<typename ntupleType> double fillSubLeadingBBtagJetTau21(ntupleType* ntu
   }
 }
 
+
+////////////////////////////////////////
+// HIGHEST BBtag AK8 JET PROPERTIES  //
+//////////////////////////////////////
+template<typename ntupleType> double fillLeadingMassJetMass(ntupleType* ntuple){
+  if(ntuple->JetsAK8->size()==0) return-99999.;
+  int index;
+  if(ntuple->JetsAK8->size()==1) index = 0;
+  else{
+    index = int( ntuple->JetsAK8_prunedMass->at(0) < ntuple->JetsAK8_prunedMass->at(1) );
+    return ntuple->JetsAK8_prunedMass->at(index);
+  }
+}
+
+template<typename ntupleType> double fillLeadingMassJetFlavor(ntupleType* ntuple){
+  if(ntuple->JetsAK8->size()==0) return-99999.;
+  int index;
+  if(ntuple->JetsAK8->size()==1) index = 0;
+  else{
+    index = int( ntuple->JetsAK8_prunedMass->at(0) < ntuple->JetsAK8_prunedMass->at(1) );
+    if( ntuple->JetsAK8_NumBhadrons->at(index)==2 ) 
+      return 21.;
+    else if( ntuple->JetsAK8_NumBhadrons->at(index)==1 )
+      return 5.;
+    else return 1.;
+  }
+}
+
+template<typename ntupleType> double fillLeadingMassJetPt(ntupleType* ntuple){
+  if(ntuple->JetsAK8->size()==0) return-99999.;
+  int index;
+  if(ntuple->JetsAK8->size()==1) index = 0;
+  else{
+    index = int( ntuple->JetsAK8_prunedMass->at(0) < ntuple->JetsAK8_prunedMass->at(1) );
+    return ntuple->JetsAK8->at(index).Pt();
+  }
+}
+template<typename ntupleType> double fillLeadingMassJetBBtag(ntupleType* ntuple){
+  if(ntuple->JetsAK8->size()==0) return-99999.;
+  int index;
+  if(ntuple->JetsAK8->size()==1) index = 0;
+  else{
+      index = int( ntuple->JetsAK8_prunedMass->at(0) < ntuple->JetsAK8_prunedMass->at(1) );
+      return ntuple->JetsAK8_doubleBDiscriminator->at(index);
+  }
+}
+
+template<typename ntupleType> double fillLeadingMassJetTau21(ntupleType* ntuple){
+  if(ntuple->JetsAK8->size()==0) return-99999.;
+  int index;
+  if(ntuple->JetsAK8->size()==1) index = 0;
+  else{
+      index = int( ntuple->JetsAK8_prunedMass->at(0) < ntuple->JetsAK8_prunedMass->at(1) );
+      return ntuple->JetsAK8_NsubjettinessTau2->at(index)/ntuple->JetsAK8_NsubjettinessTau1->at(index);
+  }
+}
+
+/////////////////////////////////////////////
+// SECOND HIGHEST Mass AK8 JET PROPERTIES //
+/////////////////////////////////////////////
+template<typename ntupleType> double fillSubLeadingMassJetMass(ntupleType* ntuple){
+  int index = int( ntuple->JetsAK8_prunedMass->at(0) > ntuple->JetsAK8_prunedMass->at(1) );
+  return ntuple->JetsAK8_prunedMass->at(index);
+}
+
+template<typename ntupleType> double fillSubLeadingMassJetFlavor(ntupleType* ntuple){
+  if(ntuple->JetsAK8->size()==0) return-99999.;
+  int index;
+  if(ntuple->JetsAK8->size()==1) index = 0;
+  else{
+    index = int( ntuple->JetsAK8_prunedMass->at(0) > ntuple->JetsAK8_prunedMass->at(1) );
+    if( ntuple->JetsAK8_NumBhadrons->at(index)==2 ) 
+      return 21.;
+    else if (ntuple->JetsAK8_NumBhadrons->at(index)==1 )
+      return 5.;
+    else return 1.;
+  }
+}
+
+template<typename ntupleType> double fillSubLeadingMassJetPt(ntupleType* ntuple){
+  if(ntuple->JetsAK8->size()==0) return-99999.;
+  int index;
+  if(ntuple->JetsAK8->size()==1) index = 0;
+  else{
+    index = int( ntuple->JetsAK8_prunedMass->at(0) > ntuple->JetsAK8_prunedMass->at(1) );
+    return ntuple->JetsAK8->at(index).Pt();
+  }
+}
+
+template<typename ntupleType> double fillSubLeadingMassJetBBtag(ntupleType* ntuple){
+  if(ntuple->JetsAK8->size()==0) return-99999.;
+  int index;
+  if(ntuple->JetsAK8->size()==1) index = 0;
+  else{
+    index = int( ntuple->JetsAK8_prunedMass->at(0) > ntuple->JetsAK8_prunedMass->at(1) );
+    return ntuple->JetsAK8_doubleBDiscriminator->at(index);
+  }
+}
+
+template<typename ntupleType> double fillSubLeadingMassJetTau21(ntupleType* ntuple){
+  if(ntuple->JetsAK8->size()==0) return-99999.;
+  int index;
+  if(ntuple->JetsAK8->size()==1) index = 0;
+  else{
+    index = int( ntuple->JetsAK8_prunedMass->at(0) > ntuple->JetsAK8_prunedMass->at(1) );
+    return ntuple->JetsAK8_NsubjettinessTau2->at(index)/ntuple->JetsAK8_NsubjettinessTau1->at(index);
+  }
+}
+
+/////////////////////////////////////////////
+// SECOND HIGHEST Mass AK8 JET PROPERTIES //
+/////////////////////////////////////////////
+
+template<typename ntupleType> double fillClosestJetMass(ntupleType* ntuple){
+    if(ntuple->JetsAK8_prunedMass->size() == 0)
+        return -999.;
+    else if( ntuple->JetsAK8_prunedMass->size() == 1 )
+        return ntuple->JetsAK8_prunedMass->at(0);
+    else{       
+        double J1diff,J2diff;
+        J1diff = ntuple->JetsAK8_prunedMass->at(0)-110.;
+        J2diff = ntuple->JetsAK8_prunedMass->at(1)-110.;
+        //cout << "J1: " << ntuple->JetsAK8_prunedMass->at(0) << " J2: " << ntuple->JetsAK8_prunedMass->at(1) << endl;
+        return fabs(J1diff)>fabs(J2diff) ?  ntuple->JetsAK8_prunedMass->at(1) :  ntuple->JetsAK8_prunedMass->at(0) ;       
+    }
+}
+
   /////////////////
  // OTHER STUFF //
 /////////////////
@@ -1040,10 +1167,13 @@ template<typename ntupleType> bool tagSB(ntupleType* ntuple, int i ){
     if( ntuple->JetsAK8_doubleBDiscriminator->size() <= i || 
         ntuple->JetsAK8_prunedMass->size() <= i ) return false;
     return ( ntuple->JetsAK8_doubleBDiscriminator->at(i) > bbtagCut && 
-             ( ntuple->JetsAK8_prunedMass->at(i) < 85. &&
-               ntuple->JetsAK8_prunedMass->at(i) > 50. ) ||
-             ( ntuple->JetsAK8_prunedMass->at(i) > 135. &&
-               ntuple->JetsAK8_prunedMass->at(i) < 250. ) );
+             (
+              ( ntuple->JetsAK8_prunedMass->at(i) < 85. &&
+                ntuple->JetsAK8_prunedMass->at(i) > 50. ) ||
+              ( ntuple->JetsAK8_prunedMass->at(i) > 135. &&
+                ntuple->JetsAK8_prunedMass->at(i) < 250. ) 
+              ) 
+             );
 }
 
 template<typename ntupleType> bool antitagSR(ntupleType* ntuple, int i){
@@ -1058,14 +1188,19 @@ template<typename ntupleType> bool antitagSB(ntupleType* ntuple, int i){
     if( ntuple->JetsAK8_doubleBDiscriminator->size() <= i || 
         ntuple->JetsAK8_prunedMass->size() <= i ) return false;
     return ( ntuple->JetsAK8_doubleBDiscriminator->at(i) < bbtagCut &&
-             ( ntuple->JetsAK8_prunedMass->at(i) < 85. &&
-               ntuple->JetsAK8_prunedMass->at(i) > 50. ) ||
-             ( ntuple->JetsAK8_prunedMass->at(i) > 135. &&
-               ntuple->JetsAK8_prunedMass->at(i) < 250. ) );
+             (
+              ( ntuple->JetsAK8_prunedMass->at(i) < 85. &&
+                ntuple->JetsAK8_prunedMass->at(i) > 50. ) ||
+              ( ntuple->JetsAK8_prunedMass->at(i) > 135. &&
+                ntuple->JetsAK8_prunedMass->at(i) < 250. ) 
+              )
+             );
 }
 
 template<typename ntupleType> bool antitagSRCut(ntupleType* ntuple){
-    return antitagSR(ntuple,0)||antitagSR(ntuple,1);
+    return ( ( antitagSR(ntuple,0)&&antitagSR(ntuple,1) ) ||
+             ( antitagSB(ntuple,0)&&antitagSR(ntuple,1) ) ||
+             ( antitagSR(ntuple,0)&&antitagSB(ntuple,1) ) );
 }
 
 template<typename ntupleType> bool antitagSBCut(ntupleType* ntuple){
@@ -1087,7 +1222,9 @@ template<typename ntupleType> bool tagSBCut(ntupleType* ntuple){
 }
 
 template<typename ntupleType> bool doubletagSRCut(ntupleType* ntuple){
-    return tagSR(ntuple,0)||tagSR(ntuple,1);
+    return ( ( tagSR(ntuple,0)&&tagSR(ntuple,1) ) ||
+             ( tagSB(ntuple,0)&&tagSR(ntuple,1) ) ||
+             ( tagSR(ntuple,0)&&tagSB(ntuple,1) ) );
 }
 
 template<typename ntupleType> bool doubletagSBCut(ntupleType* ntuple){
