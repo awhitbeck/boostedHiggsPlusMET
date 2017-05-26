@@ -108,31 +108,57 @@ int main(int argc, char** argv){
     plot MET_Plot(*fillMET<RA2bTree>,"MET","m_{J} [GeV]",2,300,700);
     plot J1pt_Ptplot(*fillLeadingJetPt<RA2bTree>,"J1pt_Pt","p_{T,J} [GeV]",50,300.,1300.);
     plot J2pt_Ptplot(*fillSubLeadingJetPt<RA2bTree>,"J2pt_Pt","p_{T,J} [GeV]",50,300.,1300.);
+    plot J1pt_Mplot(*fillLeadingJetMass<RA2bTree>,"J1pt_M","m_{J} [GeV]",50,50.,250.);
+    plot J2pt_Mplot(*fillSubLeadingJetMass<RA2bTree>,"J2pt_M","m_{J} [GeV]",50,50.,250.);
+    plot ClosestMass(*fillClosestJetMass<RA2bTree>,"ClosestMass","m_{J} [GeV]",50,50.,250.);
 
     vector<plot> doubletagSRPlots;
     doubletagSRPlots.push_back(plot(MET_Plot));
     doubletagSRPlots.push_back(plot(J1pt_Ptplot));
     doubletagSRPlots.push_back(plot(J2pt_Ptplot));
+    doubletagSRPlots.push_back(plot(J1pt_Mplot));
+    doubletagSRPlots.push_back(plot(J2pt_Mplot));
+    doubletagSRPlots.push_back(plot(ClosestMass));
+
     vector<plot> doubletagSBPlots;
     doubletagSBPlots.push_back(plot(MET_Plot));
     doubletagSBPlots.push_back(plot(J1pt_Ptplot));
-    doubletagSBPlots.push_back(plot(J2pt_Ptplot));    
+    doubletagSBPlots.push_back(plot(J2pt_Ptplot));
+    doubletagSBPlots.push_back(plot(J1pt_Mplot));    
+    doubletagSBPlots.push_back(plot(J2pt_Mplot));    
+    doubletagSBPlots.push_back(plot(ClosestMass));
+
     vector<plot> tagSRPlots;
     tagSRPlots.push_back(plot(MET_Plot));
     tagSRPlots.push_back(plot(J1pt_Ptplot));
     tagSRPlots.push_back(plot(J2pt_Ptplot));    
+    tagSRPlots.push_back(plot(J1pt_Mplot));
+    tagSRPlots.push_back(plot(J2pt_Mplot));    
+    tagSRPlots.push_back(plot(ClosestMass));
+
     vector<plot> tagSBPlots;
     tagSBPlots.push_back(plot(MET_Plot));
     tagSBPlots.push_back(plot(J1pt_Ptplot));
     tagSBPlots.push_back(plot(J2pt_Ptplot));    
+    tagSBPlots.push_back(plot(J1pt_Mplot));
+    tagSBPlots.push_back(plot(J2pt_Mplot));    
+    tagSBPlots.push_back(plot(ClosestMass));
+
     vector<plot> antitagSRPlots;
     antitagSRPlots.push_back(plot(MET_Plot));
     antitagSRPlots.push_back(plot(J1pt_Ptplot));
     antitagSRPlots.push_back(plot(J2pt_Ptplot));    
+    antitagSRPlots.push_back(plot(J1pt_Mplot));
+    antitagSRPlots.push_back(plot(J2pt_Mplot));    
+    antitagSRPlots.push_back(plot(ClosestMass));
+
     vector<plot> antitagSBPlots;
     antitagSBPlots.push_back(plot(MET_Plot));
     antitagSBPlots.push_back(plot(J1pt_Ptplot));
     antitagSBPlots.push_back(plot(J2pt_Ptplot));    
+    antitagSBPlots.push_back(plot(J1pt_Mplot));
+    antitagSBPlots.push_back(plot(J2pt_Mplot));    
+    antitagSBPlots.push_back(plot(ClosestMass));
 
     // background MC samples - 0 lepton regions
     for( int iSample = 0 ; iSample < skims.ntuples.size() ; iSample++){
