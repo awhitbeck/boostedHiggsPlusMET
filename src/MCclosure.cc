@@ -10,7 +10,10 @@
 #include <iomanip>
 #include "TStyle.h"
 
-void MCclosure(TString tag = "", bool doubleHiggsRegion = true, TString baseDir="./"){
+void MCclosure(TString tag = "", 
+               TString sample = "sum",
+               bool doubleHiggsRegion = true, 
+               TString baseDir="./"){
 
     gROOT->ProcessLine(".L tdrstyle.C");
     gROOT->ProcessLine("setTDRStyle()");
@@ -23,7 +26,6 @@ void MCclosure(TString tag = "", bool doubleHiggsRegion = true, TString baseDir=
     double METbins[numMETbins+2] = {300,500,700,1500};
 
     const int numRegions = 4;
-    TString sampleLabels[numSamples]={"sum","data"};
     //TString METlabels[numMETbins] = {"300","500","700"};
     TString regionLabels[numRegions] = {"doubletagSR","antitagSR","doubletagSB","antitagSB"};
     if( ! doubleHiggsRegion ){
@@ -35,7 +37,7 @@ void MCclosure(TString tag = "", bool doubleHiggsRegion = true, TString baseDir=
     TH1F* MC[numRegions];
 
     for( int r = 0 ; r < numRegions ; r++ ){
-        temp[r] = (TH1F*) f->Get("MET_"+regionLabels[r]+"_sum");
+        temp[r] = (TH1F*) f->Get("MET_"+regionLabels[r]+"_"+sample);
         //temp[r]->Add((TH1F*)f->Get("MET_"+regionLabels[r]+"_TTExtra"));
         MC[r] = new TH1F("MC_"+regionLabels[r],"MC_"+regionLabels[r],numMETbins+1,METbins);
 
@@ -102,6 +104,7 @@ void MCclosure(TString tag = "", bool doubleHiggsRegion = true, TString baseDir=
     botPad->Draw();
     topPad->cd();
 
+    MC[0]->GetYaxis()->SetRangeUser(0.,max(MC[0]->GetMaximum(),MCprediction->GetMaximum())*1.5);
     MC[0]->Draw("e2");
     MCprediction->Draw("p,e1,same");
 
