@@ -1,4 +1,4 @@
-#include "TLorentzVector.h"
+1;2c#include "TLorentzVector.h"
 
 // constants
 // ==============================================
@@ -1198,37 +1198,38 @@ template<typename ntupleType> bool antitagSB(ntupleType* ntuple, int i){
 }
 
 template<typename ntupleType> bool antitagSRCut(ntupleType* ntuple){
-    return ( ( antitagSR(ntuple,0)&&antitagSR(ntuple,1) ) ||
+    return ( antitagSR(ntuple,0)&&antitagSR(ntuple,1) );
+}
+
+template<typename ntupleType> bool antitagSBCut(ntupleType* ntuple){
+    return ( ( antitagSB(ntuple,0)&&antitagSB(ntuple,1) ) ||
              ( antitagSB(ntuple,0)&&antitagSR(ntuple,1) ) ||
              ( antitagSR(ntuple,0)&&antitagSB(ntuple,1) ) );
 }
 
-template<typename ntupleType> bool antitagSBCut(ntupleType* ntuple){
-    return antitagSB(ntuple,0)&&antitagSB(ntuple,1);
-}
-
 template<typename ntupleType> bool tagSRCut(ntupleType* ntuple){
     return ( ( tagSR(ntuple,0)&&antitagSR(ntuple,1) ) || 
-             ( tagSR(ntuple,0)&&antitagSB(ntuple,1) ) ||
-             ( tagSB(ntuple,0)&&antitagSR(ntuple,1) ) ||
-             ( antitagSR(ntuple,0)&&tagSR(ntuple,1) ) ||
-             ( antitagSR(ntuple,0)&&tagSB(ntuple,1) ) ||
-             ( antitagSB(ntuple,0)&&tagSR(ntuple,1) ) );
+             ( antitagSR(ntuple,0)&&tagSR(ntuple,1) ) ) ;
 }
 
 template<typename ntupleType> bool tagSBCut(ntupleType* ntuple){
     return ( ( tagSB(ntuple,0)&&antitagSB(ntuple,1) ) ||
-             ( antitagSB(ntuple,0)&&tagSB(ntuple,1) ) );
+             ( tagSR(ntuple,0)&&antitagSB(ntuple,1) ) ||
+             ( tagSB(ntuple,0)&&antitagSR(ntuple,1) ) ||
+             ( antitagSB(ntuple,0)&&tagSB(ntuple,1) ) ||
+             ( antitagSR(ntuple,0)&&tagSB(ntuple,1) ) ||
+             ( antitagSB(ntuple,0)&&tagSR(ntuple,1) ) );
+
 }
 
 template<typename ntupleType> bool doubletagSRCut(ntupleType* ntuple){
-    return ( ( tagSR(ntuple,0)&&tagSR(ntuple,1) ) ||
-             ( tagSB(ntuple,0)&&tagSR(ntuple,1) ) ||
-             ( tagSR(ntuple,0)&&tagSB(ntuple,1) ) );
+    return ( tagSR(ntuple,0)&&tagSR(ntuple,1) );
 }
 
 template<typename ntupleType> bool doubletagSBCut(ntupleType* ntuple){
-    return tagSB(ntuple,0)&&tagSB(ntuple,1);
+    return ( ( tagSB(ntuple,0)&&tagSB(ntuple,1) ) ||
+             ( tagSB(ntuple,0)&&tagSR(ntuple,1) ) ||
+             ( tagSR(ntuple,0)&&tagSB(ntuple,1) ) );
 }
 
 ////////////////////////////////////////////////////////////////////////
