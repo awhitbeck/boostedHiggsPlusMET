@@ -172,7 +172,7 @@ int main(int argc, char** argv){
             }
         }
         for( int i = 0 ; i < doubletagSRPlots.size() ; i++ ){
-            doubletagSRPlots[i].addNtuple(ntuple,"doubletagSR"+skims.sampleName[iSample]); 
+            doubletagSRPlots[i].addNtuple(ntuple,"doubletagSR_"+skims.sampleName[iSample]); 
             doubletagSRPlots[i].setFillColor(ntuple,skims.fillColor[iSample]);
         }
         for( int i = 0 ; i < doubletagSBPlots.size() ; i++ ){
