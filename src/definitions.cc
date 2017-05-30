@@ -1110,11 +1110,32 @@ template<typename ntupleType> bool photonBaselineCut(ntupleType* ntuple){
              ntuple->JetIDclean == 1);
 }
 
+template<typename ntupleType> bool photonBaselineCut_loose(ntupleType* ntuple){
+    return ( ntuple->Photons->size()==1 &&
+             ntuple->Photons->at(0).Pt() > 200. && 
+             ntuple->Photons_fullID->size() == 1 && 
+             ntuple->Photons_fullID->at(0) == 1 &&
+             ntuple->METclean > 200.             &&
+             ntuple->HTclean > 600.                         &&
+             ntuple->JetsAK8Clean->size()>=2 && 
+             ntuple->DeltaPhi1clean>0.5 && 
+             ntuple->DeltaPhi2clean>0.5 &&
+             ntuple->DeltaPhi3clean>0.3 && 
+             ntuple->DeltaPhi4clean>0.3 &&
+             ntuple->isoElectronTracksclean==0 &&
+             ntuple->isoMuonTracksclean == 0 && 
+             ntuple->isoPionTracksclean == 0 &&
+             ntuple->Electrons->size() == 0 &&
+             ntuple->Muons->size() == 0 && 
+             FiltersCut(ntuple) &&
+             ntuple->JetIDclean == 1);
+}
+
 template<typename ntupleType> bool singleHiggsTagLooseCut(ntupleType* ntuple ){ 
-  return ( ( ntuple->JetsAK8_doubleBDiscriminator->at(0) > bbtagCut ) 
-           && ( ntuple->JetsAK8_doubleBDiscriminator->at(1) < bbtagCut )
-           //|| ( ntuple->JetsAK8_doubleBDiscriminator->at(1) > bbtagCut )
-           );
+    return ( ( ntuple->JetsAK8_doubleBDiscriminator->at(0) > bbtagCut ) 
+             && ( ntuple->JetsAK8_doubleBDiscriminator->at(1) < bbtagCut ) ) ||
+        ( ( ntuple->JetsAK8_doubleBDiscriminator->at(0) < bbtagCut ) 
+          && ( ntuple->JetsAK8_doubleBDiscriminator->at(1) > bbtagCut ) );
 }
 
 template<typename ntupleType> bool antiTaggingLooseCut(ntupleType* ntuple ){
@@ -1131,9 +1152,9 @@ template<typename ntupleType> bool doubleTaggingLooseCut(ntupleType* ntuple ){
 
 template<typename ntupleType> bool doubleMassCut(ntupleType* ntuple ){
     return ( ntuple->JetsAK8_prunedMass->at(0) > 85. &&
-             ntuple->JetsAK8_prunedMass->at(0) < 135. //&&
-             //ntuple->JetsAK8_prunedMass->at(1) > 85. &&
-             //ntuple->JetsAK8_prunedMass->at(1) < 135. 
+             ntuple->JetsAK8_prunedMass->at(0) < 135. &&
+             ntuple->JetsAK8_prunedMass->at(1) > 85. &&
+             ntuple->JetsAK8_prunedMass->at(1) < 135. 
              );
 }
 
@@ -1237,9 +1258,9 @@ template<typename ntupleType> bool doubletagSBCut(ntupleType* ntuple){
 ////////////////////////////////////////////////////////////////////////
 template<typename ntupleType> bool singleHiggsTagLooseCut_photon(ntupleType* ntuple ){ 
   return ( ( ntuple->JetsAK8Clean_doubleBDiscriminator->at(0) > bbtagCut ) 
-           && ( ntuple->JetsAK8Clean_doubleBDiscriminator->at(1) < bbtagCut )
-           //|| ( ntuple->JetsAK8_doubleBDiscriminator->at(subleadingJetNoPhoton) > bbtagCut )
-           );
+           && ( ntuple->JetsAK8Clean_doubleBDiscriminator->at(1) < bbtagCut ) ) || 
+      ( ( ntuple->JetsAK8Clean_doubleBDiscriminator->at(0) < bbtagCut ) 
+        && ( ntuple->JetsAK8Clean_doubleBDiscriminator->at(1) > bbtagCut ) );
 }
 
 template<typename ntupleType> bool antiTaggingLooseCut_photon(ntupleType* ntuple ){
@@ -1278,3 +1299,81 @@ template<typename ntupleType> bool doubleHiggsTagCut_photon(ntupleType* ntuple )
              ntuple->JetsAK8Clean_prunedMass->at(1) < 135. && 
              ntuple->JetsAK8Clean_doubleBDiscriminator->at(1) > bbtagCut ) ;
 }
+
+template<typename ntupleType> bool tagSR_photon(ntupleType* ntuple, int i){
+    if( ntuple->JetsAK8Clean_doubleBDiscriminator->size() <= i || 
+        ntuple->JetsAK8_prunedMass->size() <= i ) return false;
+    return ( ntuple->JetsAK8Clean_doubleBDiscriminator->at(i) > bbtagCut &&
+             ntuple->JetsAK8Clean_prunedMass->at(i) > 85. && 
+             ntuple->JetsAK8Clean_prunedMass->at(i) < 135. );
+}
+
+template<typename ntupleType> bool tagSB_photon(ntupleType* ntuple, int i ){
+    if( ntuple->JetsAK8Clean_doubleBDiscriminator->size() <= i || 
+        ntuple->JetsAK8Clean_prunedMass->size() <= i ) return false;
+    return ( ntuple->JetsAK8Clean_doubleBDiscriminator->at(i) > bbtagCut && 
+             (
+              ( ntuple->JetsAK8Clean_prunedMass->at(i) < 85. &&
+                ntuple->JetsAK8Clean_prunedMass->at(i) > 50. ) ||
+              ( ntuple->JetsAK8Clean_prunedMass->at(i) > 135. &&
+                ntuple->JetsAK8Clean_prunedMass->at(i) < 250. ) 
+              ) 
+             );
+}
+
+template<typename ntupleType> bool antitagSR_photon(ntupleType* ntuple, int i){
+        if( ntuple->JetsAK8Clean_doubleBDiscriminator->size() <= i || 
+        ntuple->JetsAK8Clean_prunedMass->size() <= i ) return false;
+    return ( ntuple->JetsAK8Clean_doubleBDiscriminator->at(i) < bbtagCut &&
+             ( ntuple->JetsAK8Clean_prunedMass->at(i) > 85. &&
+               ntuple->JetsAK8Clean_prunedMass->at(i) < 135. ) );
+}
+        
+template<typename ntupleType> bool antitagSB_photon(ntupleType* ntuple, int i){
+    if( ntuple->JetsAK8Clean_doubleBDiscriminator->size() <= i || 
+        ntuple->JetsAK8Clean_prunedMass->size() <= i ) return false;
+    return ( ntuple->JetsAK8Clean_doubleBDiscriminator->at(i) < bbtagCut &&
+             (
+              ( ntuple->JetsAK8Clean_prunedMass->at(i) < 85. &&
+                ntuple->JetsAK8Clean_prunedMass->at(i) > 50. ) ||
+              ( ntuple->JetsAK8Clean_prunedMass->at(i) > 135. &&
+                ntuple->JetsAK8Clean_prunedMass->at(i) < 250. ) 
+              )
+             );
+}
+
+template<typename ntupleType> bool antitagSRCut_photon(ntupleType* ntuple){
+    return ( antitagSR_photon(ntuple,0)&&antitagSR_photon(ntuple,1) );
+}
+
+template<typename ntupleType> bool antitagSBCut_photon(ntupleType* ntuple){
+    return ( ( antitagSB_photon(ntuple,0)&&antitagSB_photon(ntuple,1) ) ||
+             ( antitagSB_photon(ntuple,0)&&antitagSR_photon(ntuple,1) ) ||
+             ( antitagSR_photon(ntuple,0)&&antitagSB_photon(ntuple,1) ) );
+}
+
+template<typename ntupleType> bool tagSRCut_photon(ntupleType* ntuple){
+    return ( ( tagSR_photon(ntuple,0)&&antitagSR_photon(ntuple,1) ) || 
+             ( antitagSR_photon(ntuple,0)&&tagSR_photon(ntuple,1) ) ) ;
+}
+
+template<typename ntupleType> bool tagSBCut_photon(ntupleType* ntuple){
+    return ( ( tagSB_photon(ntuple,0)&&antitagSB_photon(ntuple,1) ) ||
+             ( tagSR_photon(ntuple,0)&&antitagSB_photon(ntuple,1) ) ||
+             ( tagSB_photon(ntuple,0)&&antitagSR_photon(ntuple,1) ) ||
+             ( antitagSB_photon(ntuple,0)&&tagSB_photon(ntuple,1) ) ||
+             ( antitagSR_photon(ntuple,0)&&tagSB_photon(ntuple,1) ) ||
+             ( antitagSB_photon(ntuple,0)&&tagSR_photon(ntuple,1) ) );
+
+}
+
+template<typename ntupleType> bool doubletagSRCut_photon(ntupleType* ntuple){
+    return ( tagSR_photon(ntuple,0)&&tagSR_photon(ntuple,1) );
+}
+
+template<typename ntupleType> bool doubletagSBCut_photon(ntupleType* ntuple){
+    return ( ( tagSB_photon(ntuple,0)&&tagSB_photon(ntuple,1) ) ||
+             ( tagSB_photon(ntuple,0)&&tagSR_photon(ntuple,1) ) ||
+             ( tagSR_photon(ntuple,0)&&tagSB_photon(ntuple,1) ) );
+}
+
