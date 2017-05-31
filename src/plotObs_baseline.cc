@@ -39,21 +39,29 @@ int main(int argc, char** argv){
     plot J2pt_Massplot(*fillSubLeadingJetMass<RA2bTree>,"J2pt_Mass_baseline","m_{J} [GeV]",20,50.,200.);
     plot J1bbtag_Massplot(*fillLeadingBBtagJetMass<RA2bTree>,"J1bbtag_Mass_baseline","m_{J} [GeV]",20,50.,200.);
     plot J2bbtag_Massplot(*fillSubLeadingBBtagJetMass<RA2bTree>,"J2bbtag_Mass_baseline","m_{J} [GeV]",20,50.,200.);
+    plot J1mass_Massplot(*fillLeadingMassJetMass<RA2bTree>,"J1mass_Mass_baseline","m_{J} [GeV]",20,50.,200.);
+    plot J2mass_Massplot(*fillSubLeadingMassJetMass<RA2bTree>,"J2mass_Mass_baseline","m_{J} [GeV]",20,50.,200.);
 
     plot J1pt_BBplot(*fillLeadingBBtag<RA2bTree>,"J1pt_BBtag_baseline","bb-tag",20,-1.,1.);
     plot J2pt_BBplot(*fillSubLeadingBBtag<RA2bTree>,"J2pt_BBtag_baseline","bb-tag",20,-1.,1.);
     plot J1bbtag_BBplot(*fillLeadingBBtagJetBBtag<RA2bTree>,"J1bbtag_BBtag_baseline","bb-tag",20,-1.,1.);
     plot J2bbtag_BBplot(*fillSubLeadingBBtagJetBBtag<RA2bTree>,"J2bbtag_BBtag_baseline","bb-tag",20,-1.,1.);
+    plot J1mass_BBplot(*fillLeadingMassJetBBtag<RA2bTree>,"J1mass_BBtag_baseline","bb-tag",20,-1.,1.);
+    plot J2mass_BBplot(*fillSubLeadingMassJetBBtag<RA2bTree>,"J2mass_BBtag_baseline","bb-tag",20,-1.,1.);
 
     plot J1pt_Tau21plot(*fillLeadingTau21<RA2bTree>,"J1pt_Tau21_baseline","#tau_{21}",20,0.,1.);
     plot J2pt_Tau21plot(*fillSubLeadingTau21<RA2bTree>,"J2pt_Tau21_baseline","#tau_{21}",20,0.,1.);
     plot J1bbtag_Tau21plot(*fillLeadingBBtagJetTau21<RA2bTree>,"J1bbtag_Tau21_baseline","#tau_{21}",20,0.,1.);
     plot J2bbtag_Tau21plot(*fillSubLeadingBBtagJetTau21<RA2bTree>,"J2bbtag_Tau21_baseline","#tau_{21}",20,0.,1.);
+    plot J1mass_Tau21plot(*fillLeadingMassJetTau21<RA2bTree>,"J1mass_Tau21_baseline","#tau_{21}",20,0.,1.);
+    plot J2mass_Tau21plot(*fillSubLeadingMassJetTau21<RA2bTree>,"J2mass_Tau21_baseline","#tau_{21}",20,0.,1.);
 
     plot J1pt_Ptplot(*fillLeadingJetPt<RA2bTree>,"J1pt_Pt_baseline","p_{T,J} [GeV]",40,300.,2300.);
     plot J2pt_Ptplot(*fillSubLeadingJetPt<RA2bTree>,"J2pt_Pt_baseline","p_{T,J} [GeV]",40,300.,2300.);
     plot J1bbtag_Ptplot(*fillLeadingBBtagJetPt<RA2bTree>,"J1bbtag_Pt_baseline","p_{T,J} [GeV]",40,300.,2300.);
     plot J2bbtag_Ptplot(*fillSubLeadingBBtagJetPt<RA2bTree>,"J2bbtag_Pt_baseline","p_{T,J} [GeV]",40,300.,2300.);
+    plot J1mass_Ptplot(*fillLeadingMassJetPt<RA2bTree>,"J1mass_Pt_baseline","p_{T,J} [GeV]",40,300.,2300.);
+    plot J2mass_Ptplot(*fillSubLeadingMassJetPt<RA2bTree>,"J2mass_Pt_baseline","p_{T,J} [GeV]",40,300.,2300.);
 
     plot J1pt_JetFlavorPlot(*fillLeadingJetFlavor<RA2bTree>,"J1pt_JetFlavorPlot","Jet Flavor",22,0.5,21.5);
     plot J2pt_JetFlavorPlot(*fillSubLeadingJetFlavor<RA2bTree>,"J2pt_JetFlavorPlot","Jet Flavor",22,0.5,21.5);
@@ -74,18 +82,26 @@ int main(int argc, char** argv){
     plots.push_back(J2pt_Massplot);
     plots.push_back(J1bbtag_Massplot);
     plots.push_back(J2bbtag_Massplot);
+    plots.push_back(J1mass_Massplot);
+    plots.push_back(J2mass_Massplot);
     plots.push_back(J1pt_BBplot);
     plots.push_back(J2pt_BBplot);
     plots.push_back(J1bbtag_BBplot);
     plots.push_back(J2bbtag_BBplot);
+    plots.push_back(J1mass_BBplot);
+    plots.push_back(J2mass_BBplot);
     plots.push_back(J1pt_Tau21plot);
     plots.push_back(J2pt_Tau21plot);
     plots.push_back(J1bbtag_Tau21plot);
     plots.push_back(J2bbtag_Tau21plot);
+    plots.push_back(J1mass_Tau21plot);
+    plots.push_back(J2mass_Tau21plot);
     plots.push_back(J1pt_Ptplot);
     plots.push_back(J2pt_Ptplot);
     plots.push_back(J1bbtag_Ptplot);
     plots.push_back(J2bbtag_Ptplot);
+    plots.push_back(J1mass_Ptplot);
+    plots.push_back(J2mass_Ptplot);
     plots.push_back(J1pt_JetFlavorPlot);
     plots.push_back(J2pt_JetFlavorPlot);
 
@@ -101,10 +117,14 @@ int main(int argc, char** argv){
 
         int numEvents = ntuple->fChain->GetEntries();
         ntupleBranchStatus<RA2bTree>(ntuple);
+        TString filename;
         for( int iEvt = 0 ; iEvt < numEvents ; iEvt++ ){
             ntuple->GetEntry(iEvt);
             if( iEvt % 1000000 == 0 ) cout << skims.sampleName[iSample] << ": " << iEvt << "/" << numEvents << endl;
-            if( skims.sampleName[iSample] == "TTExtra" && ntuple->madHT>600. )continue;
+
+            filename = ntuple->fChain->GetFile()->GetName();
+            if( ( filename.Contains("SingleLept") || filename.Contains("DiLept") ) && ntuple->madHT>600. )continue;
+
             if(! baselineCut(ntuple) ) continue;
             for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++ ){
                 plots[iPlot].fill(ntuple);

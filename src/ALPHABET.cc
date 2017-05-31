@@ -203,6 +203,7 @@ int main(int argc, char** argv){
         float trigWeight=1.0;
         bool passBaseline;
         double jetMass1,jetMass2;
+        TString filename;
         for( int iEvt = 0 ; iEvt < min(MAX_EVENTS,numEvents) ; iEvt++ ){
             ntuple->GetEntry(iEvt);
             if( iEvt % 100000 == 0 ) cout << skims.sampleName[iSample] << ": " << iEvt << "/" << min(MAX_EVENTS,numEvents) << endl;
@@ -217,11 +218,11 @@ int main(int argc, char** argv){
             }
             if( ! passBaseline ) continue;
 
-
-            if( skims.sampleName[iSample] == "TTExtra" && ntuple->madHT>600. )continue;
+            filename = ntuple->fChain->GetFile()->GetName();
+            if( ( filename.Contains("SingleLept") || filename.Contains("DiLept") ) && ntuple->madHT>600. )continue;
             bin = -1;
             weight = ntuple->Weight*lumi*trigWeight *customPUweights(ntuple);	   
-            if( skims.sampleName[iSample] == "TTExtra" || skims.sampleName[iSample] == "TT" ){
+            if( skims.sampleName[iSample] == "TT" ){
                 weight *= ISRweights(ntuple);
 	    }
             for( int iBin = 0 ; iBin < numMETbins ; iBin++ ){

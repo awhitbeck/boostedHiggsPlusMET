@@ -91,10 +91,14 @@ int main(int argc, char** argv){
 
       int numEvents = ntuple->fChain->GetEntries();
       ntupleBranchStatus<RA2bTree>(ntuple);
+      TString filename;
       for( int iEvt = 0 ; iEvt < numEvents ; iEvt++ ){
           ntuple->GetEntry(iEvt);
           if( iEvt % 10000 == 0 ) cout << skims.sampleName[iSample] << ": " << iEvt << "/" << numEvents << endl;
-          if( skims.sampleName[iSample] == "TTExtra" && ntuple->madHT>600. )continue;
+
+          filename = ntuple->fChain->GetFile()->GetName();
+          if( ( filename.Contains("SingleLept") || filename.Contains("DiLept") ) && ntuple->madHT>600. )continue;
+
           if(! baselineCut(ntuple) ) continue;
           if( doubleTaggingLooseCut(ntuple) ) continue;
           if(! singleHiggsTagLooseCut(ntuple) ) continue;

@@ -126,15 +126,18 @@ int main(int argc, char** argv){
         int numEvents = ntuple->fChain->GetEntries();
         ntupleBranchStatus<RA2bTree>(ntuple);
         double weight = 0.;
+        TString filename;
         for( int iEvt = 0 ; iEvt < numEvents ; iEvt++ ){
             ntuple->GetEntry(iEvt);
             if( iEvt % 100000 == 0 ) cout << skims.sampleName[iSample] << ": " << iEvt << "/" << numEvents << endl;
-            if( skims.sampleName[iSample] == "TTExtra" && ntuple->madHT>600. )continue;
+            
+            filename = ntuple->fChain->GetFile()->GetName();
+            if( ( filename.Contains("SingleLept") || filename.Contains("DiLept") ) && ntuple->madHT>600. )continue;
 
             // ----------- compute weights --------------
             weight = ntuple->Weight*lumi*customPUweights(ntuple);
             //cout << "xsec weight: " << ntuple->Weight*lumi << endl;
-            if( skims.sampleName[iSample] == "TTExtra" || skims.sampleName[iSample] == "TT" ){
+            if( skims.sampleName[iSample] == "TT" ){
                 weight *= ISRweights(ntuple);
                 //cout << "ISR: " << ISRweights(ntuple) << endl;
             }
