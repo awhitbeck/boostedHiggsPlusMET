@@ -222,9 +222,9 @@ int main(int argc, char** argv){
             if( ( filename.Contains("SingleLept") || filename.Contains("DiLept") ) && ntuple->madHT>600. )continue;
             bin = -1;
             weight = ntuple->Weight*lumi*trigWeight *customPUweights(ntuple);	   
-            if( skims.sampleName[iSample] == "TT" ){
-                weight *= ISRweights(ntuple);
-	    }
+            //if( skims.sampleName[iSample] == "TT" ){
+            //    weight *= ISRweights(ntuple);
+            //}
             for( int iBin = 0 ; iBin < numMETbins ; iBin++ ){
                 if( ntuple->MET > lowestMET ){
                     if( ntuple->MET > numMETbins*(binWidth-1)+lowestMET )

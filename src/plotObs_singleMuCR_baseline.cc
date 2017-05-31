@@ -195,8 +195,8 @@ int main(int argc, char** argv){
       if(! singleMuBaselineCut(ntuple) ) continue;
       for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++ ){
           weight = ntuple->Weight*lumi*customPUweights(ntuple);
-          if( skims.sampleName[iSample] == "TT" )
-              weight *= ISRweights(ntuple);
+          //if( skims.sampleName[iSample] == "TT" )
+          //    weight *= ISRweights(ntuple);
           iBin=plots[iPlot].fill(ntuple,weight);
           if( plots[iPlot].label == "NJets_singleMuCR_baseline" && iBin>0 && iBin <=14 )
               HTversusNJetsplots[iBin-1].fill(ntuple,weight);
