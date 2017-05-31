@@ -14,7 +14,7 @@ void computeScaleFactor(TH1F* hdata,TH1F* hmc){
 }
 
 
-void checkScaleFactors(TString tag = "_singleMu", TString baseDir="./"){
+void checkScaleFactors(TString tag = "_singleMu", bool doubletag = true, TString baseDir="./"){
 
     gROOT->ProcessLine(".L tdrstyle.C");
     gROOT->ProcessLine("setTDRStyle()");
@@ -22,7 +22,13 @@ void checkScaleFactors(TString tag = "_singleMu", TString baseDir="./"){
     TFile* f = new TFile(baseDir+"ALPHABEThistos"+tag+".root","READ");
     TH1F* hdata,*hmc;
 
-    TH1F* doubletagSRdata = new TH1F("doubletagSRdata","doubletagSRdata",4,100,900);
+    TString tagString;
+    if(doubletag)
+        tagString = "doubletag" ;
+    else 
+        tagString = "tag" ;
+
+    TH1F* doubletagSRdata = new TH1F(tagString+"SRdata",tagString+"SRdata",4,100,900);
     doubletagSRdata->SetLineColor(1);
     doubletagSRdata->SetLineWidth(3);
     doubletagSRdata->SetMarkerColor(1);
@@ -31,13 +37,13 @@ void checkScaleFactors(TString tag = "_singleMu", TString baseDir="./"){
     doubletagSRdata->GetYaxis()->SetTitle("Events");
     //doubletagSRdata->GetXaxis()->SetRangeUser(301,900);
     TH1F* doubletagSBdata = new TH1F(*doubletagSRdata);
-    doubletagSBdata->SetNameTitle("doubletagSBdata","doubletagSBdata");
+    doubletagSBdata->SetNameTitle(tagString+"SBdata",tagString+"SBdata");
     TH1F* antitagSRdata = new TH1F(*doubletagSRdata);
     antitagSRdata->SetNameTitle("antitagSRdata","antitagSRdata");
     TH1F* antitagSBdata = new TH1F(*doubletagSRdata);
     antitagSBdata->SetNameTitle("antitagSBdata","antitagSBdata");
 
-    TH1F* doubletagSRmc = new TH1F("doubletagSRmc","doubletagSRmc",4,100,900);
+    TH1F* doubletagSRmc = new TH1F(tagString+"SRmc",tagString+"SRmc",4,100,900);
     doubletagSRmc->SetLineColor(2);
     doubletagSRmc->SetLineWidth(3);
     doubletagSRmc->SetFillColor(2);
@@ -46,7 +52,7 @@ void checkScaleFactors(TString tag = "_singleMu", TString baseDir="./"){
     doubletagSRmc->GetYaxis()->SetTitle("Events");
     //doubletagSRmc->GetXaxis()->SetRangeUser(301,900);
     TH1F* doubletagSBmc = new TH1F(*doubletagSRmc);
-    doubletagSBmc->SetNameTitle("doubletagSBmc","doubletagSBmc");
+    doubletagSBmc->SetNameTitle(tagString+"SBmc",tagString+"SBmc");
     TH1F* antitagSRmc = new TH1F(*doubletagSRmc);
     antitagSRmc->SetNameTitle("antitagSRmc","antitagSRmc");
     TH1F* antitagSBmc = new TH1F(*doubletagSRmc);
@@ -61,16 +67,16 @@ void checkScaleFactors(TString tag = "_singleMu", TString baseDir="./"){
 
     // ---------------------------------------------
     cout << "\\multicolumn{2}{c}{100 $<$ MET $<$ 300} \\\\ \\hline" << endl;
-    hdata = (TH1F*) f->Get("mJ_doubletagSR_100_data");
-    hmc = (TH1F*) f->Get("mJ_doubletagSR_100_sum");
+    hdata = (TH1F*) f->Get("mJ_"+tagString+"SR_100_data");
+    hmc = (TH1F*) f->Get("mJ_"+tagString+"SR_100_sum");
     cout << std::setprecision(2) << "$\\alpha_{}$ & ";
     computeScaleFactor(hdata,hmc);
     doubletagSRdata->SetBinContent(1,hdata->Integral(1,3));
     doubletagSRmc->SetBinContent(1,hmc->Integral(1,3));
     cout << " \\\\ \\hline" << endl;
 
-    hdata = (TH1F*) f->Get("mJ_doubletagSB_100_data");
-    hmc = (TH1F*) f->Get("mJ_doubletagSB_100_sum");
+    hdata = (TH1F*) f->Get("mJ_"+tagString+"SB_100_data");
+    hmc = (TH1F*) f->Get("mJ_"+tagString+"SB_100_sum");
     cout << "$\\beta_{}$ &";
     computeScaleFactor(hdata,hmc);
     doubletagSBdata->SetBinContent(1,hdata->Integral(1,3));
@@ -95,16 +101,16 @@ void checkScaleFactors(TString tag = "_singleMu", TString baseDir="./"){
 
     // ---------------------------------------------
     cout << "\\multicolumn{2}{c}{300 $<$ MET $<$ 500} \\\\ \\hline" << endl;
-    hdata = (TH1F*) f->Get("mJ_doubletagSR_300_data");
-    hmc = (TH1F*) f->Get("mJ_doubletagSR_300_sum");
+    hdata = (TH1F*) f->Get("mJ_"+tagString+"SR_300_data");
+    hmc = (TH1F*) f->Get("mJ_"+tagString+"SR_300_sum");
     cout << "$\\alpha_{}$ & ";
     computeScaleFactor(hdata,hmc);
     doubletagSRdata->SetBinContent(2,hdata->Integral(1,3));
     doubletagSRmc->SetBinContent(2,hmc->Integral(1,3));
     cout << " \\\\ \\hline" << endl;
 
-    hdata = (TH1F*) f->Get("mJ_doubletagSB_300_data");
-    hmc = (TH1F*) f->Get("mJ_doubletagSB_300_sum");
+    hdata = (TH1F*) f->Get("mJ_"+tagString+"SB_300_data");
+    hmc = (TH1F*) f->Get("mJ_"+tagString+"SB_300_sum");
     cout << "$\\beta_{}$ & ";
     computeScaleFactor(hdata,hmc);
     doubletagSBdata->SetBinContent(2,hdata->Integral(1,3));
@@ -129,16 +135,16 @@ void checkScaleFactors(TString tag = "_singleMu", TString baseDir="./"){
     
     // ---------------------------------------------
     cout << "\\multicolumn{2}{c}{500 $<$ MET $<$ 700} \\\\ \\hline" << endl;
-    hdata = (TH1F*) f->Get("mJ_doubletagSR_500_data");
-    hmc = (TH1F*) f->Get("mJ_doubletagSR_500_sum");
+    hdata = (TH1F*) f->Get("mJ_"+tagString+"SR_500_data");
+    hmc = (TH1F*) f->Get("mJ_"+tagString+"SR_500_sum");
     cout << "$\\alpha_{}$ & ";
     computeScaleFactor(hdata,hmc);
     doubletagSRdata->SetBinContent(3,hdata->Integral(1,3));
     doubletagSRmc->SetBinContent(3,hmc->Integral(1,3));
     cout << " \\\\ \\hline" << endl;
 
-    hdata = (TH1F*) f->Get("mJ_doubletagSB_500_data");
-    hmc = (TH1F*) f->Get("mJ_doubletagSB_500_sum");
+    hdata = (TH1F*) f->Get("mJ_"+tagString+"SB_500_data");
+    hmc = (TH1F*) f->Get("mJ_"+tagString+"SB_500_sum");
     cout << "$\\beta_{}$ & ";
     computeScaleFactor(hdata,hmc);
     doubletagSBdata->SetBinContent(3,hdata->Integral(1,3));
@@ -163,16 +169,16 @@ void checkScaleFactors(TString tag = "_singleMu", TString baseDir="./"){
 
     // ---------------------------------------------
     cout << "\\multicolumn{2}{c}{MET $>$ 700} \\\\ \\hline" << endl;
-    hdata = (TH1F*) f->Get("mJ_doubletagSR_700_data");
-    hmc = (TH1F*) f->Get("mJ_doubletagSR_700_sum");
+    hdata = (TH1F*) f->Get("mJ_"+tagString+"SR_700_data");
+    hmc = (TH1F*) f->Get("mJ_"+tagString+"SR_700_sum");
     cout << "$\\alpha_{}$ & ";
     computeScaleFactor(hdata,hmc);
     doubletagSRdata->SetBinContent(4,hdata->Integral(1,3));
     doubletagSRmc->SetBinContent(4,hmc->Integral(1,3));
     cout << " \\\\ \\hline" << endl;
 
-    hdata = (TH1F*) f->Get("mJ_doubletagSB_700_data");
-    hmc = (TH1F*) f->Get("mJ_doubletagSB_700_sum");
+    hdata = (TH1F*) f->Get("mJ_"+tagString+"SB_700_data");
+    hmc = (TH1F*) f->Get("mJ_"+tagString+"SB_700_sum");
     cout << "$\\beta_{}$ & ";
     computeScaleFactor(hdata,hmc);
     doubletagSBdata->SetBinContent(4,hdata->Integral(1,3));
