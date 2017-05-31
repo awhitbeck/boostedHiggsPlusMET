@@ -183,15 +183,19 @@ int main(int argc, char** argv){
     ntupleBranchStatus<RA2bTree>(ntuple);
     int iBin=0;
     double weight=0.;
+    TString filename;
     for( int iEvt = 0 ; iEvt < numEvents ; iEvt++ ){
       ntuple->GetEntry(iEvt);
       if( iEvt % 1000000 == 0 ) cout << skims.sampleName[iSample] << ": " << iEvt << "/" << numEvents << endl;
       //if( iEvt > 100000 ) break;
-      if( skims.sampleName[iSample] == "TTExtra" && ntuple->madHT>600. )continue;
+
+      filename = ntuple->fChain->GetFile()->GetName();
+      if( ( filename.Contains("SingleLept") || filename.Contains("DiLept") ) && ntuple->madHT>600. )continue;
+
       if(! singleMuBaselineCut(ntuple) ) continue;
       for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++ ){
           weight = ntuple->Weight*lumi*customPUweights(ntuple);
-          if( skims.sampleName[iSample] == "TTExtra" || skims.sampleName[iSample] == "TT" )
+          if( skims.sampleName[iSample] == "TT" )
               weight *= ISRweights(ntuple);
           iBin=plots[iPlot].fill(ntuple,weight);
           if( plots[iPlot].label == "NJets_singleMuCR_baseline" && iBin>0 && iBin <=14 )
