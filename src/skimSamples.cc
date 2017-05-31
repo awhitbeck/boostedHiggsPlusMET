@@ -197,49 +197,33 @@ public :
             TTinc->Add(skimType+"/"+TTincFileNames[i]);
             //TTinc->Add(skimTypeLDP+"/"+TTincFileNames[i]);
         }
+        /*
         if( r == kSignal || r == kSLm || r == kSLe || r == kLowDphi ){
             ntuples.push_back(new RA2bTree(TTinc));
             sampleName.push_back("TT");
             fillColor.push_back(kCyan);
             lineColor.push_back(kCyan);
         }
-
+        */
         std::vector<TString> TTFileNames;
         TTFileNames.push_back("tree_TTJets_HT-600to800.root");
         TTFileNames.push_back("tree_TTJets_HT-800to1200.root");
         TTFileNames.push_back("tree_TTJets_HT-1200to2500.root");
         TTFileNames.push_back("tree_TTJets_HT-2500toInf.root");
+        TTFileNames.push_back("tree_TTJets_SingleLeptFromT.root");
+        TTFileNames.push_back("tree_TTJets_SingleLeptFromTbar.root");
+        TTFileNames.push_back("tree_TTJets_DiLept.root");        
         TT = new TChain("tree");
         for( int i = 0 ; i < TTFileNames.size() ; i++ ){
             TT->Add(skimType+"/"+TTFileNames[i]);
             //TT->Add(skimTypeLDP+"/"+TTFileNames[i]);
         }
-        /*
-        if( r == kSignal || r == kSLm || r == kSLe ){
+        if( r == kSignal || r == kSLm || r == kSLe || r == kLowDphi ){
             ntuples.push_back(new RA2bTree(TT));
             sampleName.push_back("TT");
             fillColor.push_back(kCyan);
             lineColor.push_back(kCyan);
         }
-        */
-
-        std::vector<TString> TTExtraFileNames;
-        TTExtraFileNames.push_back("tree_TTJets_SingleLeptFromT.root");
-        TTExtraFileNames.push_back("tree_TTJets_SingleLeptFromTbar.root");
-        TTExtraFileNames.push_back("tree_TTJets_DiLept.root");        
-        TTExtra = new TChain("tree");
-        for( int i = 0 ; i < TTExtraFileNames.size() ; i++ ){
-            TTExtra->Add(skimType+"/"+TTExtraFileNames[i]);
-            //TTExtra->Add(skimTypeLDP+"/"+TTExtraFileNames[i]);
-        }
-        /*
-        if( r == kSignal || r == kSLm || r == kSLe ){
-            ntuples.push_back(new RA2bTree(TTExtra));
-            sampleName.push_back("TTExtra");
-            fillColor.push_back(kCyan);
-            lineColor.push_back(1);
-        }
-        */
 
         std::vector<TString> DYFileNames;
         DYFileNames.push_back("tree_DYJetsToLL_M-50_HT-100to200.root");
