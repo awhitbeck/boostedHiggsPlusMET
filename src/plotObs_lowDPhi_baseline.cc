@@ -13,18 +13,24 @@
 #include "skimSamples.cc"
 #include "definitions.cc"
 #include "RA2bTree.cc"
+#include "TriggerEfficiencySextet.cc"
+
 using namespace std;
 
 int main(int argc, char** argv){
 
+    int MAX_EVENTS(99999999);
+    if( argc >= 2 )
+        MAX_EVENTS = atoi(argv[1]);
+
     gROOT->ProcessLine(".L tdrstyle.C");
     gROOT->ProcessLine("setTDRStyle()");
   
-    skimSamples skims;
+    skimSamples skims(skimSamples::kLowDphi);
     typedef plot<RA2bTree> plot;
 
-    plot METplot(*fillMET<RA2bTree>,"MET_lowDPhi_baseline","MET [GeV]",15,300.,1800.);
-    plot HTplot(*fillHT<RA2bTree>,"HT_lowDPhi_baseline","H_{T} [GeV]",15,300,2800.);
+    plot METplot(*fillMET<RA2bTree>,"MET_lowDPhi_baseline","MET [GeV]",15,300.,800.);
+    plot HTplot(*fillHT<RA2bTree>,"HT_lowDPhi_baseline","H_{T} [GeV]",17,300,2000.);
     plot NJetsplot(*fillNJets<RA2bTree>,"NJets_lowDPhi_baseline","n_{j}",14,1.5,15.5);
     plot BTagsplot(*fillBTags<RA2bTree>,"BTags_lowDPhi_baseline","n_{b}",6,-0.5,5.5);
     plot Binsplot(*fillAnalysisBins<RA2bTree>,"AnalysisBins_lowDPhi_baseline","i^th Bin",8,0.5,8.5);
@@ -138,20 +144,31 @@ int main(int argc, char** argv){
         int numEvents = ntuple->fChain->GetEntries();
         ntupleBranchStatus<RA2bTree>(ntuple);
         int iBin=0; 
-        for( int iEvt = 0 ; iEvt < numEvents ; iEvt++ ){
+        double weight,trigWeight;
+        TString filename;
+
+        for( int iEvt = 0 ; iEvt < min(MAX_EVENTS,numEvents) ; iEvt++ ){
             ntuple->GetEntry(iEvt);
             if( iEvt % 1000000 == 0 ) cout << skims.sampleName[iSample] << ": " << iEvt << "/" << numEvents << endl;
             //if( iEvt > 100000 ) break;
+            std::vector<double> EfficiencyCenterUpDown = Eff_MetMhtSextetReal_CenterUpDown(ntuple->HT, ntuple->MHT, ntuple->NJets);
+            trigWeight=EfficiencyCenterUpDown[0];
+
+            filename = ntuple->fChain->GetFile()->GetName();
+            if( ( filename.Contains("SingleLept") || filename.Contains("DiLept") ) && ntuple->madHT>600. )continue;
+
             if(! lowDphiBaselineCut(ntuple) ) continue;
+
+            weight = ntuple->Weight*lumi*customPUweights(ntuple)*trigWeight;
             for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++ ){
                 iBin = plots[iPlot].fill(ntuple);
                 if( plots[iPlot].label == "NJets_lowDPhi_baseline" && iBin>0 && iBin <=14 )
-                    HTversusNJetsplots[iBin-1].fill(ntuple,ntuple->Weight*lumi*customPUweights(ntuple));
+                    HTversusNJetsplots[iBin-1].fill(ntuple,weight);
                 if( plots[iPlot].label == "J1pt_numBhadrons_baseline" && iBin > 0 && iBin <= 5 ){
-                    LeadingBBdiscVersusNbHad[iBin-1].fill(ntuple,ntuple->Weight*lumi*customPUweights(ntuple));
+                    LeadingBBdiscVersusNbHad[iBin-1].fill(ntuple,weight);
                 }
                 if( plots[iPlot].label == "J2pt_numBhadrons_baseline" && iBin > 0 && iBin <= 5 )
-                    SubLeadingBBdiscVersusNbHad[iBin-1].fill(ntuple,ntuple->Weight*lumi*customPUweights(ntuple));
+                    SubLeadingBBdiscVersusNbHad[iBin-1].fill(ntuple,weight);
             }
         }
     }
@@ -195,7 +212,7 @@ int main(int argc, char** argv){
     int numEvents = ntuple->fChain->GetEntries();
     ntupleBranchStatus<RA2bTree>(ntuple);
     int iBin=0;
-    for( int iEvt = 0 ; iEvt < numEvents ; iEvt++ ){
+    for( int iEvt = 0 ; iEvt < min(MAX_EVENTS,numEvents) ; iEvt++ ){
         ntuple->GetEntry(iEvt);
         if( iEvt % 1000000 == 0 ) cout << "data_HTMHT: " << iEvt << "/" << numEvents << endl;
         if(! lowDphiBaselineCut(ntuple) ) continue;
