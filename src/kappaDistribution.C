@@ -1,25 +1,24 @@
 #include "computeKappa.C"
 
 void kappaDistribution(
-                       double corrTT_A=0.48,      double corrErrTT_A=0.24 ,
-                       double corrTT_B=0.63,       double corrErrTT_B=0.12 ,
-                       double corrTT_C=0.47,      double corrErrTT_C=0.071 ,
-                       double corrTT_D=0.42,      double corrErrTT_D=0.026 ,
-                       double corrWJets_A=0.48,    double corrErrWJets_A=0.24 ,
-                       double corrWJets_B=0.63,    double corrErrWJets_B=0.12 ,
-                       double corrWJets_C=0.47,    double corrErrWJets_C=0.071 ,
-                       double corrWJets_D=0.42,    double corrErrWJets_D=0.026 ,
-                       double corrZJets_A=0.63,   double corrErrZJets_A=0.25 ,
-                       double corrZJets_B=0.63,   double corrErrZJets_B=0.57 ,
-                       double corrZJets_C=0.55,   double corrErrZJets_C=0.054 ,
-                       double corrZJets_D=0.64,   double corrErrZJets_D=0.024 ,
-                       double corrQCD_A=0.95,     double corrErrQCD_A=0.31 ,
-                       double corrQCD_B=1.1,     double corrErrQCD_B=0.14 ,
-                       double corrQCD_C=0.86,     double corrErrQCD_C=0.089 ,
-                       double corrQCD_D=0.66,     double corrErrQCD_D=0.022,
-                       bool doubletag = true
+                       // double corrTT_A=0.48,      double corrErrTT_A=0.24 ,
+                       // double corrTT_B=0.63,       double corrErrTT_B=0.12 ,
+                       // double corrTT_C=0.47,      double corrErrTT_C=0.071 ,
+                       // double corrTT_D=0.42,      double corrErrTT_D=0.026 ,
+                       // double corrWJets_A=0.48,    double corrErrWJets_A=0.24 ,
+                       // double corrWJets_B=0.63,    double corrErrWJets_B=0.12 ,
+                       // double corrWJets_C=0.47,    double corrErrWJets_C=0.071 ,
+                       // double corrWJets_D=0.42,    double corrErrWJets_D=0.026 ,
+                       // double corrZJets_A=0.23,   double corrErrZJets_A=0.25 ,
+                       // double corrZJets_B=2.0,   double corrErrZJets_B=0.57 ,
+                       // double corrZJets_C=0.55,   double corrErrZJets_C=0.054 ,
+                       // double corrZJets_D=0.64,   double corrErrZJets_D=0.024 ,
+                       // double corrQCD_A=0.95,     double corrErrQCD_A=0.31 ,
+                       // double corrQCD_B=1.1,     double corrErrQCD_B=0.14 ,
+                       // double corrQCD_C=0.86,     double corrErrQCD_C=0.089 ,
+                       // double corrQCD_D=0.66,     double corrErrQCD_D=0.022,
+                       // bool doubletag = true
 
-                       /*
                        double corrTT_A=0.49,      double corrErrTT_A=0.11 ,
                        double corrTT_B=0.52,       double corrErrTT_B=0.043 ,
                        double corrTT_C=0.47,      double corrErrTT_C=0.071 ,
@@ -37,7 +36,6 @@ void kappaDistribution(
                        double corrQCD_C=0.86,     double corrErrQCD_C=0.089 ,
                        double corrQCD_D=0.66,     double corrErrQCD_D=0.022,
                        bool doubletag = false
-                       */
                        ){
 
     gROOT->ProcessLine(".L tdrstyle.C");
