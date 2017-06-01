@@ -24,8 +24,8 @@ int main(int argc, char** argv){
   skimSamples skims(skimSamples::kSLe);
   typedef plot<RA2bTree> plot;
 
-  plot METplot(*fillMET<RA2bTree>,"MET_singleEleCR_baseline","MET [GeV]",16,100.,900.);
-  plot HTplot(*fillHT<RA2bTree>,"HT_singleEleCR_baseline","H_{T} [GeV]",15,300,2800.);
+  plot METplot(*fillMET<RA2bTree>,"MET_singleEleCR_baseline","MET [GeV]",21,100.,800.);
+  plot HTplot(*fillHT<RA2bTree>,"HT_singleEleCR_baseline","H_{T} [GeV]",17,300,2000.);
   plot NJetsplot(*fillNJets<RA2bTree>,"NJets_singleEleCR_baseline","n_{j}",14,1.5,15.5);
   plot BTagsplot(*fillBTags<RA2bTree>,"BTags_singleEleCR_baseline","n_{b}",6,-0.5,5.5);
   plot Binsplot(*fillAnalysisBins<RA2bTree>,"AnalysisBins_singleEleCR_baseline","i^th Bin",8,0.5,8.5);
