@@ -921,12 +921,12 @@ template<typename ntupleType> bool RA2bBaselineCut(ntupleType* ntuple){
 
 template<typename ntupleType> bool FiltersCut(ntupleType* ntuple){
     return ntuple->HBHENoiseFilter==1 && 
-           ntuple->HBHEIsoNoiseFilter==1 && 
-           ntuple->eeBadScFilter==1 && 
-           ntuple->EcalDeadCellTriggerPrimitiveFilter == 1 && 
-           ntuple->NVtx>0 && 
-           ntuple->MET/ntuple->CaloMET < 5. &&
-           ntuple->BadPFMuonFilter == 1 &&
+        ntuple->HBHEIsoNoiseFilter==1 && 
+        ntuple->eeBadScFilter==1 && 
+        ntuple->EcalDeadCellTriggerPrimitiveFilter == 1 && 
+        ntuple->NVtx>0 && 
+        ntuple->MET/ntuple->CaloMET < 5. &&
+        ntuple->BadPFMuonFilter == 1 &&
         ntuple->BadChargedCandidateFilter == 1;
 }
 
@@ -1068,19 +1068,19 @@ template<typename ntupleType> bool singleEleBaselineCut(ntupleType* ntuple){
 }
 
 template<typename ntupleType> bool lowDphiBaselineCut(ntupleType* ntuple){
- 
-  return ( ntuple->MET > 300.             &&
-           ntuple->HT > 600.                         &&
-           ntuple->JetsAK8->size() >= 2 &&
-           ntuple->JetsAK8->at(0).Pt() > 300. && 
-           ntuple->JetsAK8_prunedMass->at(0) > 50. && 
-           ntuple->JetsAK8_prunedMass->at(0) < 250. && 
-           ntuple->JetsAK8->at(1).Pt() > 300. &&
-           ntuple->JetsAK8_prunedMass->at(1) > 50. && 
-           ntuple->JetsAK8_prunedMass->at(1) < 250.&&
-           ! DeltaPhiCuts( ntuple ) && 
-           FiltersCut(ntuple) &&
-           ntuple->JetID == 1);
+
+    return ( ntuple->MET > 300.             &&
+             ntuple->HT > 600.                         &&
+             ntuple->JetsAK8->size() >= 2 &&
+             ntuple->JetsAK8->at(0).Pt() > 300. && 
+             ntuple->JetsAK8_prunedMass->at(0) > 50. && 
+             ntuple->JetsAK8_prunedMass->at(0) < 250. && 
+             ntuple->JetsAK8->at(1).Pt() > 300. &&
+             ntuple->JetsAK8_prunedMass->at(1) > 50. && 
+             ntuple->JetsAK8_prunedMass->at(1) < 250.&&
+             ! DeltaPhiCuts( ntuple ) && 
+             FiltersCut(ntuple) &&
+             ntuple->JetID == 1);
 }
 
 template<typename ntupleType> bool photonBaselineCut(ntupleType* ntuple){
