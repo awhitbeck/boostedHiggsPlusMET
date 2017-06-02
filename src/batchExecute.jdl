@@ -2,7 +2,7 @@ universe = vanilla
 Executable = worker.sh
 Requirements = OpSys == "LINUX" && (Arch != "DUMMY" )
 request_disk = 10000000
-request_memory = 10000
+request_memory = 20000
 Should_Transfer_Files = YES
 WhenToTransferOutput = ON_EXIT_OR_EVICT
 Transfer_Input_Files = workingArea.tar
