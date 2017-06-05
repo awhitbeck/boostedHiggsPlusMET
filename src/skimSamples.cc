@@ -36,6 +36,7 @@ public :
             skimType=BASE_DIR+"tree_signal/";
         }
         if( r == kPhoton ){
+            //skimType="root://cmseos.fnal.gov//store/user/fojensen/boostedSkims_02062017/";
             skimType="root://cmseos.fnal.gov//store/user/fojensen/boostedSkims/";
         }
         if( r == kSLm ){
