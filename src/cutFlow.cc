@@ -152,7 +152,7 @@ int main(int argc, char** argv){
             }else if( region == 2 ){
                 weight*=singleElectronTrigWeights(ntuple);
             }else if( region == 3 ){
-                weight*=1.;
+                weight*=lowDphiTrigWeights(ntuple);
             }
             // ------------------------------------------
             for( int iCut = 0 ; iCut < cutFlow.size() ; iCut++ ){
@@ -163,7 +163,7 @@ int main(int argc, char** argv){
             }
         }
     }
-
+    
     // Signal samples
     for( int iSample = 0 ; iSample < ( region == 0 ? skims.signalNtuples.size() : 0 )  ; iSample++){
 
