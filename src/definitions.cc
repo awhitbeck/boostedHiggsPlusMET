@@ -191,6 +191,25 @@ template<typename ntupleType> double singleElectronTrigWeights(ntupleType* ntupl
     }
 }
 
+template<typename ntupleType> double lowDphiTrigWeights(ntupleType* ntuple){
+    if( ntuple->MET>100. ){
+        if( ntuple->MET<200. ){
+            return 0.500;
+        }else if( ntuple->MET<300. ){
+            return 0.712;
+        }else if( ntuple->MET<400. ){
+            return 0.806;
+        }else if( ntuple->MET<500. ){
+            return 0.874;
+        }else if( ntuple->MET<700. ){
+            return 0.866;
+        }else{
+            return 0.766;
+        }
+    }else
+        return 0.;
+}
+
 template<typename ntupleType> double customPUweights(ntupleType* ntuple){
     int nVtx = ntuple->TrueNumInteractions;
     return puWeightHist->GetBinContent(puWeightHist->GetXaxis()->FindBin(min(ntuple->TrueNumInteractions,puWeightHist->GetBinLowEdge(puWeightHist->GetNbinsX()+1))));
