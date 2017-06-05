@@ -140,6 +140,57 @@ template<typename ntupleType> double singleMuonTrigWeights(ntupleType* ntuple){
     }
 }
 
+template<typename ntupleType> double singleElectronTrigWeights(ntupleType* ntuple){
+    if( ntuple->Electrons->size() == 0 ) return 0.;
+    else if( ntuple->HT > 450. ){
+        
+        //cout << "ntuple->HT: " << ntuple->HT << endl;
+        //cout << "ntuple->Electrons->at(0).Pt(): " << ntuple->Electrons->at(0).Pt() << endl;
+
+        if( ntuple->Electrons->at(0).Pt() > 25. ){
+            if( ntuple->Electrons->at(0).Pt() < 30. ){
+                return 0.794;
+            }else if( ntuple->Electrons->at(0).Pt() < 40. ){
+                return 0.826;
+            }else if( ntuple->Electrons->at(0).Pt() < 50. ){
+                return 0.872;
+            }else if( ntuple->Electrons->at(0).Pt() < 75. ){
+                return 0.884;
+            }else if( ntuple->Electrons->at(0).Pt() < 100. ){
+                return 0.913;
+            }else{
+                return 0.947;
+            }
+        }else{
+            return 0.;
+        }
+    }else if( ntuple->HT > 300. ){
+
+        //cout << "ntuple->HT: " << ntuple->HT << endl;
+        //cout << "ntuple->Electrons->at(0).Pt(): " << ntuple->Electrons->at(0).Pt() << endl;
+
+        if( ntuple->Electrons->at(0).Pt() > 25. ){
+            if( ntuple->Electrons->at(0).Pt() < 30. ){
+                return 0.572;
+            }else if( ntuple->Electrons->at(0).Pt() < 40. ){
+                return 0.775;
+            }else if( ntuple->Electrons->at(0).Pt() < 50. ){
+                return 0.858;
+            }else if( ntuple->Electrons->at(0).Pt() < 75. ){
+                return 0.861;
+            }else if( ntuple->Electrons->at(0).Pt() < 100. ){
+                return 0.932;
+            }else{
+                return 1.;
+            }  
+        }else{
+            return 0.;
+        }
+    }else{
+        return 0.;
+    }
+}
+
 template<typename ntupleType> double customPUweights(ntupleType* ntuple){
     int nVtx = ntuple->TrueNumInteractions;
     return puWeightHist->GetBinContent(puWeightHist->GetXaxis()->FindBin(min(ntuple->TrueNumInteractions,puWeightHist->GetBinLowEdge(puWeightHist->GetNbinsX()+1))));
@@ -966,7 +1017,7 @@ template<typename ntupleType> bool lowDPhiCuts(ntupleType* ntuple){
 }
 
 template<typename ntupleType> bool METHTlooseCut(ntupleType* ntuple){
-  return ( ntuple->MET > 200. && ntuple->HT > 500. );
+  return ( ntuple->MET > 100. && ntuple->HT > 300. );
 }
 
 template<typename ntupleType> bool METHTCut(ntupleType* ntuple){
@@ -1028,8 +1079,6 @@ template<typename ntupleType> bool singleMuBaselineCut(ntupleType* ntuple){
              ntuple->MET > 100.             &&
              ntuple->HT > 600.                         &&
              ntuple->JetsAK8->size() >= 2 &&
-             //muonLeadJetdR(ntuple) > 1.0 &&
-             //muonSubleadJetdR(ntuple) > 1.0 &&
              ntuple->JetsAK8->at(0).Pt() > 300. && 
              ntuple->JetsAK8_prunedMass->at(0) > 50. && 
              ntuple->JetsAK8_prunedMass->at(0) < 250. && 
@@ -1377,3 +1426,25 @@ template<typename ntupleType> bool doubletagSBCut_photon(ntupleType* ntuple){
              ( tagSR_photon(ntuple,0)&&tagSB_photon(ntuple,1) ) );
 }
 
+/////////////////////////////////////////////////
+// - - - - - - - Trigger Cuts - - - - - - - -  //
+/////////////////////////////////////////////////
+template<typename ntupleType> bool signalTriggerCut(ntupleType* ntuple){
+    return ntuple->TriggerPass->at(42) == 1 || ntuple->TriggerPass->at(43) == 1 || ntuple->TriggerPass->at(44) == 1 || ntuple->TriggerPass->at(45) == 1 ; 
+}
+
+template<typename ntupleType> bool singleMuTriggerCut(ntupleType* ntuple){
+    return ( ntuple->TriggerPass->at(20)==1 || ntuple->TriggerPass->at(21)==1 || ntuple->TriggerPass->at(22)==1 || ntuple->TriggerPass->at(23)==1 || ntuple->TriggerPass->at(24)==1 || ntuple->TriggerPass->at(28)==1 || ntuple->TriggerPass->at(29)==1 );
+}
+
+template<typename ntupleType> bool singleEleTriggerCut(ntupleType* ntuple){
+    return ntuple->TriggerPass->at(6) == 1 || ntuple->TriggerPass->at(7) == 1 || ntuple->TriggerPass->at(8) == 1 || ntuple->TriggerPass->at(9) == 1 || ntuple->TriggerPass->at(10) == 1 || ntuple->TriggerPass->at(11) == 1 || ntuple->TriggerPass->at(12) == 1 || ntuple->TriggerPass->at(13) == 1 || ntuple->TriggerPass->at(14) == 1 ;
+}
+
+template<typename ntupleType> bool lowDphiTriggerCut(ntupleType* ntuple){
+    return ntuple->TriggerPass->at(42) == 1 || ntuple->TriggerPass->at(43) == 1 || ntuple->TriggerPass->at(44) == 1 || ntuple->TriggerPass->at(45) == 1 ; 
+}
+
+template<typename ntupleType> bool photonTriggerCut(ntupleType* ntuple){
+    return ntuple->TriggerPass->at(53) == 1 || ntuple->TriggerPass->at(54) == 1;
+}
