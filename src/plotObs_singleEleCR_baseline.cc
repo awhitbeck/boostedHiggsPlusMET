@@ -53,10 +53,10 @@ int main(int argc, char** argv){
   plot J1bbtag_Tau21plot(*fillLeadingBBtagJetTau21<RA2bTree>,"J1bbtag_Tau21_singleEleCR_baseline","#tau_{21}",20,0.,1.);
   plot J2bbtag_Tau21plot(*fillSubLeadingBBtagJetTau21<RA2bTree>,"J2bbtag_Tau21_singleEleCR_baseline","#tau_{21}",20,0.,1.);
 
-  plot J1pt_Ptplot(*fillLeadingJetPt<RA2bTree>,"J1pt_Pt_singleEleCR_baseline","p_{T,J} [GeV]",50,300.,1300.);
-  plot J2pt_Ptplot(*fillSubLeadingJetPt<RA2bTree>,"J2pt_Pt_singleEleCR_baseline","p_{T,J} [GeV]",50,300.,900.);
-  plot J1bbtag_Ptplot(*fillLeadingBBtagJetPt<RA2bTree>,"J1bbtag_Pt_singleEleCR_baseline","p_{T,J} [GeV]",50,300.,1300.);
-  plot J2bbtag_Ptplot(*fillSubLeadingBBtagJetPt<RA2bTree>,"J2bbtag_Pt_singleEleCR_baseline","p_{T,J} [GeV]",50,300.,1300.);
+  plot J1pt_Ptplot(*fillLeadingJetPt<RA2bTree>,"J1pt_Pt_singleEleCR_baseline","p_{T,J} [GeV]",50,100.,1300.);
+  plot J2pt_Ptplot(*fillSubLeadingJetPt<RA2bTree>,"J2pt_Pt_singleEleCR_baseline","p_{T,J} [GeV]",50,100.,900.);
+  plot J1bbtag_Ptplot(*fillLeadingBBtagJetPt<RA2bTree>,"J1bbtag_Pt_singleEleCR_baseline","p_{T,J} [GeV]",50,100.,1300.);
+  plot J2bbtag_Ptplot(*fillSubLeadingBBtagJetPt<RA2bTree>,"J2bbtag_Pt_singleEleCR_baseline","p_{T,J} [GeV]",50,100.,1300.);
 
   plot J1pt_JetFlavorPlot(*fillLeadingJetFlavor<RA2bTree>,"J1pt_JetFlavorPlot","Jet Flavor",22,0.5,21.5);
   plot J2pt_JetFlavorPlot(*fillSubLeadingJetFlavor<RA2bTree>,"J2pt_JetFlavorPlot","Jet Flavor",22,0.5,21.5);
@@ -105,6 +105,7 @@ int main(int argc, char** argv){
     for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++){
       plots[iPlot].addNtuple(ntuple,skims.sampleName[iSample]);
       plots[iPlot].setFillColor(ntuple,skims.fillColor[iSample]);
+      plots[iPlot].setLineColor(ntuple,skims.lineColor[iSample]);
     }
 
     int numEvents = ntuple->fChain->GetEntries();
@@ -119,10 +120,10 @@ filename = ntuple->fChain->GetFile()->GetName();
       if( ( filename.Contains("SingleLept") || filename.Contains("DiLept") ) && ntuple->madHT>600. )continue;
 
       if(! singleEleBaselineCut(ntuple) ) continue;
+      weight = ntuple->Weight*lumi*customPUweights(ntuple)*singleElectronTrigWeights(ntuple);
+      //if( skims.sampleName[iSample] == "TT" )
+      //    weight *= ISRweights(ntuple);
       for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++ ){
-          weight = ntuple->Weight*lumi*customPUweights(ntuple);
-          //if( skims.sampleName[iSample] == "TT" )
-          //    weight *= ISRweights(ntuple);
           plots[iPlot].fill(ntuple,weight);
       }
     }
@@ -163,7 +164,7 @@ filename = ntuple->fChain->GetFile()->GetName();
       ntuple->GetEntry(iEvt);
       if( iEvt % 1000000 == 0 ) cout << "data: " << iEvt << "/" << numEvents << endl;
       if(! singleEleBaselineCut(ntuple) ) continue;
-      if( ntuple->TriggerPass->at(5) == 1 || ntuple->TriggerPass->at(6)==1 || ntuple->TriggerPass->at(7)==1 || ntuple->TriggerPass->at(8)==1){
+      if( singleEleTriggerCut(ntuple) ){
           for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++){
               plots[iPlot].fillData(ntuple);
           }

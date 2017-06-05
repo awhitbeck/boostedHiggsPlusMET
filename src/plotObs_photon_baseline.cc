@@ -204,8 +204,8 @@ int main(int argc, char** argv){
   for( int iEvt = 0 ; iEvt < numEvents ; iEvt++ ){
       ntuple->GetEntry(iEvt);
       if( iEvt % 1000000 == 0 ) cout << "data: " << iEvt << "/" << numEvents << endl;
-      if(! photonBaselineCut(ntuple) ) continue;
-      if( !ntuple->TriggerPass->at(51)==1 ) continue;
+      if( !photonBaselineCut(ntuple) ) continue;
+      if( !photonTriggerCut(ntuple) ) continue;
       for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++){
           iBin=plots[iPlot].fillData(ntuple);
           if( plots[iPlot].label == "NJets_singleMuCR_baseline" && iBin>0 && iBin <=14 )

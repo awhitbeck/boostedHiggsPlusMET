@@ -75,10 +75,10 @@ int main(int argc, char** argv){
   plot J1pt_dRplot(*muonLeadJetdR<RA2bTree>,"J1pt_dRleptonJet_singleMuCR_baseline","#DeltaR ",40,0.,2*3.1415);
   plot J2pt_dRplot(*muonSubleadJetdR<RA2bTree>,"J2pt_dRleptonJet_singleMuCR_baseline","#DeltaR ",40,0.,2*3.1415);
 
-  plot J1pt_Massplot(*fillLeadingJetMass<RA2bTree>,"J1pt_Mass_singleMuCR_baseline","m_{J} [GeV]",20,50.,200.);
-  plot J2pt_Massplot(*fillSubLeadingJetMass<RA2bTree>,"J2pt_Mass_singleMuCR_baseline","m_{J} [GeV]",20,50.,200.);
-  plot J1pt_MassLooseplot(*fillLeadingJetMass<RA2bTree>,"J1pt_MassLoose_singleMuCR_baseline","m_{J} [GeV]",40,0.,200.);
-  plot J2pt_MassLooseplot(*fillSubLeadingJetMass<RA2bTree>,"J2pt_MassLoose_singleMuCR_baseline","m_{J} [GeV]",40,0.,200.);
+  plot J1pt_Massplot(*fillLeadingJetMass<RA2bTree>,"J1pt_Mass_singleMuCR_baseline","m_{J} [GeV]",20,50.,250.);
+  plot J2pt_Massplot(*fillSubLeadingJetMass<RA2bTree>,"J2pt_Mass_singleMuCR_baseline","m_{J} [GeV]",20,50.,250.);
+  plot J1pt_MassLooseplot(*fillLeadingJetMass<RA2bTree>,"J1pt_MassLoose_singleMuCR_baseline","m_{J} [GeV]",50,0.,250.);
+  plot J2pt_MassLooseplot(*fillSubLeadingJetMass<RA2bTree>,"J2pt_MassLoose_singleMuCR_baseline","m_{J} [GeV]",50,0.,250.);
   plot J1bbtag_Massplot(*fillLeadingBBtagJetMass<RA2bTree>,"J1bbtag_Mass_singleMuCR_baseline","m_{J} [GeV]",20,50.,200.);
   plot J2bbtag_Massplot(*fillSubLeadingBBtagJetMass<RA2bTree>,"J2bbtag_Mass_singleMuCR_baseline","m_{J} [GeV]",20,50.,200.);
 
@@ -193,10 +193,10 @@ int main(int argc, char** argv){
       if( ( filename.Contains("SingleLept") || filename.Contains("DiLept") ) && ntuple->madHT>600. )continue;
 
       if(! singleMuBaselineCut(ntuple) ) continue;
+      weight = ntuple->Weight*lumi*customPUweights(ntuple)*singleMuonTrigWeights(ntuple);
+      //if( skims.sampleName[iSample] == "TT" )
+      //    weight *= ISRweights(ntuple);
       for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++ ){
-          weight = ntuple->Weight*lumi*customPUweights(ntuple);
-          //if( skims.sampleName[iSample] == "TT" )
-          //    weight *= ISRweights(ntuple);
           iBin=plots[iPlot].fill(ntuple,weight);
           if( plots[iPlot].label == "NJets_singleMuCR_baseline" && iBin>0 && iBin <=14 )
               HTversusNJetsplots[iBin-1].fill(ntuple,weight);
@@ -254,7 +254,7 @@ int main(int argc, char** argv){
       ntuple->GetEntry(iEvt);
       if( iEvt % 1000000 == 0 ) cout << "data: " << iEvt << "/" << numEvents << endl;
       if(! singleMuBaselineCut(ntuple) ) continue;
-      if( ntuple->TriggerPass->at(21)==1 || ntuple->TriggerPass->at(22)==1 || ntuple->TriggerPass->at(23)==1 || ntuple->TriggerPass->at(24)==1 || ntuple->TriggerPass->at(28)==1 ){
+      if( singleMuTriggerCut(ntuple) ){
           for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++){
               iBin = plots[iPlot].fillData(ntuple);
               if( plots[iPlot].label == "NJets_singleMuCR_baseline" && iBin>0 && iBin <=14 )

@@ -215,8 +215,8 @@ int main(int argc, char** argv){
     for( int iEvt = 0 ; iEvt < min(MAX_EVENTS,numEvents) ; iEvt++ ){
         ntuple->GetEntry(iEvt);
         if( iEvt % 1000000 == 0 ) cout << "data_HTMHT: " << iEvt << "/" << numEvents << endl;
-        if(! lowDphiBaselineCut(ntuple) ) continue;
-        if( ntuple->TriggerPass->at(41)!=1 && ntuple->TriggerPass->at(42)!=1 && ntuple->TriggerPass->at(43)!=1 && ntuple->TriggerPass->at(44)!=1 ) continue;
+        if( !lowDphiBaselineCut(ntuple) ) continue;
+        if( !lowDphiTriggerCut(ntuple) ) continue;
         for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++){
             iBin = plots[iPlot].fillData(ntuple);
             if( plots[iPlot].label == "NJets_lowDPhi_baseline" && iBin>0 && iBin <=14 )
