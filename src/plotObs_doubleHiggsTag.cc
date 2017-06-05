@@ -135,7 +135,7 @@ int main(int argc, char** argv){
       ntuple->GetEntry(iEvt);
       if(! baselineCut(ntuple) ) continue;
       if(! doubleTaggingLooseCut(ntuple) ) continue;
-      if( ntuple->TriggerPass->size() < 44 || ( !ntuple->TriggerPass->at(41) && !ntuple->TriggerPass->at(42) && !ntuple->TriggerPass->at(43) && !ntuple->TriggerPass->at(44)) ) continue;
+      if( !signalTriggerCut(ntuple) ) continue;
       if( iEvt % 1000000 == 0 ) cout << "DATA: " << iEvt << "/" << numEvents << endl;
       for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++){
           plots[iPlot].fillSignal(ntuple);

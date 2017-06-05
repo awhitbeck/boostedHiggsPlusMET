@@ -158,7 +158,7 @@ int main(int argc, char** argv){
         if( iEvt % 1000000 == 0 ) cout << "data_HTMHT: " << iEvt << "/" << numEvents << endl;
         if(! baselineCut(ntuple) ) continue;
         if(! antiTaggingLooseCut(ntuple) ) continue;    
-        if( ntuple->TriggerPass->at(41)!=1 && ntuple->TriggerPass->at(42)!=1 && ntuple->TriggerPass->at(43)!=1 && ntuple->TriggerPass->at(44)!=1 ) continue;
+        if( !signalTriggerCut(ntuple) ) continue;
         for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++){
             plots[iPlot].fillData(ntuple);
         }
