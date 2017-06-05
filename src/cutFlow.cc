@@ -14,6 +14,7 @@
 #include "skimSamples.cc"
 #include "definitions.cc"
 #include "RA2bTree.cc"
+#include "TriggerEfficiencySextet.cc"
 
 using namespace std;
 
@@ -68,6 +69,8 @@ int main(int argc, char** argv){
         cutName.push_back("SingleEle");
     }
 
+    cutFlow.push_back(*METHTlooseCut<RA2bTree>);
+    cutName.push_back("METHTLoose");
     cutFlow.push_back(*METHTCut<RA2bTree>);
     cutName.push_back("METHT");
     cutFlow.push_back(*AK8MultCut<RA2bTree>);
@@ -137,13 +140,19 @@ int main(int argc, char** argv){
             // ----------- compute weights --------------
             weight = ntuple->Weight*lumi*customPUweights(ntuple);
             //cout << "xsec weight: " << ntuple->Weight*lumi << endl;
-            if( skims.sampleName[iSample] == "TT" ){
-                weight *= ISRweights(ntuple);
-                //cout << "ISR: " << ISRweights(ntuple) << endl;
-            }
-            if( region == 1 ){
-                weight *= singleMuonTrigWeights(ntuple);
-                //cout << "single muon trigger weights: " << singleMuonTrigWeights(ntuple) << endl;
+            //if( skims.sampleName[iSample] == "TT" ){
+            //    weight *= ISRweights(ntuple);
+            //    //cout << "ISR: " << ISRweights(ntuple) << endl;
+            // }
+            if(region==0){
+                std::vector<double> EfficiencyCenterUpDown = Eff_MetMhtSextetReal_CenterUpDown(ntuple->HT, ntuple->MHT, ntuple->NJets);
+                weight*=EfficiencyCenterUpDown[0];
+            }else if( region == 1 ){
+                weight*=singleMuonTrigWeights(ntuple);
+            }else if( region == 2 ){
+                weight*=singleElectronTrigWeights(ntuple);
+            }else if( region == 3 ){
+                weight*=1.;
             }
             // ------------------------------------------
             for( int iCut = 0 ; iCut < cutFlow.size() ; iCut++ ){
@@ -198,13 +207,13 @@ int main(int argc, char** argv){
         ntuple->GetEntry(iEvt);
         if( iEvt % 100000 == 0 ) cout << "data: " << iEvt << "/" << numEvents << endl;
         if( region == 0 ){
-            if( ntuple->TriggerPass->at(41)!=1 && ntuple->TriggerPass->at(42)!=1 && ntuple->TriggerPass->at(43)!=1 && ntuple->TriggerPass->at(44)!=1 ) continue;
+            if( !signalTriggerCut(ntuple) ) continue;
         }else if( region == 1){
-            if( ntuple->TriggerPass->at(21)!=1 && ntuple->TriggerPass->at(22)!=1 && ntuple->TriggerPass->at(23)!=1 && ntuple->TriggerPass->at(24)!=1 && ntuple->TriggerPass->at(25)!=1 && ntuple->TriggerPass->at(26)!=1 && ntuple->TriggerPass->at(27)!=1 && ntuple->TriggerPass->at(28)!=1 ) continue;
+            if( !singleMuTriggerCut(ntuple) ) continue;
         }else if( region == 2){
-            if( ntuple->TriggerPass->at(5) != 1 && ntuple->TriggerPass->at(6)!=1 && ntuple->TriggerPass->at(7)!=1 && ntuple->TriggerPass->at(8)!=1) continue;
+            if( !singleEleTriggerCut(ntuple) ) continue;
         }else if( region == 3 ){ 
-            if( ntuple->TriggerPass->at(41)!=1 && ntuple->TriggerPass->at(42)!=1 && ntuple->TriggerPass->at(43)!=1 && ntuple->TriggerPass->at(44)!=1 ) continue;
+            if( !lowDphiTriggerCut(ntuple) ) continue;
         }
         for( int iCut = 0 ; iCut < cutFlow.size() ; iCut++ ){
             if( ! cutFlow[iCut](ntuple) ) break;
