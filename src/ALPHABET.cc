@@ -216,7 +216,7 @@ int main(int argc, char** argv){
             }else if( region == 2 ){
                 trigWeight=singleElectronTrigWeights(ntuple);
             }else if( region == 3 ){
-                trigWeight=1.;
+                trigWeight=lowDphiTrigWeights(ntuple);
             }
 
             passBaseline=true;
@@ -228,7 +228,7 @@ int main(int argc, char** argv){
             filename = ntuple->fChain->GetFile()->GetName();
             if( ( filename.Contains("SingleLept") || filename.Contains("DiLept") ) && ntuple->madHT>600. )continue;
             bin = -1;
-            weight = ntuple->Weight*lumi*trigWeight *customPUweights(ntuple);	   
+            weight = ntuple->Weight*lumi*trigWeight*customPUweights(ntuple);	   
             //if( skims.sampleName[iSample] == "TT" ){
             //    weight *= ISRweights(ntuple);
             //}
