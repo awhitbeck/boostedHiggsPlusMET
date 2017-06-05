@@ -210,8 +210,8 @@ int main(int argc, char** argv){
     for( int iEvt = 0 ; iEvt < min(MAX_EVENTS,numEvents) ; iEvt++ ){
         ntuple->GetEntry(iEvt);
         if( iEvt % 100000 == 0 ) cout << "data: " << iEvt << "/" << min(MAX_EVENTS,numEvents) << endl;
-        if(! photonBaselineCut(ntuple) ) continue;
-        if( !ntuple->TriggerPass->at(51)==1 ) continue;
+        if( !photonBaselineCut(ntuple) ) continue;
+        if( !photonTriggerCut(ntuple) ) continue;
 
         bin = -1;
         if( ntuple->METclean < lowestMET ) continue;
