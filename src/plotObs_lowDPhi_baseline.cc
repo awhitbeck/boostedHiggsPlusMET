@@ -51,12 +51,6 @@ int main(int argc, char** argv){
         binLabel+=i;
         SubLeadingBBdiscVersusNbHad.push_back(plot(*fillSubLeadingBBtag<RA2bTree>,"J2pt_BBtag_lowDPhi_NbHad"+binLabel,"bb-disc",20,-1,1));
     }
-    vector<plot> HTversusNJetsplots;
-    for( int i=0; i<14 ; i++){
-        binLabel="";
-        binLabel+=i;
-        HTversusNJetsplots.push_back(plot(*fillHT<RA2bTree>,"HT_lowDPhi_HT"+binLabel,"H_{T} [GeV]",15,300,2800.));
-    }
 
     plot DeltaPhi1plot(*fillDeltaPhi1<RA2bTree>,"DeltaPhi1_lowDPhi_baseline","#Delta#Phi_{1}",20,0,3.1415);
     plot DeltaPhi2plot(*fillDeltaPhi2<RA2bTree>,"DeltaPhi2_lowDPhi_baseline","#Delta#Phi_{2}",20,0,3.1415);
@@ -128,10 +122,6 @@ int main(int argc, char** argv){
             plots[iPlot].addNtuple(ntuple,skims.sampleName[iSample]);
             plots[iPlot].setFillColor(ntuple,skims.fillColor[iSample]);
         }
-        for( int iPlot = 0 ; iPlot < HTversusNJetsplots.size() ; iPlot++){
-            HTversusNJetsplots[iPlot].addNtuple(ntuple,skims.sampleName[iSample]);
-            HTversusNJetsplots[iPlot].setFillColor(ntuple,skims.fillColor[iSample]);
-        }
         for( int iPlot = 0 ; iPlot < LeadingBBdiscVersusNbHad.size() ; iPlot++){
             LeadingBBdiscVersusNbHad[iPlot].addNtuple(ntuple,skims.sampleName[iSample]);
             LeadingBBdiscVersusNbHad[iPlot].setFillColor(ntuple,skims.fillColor[iSample]);
@@ -150,20 +140,19 @@ int main(int argc, char** argv){
         for( int iEvt = 0 ; iEvt < min(MAX_EVENTS,numEvents) ; iEvt++ ){
             ntuple->GetEntry(iEvt);
             if( iEvt % 1000000 == 0 ) cout << skims.sampleName[iSample] << ": " << iEvt << "/" << numEvents << endl;
-            //if( iEvt > 100000 ) break;
-            //std::vector<double> EfficiencyCenterUpDown = Eff_MetMhtSextetReal_CenterUpDown(ntuple->HT, ntuple->MHT, ntuple->NJets);
-            trigWeight=1.0;//EfficiencyCenterUpDown[0];
-            
+
             filename = ntuple->fChain->GetFile()->GetName();
             if( ( filename.Contains("SingleLept") || filename.Contains("DiLept") ) && ntuple->madHT>600. )continue;
 
             if(! lowDphiBaselineCut(ntuple) ) continue;
 
+            //if( iEvt > 100000 ) break;
+            //std::vector<double> EfficiencyCenterUpDown = Eff_MetMhtSextetReal_CenterUpDown(ntuple->HT, ntuple->MHT, ntuple->NJets);
+            //EfficiencyCenterUpDown[0];
+            trigWeight = lowDphiTrigWeights(ntuple);
             weight = ntuple->Weight*lumi*customPUweights(ntuple)*trigWeight;
             for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++ ){
-                iBin = plots[iPlot].fill(ntuple);
-                if( plots[iPlot].label == "NJets_lowDPhi_baseline" && iBin>0 && iBin <=14 )
-                    HTversusNJetsplots[iBin-1].fill(ntuple,weight);
+                iBin = plots[iPlot].fill(ntuple,weight);
                 if( plots[iPlot].label == "J1pt_numBhadrons_baseline" && iBin > 0 && iBin <= 5 ){
                     LeadingBBdiscVersusNbHad[iBin-1].fill(ntuple,weight);
                 }
@@ -173,34 +162,10 @@ int main(int argc, char** argv){
         }
     }
 
-    // Signal samples
-    for( int iSample = 0 ; iSample < 0 /*skims.signalNtuples.size()*/ ; iSample++){
-
-        RA2bTree* ntuple = skims.signalNtuples[iSample];
-        for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++){
-            plots[iPlot].addSignalNtuple(ntuple,skims.signalSampleName[iSample]);
-            plots[iPlot].setLineColor(ntuple,skims.lineColor[iSample]);
-        }
-
-        int numEvents = ntuple->fChain->GetEntries();
-        ntupleBranchStatus<RA2bTree>(ntuple);
-        for( int iEvt = 0 ; iEvt < numEvents ; iEvt++ ){
-            ntuple->GetEntry(iEvt);
-            if( iEvt % 1000000 == 0 ) cout << skims.signalSampleName[iSample] << ": " << iEvt << "/" << numEvents << endl;
-            if(! lowDphiBaselineCut(ntuple) ) continue;
-            for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++){
-                plots[iPlot].fillSignal(ntuple);
-            }
-        }
-    }
-
     // Data samples
     RA2bTree* ntuple = skims.dataNtuple;
     for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++){
         plots[iPlot].addDataNtuple(ntuple,"data_HTMHT");
-    }
-    for( int iPlot = 0 ; iPlot < HTversusNJetsplots.size() ; iPlot++){
-        HTversusNJetsplots[iPlot].addDataNtuple(ntuple,"data");
     }
     for( int iPlot = 0 ; iPlot < LeadingBBdiscVersusNbHad.size() ; iPlot++){
         LeadingBBdiscVersusNbHad[iPlot].addDataNtuple(ntuple,"data");
@@ -219,8 +184,6 @@ int main(int argc, char** argv){
         if( !lowDphiTriggerCut(ntuple) ) continue;
         for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++){
             iBin = plots[iPlot].fillData(ntuple);
-            if( plots[iPlot].label == "NJets_lowDPhi_baseline" && iBin>0 && iBin <=14 )
-                HTversusNJetsplots[iBin-1].fillData(ntuple);
             if( plots[iPlot].label == "J1pt_numBhadrons_baseline" && iBin > 0 && iBin <= 5 )
                 LeadingBBdiscVersusNbHad[iBin-1].fillData(ntuple);
             if( plots[iPlot].label == "J2pt_numBhadrons_baseline" && iBin > 0 && iBin <= 5 )
@@ -229,14 +192,6 @@ int main(int argc, char** argv){
     }
     TFile* outputFile = new TFile("plotObs_lowDPhi_baseline.root","RECREATE");
 
-    for( int iPlot = 0 ; iPlot < HTversusNJetsplots.size() ; iPlot++){
-        HTversusNJetsplots[iPlot].buildSum();
-        HTversusNJetsplots[iPlot].Write();
-        HTversusNJetsplots[iPlot].sum->Write();
-        TCanvas* can = new TCanvas("can","can",500,500);
-        can->SetTopMargin(0.05);
-        HTversusNJetsplots[iPlot].Draw(can,skims.ntuples,skims.signalNtuples,"../plots/plotObs_lowDPhi_baseline_plots",0.1,2.0,true);
-    }
     for( int iPlot = 0 ; iPlot < LeadingBBdiscVersusNbHad.size() ; iPlot++){
         LeadingBBdiscVersusNbHad[iPlot].buildSum();
         LeadingBBdiscVersusNbHad[iPlot].Write();
