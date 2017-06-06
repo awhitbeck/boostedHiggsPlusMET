@@ -97,3 +97,15 @@ To produce the cut flow table, you should run `cutFlow.cc` ([https://github.com/
 make cutFlow
 cutFlow
 ```
+
+#### WtaggingEfficiency
+
+To produce histograms for fitting the W(qq) peak in data/MC, you first need to run `WtaggingEfficiency.cc` to get the input histograms for fitting.   Then run `fitWpeak.cc`
+
+```bash
+make WtaggingEfficiency
+WtaggingEfficiency 1 # single muon events
+WtaggingEfficiency 2 # single electron events
+make fitWpeak
+fitWpeak
+```
