@@ -74,6 +74,26 @@ template<typename ntupleType>void ntupleBranchStatus(ntupleType* ntuple){
 /***************************************************************/
 /* - - - - - - - - - - - - gen-level cuts - - - - - - - - - -  */
 /***************************************************************/
+template<typename ntupleType> bool genWmatched(ntupleType* ntuple){
+    if( ntuple->JetsAK8->size() == 0 ) return false;
+    
+    for( int i=0 ; i < ntuple->GenParticles->size() ; i++ ){
+        if( abs(ntuple->GenParticles_PdgId->at(i)) == 24 && ntuple->JetsAK8->at(0).DeltaR(ntuple->GenParticles->at(i))<0.4)
+            return true;
+    }
+    return false;
+}
+
+template<typename ntupleType> bool genTmatched(ntupleType* ntuple){
+    if( ntuple->JetsAK8->size() == 0 ) return false;
+    
+    for( int i=0 ; i < ntuple->GenParticles->size() ; i++ ){
+        if( abs(ntuple->GenParticles_PdgId->at(i)) == 6 && ntuple->JetsAK8->at(0).DeltaR(ntuple->GenParticles->at(i))<0.4)
+            return true;
+    }
+    return false;
+}
+
 template<typename ntupleType> int getNumGenHiggses(ntupleType* ntuple){
     int numHiggses=0;
     for( int i=0 ; i < ntuple->GenParticles->size() ; i++ ){
@@ -527,6 +547,23 @@ template<typename ntupleType> double fillBTags(ntupleType* ntuple){
 ////////////////////////////////
 // HIGHEST PT JET PROPERTIES  //
 ////////////////////////////////
+template<typename ntupleType> double fillLeadingJetMinDRB(ntupleType* ntuple){
+    if( ntuple->JetsAK8->size() == 0 ) return -999.;
+    else{
+        double minDRB = 999.;
+        double DRB = 999.;
+        for( int i = 0 ; i < ntuple->Jets->size() ; i++ ){
+            DRB = 999.;            
+            if( abs(ntuple->Jets_partonFlavor->at(i)) == 5 ){
+                DRB = ntuple->JetsAK8->at(0).DeltaR(ntuple->Jets->at(i));
+            }
+            if( DRB < minDRB ) 
+                minDRB = DRB;
+        }
+        return minDRB;
+    }
+}
+
 template<typename ntupleType> double fillLeadingJetMass(ntupleType* ntuple){
   if(ntuple->JetsAK8->size()==0) return -99999.;
   return ntuple->JetsAK8_prunedMass->at(0);
