@@ -229,7 +229,6 @@ public:
                 buildStack(ntuples);
 
             stack->Draw("histo");
-            cout << "xlabel: " << xlabel << endl;
             stack->GetXaxis()->SetTitle(xlabel);
             stack->GetXaxis()->SetNdivisions(505);
             stack->GetYaxis()->SetTitle("Events");
@@ -333,7 +332,6 @@ public:
                 buildStack(ntuples);
 
             stack->Draw("histo");
-            cout << "xlabel: " << xlabel << endl;
             stack->GetXaxis()->SetTitle(xlabel);
             stack->GetXaxis()->SetNdivisions(505);
             stack->GetYaxis()->SetTitle("Events");
