@@ -79,8 +79,6 @@ CMS_lumi( TPad* pad, int iPeriod, int iPosX )
       lumiText += lumi_sqrtS;
     }
    
-  std::cout << lumiText << std::endl;
-
   TLatex latex;
   latex.SetNDC();
   latex.SetTextAngle(0);
