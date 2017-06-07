@@ -17,6 +17,8 @@
 
 using namespace std;
 
+const int MAX_EVENTS = 99999999;
+
 int main(int argc, char** argv){
 
   gROOT->ProcessLine(".L tdrstyle.C");
@@ -92,7 +94,7 @@ int main(int argc, char** argv){
       int numEvents = ntuple->fChain->GetEntries();
       ntupleBranchStatus<RA2bTree>(ntuple);
       TString filename;
-      for( int iEvt = 0 ; iEvt < numEvents ; iEvt++ ){
+      for( int iEvt = 0 ; iEvt < min(MAX_EVENTS,numEvents) ; iEvt++ ){
           ntuple->GetEntry(iEvt);
           if( iEvt % 100000 == 0 ) cout << skims.sampleName[iSample] << ": " << iEvt << "/" << numEvents << endl;
 
@@ -108,9 +110,12 @@ int main(int argc, char** argv){
   }
 
   // Signal samples
+  vector<RA2bTree*> sigNtuples;
   for( int iSample = 0 ; iSample < skims.signalNtuples.size() ; iSample++){
+      if( skims.signalSampleName[iSample] != "T5HH1300" && skims.signalSampleName[iSample] != "T5HH1700" ) continue;
 
       RA2bTree* ntuple = skims.signalNtuples[iSample];
+      sigNtuples.push_back(ntuple);
       for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++){
           plots[iPlot].addSignalNtuple(ntuple,skims.signalSampleName[iSample]);
           plots[iPlot].setLineColor(ntuple,skims.sigLineColor[iSample]);
@@ -118,7 +123,7 @@ int main(int argc, char** argv){
 
       int numEvents = ntuple->fChain->GetEntries();
       ntupleBranchStatus<RA2bTree>(ntuple);
-      for( int iEvt = 0 ; iEvt < numEvents ; iEvt++ ){
+      for( int iEvt = 0 ; iEvt < min(MAX_EVENTS,numEvents) ; iEvt++ ){
           ntuple->GetEntry(iEvt);
           if( iEvt % 100000 == 0 ) cout << skims.signalSampleName[iSample] << ": " << iEvt << "/" << numEvents << endl;
           if( !baselineCut(ntuple) ) continue;
@@ -134,8 +139,9 @@ int main(int argc, char** argv){
       }
   }
 
-  TCanvas* can = new TCanvas("can","can",500,500);
   for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++){
-    plots[iPlot].Draw(can,skims.ntuples,skims.signalNtuples,"../plots/plotObs_singleHiggsTag_plots");
+      TCanvas* can = new TCanvas("can","can",500,500);
+      plots[iPlot].dataHist = NULL;
+      plots[iPlot].DrawNoRatio(can,skims.ntuples,sigNtuples,"../plots/plotObs_singleHiggsTag_plots");
   }
 }
