@@ -476,7 +476,7 @@ public :
             }
             signalNtuples.push_back(new RA2bTree(T5HH1700));
             signalSampleName.push_back("T5HH1700");
-            sigLineColor.push_back(kRed);
+            sigLineColor.push_back(kOrange);
         }
         if( r == kSignal ){
             T5HH1800 = new TChain("TreeMaker2/PreSelection");
