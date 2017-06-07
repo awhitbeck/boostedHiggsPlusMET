@@ -111,8 +111,8 @@ int main(int argc, char** argv){
             filename = ntuple->fChain->GetFile()->GetName();
             if( ( filename.Contains("SingleLept") || filename.Contains("DiLept") ) && ntuple->madHT>600. )continue;
 
-            if(! baselineCut(ntuple) ) continue;
-            if(! antiTaggingLooseCut(ntuple) ) continue;
+            if( !baselineCut(ntuple) ) continue;
+            if( !(antitagSRCut(ntuple) || antitagSBCut(ntuple) ) ) continue;
             for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++ ){
                 plots[iPlot].fill(ntuple);
             }
@@ -134,8 +134,9 @@ int main(int argc, char** argv){
             ntuple->GetEntry(iEvt);
             if( iEvt % 1000000 == 0 ) cout << skims.signalSampleName[iSample] << ": " << iEvt << "/" << numEvents << endl;
             if(! baselineCut(ntuple) ) continue;
-            if(! antiTaggingLooseCut(ntuple) ) continue;
+            if( !(antitagSRCut(ntuple) || antitagSBCut(ntuple) ) ) continue;
             if( !genLevelHHcut(ntuple) ) continue;
+            if( !signalTriggerCut(ntuple) ) continue;
             for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++){
                 if( skims.signalSampleName[iSample] == "T5HH1300" )
                     plots[iPlot].fillSignal(ntuple,lumi*0.0460525/102482.);
