@@ -37,6 +37,12 @@ condor_submit batchExecute.jdl exec_name="ALPHABET_signal" arguments="${hash} AL
 condor_submit batchExecute.jdl exec_name="ALPHABET_singleMu" arguments="${hash} ALPHABET 1"
 condor_submit batchExecute.jdl exec_name="ALPHABET_singleEle" arguments="${hash} ALPHABET 2"
 condor_submit batchExecute.jdl exec_name="ALPHABET_lowDPhi" arguments="${hash} ALPHABET 3"
+
+condor_submit batchExecute.jdl exec_name="ALPHABET_signal_loose" arguments="${hash} ALPHABET 0 1"
+condor_submit batchExecute.jdl exec_name="ALPHABET_singleMu_loose" arguments="${hash} ALPHABET 1 1"
+condor_submit batchExecute.jdl exec_name="ALPHABET_singleEle_loose" arguments="${hash} ALPHABET 2 1"
+condor_submit batchExecute.jdl exec_name="ALPHABET_lowDPhi_loose" arguments="${hash} ALPHABET 3 1"
+
 condor_submit batchExecute.jdl exec_name="ALPHABET_photon" arguments="${hash} ALPHABET_photon"
 
 condor_submit batchExecute.jdl exec_name="datacardInputs" arguments="${hash} datacardInputs"
