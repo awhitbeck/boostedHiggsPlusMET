@@ -1,4 +1,5 @@
 #include "CMS_lumi.cc"
+#include "computeRatio.h"
 
 void computeScaleFactor(TH1F* hdata,TH1F* hmc){
     double yieldmc,yeilddata,errmc,errdata;
@@ -14,6 +15,66 @@ void computeScaleFactor(TH1F* hdata,TH1F* hmc){
         cout << yielddata/yieldmc << " +/- " << sqrt(errmc*errmc/yieldmc/yieldmc+errdata*errdata/yielddata/yielddata)*yielddata/yieldmc;
 }
 
+void setStyle(TGraphAsymmErrors& graph, TString ylabel="Data/MC"){
+    graph.GetYaxis()->SetRangeUser(0.,2.);
+    graph.GetXaxis()->SetLimits(100.,900.);
+    graph.GetYaxis()->SetTitle(ylabel);
+    graph.GetXaxis()->SetTitle("MET [GeV]");
+    graph.GetYaxis()->SetNdivisions(503);
+
+    graph.GetYaxis()->SetLabelFont(43);
+    graph.GetYaxis()->SetLabelSize(23);
+    graph.GetYaxis()->SetTitleFont(43);
+    graph.GetYaxis()->SetTitleSize(27);
+    graph.GetYaxis()->SetTitleOffset(2.0);
+    
+    graph.GetXaxis()->SetLabelFont(43);
+    graph.GetXaxis()->SetLabelSize(23);
+    graph.GetXaxis()->SetTitleFont(43);
+    graph.GetXaxis()->SetTitleSize(27);
+    graph.GetXaxis()->SetTitleOffset(2.3);
+    
+    graph.SetLineColor(1);
+    graph.SetMarkerColor(1);
+    graph.SetMarkerStyle(8);
+}
+
+TH1F* makeRatio(TH1F* num , TH1F* denom, TString ylabel="Data/MC"){
+
+    TH1F* Ratio = new TH1F(*num);
+    Ratio->SetNameTitle("MCRatio","MCRatio");
+    Ratio->GetYaxis()->SetRangeUser(0.,2.);
+    Ratio->GetYaxis()->SetTitle(ylabel);
+    Ratio->GetYaxis()->SetNdivisions(503);
+
+    Ratio->GetYaxis()->SetLabelFont(43);
+    Ratio->GetYaxis()->SetLabelSize(23);
+    Ratio->GetYaxis()->SetTitleFont(43);
+    Ratio->GetYaxis()->SetTitleSize(27);
+    Ratio->GetYaxis()->SetTitleOffset(2.0);
+    
+    Ratio->GetXaxis()->SetLabelFont(43);
+    Ratio->GetXaxis()->SetLabelSize(23);
+    Ratio->GetXaxis()->SetTitleFont(43);
+    Ratio->GetXaxis()->SetTitleSize(27);
+    Ratio->GetXaxis()->SetTitleOffset(2.3);
+    
+    Ratio->SetFillColor(2);
+    Ratio->SetLineColor(0);
+    Ratio->SetFillStyle(3490);
+    Ratio->Divide(denom);
+
+    return Ratio;
+
+}
+
+
+TLine* makeRatioLine(TH1F* num , TH1F* denom){
+    TLine* line = new TLine(100.,num->Integral()/denom->Integral(),900.,num->Integral()/denom->Integral());
+    line->SetLineStyle(2);
+    line->SetLineWidth(2);
+    return line;
+}
 
 void checkScaleFactors(TString tag = "_singleMu", bool doubletag = true, TString baseDir="./"){
 
@@ -230,6 +291,16 @@ void checkScaleFactors(TString tag = "_singleMu", bool doubletag = true, TString
     // ---------------------------------------------
 
     TCanvas* can = new TCanvas("can","can",800,800);
+    TPad* topPad = new TPad("topPad","topPad",0.,0.4,.99,.99);
+    TPad* botPad = new TPad("botPad","botPad",0.,0.01,.99,.39);
+    botPad->SetBottomMargin(0.25);
+    botPad->SetTopMargin(0.02);
+    topPad->SetTopMargin(0.06);
+    topPad->SetBottomMargin(0.17);
+    topPad->Draw();
+    botPad->Draw();
+    topPad->cd();
+    
     writeExtraText=true;
     extraText="Preliminary";
     lumi_13TeV="35.9 fb^{-1}";
@@ -256,10 +327,34 @@ void checkScaleFactors(TString tag = "_singleMu", bool doubletag = true, TString
     can->Update();
     can->RedrawAxis();
     can->GetFrame()->Draw();
+    
+    botPad->cd();
+
+    TGraphAsymmErrors MCRatio;
+    SetRatioErr(doubletagSRdata,doubletagSRmc,MCRatio);
+    setStyle(MCRatio);
+    MCRatio.SetFillStyle(3490);
+    MCRatio.SetFillColor(2);
+    MCRatio.SetLineColor(0);
+    MCRatio.Draw("A2");
+
+    TGraphAsymmErrors predictionRatio;
+    SetRatioErr(doubletagSRdata,prediction,predictionRatio);
+    setStyle(predictionRatio);
+    predictionRatio.SetLineColor(4);
+    predictionRatio.SetMarkerColor(4);
+    predictionRatio.SetMarkerStyle(8);
+    predictionRatio.Draw("p");
+
+    TLine* scaleFactor = makeRatioLine(doubletagSRdata,doubletagSRmc);
+    scaleFactor->Draw();
+
     can->SaveAs("../plots/ABCDscaleFactors/ABCDscaleFactors_"+legLabel+"SR"+tag+".png");
     can->SaveAs("../plots/ABCDscaleFactors/ABCDscaleFactors_"+legLabel+"SR"+tag+".eps");
     can->SaveAs("../plots/ABCDscaleFactors/ABCDscaleFactors_"+legLabel+"SR"+tag+".pdf");
     
+    topPad->cd();
+
     doubletagSBdata->GetYaxis()->SetRangeUser(0.,max(doubletagSBdata->GetMaximum(),doubletagSBmc->GetMaximum())*1.3);
     doubletagSBdata->Draw("p,e1");
     doubletagSBmc->Draw("e2,SAME");
@@ -273,9 +368,21 @@ void checkScaleFactors(TString tag = "_singleMu", bool doubletag = true, TString
     can->Update();
     can->RedrawAxis();
     can->GetFrame()->Draw();
+
+    botPad->cd();
+
+    SetRatioErr(doubletagSBdata,doubletagSBmc,MCRatio);
+    MCRatio.Draw("A,p");
+    setStyle(MCRatio);
+
+    scaleFactor = makeRatioLine(doubletagSBdata,doubletagSBmc);
+    scaleFactor->Draw();
+
     can->SaveAs("../plots/ABCDscaleFactors/ABCDscaleFactors_"+legLabel+"SB"+tag+".png");
     can->SaveAs("../plots/ABCDscaleFactors/ABCDscaleFactors_"+legLabel+"SB"+tag+".eps");
     can->SaveAs("../plots/ABCDscaleFactors/ABCDscaleFactors_"+legLabel+"SB"+tag+".pdf");
+
+    topPad->cd();
 
     antitagSRdata->GetYaxis()->SetRangeUser(0.,max(antitagSRdata->GetMaximum(),antitagSRmc->GetMaximum())*1.3);
     antitagSRdata->Draw("p,e1");
@@ -290,9 +397,21 @@ void checkScaleFactors(TString tag = "_singleMu", bool doubletag = true, TString
     can->Update();
     can->RedrawAxis();
     can->GetFrame()->Draw();
+
+    botPad->cd();
+
+    SetRatioErr(antitagSRdata,antitagSRmc,MCRatio);
+    MCRatio.Draw("A,p");
+    setStyle(MCRatio);
+
+    scaleFactor = makeRatioLine(antitagSRdata,antitagSRmc);
+    scaleFactor->Draw();
+
     can->SaveAs("../plots/ABCDscaleFactors/ABCDscaleFactors_antitagSR"+tag+".png");
     can->SaveAs("../plots/ABCDscaleFactors/ABCDscaleFactors_antitagSR"+tag+".eps");
     can->SaveAs("../plots/ABCDscaleFactors/ABCDscaleFactors_antitagSR"+tag+".pdf");
+
+    topPad->cd();
         
     antitagSBdata->GetYaxis()->SetRangeUser(0.,max(antitagSBdata->GetMaximum(),antitagSBmc->GetMaximum())*1.3);
     antitagSBdata->Draw("p,e1");
@@ -307,8 +426,21 @@ void checkScaleFactors(TString tag = "_singleMu", bool doubletag = true, TString
     can->Update();
     can->RedrawAxis();
     can->GetFrame()->Draw();
+
+    botPad->cd();
+
+    SetRatioErr(antitagSBdata,antitagSBmc,MCRatio);
+    MCRatio.Draw("A,p");
+    setStyle(MCRatio);
+
+    scaleFactor = makeRatioLine(antitagSBdata,antitagSBmc);
+    scaleFactor->Draw();
+
     can->SaveAs("../plots/ABCDscaleFactors/ABCDscaleFactors_antitagSB"+tag+".png");
     can->SaveAs("../plots/ABCDscaleFactors/ABCDscaleFactors_antitagSB"+tag+".eps");
     can->SaveAs("../plots/ABCDscaleFactors/ABCDscaleFactors_antitagSB"+tag+".pdf");
 
+    
+
 }
+
