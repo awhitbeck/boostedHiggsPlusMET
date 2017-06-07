@@ -1,3 +1,4 @@
+#include "CMS_lumi.cc"
 
 void computeScaleFactor(TH1F* hdata,TH1F* hmc){
     double yieldmc,yeilddata,errmc,errdata;
@@ -229,28 +230,85 @@ void checkScaleFactors(TString tag = "_singleMu", bool doubletag = true, TString
     // ---------------------------------------------
 
     TCanvas* can = new TCanvas("can","can",800,800);
-    can->Divide(2,2);
-    can->cd(1);
+    writeExtraText=true;
+    extraText="Preliminary";
+    lumi_13TeV="35.9 fb^{-1}";
+
     gStyle->SetErrorX(0.5);
+
     doubletagSRdata->GetYaxis()->SetRangeUser(0.,max(doubletagSRdata->GetMaximum(),max(doubletagSRmc->GetMaximum(),prediction->GetMaximum()))*1.3);
     doubletagSRdata->Draw("p,e1");
     doubletagSRmc->Draw("e2,SAME");
     prediction->Draw("SAME,p,e1");
-    can->cd(2);
+    TString legLabel;
+    if( doubletag )
+        legLabel = "double-tag";
+    else
+        legLabel = "single-tag";
+    TLegend* leg = new TLegend(.6,.7,.9,.9,legLabel+" SR");
+    leg->SetFillColor(0);
+    leg->SetBorderSize(0);
+    leg->AddEntry(doubletagSRdata,"data","pl");
+    leg->AddEntry(doubletagSRmc,"MC pred.","pf");
+    leg->AddEntry(prediction,"ABCD pred.","pl");
+    leg->Draw();
+    CMS_lumi(can,4,0);
+    can->Update();
+    can->RedrawAxis();
+    can->GetFrame()->Draw();
+    can->SaveAs("../plots/ABCDscaleFactors/ABCDscaleFactors_"+legLabel+"SR"+tag+".png");
+    can->SaveAs("../plots/ABCDscaleFactors/ABCDscaleFactors_"+legLabel+"SR"+tag+".eps");
+    can->SaveAs("../plots/ABCDscaleFactors/ABCDscaleFactors_"+legLabel+"SR"+tag+".pdf");
+    
     doubletagSBdata->GetYaxis()->SetRangeUser(0.,max(doubletagSBdata->GetMaximum(),doubletagSBmc->GetMaximum())*1.3);
     doubletagSBdata->Draw("p,e1");
     doubletagSBmc->Draw("e2,SAME");
-    can->cd(3);
+    leg = new TLegend(.6,.7,.9,.9,legLabel+" SB");
+    leg->SetFillColor(0);
+    leg->SetBorderSize(0);
+    leg->AddEntry(doubletagSBdata,"data","pl");
+    leg->AddEntry(doubletagSBmc,"MC pred.","pf");
+    leg->Draw();
+    CMS_lumi(can,4,0);
+    can->Update();
+    can->RedrawAxis();
+    can->GetFrame()->Draw();
+    can->SaveAs("../plots/ABCDscaleFactors/ABCDscaleFactors_"+legLabel+"SB"+tag+".png");
+    can->SaveAs("../plots/ABCDscaleFactors/ABCDscaleFactors_"+legLabel+"SB"+tag+".eps");
+    can->SaveAs("../plots/ABCDscaleFactors/ABCDscaleFactors_"+legLabel+"SB"+tag+".pdf");
+
     antitagSRdata->GetYaxis()->SetRangeUser(0.,max(antitagSRdata->GetMaximum(),antitagSRmc->GetMaximum())*1.3);
     antitagSRdata->Draw("p,e1");
     antitagSRmc->Draw("e2,SAME");
-    can->cd(4);
+    leg = new TLegend(.6,.7,.9,.9,"anti-tag SR");
+    leg->SetFillColor(0);
+    leg->SetBorderSize(0);
+    leg->AddEntry(antitagSRdata,"data","pl");
+    leg->AddEntry(antitagSRmc,"MC pred.","pf");
+    leg->Draw();
+    CMS_lumi(can,4,0);
+    can->Update();
+    can->RedrawAxis();
+    can->GetFrame()->Draw();
+    can->SaveAs("../plots/ABCDscaleFactors/ABCDscaleFactors_antitagSR"+tag+".png");
+    can->SaveAs("../plots/ABCDscaleFactors/ABCDscaleFactors_antitagSR"+tag+".eps");
+    can->SaveAs("../plots/ABCDscaleFactors/ABCDscaleFactors_antitagSR"+tag+".pdf");
+        
     antitagSBdata->GetYaxis()->SetRangeUser(0.,max(antitagSBdata->GetMaximum(),antitagSBmc->GetMaximum())*1.3);
     antitagSBdata->Draw("p,e1");
     antitagSBmc->Draw("e2,SAME");
-
-    can->SaveAs("../plots/ABCDscaleFactors/ABCDscaleFactors"+tag+".png");
-    can->SaveAs("../plots/ABCDscaleFactors/ABCDscaleFactors"+tag+".eps");
-    can->SaveAs("../plots/ABCDscaleFactors/ABCDscaleFactors"+tag+".pdf");
+    leg = new TLegend(.6,.7,.9,.9,"anti-tag SB");
+    leg->SetFillColor(0);
+    leg->SetBorderSize(0);
+    leg->AddEntry(antitagSBdata,"data","pl");
+    leg->AddEntry(antitagSBmc,"MC pred.","pf");
+    leg->Draw();
+    CMS_lumi(can,4,0);
+    can->Update();
+    can->RedrawAxis();
+    can->GetFrame()->Draw();
+    can->SaveAs("../plots/ABCDscaleFactors/ABCDscaleFactors_antitagSB"+tag+".png");
+    can->SaveAs("../plots/ABCDscaleFactors/ABCDscaleFactors_antitagSB"+tag+".eps");
+    can->SaveAs("../plots/ABCDscaleFactors/ABCDscaleFactors_antitagSB"+tag+".pdf");
 
 }
