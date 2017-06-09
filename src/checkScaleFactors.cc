@@ -1,14 +1,33 @@
 #include "CMS_lumi.cc"
 #include "computeRatio.h"
 
+void computeIntegratedRatio(TH1F* num, TH1F* denom){
+    
+    TH1F* num_int = new TH1F("num_int","num_int",1,100,900);
+    TH1F* denom_int = new TH1F("denom_int","denom_int",1,100,900);
+    double error;
+
+    num_int->SetBinContent(1,num->IntegralAndError(1,4,error));
+    num_int->SetBinError(1,error);
+
+    denom_int->SetBinContent(1,denom->IntegralAndError(1,4,error));
+    denom_int->SetBinError(1,error);
+
+    TGraphAsymmErrors graph;
+    SetRatioErr(num_int,denom_int,graph,1,100.,1000.);
+
+    delete num_int;
+    delete denom_int;
+}
+
 void computeScaleFactor(TH1F* hdata,TH1F* hmc){
     double yieldmc,yeilddata,errmc,errdata;
 
     //cout << "hdata: " << hdata << endl;
     //cout << "hmc: " << hmc << endl;
 
-    yieldmc = hmc->IntegralAndError(1,40,errmc) ; 
-    yielddata = hdata->IntegralAndError(1,40,errdata) ;
+    yieldmc = hmc->IntegralAndError(1,3,errmc) ; 
+    yielddata = hdata->IntegralAndError(1,3,errdata) ;
     if( yielddata == 0. )
         cout << " 0. +/- " <<  sqrt(errmc*errmc+1.67*1.67);
     else 
@@ -18,7 +37,6 @@ void computeScaleFactor(TH1F* hdata,TH1F* hmc){
 void setStyle(TGraphAsymmErrors& graph, TString ylabel="Data/MC"){
     graph.GetXaxis()->SetLimits(100.,900.);
     double maximum = TMath::MaxElement(graph.GetN(),graph.GetY());
-    cout << "MAX: " << maximum << endl;
     graph.GetYaxis()->SetRangeUser(0.,max(maximum*1.2,2.0));
     graph.GetYaxis()->SetTitle(ylabel);
     graph.GetXaxis()->SetTitle("MET [GeV]");
@@ -484,7 +502,23 @@ void checkScaleFactors(TString tag = "_singleMu", bool doubletag = true, TString
     can->SaveAs("../plots/ABCDscaleFactors/ABCDscaleFactors_antitagSB"+tag+".eps");
     can->SaveAs("../plots/ABCDscaleFactors/ABCDscaleFactors_antitagSB"+tag+".pdf");
 
+    cout << "// - - - - - - - - - - - - - - - - - - - - " << endl;
+    cout << "// Integrated stats " << endl;
+    cout << "// - - - - - - - - - - - - - - - - - - - - " << endl;
+    cout << "antitag SR: " << endl;
+    computeIntegratedRatio(antitagSRdata,antitagSRmc);
+    cout << "antitag SB: " << endl;
+    computeIntegratedRatio(antitagSBdata,antitagSBmc);
+    if(doubletag)
+        cout << "doubletag SR: " << endl;
+    else
+        cout << "tag SR: " << endl;
+    computeIntegratedRatio(doubletagSRdata,doubletagSRmc);
+    if(doubletag)
+        cout << "doubletag SB: " << endl;
+    else 
+        cout << "tag SB: " << endl;
+    computeIntegratedRatio(doubletagSBdata,doubletagSBmc);
     
-
 }
 
