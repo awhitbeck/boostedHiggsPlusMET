@@ -221,7 +221,7 @@ public:
         if( histoMap.size() ){
 
             buildSum();
-            max = sum->GetMaximum()*2.0; 
+            max = sum->GetMaximum();
 
             if( normalizeMCtoData )
                 buildStack(ntuples,dataHist->Integral()/sum->Integral());
@@ -250,7 +250,7 @@ public:
                 max = dataHist->GetMaximum();
         }
 
-        stack->SetMaximum(max);
+        stack->SetMaximum(max*1.5);
         stack->SetMinimum(0.1);
 
         stack->GetYaxis()->SetLabelFont(63);
