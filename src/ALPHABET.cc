@@ -105,7 +105,7 @@ int main(int argc, char** argv){
     }
 
     //vector<plot> tempPlots;
-    plot MET_Plot(*fillMET<RA2bTree>,"MET","m_{J} [GeV]",2,300,700);
+    plot MET_Plot(*fillMET<RA2bTree>,"MET","m_{J} [GeV]",3,100,700);
     plot J1pt_Ptplot(*fillLeadingJetPt<RA2bTree>,"J1pt_Pt","p_{T,J} [GeV]",50,300.,1300.);
     plot J2pt_Ptplot(*fillSubLeadingJetPt<RA2bTree>,"J2pt_Pt","p_{T,J} [GeV]",50,300.,1300.);
     plot J1pt_Mplot(*fillLeadingJetMass<RA2bTree>,"J1pt_M","m_{J} [GeV]",50,50.,250.);

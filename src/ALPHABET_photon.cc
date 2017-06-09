@@ -68,7 +68,7 @@ int main(int argc, char** argv){
     }
 
     //vector<plot> tempPlots;
-    plot MET_Plot(*fillMETclean<RA2bTree>,"MET","m_{J} [GeV]",2,300,700);
+    plot MET_Plot(*fillMETclean<RA2bTree>,"MET","m_{J} [GeV]",3,100,700);
     
     vector<plot> doubletagSRPlots;
     doubletagSRPlots.push_back(plot(MET_Plot));
