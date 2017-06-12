@@ -69,24 +69,38 @@ int main(int argc, char** argv){
 
     //vector<plot> tempPlots;
     plot MET_Plot(*fillMETclean<RA2bTree>,"MET","m_{J} [GeV]",3,100,700);
+    plot ClosestMass(*fillClosestJetMass<RA2bTree>,"ClosestMass","m_{J} [GeV]",3,mJbins);
+    plot FarthestMass(*fillFarthestJetMass<RA2bTree>,"FarthestMass","m_{J} [GeV]",3,mJbins);
     
     vector<plot> doubletagSRPlots;
     doubletagSRPlots.push_back(plot(MET_Plot));
+    doubletagSRPlots.push_back(plot(ClosestMass));
+    doubletagSRPlots.push_back(plot(FarthestMass));
 
     vector<plot> doubletagSBPlots;
     doubletagSBPlots.push_back(plot(MET_Plot));
+    doubletagSBPlots.push_back(plot(ClosestMass));
+    doubletagSBPlots.push_back(plot(FarthestMass));
 
     vector<plot> tagSRPlots;
     tagSRPlots.push_back(plot(MET_Plot));
+    tagSRPlots.push_back(plot(ClosestMass));
+    tagSRPlots.push_back(plot(FarthestMass));
 
     vector<plot> tagSBPlots;
     tagSBPlots.push_back(plot(MET_Plot));
+    tagSBPlots.push_back(plot(ClosestMass));
+    tagSBPlots.push_back(plot(FarthestMass));
 
     vector<plot> antitagSRPlots;
     antitagSRPlots.push_back(plot(MET_Plot));
+    antitagSRPlots.push_back(plot(ClosestMass));
+    antitagSRPlots.push_back(plot(FarthestMass));
 
     vector<plot> antitagSBPlots;
     antitagSBPlots.push_back(plot(MET_Plot));
+    antitagSBPlots.push_back(plot(ClosestMass));
+    antitagSBPlots.push_back(plot(FarthestMass));
     
     // background MC samples - 0 lepton regions
     for( int iSample = 0 ; iSample < skims.ntuples.size() ; iSample++){
