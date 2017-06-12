@@ -886,6 +886,20 @@ template<typename ntupleType> double fillClosestJetMass(ntupleType* ntuple){
     }
 }
 
+template<typename ntupleType> double fillFarthestJetMass(ntupleType* ntuple){
+    if(ntuple->JetsAK8_prunedMass->size() == 0)
+        return -999.;
+    else if( ntuple->JetsAK8_prunedMass->size() == 1 )
+        return ntuple->JetsAK8_prunedMass->at(0);
+    else{       
+        double J1diff,J2diff;
+        J1diff = ntuple->JetsAK8_prunedMass->at(0)-110.;
+        J2diff = ntuple->JetsAK8_prunedMass->at(1)-110.;
+        //cout << "J1: " << ntuple->JetsAK8_prunedMass->at(0) << " J2: " << ntuple->JetsAK8_prunedMass->at(1) << endl;
+        return fabs(J1diff)<fabs(J2diff) ?  ntuple->JetsAK8_prunedMass->at(1) :  ntuple->JetsAK8_prunedMass->at(0) ;       
+    }
+}
+
   /////////////////
  // OTHER STUFF //
 /////////////////
