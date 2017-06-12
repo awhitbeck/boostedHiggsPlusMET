@@ -24,8 +24,11 @@ int main(int argc, char** argv){
     gROOT->ProcessLine("setTDRStyle()");
 
     int region(0);
+    int MAX_EVENTS(99999999);
     if( argc >= 2 ) 
         region = atoi(argv[1]);
+    if( argc >= 3 ) 
+        MAX_EVENTS = atoi(argv[2]);
 
     gROOT->ProcessLine(".L tdrstyle.C");
     gROOT->ProcessLine("setTDRStyle()");
@@ -130,7 +133,7 @@ int main(int argc, char** argv){
         ntupleBranchStatus<RA2bTree>(ntuple);
         double weight = 0.;
         TString filename;
-        for( int iEvt = 0 ; iEvt < numEvents ; iEvt++ ){
+        for( int iEvt = 0 ; iEvt < min(MAX_EVENTS,numEvents) ; iEvt++ ){
             ntuple->GetEntry(iEvt);
             if( iEvt % 100000 == 0 ) cout << skims.sampleName[iSample] << ": " << iEvt << "/" << numEvents << endl;
             
@@ -165,9 +168,12 @@ int main(int argc, char** argv){
     }
     
     // Signal samples
+    vector<RA2bTree*> sigSamples;
     for( int iSample = 0 ; iSample < ( region == 0 ? skims.signalNtuples.size() : 0 )  ; iSample++){
-
+        if( skims.signalSampleName[iSample] != "T5HH1300" && skims.signalSampleName[iSample] != "T5HH1700" ) continue;
+            
         RA2bTree* ntuple = skims.signalNtuples[iSample];
+        sigSamples.push_back(ntuple);
         for( int iCut = 0 ; iCut < cutFlow.size() ; iCut++){
             for( int iPlot = 0 ; iPlot < plots[iCut].size() ; iPlot++){
                 plots[iCut][iPlot].addSignalNtuple(ntuple,skims.signalSampleName[iSample]);
@@ -177,7 +183,7 @@ int main(int argc, char** argv){
 
         int numEvents = ntuple->fChain->GetEntries();
         ntupleBranchStatus<RA2bTree>(ntuple);
-        for( int iEvt = 0 ; iEvt < numEvents ; iEvt++ ){
+        for( int iEvt = 0 ; iEvt < min(MAX_EVENTS,numEvents) ; iEvt++ ){
             ntuple->GetEntry(iEvt);
             if( iEvt % 100000 == 0 ) cout << skims.signalSampleName[iSample] << ": " << iEvt << "/" << numEvents << endl;
             if( !genLevelHHcut(ntuple) ) continue;
@@ -203,7 +209,7 @@ int main(int argc, char** argv){
   
     int numEvents = ntuple->fChain->GetEntries();
     ntupleBranchStatus<RA2bTree>(ntuple);
-    for( int iEvt = 0 ; iEvt < ( region == 0 ? 0 : numEvents ) ; iEvt++ ){
+    for( int iEvt = 0 ; iEvt < min(MAX_EVENTS,( region == 0 ? 0 : numEvents )) ; iEvt++ ){
         ntuple->GetEntry(iEvt);
         if( iEvt % 100000 == 0 ) cout << "data: " << iEvt << "/" << numEvents << endl;
         if( region == 0 ){
@@ -223,17 +229,14 @@ int main(int argc, char** argv){
         }
     }
 
+    TString outputDir[4]={"../plots/cutFlow_plots","../plots/cutFlow_singleMuCR_plots","../plots/cutFlow_singleEleCR_plots","../plots/cutFlow_lowDPhi_plots"};
     for( int iCut = 0 ; iCut < cutFlow.size() ; iCut++ ){
         for( int iPlot = 0 ; iPlot < plots[iCut].size() ; iPlot++){
             TCanvas* can = new TCanvas("can","can",500,500);
             if( region == 0 )
-                plots[iCut][iPlot].Draw(can,skims.ntuples,skims.signalNtuples,"../plots/cutFlow_plots",0.1,2.0,false);
-            if( region == 1 )
-                plots[iCut][iPlot].Draw(can,skims.ntuples,skims.signalNtuples,"../plots/cutFlow_singleMuCR_plots",0.1,2.0,false);
-            if( region == 2 )
-                plots[iCut][iPlot].Draw(can,skims.ntuples,skims.signalNtuples,"../plots/cutFlow_singleEleCR_plots",0.1,2.0,false);
-            if( region == 3 )
-                plots[iCut][iPlot].Draw(can,skims.ntuples,skims.signalNtuples,"../plots/cutFlow_lowDPhi_plots",0.1,2.0,false);
+                plots[iCut][iPlot].DrawNoRatio(can,skims.ntuples,sigSamples,outputDir[region]);
+            else
+                plots[iCut][iPlot].Draw(can,skims.ntuples,sigSamples,outputDir[region],0.1,2.0,true);
         }
     }
 
