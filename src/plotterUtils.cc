@@ -293,6 +293,10 @@ public:
         can->SaveAs(dir+"/"+label+".png");
         can->SaveAs(dir+"/"+label+".eps");
         can->SaveAs(dir+"/"+label+".pdf");
+
+        stack->SetMaximum(max*10.);
+        stack->SetMinimum(0.1);
+
         gPad->SetLogy(true);
         can->SaveAs(dir+"/"+label+"_LogY.png");
         can->SaveAs(dir+"/"+label+"_LogY.eps");

@@ -177,7 +177,7 @@ int main(int argc, char** argv){
         for( int iCut = 0 ; iCut < cutFlow.size() ; iCut++){
             for( int iPlot = 0 ; iPlot < plots[iCut].size() ; iPlot++){
                 plots[iCut][iPlot].addSignalNtuple(ntuple,skims.signalSampleName[iSample]);
-                plots[iCut][iPlot].setLineColor(ntuple,skims.lineColor[iSample]);
+                plots[iCut][iPlot].setLineColor(ntuple,skims.sigLineColor[iSample]);
             }
         }
 
