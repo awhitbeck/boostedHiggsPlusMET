@@ -54,17 +54,19 @@ int main(int argc, char** argv){
     vector<plot> plots_tag;
     vector<plot> plots_noTag;
 
+    double ptBinning[5]={150,300,400,500,2000};
+
     plots_tag.push_back(plot(*fillMET<RA2bTree>,"MET_WtaggingEff_tag","MET [GeV]",40,100.,1300.));
     plots_tag.push_back(plot(*fillHT<RA2bTree>,"HT_WtaggingEff_tag","H_{T} [GeV]",40,100.,2000.));
     plots_tag.push_back(plot(*fillLeadingJetMass<RA2bTree>,"J1M_WtaggingEff_tag","leading m_{J} [GeV]",100,40.,140.));
-    plots_tag.push_back(plot(*fillLeadingJetPt<RA2bTree>,"J1Pt_WtaggingEff_tag","leading p_{T,J} [GeV]",50,0.,2000.));
+    plots_tag.push_back(plot(*fillLeadingJetPt<RA2bTree>,"J1Pt_WtaggingEff_tag","leading p_{T,J} [GeV]",4,ptBinning));
     plots_tag.push_back(plot(*fillSubLeadingJetMass<RA2bTree>,"J2M_WtaggingEff_tag","subleading m_{J} [GeV]",100,40.,140.));
     plots_tag.push_back(plot(*fillSubLeadingJetPt<RA2bTree>,"J2Pt_WtaggingEff_tag","subleading p_{T,J} [GeV]",50,0.,2000.));
 
     plots_noTag.push_back(plot(*fillMET<RA2bTree>,"MET_WtaggingEff_noTag","MET [GeV]",40,100.,1300.));
     plots_noTag.push_back(plot(*fillHT<RA2bTree>,"HT_WtaggingEff_noTag","H_{T} [GeV]",40,100.,2000.));
     plots_noTag.push_back(plot(*fillLeadingJetMass<RA2bTree>,"J1M_WtaggingEff_noTag","leading m_{J} [GeV]",100,40.,140.));
-    plots_noTag.push_back(plot(*fillLeadingJetPt<RA2bTree>,"J1Pt_WtaggingEff_noTag","leading p_{T,J} [GeV]",50,0.,2000.));
+    plots_noTag.push_back(plot(*fillLeadingJetPt<RA2bTree>,"J1Pt_WtaggingEff_noTag","leading p_{T,J} [GeV]",4,ptBinning));
     plots_noTag.push_back(plot(*fillSubLeadingJetMass<RA2bTree>,"J2M_WtaggingEff_noTag","subleading m_{J} [GeV]",100,40.,140.));
     plots_noTag.push_back(plot(*fillSubLeadingJetPt<RA2bTree>,"J2Pt_WtaggingEff_noTag","subleading p_{T,J} [GeV]",50,0.,2000.));
 
