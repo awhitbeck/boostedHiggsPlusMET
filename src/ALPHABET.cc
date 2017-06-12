@@ -110,8 +110,8 @@ int main(int argc, char** argv){
     plot J2pt_Ptplot(*fillSubLeadingJetPt<RA2bTree>,"J2pt_Pt","p_{T,J} [GeV]",50,300.,1300.);
     plot J1pt_Mplot(*fillLeadingJetMass<RA2bTree>,"J1pt_M","m_{J} [GeV]",50,50.,250.);
     plot J2pt_Mplot(*fillSubLeadingJetMass<RA2bTree>,"J2pt_M","m_{J} [GeV]",50,50.,250.);
-    plot ClosestMass(*fillClosestJetMass<RA2bTree>,"ClosestMass","m_{J} [GeV]",50,50.,250.);
-    plot FarthestMass(*fillFarthestJetMass<RA2bTree>,"FarthestMass","m_{J} [GeV]",50,50.,250.);
+    plot ClosestMass(*fillClosestJetMass<RA2bTree>,"ClosestMass","m_{J} [GeV]",3,mJbins);
+    plot FarthestMass(*fillFarthestJetMass<RA2bTree>,"FarthestMass","m_{J} [GeV]",3,mJbins);
 
     vector<plot> doubletagSRPlots;
     doubletagSRPlots.push_back(plot(MET_Plot));
@@ -155,6 +155,7 @@ int main(int argc, char** argv){
     antitagSRPlots.push_back(plot(J2pt_Ptplot));    
     antitagSRPlots.push_back(plot(J1pt_Mplot));
     antitagSRPlots.push_back(plot(J2pt_Mplot));    
+    antitagSRPlots.push_back(plot(ClosestMass));
     antitagSRPlots.push_back(plot(FarthestMass));
 
     vector<plot> antitagSBPlots;
