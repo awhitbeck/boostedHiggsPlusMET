@@ -328,7 +328,7 @@ void checkScaleFactors(TString tag = "_singleMu", bool doubletag = true, TString
     gStyle->SetErrorX(0.5);
 
     doubletagSRdata->GetYaxis()->SetRangeUser(0.,max(doubletagSRdata->GetMaximum(),max(doubletagSRmc->GetMaximum(),prediction->GetMaximum()))*1.3);
-    if( tag == "_lowDphi" )
+    if( tag == "_lowDphi" || tag == "_looseCuts_lowDphi" )
         doubletagSRdata->GetXaxis()->SetRangeUser(300.,900.);
     doubletagSRdata->Draw("p,e1");
     doubletagSRmc->Draw("SAME,e2");
@@ -355,11 +355,11 @@ void checkScaleFactors(TString tag = "_singleMu", bool doubletag = true, TString
     TGraphAsymmErrors MCRatio;
     SetRatioErr(doubletagSRdata,doubletagSRmc,MCRatio);
     setStyle(MCRatio);
-    if( tag == "_lowDphi" )
+    if( tag == "_lowDphi" || tag == "_looseCuts_lowDphi" )
         MCRatio.GetXaxis()->SetLimits(300.,900.);
     MCRatio.Draw("A,p");
 
-    TLine* scaleFactor = makeRatioLine(doubletagSRdata,doubletagSRmc,(tag=="_lowDphi"?300.:100.));
+    TLine* scaleFactor = makeRatioLine(doubletagSRdata,doubletagSRmc,(tag=="_lowDphi"||tag == "_looseCuts_lowDphi"?300.:100.));
     scaleFactor->Draw();
 
     can->SaveAs("../plots/ABCDscaleFactors/ABCDscaleFactors_"+legLabel+"SR"+tag+".png");
@@ -390,11 +390,11 @@ void checkScaleFactors(TString tag = "_singleMu", bool doubletag = true, TString
     TGraphAsymmErrors predictionRatio;
     SetRatioErr(doubletagSRdata,prediction,predictionRatio);
     setStyle(predictionRatio);
-    if( tag == "_lowDphi" )
+    if( tag == "_lowDphi" || tag == "_looseCuts_lowDphi" )
         predictionRatio.GetXaxis()->SetLimits(300.,900.);
     predictionRatio.Draw("A,p");
 
-    scaleFactor = makeRatioLine(doubletagSRdata,prediction,(tag=="_lowDphi"?300.:100.));
+    scaleFactor = makeRatioLine(doubletagSRdata,prediction,(tag=="_lowDphi"||tag == "_looseCuts_lowDphi"?300.:100.));
     scaleFactor->Draw();
 
     can->SaveAs("../plots/ABCDscaleFactors/dataClosure_"+legLabel+"SR"+tag+".png");
@@ -406,7 +406,7 @@ void checkScaleFactors(TString tag = "_singleMu", bool doubletag = true, TString
     topPad->cd();
 
     doubletagSBdata->GetYaxis()->SetRangeUser(0.,max(doubletagSBdata->GetMaximum(),doubletagSBmc->GetMaximum())*1.3);
-    if( tag == "_lowDphi" )
+    if( tag == "_lowDphi" || tag == "_looseCuts_lowDphi" )
         doubletagSBdata->GetYaxis()->SetRangeUser(300.,900.);
     doubletagSBdata->Draw("p,e1");
     doubletagSBmc->Draw("e2,SAME");
@@ -425,11 +425,11 @@ void checkScaleFactors(TString tag = "_singleMu", bool doubletag = true, TString
 
     SetRatioErr(doubletagSBdata,doubletagSBmc,MCRatio);
     setStyle(MCRatio);
-    if( tag == "_lowDphi" )
+    if( tag == "_lowDphi" || tag == "_looseCuts_lowDphi" )
         MCRatio.GetXaxis()->SetLimits(300.,900.);
     MCRatio.Draw("A,p");
 
-    scaleFactor = makeRatioLine(doubletagSBdata,doubletagSBmc,(tag=="_lowDphi"?300.:100.));
+    scaleFactor = makeRatioLine(doubletagSBdata,doubletagSBmc,(tag=="_lowDphi"||tag == "_looseCuts_lowDphi"?300.:100.));
     scaleFactor->Draw();
 
     can->SaveAs("../plots/ABCDscaleFactors/ABCDscaleFactors_"+legLabel+"SB"+tag+".png");
@@ -439,7 +439,7 @@ void checkScaleFactors(TString tag = "_singleMu", bool doubletag = true, TString
     topPad->cd();
 
     antitagSRdata->GetYaxis()->SetRangeUser(0.,max(antitagSRdata->GetMaximum(),antitagSRmc->GetMaximum())*1.3);
-    if( tag == "_lowDphi" )
+    if( tag == "_lowDphi" || tag == "_looseCuts_lowDphi" )
         antitagSRdata->GetXaxis()->SetRangeUser(300.,900.);
     antitagSRdata->Draw("p,e1");
     antitagSRmc->Draw("e2,SAME");
@@ -458,11 +458,11 @@ void checkScaleFactors(TString tag = "_singleMu", bool doubletag = true, TString
 
     SetRatioErr(antitagSRdata,antitagSRmc,MCRatio);
     setStyle(MCRatio);
-    if( tag == "_lowDphi" )
+    if( tag == "_lowDphi" || tag == "_looseCuts_lowDphi" )
         MCRatio.GetXaxis()->SetLimits(300.,900.);
     MCRatio.Draw("A,p");
 
-    scaleFactor = makeRatioLine(antitagSRdata,antitagSRmc,(tag=="_lowDphi"?300.:100.));
+    scaleFactor = makeRatioLine(antitagSRdata,antitagSRmc,(tag=="_lowDphi"||tag == "_looseCuts_lowDphi"?300.:100.));
     scaleFactor->Draw();
 
     can->SaveAs("../plots/ABCDscaleFactors/ABCDscaleFactors_antitagSR"+tag+".png");
@@ -472,7 +472,7 @@ void checkScaleFactors(TString tag = "_singleMu", bool doubletag = true, TString
     topPad->cd();
         
     antitagSBdata->GetYaxis()->SetRangeUser(0.,max(antitagSBdata->GetMaximum(),antitagSBmc->GetMaximum())*1.3);
-    if( tag == "_lowDphi" )
+    if( tag == "_lowDphi" || tag == "_looseCuts_lowDphi" )
         antitagSBdata->GetXaxis()->SetRangeUser(300.,900.);
     antitagSBdata->Draw("p,e1");
     antitagSBmc->Draw("e2,SAME");
@@ -491,11 +491,11 @@ void checkScaleFactors(TString tag = "_singleMu", bool doubletag = true, TString
 
     SetRatioErr(antitagSBdata,antitagSBmc,MCRatio);
     setStyle(MCRatio);
-    if( tag == "_lowDphi" )
+    if( tag == "_lowDphi" || tag == "_looseCuts_lowDphi" )
         MCRatio.GetXaxis()->SetLimits(300.,900.);
     MCRatio.Draw("A,p");
 
-    scaleFactor = makeRatioLine(antitagSBdata,antitagSBmc,(tag=="_lowDphi"?300.:100.));
+    scaleFactor = makeRatioLine(antitagSBdata,antitagSBmc,(tag=="_lowDphi"||tag == "_looseCuts_lowDphi"?300.:100.));
     scaleFactor->Draw();
 
     can->SaveAs("../plots/ABCDscaleFactors/ABCDscaleFactors_antitagSB"+tag+".png");
