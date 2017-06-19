@@ -1231,11 +1231,11 @@ template<typename ntupleType> bool photonBaselineCut(ntupleType* ntuple){
 
 template<typename ntupleType> bool photonBaselineCut_loose(ntupleType* ntuple){
     return ( ntuple->Photons->size()==1 &&
-             ntuple->Photons->at(0).Pt() > 200. && 
+             ntuple->Photons->at(0).Pt() > 100. && 
              ntuple->Photons_fullID->size() == 1 && 
              ntuple->Photons_fullID->at(0) == 1 &&
-             ntuple->METclean > 200.             &&
-             ntuple->HTclean > 600.                         &&
+             ntuple->METclean > 100.             &&
+             ntuple->HTclean > 400.                         &&
              ntuple->JetsAK8Clean->size()>=2 && 
              ntuple->DeltaPhi1clean>0.5 && 
              ntuple->DeltaPhi2clean>0.5 &&
