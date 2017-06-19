@@ -1,42 +1,42 @@
 #include "computeKappa.C"
 
 void kappaDistribution(
-                       // double corrTT_A=0.48,      double corrErrTT_A=0.24 ,
-                       // double corrTT_B=0.63,       double corrErrTT_B=0.12 ,
-                       // double corrTT_C=0.47,      double corrErrTT_C=0.071 ,
-                       // double corrTT_D=0.42,      double corrErrTT_D=0.026 ,
-                       // double corrWJets_A=0.48,    double corrErrWJets_A=0.24 ,
-                       // double corrWJets_B=0.63,    double corrErrWJets_B=0.12 ,
-                       // double corrWJets_C=0.47,    double corrErrWJets_C=0.071 ,
-                       // double corrWJets_D=0.42,    double corrErrWJets_D=0.026 ,
-                       // double corrZJets_A=0.23,   double corrErrZJets_A=0.25 ,
-                       // double corrZJets_B=2.0,   double corrErrZJets_B=0.57 ,
-                       // double corrZJets_C=0.55,   double corrErrZJets_C=0.054 ,
-                       // double corrZJets_D=0.64,   double corrErrZJets_D=0.024 ,
-                       // double corrQCD_A=0.95,     double corrErrQCD_A=0.31 ,
-                       // double corrQCD_B=1.1,     double corrErrQCD_B=0.14 ,
-                       // double corrQCD_C=0.86,     double corrErrQCD_C=0.089 ,
-                       // double corrQCD_D=0.66,     double corrErrQCD_D=0.022,
-                       // bool doubletag = true
-
-                       double corrTT_A=0.49,      double corrErrTT_A=0.11 ,
-                       double corrTT_B=0.52,       double corrErrTT_B=0.043 ,
-                       double corrTT_C=0.47,      double corrErrTT_C=0.071 ,
-                       double corrTT_D=0.42,      double corrErrTT_D=0.026 ,
-                       double corrWJets_A=0.49,    double corrErrWJets_A=0.11 ,
-                       double corrWJets_B=0.52,    double corrErrWJets_B=0.043 ,
-                       double corrWJets_C=0.47,    double corrErrWJets_C=0.071 ,
-                       double corrWJets_D=0.42,    double corrErrWJets_D=0.026 ,
-                       double corrZJets_A=0.8,   double corrErrZJets_A=0.18 ,
-                       double corrZJets_B=0.97,   double corrErrZJets_B=0.077 ,
-                       double corrZJets_C=0.55,   double corrErrZJets_C=0.054 ,
-                       double corrZJets_D=0.64,   double corrErrZJets_D=0.024 ,
-                       double corrQCD_A=0.77,     double corrErrQCD_A=0.11 ,
-                       double corrQCD_B=0.8,     double corrErrQCD_B=0.037 ,
-                       double corrQCD_C=0.86,     double corrErrQCD_C=0.089 ,
-                       double corrQCD_D=0.66,     double corrErrQCD_D=0.022,
-                       bool doubletag = false
-                       ){
+                       double corrTT_A=0.6,      double corrErrTT_A=0.25 ,
+                       double corrTT_B=0.74,       double corrErrTT_B=0.14 ,
+                       double corrTT_C=0.53,      double corrErrTT_C=0.08 ,
+                       double corrTT_D=0.48,      double corrErrTT_D=0.031 ,
+                       double corrWJets_A=0.6,    double corrErrWJets_A=0.25 ,
+                       double corrWJets_B=0.74,    double corrErrWJets_B=0.14 ,
+                       double corrWJets_C=0.53,    double corrErrWJets_C=0.08 ,
+                       double corrWJets_D=0.48,    double corrErrWJets_D=0.031 ,
+                       double corrZJets_A=0.44,   double corrErrZJets_A=0.26 ,
+                       double corrZJets_B=1.7,   double corrErrZJets_B=0.41 ,
+                       double corrZJets_C=0.49,   double corrErrZJets_C=0.046 ,
+                       double corrZJets_D=0.6,   double corrErrZJets_D=0.02 ,
+                       double corrQCD_A=0.85,     double corrErrQCD_A=0.12 ,
+                       double corrQCD_B=1.2,     double corrErrQCD_B=0.16 ,
+                       double corrQCD_C=0.93,     double corrErrQCD_C=0.1 ,
+                       double corrQCD_D=0.71,     double corrErrQCD_D=0.027,
+                        bool doubletag = true
+                       /*                                                                                                                                                                                        
+                       double corrTT_A=0.58,      double corrErrTT_A=0.12 , //signal          
+                       double corrTT_B=0.58,       double corrErrTT_B=0.049 ,//sideband       
+                       double corrTT_C=0.53,      double corrErrTT_C=0.08 ,//antitag          
+                       double corrTT_D=0.48,      double corrErrTT_D=0.031 ,//antitag sideband
+                       double corrWJets_A=0.58,    double corrErrWJets_A=0.12 ,               
+                       double corrWJets_B=0.58,    double corrErrWJets_B=0.049 ,              
+                       double corrWJets_C=0.53,    double corrErrWJets_C=0.08 ,               
+                       double corrWJets_D=0.48,    double corrErrWJets_D=0.031 ,              
+                       double corrZJets_A=0.79,   double corrErrZJets_A=0.14 ,                
+                       double corrZJets_B=0.91,   double corrErrZJets_B=0.06 ,                
+                       double corrZJets_C=0.49,   double corrErrZJets_C=0.046 ,               
+                       double corrZJets_D=0.6,   double corrErrZJets_D=0.02 ,                 
+                       double corrQCD_A=1.1,     double corrErrQCD_A=0.33 ,                   
+                       double corrQCD_B=0.88,     double corrErrQCD_B=0.04 ,                  
+                       double corrQCD_C=0.93,     double corrErrQCD_C=0.1 ,                   
+                       double corrQCD_D=0.71,     double corrErrQCD_D=0.027,                  
+                       bool doubletag = false                                                                                                                                                         
+                       */){
 
     gROOT->ProcessLine(".L tdrstyle.C");
     gROOT->ProcessLine("setTDRStyle()");
