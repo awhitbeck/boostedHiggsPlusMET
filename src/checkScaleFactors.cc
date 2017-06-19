@@ -392,6 +392,7 @@ void checkScaleFactors(TString tag = "_singleMu", bool doubletag = true, TString
     setStyle(predictionRatio);
     if( tag == "_lowDphi" || tag == "_looseCuts_lowDphi" )
         predictionRatio.GetXaxis()->SetLimits(300.,900.);
+    predictionRatio.GetYaxis()->SetTitle("#kappa");
     predictionRatio.Draw("A,p");
 
     scaleFactor = makeRatioLine(doubletagSRdata,prediction,(tag=="_lowDphi"||tag == "_looseCuts_lowDphi"?300.:100.));
@@ -407,7 +408,7 @@ void checkScaleFactors(TString tag = "_singleMu", bool doubletag = true, TString
 
     doubletagSBdata->GetYaxis()->SetRangeUser(0.,max(doubletagSBdata->GetMaximum(),doubletagSBmc->GetMaximum())*1.3);
     if( tag == "_lowDphi" || tag == "_looseCuts_lowDphi" )
-        doubletagSBdata->GetYaxis()->SetRangeUser(300.,900.);
+        doubletagSBdata->GetXaxis()->SetRangeUser(300.,900.);
     doubletagSBdata->Draw("p,e1");
     doubletagSBmc->Draw("e2,SAME");
     leg = new TLegend(.6,.7,.9,.9,legLabel+" SB");
@@ -519,6 +520,12 @@ void checkScaleFactors(TString tag = "_singleMu", bool doubletag = true, TString
     else 
         cout << "tag SB: " << endl;
     computeIntegratedRatio(doubletagSBdata,doubletagSBmc);
-    
+
+    if(doubletag)
+        cout << "closure 2H: " << endl;
+    else
+        cout << "closure 2H: " << endl;
+    computeIntegratedRatio(doubletagSRdata,prediction);
+
 }
 
