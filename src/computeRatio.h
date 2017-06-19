@@ -21,8 +21,8 @@ void SetRatioErr(TH1F*TotalBkg, TH1F*Pred, TGraphAsymmErrors &Closure,
                 den=rand.Gaus(Pred->GetBinContent(m),Pred->GetBinError(m));
                 den=1.0+den;
             }
-            if(TotalBkg->GetBinCenter(m)<upperBound)kappaDist->Fill(TotalBkg->GetBinCenter(m),num/den);
-            else kappaDist->Fill(upperBound-1.,num/den);
+            if( TotalBkg->GetBinCenter(m)<upperBound && TotalBkg->GetBinContent(m) > 0.0001 && Pred->GetBinContent(m) > 0.0001 )
+                kappaDist->Fill(TotalBkg->GetBinCenter(m),num/den);
         }
         TH1D*METBinKappa=(TH1D*)kappaDist->QuantilesX(0.5, "METBinKappa");
         TH1D*METBinKappaUncUp=(TH1D*)kappaDist->QuantilesX(0.5+0.34, "METBinKappaUnc");
