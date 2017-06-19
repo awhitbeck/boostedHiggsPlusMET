@@ -113,6 +113,11 @@ int main(int argc, char** argv){
         tempPlots.push_back(plot(*fillDeltaPhi3<RA2bTree>,"DeltaPhi3_"+cutName[iCut],"#Delta#Phi_{3}",20,0.,3.1415));
         tempPlots.push_back(plot(*fillDeltaPhi4<RA2bTree>,"DeltaPhi4_"+cutName[iCut],"#Delta#Phi_{4}",20,0.,3.1415));
 
+        tempPlots.push_back(plot(*fillJetPt1<RA2bTree>,"Ak4JetPt1_"+cutName[iCut],"p_{T,j1} [GeV]",50,0,1000));
+        tempPlots.push_back(plot(*fillJetPt2<RA2bTree>,"Ak4JetPt2_"+cutName[iCut],"p_{T,j2} [GeV]",50,0,1000));
+        tempPlots.push_back(plot(*fillJetPt3<RA2bTree>,"Ak4JetPt3_"+cutName[iCut],"p_{T,j3} [GeV]",50,0,600));
+        tempPlots.push_back(plot(*fillJetPt4<RA2bTree>,"Ak4JetPt4_"+cutName[iCut],"p_{T,j4} [GeV]",50,0,500));
+
         plots.push_back(tempPlots);
     }
 
