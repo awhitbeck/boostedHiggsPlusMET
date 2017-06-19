@@ -42,7 +42,7 @@ int main(int argc, char** argv){
   for( int i=0; i<5 ; i++){    
       binLabel="";
       binLabel+=i;
-      LeadingBBdiscVersusNbHad.push_back(plot(*fillLeadingBBtag<RA2bTree>,"J1pt_BBtag_photon_NbHad"+binLabel,"bb-disc",20,-1,1));
+      LeadingBBdiscVersusNbHad.push_back(plot(*fillLeadingBBtag_photon<RA2bTree>,"J1pt_BBtag_photon_NbHad"+binLabel,"bb-disc",20,-1,1));
   }
   vector<plot> SubLeadingBBdiscVersusNbHad;
   for( int i=0; i<5 ; i++){    
@@ -51,48 +51,21 @@ int main(int argc, char** argv){
       SubLeadingBBdiscVersusNbHad.push_back(plot(*fillSubLeadingBBtag<RA2bTree>,"J2pt_BBtag_photon_NbHad"+binLabel,"bb-disc",20,-1,1));
   }
 
-  plot J1dR_Massplot(*leadJetMuondR_mass<RA2bTree>,"J1dR_Mass_photon_baseline","m_{J} [GeV]",20,50.,250.);
-  plot J2dR_Massplot(*subleadJetMuondR_mass<RA2bTree>,"J2dR_Mass_photon_baseline","m_{J} [GeV]",20,50.,250.);
-  plot J1dR_MassWideplot(*leadJetMuondR_mass<RA2bTree>,"J1dR_MassWide_photon_baseline","m_{J} [GeV]",50,0.,250.);
-  plot J2dR_MassWideplot(*subleadJetMuondR_mass<RA2bTree>,"J2dR_MassWide_photon_baseline","m_{J} [GeV]",50,0.,250.);
-  plot J1dR_BBplot(*leadJetMuondR_bbdisc<RA2bTree>,"J1dR_BBdisc_photon_baseline","bb-disc",20,-1.,1.);
-  plot J2dR_BBplot(*subleadJetMuondR_bbdisc<RA2bTree>,"J2dR_BBdisc_photon_baseline","bb-disc",20,-1.,1.);
-
-  plot J1pt_dRplot(*muonLeadJetdR<RA2bTree>,"J1pt_dRleptonJet_photon_baseline","#DeltaR ",40,0.,2*3.1415);
-  plot J2pt_dRplot(*muonSubleadJetdR<RA2bTree>,"J2pt_dRleptonJet_photon_baseline","#DeltaR ",40,0.,2*3.1415);
-
-  plot J1pt_Massplot(*fillLeadingJetMass<RA2bTree>,"J1pt_Mass_photon_baseline","m_{J} [GeV]",20,50.,250.);
-  plot J2pt_Massplot(*fillSubLeadingJetMass<RA2bTree>,"J2pt_Mass_photon_baseline","m_{J} [GeV]",20,50.,250.);
-  plot J1bbtag_Massplot(*fillLeadingBBtagJetMass<RA2bTree>,"J1bbtag_Mass_photon_baseline","m_{J} [GeV]",20,50.,250.);
-  plot J2bbtag_Massplot(*fillSubLeadingBBtagJetMass<RA2bTree>,"J2bbtag_Mass_photon_baseline","m_{J} [GeV]",20,50.,250.);
-
-  plot J1pt_MassWideplot(*fillLeadingJetMass<RA2bTree>,"J1pt_MassWide_photon_baseline","m_{J} [GeV]",50,0.,250.);
-  plot J2pt_MassWideplot(*fillSubLeadingJetMass<RA2bTree>,"J2pt_MassWide_photon_baseline","m_{J} [GeV]",50,0.,250.);
-  plot J1bbtag_MassWideplot(*fillLeadingBBtagJetMass<RA2bTree>,"J1bbtag_MassWide_photon_baseline","m_{J} [GeV]",50,0.,250.);
-  plot J2bbtag_MassWideplot(*fillSubLeadingBBtagJetMass<RA2bTree>,"J2bbtag_MassWide_photon_baseline","m_{J} [GeV]",50,0.,250.);
+  plot J1pt_Massplot(*fillLeadingJetMass_photon<RA2bTree>,"J1pt_Mass_photon_baseline","m_{J} [GeV]",20,50.,250.);
+  plot J2pt_Massplot(*fillSubLeadingJetMass_photon<RA2bTree>,"J2pt_Mass_photon_baseline","m_{J} [GeV]",20,50.,250.);
+  plot J1pt_MassWideplot(*fillLeadingJetMass_photon<RA2bTree>,"J1pt_MassWide_photon_baseline","m_{J} [GeV]",50,0.,250.);
+  plot J2pt_MassWideplot(*fillSubLeadingJetMass_photon<RA2bTree>,"J2pt_MassWide_photon_baseline","m_{J} [GeV]",50,0.,250.);
 
   plot J1pt_BBplot(*fillLeadingBBtag_photon<RA2bTree>,"J1pt_BBtag_photon_baseline","bb-disc",20,-1.,1.);
   plot J2pt_BBplot(*fillSubLeadingBBtag_photon<RA2bTree>,"J2pt_BBtag_photon_baseline","bb-disc",20,-1.,1.);
-  plot J1bbtag_BBplot(*fillLeadingBBtagJetBBtag<RA2bTree>,"J1bbtag_BBtag_photon_baseline","bb-disc",20,-1.,1.);
-  plot J2bbtag_BBplot(*fillSubLeadingBBtagJetBBtag<RA2bTree>,"J2bbtag_BBtag_photon_baseline","bb-disc",20,-1.,1.);
 
-  plot J1pt_Tau21plot(*fillLeadingTau21<RA2bTree>,"J1pt_Tau21_photon_baseline","#tau_{21}",20,0.,1.);
-  plot J2pt_Tau21plot(*fillSubLeadingTau21<RA2bTree>,"J2pt_Tau21_photon_baseline","#tau_{21}",20,0.,1.);
-  plot J1bbtag_Tau21plot(*fillLeadingBBtagJetTau21<RA2bTree>,"J1bbtag_Tau21_photon_baseline","#tau_{21}",20,0.,1.);
-  plot J2bbtag_Tau21plot(*fillSubLeadingBBtagJetTau21<RA2bTree>,"J2bbtag_Tau21_photon_baseline","#tau_{21}",20,0.,1.);
+  plot J1pt_Ptplot(*fillLeadingJetPt_photon<RA2bTree>,"J1pt_Pt_photon_baseline","p_{T,J} [GeV]",40,300.,2300.);
+  plot J2pt_Ptplot(*fillSubLeadingJetPt_photon<RA2bTree>,"J2pt_Pt_photon_baseline","p_{T,J} [GeV]",40,300.,2300.);
+  plot J1pt_PtWideplot(*fillLeadingJetPt_photon<RA2bTree>,"J1pt_PtWide_photon_baseline","p_{T,J} [GeV]",50,100.,2100.);
+  plot J2pt_PtWideplot(*fillSubLeadingJetPt_photon<RA2bTree>,"J2pt_PtWide_photon_baseline","p_{T,J} [GeV]",50,100.,2100.);
 
-  plot J1pt_Ptplot(*fillLeadingJetPt<RA2bTree>,"J1pt_Pt_photon_baseline","p_{T,J} [GeV]",40,300.,2300.);
-  plot J2pt_Ptplot(*fillSubLeadingJetPt<RA2bTree>,"J2pt_Pt_photon_baseline","p_{T,J} [GeV]",40,300.,2300.);
-  plot J1bbtag_Ptplot(*fillLeadingBBtagJetPt<RA2bTree>,"J1bbtag_Pt_photon_baseline","p_{T,J} [GeV]",40,300.,2300.);
-  plot J2bbtag_Ptplot(*fillSubLeadingBBtagJetPt<RA2bTree>,"J2bbtag_Pt_photon_baseline","p_{T,J} [GeV]",40,300.,2300.);
-
-  plot J1pt_PtWideplot(*fillLeadingJetPt<RA2bTree>,"J1pt_PtWide_photon_baseline","p_{T,J} [GeV]",50,100.,2100.);
-  plot J2pt_PtWideplot(*fillSubLeadingJetPt<RA2bTree>,"J2pt_PtWide_photon_baseline","p_{T,J} [GeV]",50,100.,2100.);
-  plot J1bbtag_PtWideplot(*fillLeadingBBtagJetPt<RA2bTree>,"J1bbtag_PtWide_photon_baseline","p_{T,J} [GeV]",50,100.,2100.);
-  plot J2bbtag_PtWideplot(*fillSubLeadingBBtagJetPt<RA2bTree>,"J2bbtag_PtWide_photon_baseline","p_{T,J} [GeV]",50,100.,2100.);
-
-  plot J1pt_JetFlavorPlot(*fillLeadingJetFlavor<RA2bTree>,"J1pt_JetFlavorPlot","Jet Flavor",22,0.5,21.5);
-  plot J2pt_JetFlavorPlot(*fillSubLeadingJetFlavor<RA2bTree>,"J2pt_JetFlavorPlot","Jet Flavor",22,0.5,21.5);
+  plot J1pt_JetFlavorPlot(*fillLeadingJetFlavor_photon<RA2bTree>,"J1pt_JetFlavorPlot","Jet Flavor",22,0.5,21.5);
+  plot J2pt_JetFlavorPlot(*fillSubLeadingJetFlavor_photon<RA2bTree>,"J2pt_JetFlavorPlot","Jet Flavor",22,0.5,21.5);
 
   vector<plot> plots;
   plots.push_back(J1NbhadronPlot);
@@ -101,36 +74,16 @@ int main(int argc, char** argv){
   plots.push_back(HTplot);
   plots.push_back(NJetsplot);
   plots.push_back(BTagsplot);
-  plots.push_back(J1dR_Massplot);
-  plots.push_back(J2dR_Massplot);
-  plots.push_back(J1dR_BBplot);
-  plots.push_back(J2dR_BBplot);
-  plots.push_back(J1pt_dRplot);
-  plots.push_back(J2pt_dRplot);
   plots.push_back(J1pt_Massplot);
   plots.push_back(J2pt_Massplot);
   plots.push_back(J1pt_MassWideplot);
   plots.push_back(J2pt_MassWideplot);
-  plots.push_back(J1bbtag_Massplot);
-  plots.push_back(J2bbtag_Massplot);
-  plots.push_back(J1bbtag_MassWideplot);
-  plots.push_back(J2bbtag_MassWideplot);
   plots.push_back(J1pt_BBplot);
   plots.push_back(J2pt_BBplot);
-  plots.push_back(J1bbtag_BBplot);
-  plots.push_back(J2bbtag_BBplot);
-  plots.push_back(J1pt_Tau21plot);
-  plots.push_back(J2pt_Tau21plot);
-  plots.push_back(J1bbtag_Tau21plot);
-  plots.push_back(J2bbtag_Tau21plot);
   plots.push_back(J1pt_Ptplot);
   plots.push_back(J2pt_Ptplot);
-  plots.push_back(J1bbtag_Ptplot);
-  plots.push_back(J2bbtag_Ptplot);
   plots.push_back(J1pt_PtWideplot);
   plots.push_back(J2pt_PtWideplot);
-  plots.push_back(J1bbtag_PtWideplot);
-  plots.push_back(J2bbtag_PtWideplot);
   plots.push_back(J1pt_JetFlavorPlot);
   plots.push_back(J2pt_JetFlavorPlot);
 

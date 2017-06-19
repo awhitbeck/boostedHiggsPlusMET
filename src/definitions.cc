@@ -588,6 +588,16 @@ template<typename ntupleType> double fillLeadingJetFlavor(ntupleType* ntuple){
   else return 1.;
 }
 
+
+template<typename ntupleType> double fillLeadingJetFlavor_photon(ntupleType* ntuple){
+  if(ntuple->JetsAK8Clean->size()==0) return -99999.;
+  if( ntuple->JetsAK8Clean_NumBhadrons->at(0)==2 ) 
+    return 21.;
+  else if( ntuple->JetsAK8Clean_NumBhadrons->at(0)==1 )
+    return 5.;
+  else return 1.;
+}
+
 template<typename ntupleType> double fillLeadingNbHadrons(ntupleType* ntuple){
     return ntuple->JetsAK8->size()>=1?ntuple->JetsAK8_NumBhadrons->at(0):-999.;
 }
@@ -595,6 +605,10 @@ template<typename ntupleType> double fillLeadingNbHadrons(ntupleType* ntuple){
 template<typename ntupleType> double fillLeadingJetPt(ntupleType* ntuple){
   if(ntuple->JetsAK8->size()==0) return-99999.;
   return ntuple->JetsAK8->at(0).Pt();
+}
+template<typename ntupleType> double fillLeadingJetPt_photon(ntupleType* ntuple){
+  if(ntuple->JetsAK8Clean->size()==0) return-99999.;
+  return ntuple->JetsAK8Clean->at(0).Pt();
 }
 
 template<typename ntupleType> double fillLeadingBBtag(ntupleType* ntuple){
@@ -628,6 +642,15 @@ template<typename ntupleType> double fillSubLeadingJetFlavor(ntupleType* ntuple)
   else return 1.;
 }
 
+template<typename ntupleType> double fillSubLeadingJetFlavor_photon(ntupleType* ntuple){
+  if(ntuple->JetsAK8Clean->size()<=1) return-99999.;
+  if( ntuple->JetsAK8Clean_NumBhadrons->at(1)==2 ) 
+    return 21.;
+  else if (ntuple->JetsAK8Clean_NumBhadrons->at(1)==1 )
+    return 5.;
+  else return 1.;
+}
+
 template<typename ntupleType> double fillSubLeadingNbHadrons(ntupleType* ntuple){
     return ntuple->JetsAK8->size()>=2?ntuple->JetsAK8_NumBhadrons->at(1):-999.;
 }
@@ -635,6 +658,11 @@ template<typename ntupleType> double fillSubLeadingNbHadrons(ntupleType* ntuple)
 template<typename ntupleType> double fillSubLeadingJetPt(ntupleType* ntuple){
   if(ntuple->JetsAK8->size()<=1) return -99999.;
   return ntuple->JetsAK8->at(1).Pt();
+}
+
+template<typename ntupleType> double fillSubLeadingJetPt_photon(ntupleType* ntuple){
+  if(ntuple->JetsAK8Clean->size()<=1) return -99999.;
+  return ntuple->JetsAK8Clean->at(1).Pt();
 }
 
 template<typename ntupleType> double fillSubLeadingBBtag(ntupleType* ntuple){
