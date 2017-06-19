@@ -102,9 +102,14 @@ int main( int argc , char** argv ){
     can->RedrawAxis();
     can->GetFrame()->Draw();
 
-    if( fitData )
+    if( fitData ){
         can->SaveAs("fitWpeak_data.png");
-    else 
+        can->SaveAs("fitWpeak_data.eps");
+        can->SaveAs("fitWpeak_data.pdf");
+    }else{ 
         can->SaveAs("fitWpeak_MC.png");
+        can->SaveAs("fitWpeak_MC.eps");
+        can->SaveAs("fitWpeak_MC.pdf");
+    }
 }
         
