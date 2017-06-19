@@ -3,7 +3,7 @@ CFLAGS=
 LIBS=`root-config --cflags --glibs` -L $(ROOTSYS)/lib -I$(ROOTSYS)/include
 ROOFITLIBS=-lRooFit -lHtml -lMinuit -lRooFitCore
 INCLUDES=-I$(CMSSW_BASE)/src/AnalysisTools/src/ -I$(CMSSW_BASE)/src/ -I$(CMSSW_BASE)/src/Analysis/btag/
-EXECS=fitWpeak flavorFit plotObs_photon_baseline plotObs_singleEleCR_baseline plotObs_lowDPhi_baseline plotObs_singleHiggsTag plotObs_doubleHiggsTag plotObs_antitag plotObs_baseline plotObs_singleMuCR_baseline frankSynch cutFlow NminusOne ALPHABET ALPHABET_photon plotHiggsPt_TChiHH datacardInputs photonSkim WtaggingEfficiency.cc
+EXECS=fitWpeak flavorFit plotObs_photon_baseline plotObs_singleEleCR_baseline plotObs_lowDPhi_baseline plotObs_singleHiggsTag plotObs_doubleHiggsTag plotObs_antitag plotObs_baseline plotObs_singleMuCR_baseline frankSynch cutFlow NminusOne ALPHABET ALPHABET_photon plotHiggsPt_TChiHH datacardInputs photonSkim WtaggingEfficiency.cc plotWtagDist.cc
 $(EXECS):RA2bTree.cc definitions.cc skimSamples.cc plotterUtils.cc
 flavorFit:flavorFit.cc
 fitWpeak:fitWpeak.cc
@@ -24,8 +24,12 @@ ALPHABET_photon:ALPHABET_photon.cc
 datacardInputs:datacardInputs.cc
 photonSkim:photonSkim.cc
 WtaggingEfficiency:WtaggingEfficiency.cc
+plotWtagDist:plotWtagDist.cc
+
 all:$(EXECS) 
 
+plotWtagDist:
+	$(CC) -g $(CFLAGS) $(LIBS) $(ROOFITLIBS) $(INCLUDES) plotWtagDist.cc -o ../bin/$@	
 fitWpeak:
 	$(CC) -g $(CFLAGS) $(LIBS) $(ROOFITLIBS) $(INCLUDES) fitWpeak.cc -o ../bin/$@	
 WtaggingEfficiency:
