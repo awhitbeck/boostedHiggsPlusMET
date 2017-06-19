@@ -18,6 +18,11 @@ using namespace std;
 
 int main(int argc, char** argv){
 
+    bool looseCuts(0);
+    if( argc >= 2 )
+        looseCuts = atoi(argv[1]);
+
+
   gROOT->ProcessLine(".L tdrstyle.C");
   gROOT->ProcessLine("setTDRStyle()");
   
@@ -48,16 +53,23 @@ int main(int argc, char** argv){
 
   plot J1dR_Massplot(*leadJetMuondR_mass<RA2bTree>,"J1dR_Mass_photon_baseline","m_{J} [GeV]",20,50.,250.);
   plot J2dR_Massplot(*subleadJetMuondR_mass<RA2bTree>,"J2dR_Mass_photon_baseline","m_{J} [GeV]",20,50.,250.);
+  plot J1dR_MassWideplot(*leadJetMuondR_mass<RA2bTree>,"J1dR_MassWide_photon_baseline","m_{J} [GeV]",50,0.,250.);
+  plot J2dR_MassWideplot(*subleadJetMuondR_mass<RA2bTree>,"J2dR_MassWide_photon_baseline","m_{J} [GeV]",50,0.,250.);
   plot J1dR_BBplot(*leadJetMuondR_bbdisc<RA2bTree>,"J1dR_BBdisc_photon_baseline","bb-disc",20,-1.,1.);
   plot J2dR_BBplot(*subleadJetMuondR_bbdisc<RA2bTree>,"J2dR_BBdisc_photon_baseline","bb-disc",20,-1.,1.);
 
   plot J1pt_dRplot(*muonLeadJetdR<RA2bTree>,"J1pt_dRleptonJet_photon_baseline","#DeltaR ",40,0.,2*3.1415);
   plot J2pt_dRplot(*muonSubleadJetdR<RA2bTree>,"J2pt_dRleptonJet_photon_baseline","#DeltaR ",40,0.,2*3.1415);
 
-  plot J1pt_Massplot(*fillLeadingJetMass<RA2bTree>,"J1pt_Mass_photon_baseline","m_{J} [GeV]",20,50.,200.);
-  plot J2pt_Massplot(*fillSubLeadingJetMass<RA2bTree>,"J2pt_Mass_photon_baseline","m_{J} [GeV]",20,50.,200.);
-  plot J1bbtag_Massplot(*fillLeadingBBtagJetMass<RA2bTree>,"J1bbtag_Mass_photon_baseline","m_{J} [GeV]",20,50.,200.);
-  plot J2bbtag_Massplot(*fillSubLeadingBBtagJetMass<RA2bTree>,"J2bbtag_Mass_photon_baseline","m_{J} [GeV]",20,50.,200.);
+  plot J1pt_Massplot(*fillLeadingJetMass<RA2bTree>,"J1pt_Mass_photon_baseline","m_{J} [GeV]",20,50.,250.);
+  plot J2pt_Massplot(*fillSubLeadingJetMass<RA2bTree>,"J2pt_Mass_photon_baseline","m_{J} [GeV]",20,50.,250.);
+  plot J1bbtag_Massplot(*fillLeadingBBtagJetMass<RA2bTree>,"J1bbtag_Mass_photon_baseline","m_{J} [GeV]",20,50.,250.);
+  plot J2bbtag_Massplot(*fillSubLeadingBBtagJetMass<RA2bTree>,"J2bbtag_Mass_photon_baseline","m_{J} [GeV]",20,50.,250.);
+
+  plot J1pt_MassWideplot(*fillLeadingJetMass<RA2bTree>,"J1pt_MassWide_photon_baseline","m_{J} [GeV]",50,0.,250.);
+  plot J2pt_MassWideplot(*fillSubLeadingJetMass<RA2bTree>,"J2pt_MassWide_photon_baseline","m_{J} [GeV]",50,0.,250.);
+  plot J1bbtag_MassWideplot(*fillLeadingBBtagJetMass<RA2bTree>,"J1bbtag_MassWide_photon_baseline","m_{J} [GeV]",50,0.,250.);
+  plot J2bbtag_MassWideplot(*fillSubLeadingBBtagJetMass<RA2bTree>,"J2bbtag_MassWide_photon_baseline","m_{J} [GeV]",50,0.,250.);
 
   plot J1pt_BBplot(*fillLeadingBBtag_photon<RA2bTree>,"J1pt_BBtag_photon_baseline","bb-disc",20,-1.,1.);
   plot J2pt_BBplot(*fillSubLeadingBBtag_photon<RA2bTree>,"J2pt_BBtag_photon_baseline","bb-disc",20,-1.,1.);
@@ -73,6 +85,11 @@ int main(int argc, char** argv){
   plot J2pt_Ptplot(*fillSubLeadingJetPt<RA2bTree>,"J2pt_Pt_photon_baseline","p_{T,J} [GeV]",40,300.,2300.);
   plot J1bbtag_Ptplot(*fillLeadingBBtagJetPt<RA2bTree>,"J1bbtag_Pt_photon_baseline","p_{T,J} [GeV]",40,300.,2300.);
   plot J2bbtag_Ptplot(*fillSubLeadingBBtagJetPt<RA2bTree>,"J2bbtag_Pt_photon_baseline","p_{T,J} [GeV]",40,300.,2300.);
+
+  plot J1pt_PtWideplot(*fillLeadingJetPt<RA2bTree>,"J1pt_PtWide_photon_baseline","p_{T,J} [GeV]",50,100.,2100.);
+  plot J2pt_PtWideplot(*fillSubLeadingJetPt<RA2bTree>,"J2pt_PtWide_photon_baseline","p_{T,J} [GeV]",50,100.,2100.);
+  plot J1bbtag_PtWideplot(*fillLeadingBBtagJetPt<RA2bTree>,"J1bbtag_PtWide_photon_baseline","p_{T,J} [GeV]",50,100.,2100.);
+  plot J2bbtag_PtWideplot(*fillSubLeadingBBtagJetPt<RA2bTree>,"J2bbtag_PtWide_photon_baseline","p_{T,J} [GeV]",50,100.,2100.);
 
   plot J1pt_JetFlavorPlot(*fillLeadingJetFlavor<RA2bTree>,"J1pt_JetFlavorPlot","Jet Flavor",22,0.5,21.5);
   plot J2pt_JetFlavorPlot(*fillSubLeadingJetFlavor<RA2bTree>,"J2pt_JetFlavorPlot","Jet Flavor",22,0.5,21.5);
@@ -92,8 +109,12 @@ int main(int argc, char** argv){
   plots.push_back(J2pt_dRplot);
   plots.push_back(J1pt_Massplot);
   plots.push_back(J2pt_Massplot);
+  plots.push_back(J1pt_MassWideplot);
+  plots.push_back(J2pt_MassWideplot);
   plots.push_back(J1bbtag_Massplot);
   plots.push_back(J2bbtag_Massplot);
+  plots.push_back(J1bbtag_MassWideplot);
+  plots.push_back(J2bbtag_MassWideplot);
   plots.push_back(J1pt_BBplot);
   plots.push_back(J2pt_BBplot);
   plots.push_back(J1bbtag_BBplot);
@@ -106,6 +127,10 @@ int main(int argc, char** argv){
   plots.push_back(J2pt_Ptplot);
   plots.push_back(J1bbtag_Ptplot);
   plots.push_back(J2bbtag_Ptplot);
+  plots.push_back(J1pt_PtWideplot);
+  plots.push_back(J2pt_PtWideplot);
+  plots.push_back(J1bbtag_PtWideplot);
+  plots.push_back(J2bbtag_PtWideplot);
   plots.push_back(J1pt_JetFlavorPlot);
   plots.push_back(J2pt_JetFlavorPlot);
 
@@ -134,7 +159,12 @@ int main(int argc, char** argv){
       ntuple->GetEntry(iEvt);
       if( iEvt % 1000000 == 0 ) cout << skims.sampleName[iSample] << ": " << iEvt << "/" << numEvents << endl;
 
-      if(! photonBaselineCut(ntuple) ) continue;
+      if( looseCuts ){
+          if( !photonBaselineCut_loose(ntuple) ) continue;
+      }else{
+          if( !photonBaselineCut(ntuple) ) continue;
+      }
+
       if( skims.sampleName[iSample] == "QCD" && ntuple->Photons_nonPrompt->at(0) == 0 && ntuple->madMinPhotonDeltaR>0.4 && ntuple->madMinDeltaRStatus==1 ) continue;
       if( skims.sampleName[iSample] == "GJets" && ntuple->Photons_nonPrompt->at(0) == 1 ) continue;
 
@@ -189,7 +219,12 @@ int main(int argc, char** argv){
   for( int iEvt = 0 ; iEvt < numEvents ; iEvt++ ){
       ntuple->GetEntry(iEvt);
       if( iEvt % 1000000 == 0 ) cout << "data: " << iEvt << "/" << numEvents << endl;
-      if( !photonBaselineCut(ntuple) ) continue;
+      
+      if( looseCuts ){
+          if( !photonBaselineCut_loose(ntuple) ) continue;
+      }else{
+          if( !photonBaselineCut(ntuple) ) continue;
+      }
       if( !photonTriggerCut(ntuple) ) continue;
       for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++){
           iBin=plots[iPlot].fillData(ntuple);
@@ -200,7 +235,8 @@ int main(int argc, char** argv){
       }
   }
   
-  TFile* outputFile = new TFile("plotObs_photon_baseline.root","RECREATE");
+  TString outputTag = (looseCuts?"looseCuts_":"");
+  TFile* outputFile = new TFile("plotObs_photon_"+outputTag+"baseline.root","RECREATE");
 
   for( int iPlot = 0 ; iPlot < LeadingBBdiscVersusNbHad.size() ; iPlot++){
       LeadingBBdiscVersusNbHad[iPlot].buildSum();
@@ -208,7 +244,7 @@ int main(int argc, char** argv){
       LeadingBBdiscVersusNbHad[iPlot].sum->Write();
       TCanvas* can = new TCanvas("can","can",500,500);
       can->SetTopMargin(0.05);
-      LeadingBBdiscVersusNbHad[iPlot].Draw(can,skims.ntuples,skims.signalNtuples,"../plots/plotObs_photon_baseline_plots",0.,2.,true);
+      LeadingBBdiscVersusNbHad[iPlot].Draw(can,skims.ntuples,skims.signalNtuples,"../plots/plotObs_photon_"+outputTag+"baseline_plots",0.,2.,true);
   }
   for( int iPlot = 0 ; iPlot < SubLeadingBBdiscVersusNbHad.size() ; iPlot++){
       SubLeadingBBdiscVersusNbHad[iPlot].buildSum();
@@ -216,12 +252,12 @@ int main(int argc, char** argv){
       SubLeadingBBdiscVersusNbHad[iPlot].sum->Write();
       TCanvas* can = new TCanvas("can","can",500,500);
       can->SetTopMargin(0.05);
-      SubLeadingBBdiscVersusNbHad[iPlot].Draw(can,skims.ntuples,skims.signalNtuples,"../plots/plotObs_photon_baseline_plots",0.,2.,true);
+      SubLeadingBBdiscVersusNbHad[iPlot].Draw(can,skims.ntuples,skims.signalNtuples,"../plots/plotObs_photon_"+outputTag+"baseline_plots",0.,2.,true);
   }
   for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++){
       plots[iPlot].Write();
       TCanvas* can = new TCanvas("can","can",500,500);
       can->SetTopMargin(0.05);
-      plots[iPlot].Draw(can,skims.ntuples,skims.signalNtuples,"../plots/plotObs_photon_baseline_plots",0.,2.,true);
+      plots[iPlot].Draw(can,skims.ntuples,skims.signalNtuples,"../plots/plotObs_photon_"+outputTag+"baseline_plots",0.,2.,true);
   }
 }
