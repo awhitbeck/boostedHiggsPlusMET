@@ -20,7 +20,8 @@ vector<double> computeKappa(double corrTT_A=1.0,
                             ){
 
     //TFile* f = new TFile("ALPHABEThistos_newSBdef.root","READ");
-    TFile* f = new TFile("~/eos/boostedHiggsPlusMET/b72752d9a4c541a60e4e06f51322da26de5fd1f6/ALPHABEThistos.root","READ");
+    //TFile* f = new TFile("~/eos/boostedHiggsPlusMET/ae9d4e104fd7627f36dec4c410c4b591f7ae4036/ALPHABEThistos.root","READ");
+    TFile* f = new TFile("/uscms_data/d2/rgp230/BoostedHPush/NewCommit/NewBugFixes/CMSSW_7_4_2/src/boostedHiggsPlusMET/src/ALPHABEThistosSynch.root","READ");
 
     ////////////////////////////////////////////////////////////
     // - - - - - - - - - data/MC corrections - - - - - - - -  //
@@ -57,6 +58,8 @@ vector<double> computeKappa(double corrTT_A=1.0,
         hA->Add((TH1F*) f->Get(histoName),corrZJets_A);
         histoName="mJ_"+tagString+"SR_"; histoName+=METbins[i]; histoName+="_Other";
         hA->Add((TH1F*) f->Get(histoName),1.0);
+        histoName="mJ_"+tagString+"SR_"; histoName+=METbins[i]; histoName+="_SnglT";
+        hA->Add((TH1F*) f->Get(histoName),1.0);
         A = hA->IntegralAndError(1,40,Aerr);
         histoName="mJ_"+tagString+"SB_"; histoName+=METbins[i]; histoName+="_TT";
         hB = (TH1F*) f->Get(histoName);
@@ -68,6 +71,8 @@ vector<double> computeKappa(double corrTT_A=1.0,
         histoName="mJ_"+tagString+"SB_"; histoName+=METbins[i]; histoName+="_QCD";
         hB->Add((TH1F*) f->Get(histoName),corrQCD_B);
         histoName="mJ_"+tagString+"SB_"; histoName+=METbins[i]; histoName+="_Other";
+        hB->Add((TH1F*) f->Get(histoName),1.0);
+        histoName="mJ_"+tagString+"SB_"; histoName+=METbins[i]; histoName+="_SnglT";
         hB->Add((TH1F*) f->Get(histoName),1.0);
         B = hB->IntegralAndError(1,40,Berr);
         histoName="mJ_antitagSR_"; histoName+=METbins[i]; histoName+="_TT";
@@ -81,6 +86,8 @@ vector<double> computeKappa(double corrTT_A=1.0,
         hC->Add((TH1F*) f->Get(histoName),corrQCD_C);
         histoName="mJ_antitagSR_"; histoName+=METbins[i]; histoName+="_Other";
         hC->Add((TH1F*) f->Get(histoName),1.0);
+        histoName="mJ_antitagSR_"; histoName+=METbins[i]; histoName+="_SnglT";
+        hC->Add((TH1F*) f->Get(histoName),1.0);
         C = hC->IntegralAndError(1,40,Cerr);
         histoName="mJ_antitagSB_"; histoName+=METbins[i]; histoName+="_TT";
         hD = (TH1F*) f->Get(histoName);
@@ -92,6 +99,8 @@ vector<double> computeKappa(double corrTT_A=1.0,
         histoName="mJ_antitagSB_"; histoName+=METbins[i]; histoName+="_QCD";
         hD->Add((TH1F*) f->Get(histoName),corrQCD_D);
         histoName="mJ_antitagSB_"; histoName+=METbins[i]; histoName+="_Other";
+        hD->Add((TH1F*) f->Get(histoName),1.0);
+        histoName="mJ_antitagSB_"; histoName+=METbins[i]; histoName+="_SnglT";
         hD->Add((TH1F*) f->Get(histoName),1.0);
         D = hD->IntegralAndError(1,40,Derr);
         kappa[i] = C*B/D/A ;
