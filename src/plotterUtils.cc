@@ -89,7 +89,7 @@ public:
     };
   
     int fill(ntupleType* ntuple ){
-        if( histoMap.find(ntuple) != histoMap.end() ){
+        if( histoMap[ntuple] ){ // histoMap.find(ntuple) != histoMap.end() ){
             return histoMap[ntuple]->Fill(fillerFunc(ntuple),ntuple->Weight*lumi);
         }else{
             cout << "plot::fill - ERROR: key not found: " << ntuple << endl;
@@ -98,7 +98,7 @@ public:
     };
 
     int fillSignal(ntupleType* ntuple ){
-        if( signalHistoMap.find(ntuple) != signalHistoMap.end() ){
+        if( signalHistoMap[ntuple] ){ // signalHistoMap.find(ntuple) != signalHistoMap.end() ){
             return signalHistoMap[ntuple]->Fill(fillerFunc(ntuple),ntuple->Weight*lumi);
         }else{
             cout << "plot::fillSignal - ERROR: key not found, " << ntuple << endl;
@@ -107,7 +107,7 @@ public:
     };
 
     int fill(ntupleType* ntuple , float customWeight ){
-        if( histoMap.find(ntuple) != histoMap.end() ){
+        if( histoMap[ntuple] ){ // histoMap.find(ntuple) != histoMap.end() ){
             return histoMap[ntuple]->Fill(fillerFunc(ntuple),customWeight);
         }else{
             cout << "plot::fill - ERROR: key not found: " << ntuple << endl;
@@ -116,7 +116,7 @@ public:
     };
 
     int fillSignal(ntupleType* ntuple , float customWeight ){
-        if( signalHistoMap.find(ntuple) != signalHistoMap.end() ){
+        if( signalHistoMap[ntuple] ){ // signalHistoMap.find(ntuple) != signalHistoMap.end() ){
             return signalHistoMap[ntuple]->Fill(fillerFunc(ntuple),customWeight);
         }else{
             cout << "plot::fillSignal - ERROR: key not found, " << ntuple << endl;
