@@ -146,7 +146,11 @@ int main(int argc, char** argv){
         for( int iEvt = 0 ; iEvt < min(MAX_EVENTS,numEvents) ; iEvt++ ){
             ntuple->GetEntry(iEvt);
             if( iEvt % 100000 == 0 ) cout << skims.sampleName[iSample] << ": " << iEvt << "/" << min(MAX_EVENTS,numEvents) << endl;
-            if(! photonBaselineCut(ntuple) ) continue;
+            if( looseCuts ){
+                if( !photonBaselineCut_loose(ntuple) ) continue;
+            }else{
+                if( !photonBaselineCut(ntuple) ) continue;
+            }
             if( skims.sampleName[iSample] == "QCD" && ntuple->Photons_nonPrompt->at(0) == 0 && ntuple->madMinPhotonDeltaR>0.4 && ntuple->madMinDeltaRStatus==1 ) continue;
             if( skims.sampleName[iSample] == "GJets" && ntuple->Photons_nonPrompt->at(0) == 1 ) continue;
 
@@ -224,7 +228,11 @@ int main(int argc, char** argv){
     for( int iEvt = 0 ; iEvt < min(MAX_EVENTS,numEvents) ; iEvt++ ){
         ntuple->GetEntry(iEvt);
         if( iEvt % 100000 == 0 ) cout << "data: " << iEvt << "/" << min(MAX_EVENTS,numEvents) << endl;
-        if( !photonBaselineCut(ntuple) ) continue;
+        if( looseCuts ){
+            if( !photonBaselineCut_loose(ntuple) ) continue;
+        }else{
+            if( !photonBaselineCut(ntuple) ) continue;
+        }
         if( !photonTriggerCut(ntuple) ) continue;
 
         bin = -1;
@@ -261,8 +269,9 @@ int main(int argc, char** argv){
         }// end if-else-if block for tagging regions
     }// end event loop 
 
+    TString outputFileName = (looseCuts?"ALPHABEThistos_looseCuts_photon.root":"ALPHABEThistos_photon.root");
     TFile* outputFile;
-    outputFile = new TFile("ALPHABEThistos_photon.root","RECREATE");
+    outputFile = new TFile(outputFileName,"RECREATE");
     
     for( int iBin = 0 ; iBin < numMETbins; iBin++){
         for( int iPlot = 0 ; iPlot < plots[iBin].size() ; iPlot++){
