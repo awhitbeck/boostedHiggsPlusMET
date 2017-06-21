@@ -19,8 +19,6 @@
 using namespace std;
 using namespace alphabet;
 
-static const int MAX_EVENTS=99999999;
-
 int main(int argc, char** argv){
 
     bool looseCuts(false);
