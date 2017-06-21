@@ -35,7 +35,7 @@ public :
             skimType=BASE_DIR+"tree_signal/";
         }
         if( r == kPhoton ){
-            skimType="root://cmseos.fnal.gov//store/user/fojensen/boostedSkims_14062017/Run2ProductionV12/tree_GJet/";
+            skimType="root://cmseos.fnal.gov//store/user/fojensen/boostedSkims_19062017/Run2ProductionV12/tree_GJet/";
         }
         if( r == kSLm ){
             skimType=BASE_DIR+"tree_SLm/";
@@ -70,7 +70,7 @@ public :
         for( int i = 0 ; i < OtherFileNames.size() ; i++ ){
             Other->Add(skimType+"/"+OtherFileNames[i]);
         }
-        if( r == kSignal || r == kSLm || r == kSLe || r == kLowDphi ){
+        if( r == kSignal || r == kSLm || r == kSLe || r == kLowDphi || r == kPhoton ){
             ntuples.push_back(new RA2bTree(Other));
             sampleName.push_back("Other");
             fillColor.push_back(kRed+1);
