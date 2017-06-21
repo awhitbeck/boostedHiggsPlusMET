@@ -16,6 +16,8 @@
 
 using namespace std;
 
+const int MAX_EVENTS = 99999999;
+
 int main(int argc, char** argv){
 
     bool looseCuts(0);
@@ -33,6 +35,7 @@ int main(int argc, char** argv){
   plot HTplot(*fillHTclean<RA2bTree>,"HT_photon_baseline","H_{T} [GeV]",17,300,2000.);
   plot NJetsplot(*fillNJetsclean<RA2bTree>,"NJets_photon_baseline","n_{j}",14,1.5,15.5);
   plot BTagsplot(*fillBTags<RA2bTree>,"BTags_photon_baseline","n_{b}",6,-0.5,5.5);
+  plot PhotonPtplot(*fillPhotonPt<RA2bTree>,"PhotonPt_photon_baseline","n_{b}",50,100.,1100.);
 
   plot J2NbhadronPlot(*fillLeadingNbHadrons<RA2bTree>,"J1pt_numBhadrons_baseline","n_{b-had}",5,-0.5,4.5);
   plot J1NbhadronPlot(*fillSubLeadingNbHadrons<RA2bTree>,"J2pt_numBhadrons_baseline","n_{b-had}",5,-0.5,4.5);
@@ -74,6 +77,7 @@ int main(int argc, char** argv){
   plots.push_back(HTplot);
   plots.push_back(NJetsplot);
   plots.push_back(BTagsplot);
+  plots.push_back(PhotonPtplot);
   plots.push_back(J1pt_Massplot);
   plots.push_back(J2pt_Massplot);
   plots.push_back(J1pt_MassWideplot);
@@ -108,9 +112,10 @@ int main(int argc, char** argv){
     int numEvents = ntuple->fChain->GetEntries();
     ntupleBranchStatus<RA2bTree>(ntuple);
     int iBin=0;
-    for( int iEvt = 0 ; iEvt < numEvents ; iEvt++ ){
+    double weight=0.;
+    for( int iEvt = 0 ; iEvt < min(MAX_EVENTS,numEvents) ; iEvt++ ){
       ntuple->GetEntry(iEvt);
-      if( iEvt % 1000000 == 0 ) cout << skims.sampleName[iSample] << ": " << iEvt << "/" << numEvents << endl;
+      if( iEvt % 100000 == 0 ) cout << skims.sampleName[iSample] << ": " << iEvt << "/" << numEvents << endl;
 
       if( looseCuts ){
           if( !photonBaselineCut_loose(ntuple) ) continue;
@@ -121,13 +126,18 @@ int main(int argc, char** argv){
       if( skims.sampleName[iSample] == "QCD" && ntuple->Photons_nonPrompt->at(0) == 0 && ntuple->madMinPhotonDeltaR>0.4 && ntuple->madMinDeltaRStatus==1 ) continue;
       if( skims.sampleName[iSample] == "GJets" && ntuple->Photons_nonPrompt->at(0) == 1 ) continue;
 
+      weight = ntuple->Weight*lumi*customPUweights(ntuple);
+      //if( skims.sampleName[iSample] == "GJets" ){
+          //cout << "GJets NLO correction: " << GJetsNLOWeights(ntuple) << endl;
+      //    weight*=GJetsNLOWeights(ntuple);
+      //}
       for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++ ){
-          iBin=plots[iPlot].fill(ntuple,ntuple->Weight*lumi*customPUweights(ntuple));
+          iBin=plots[iPlot].fill(ntuple,weight);
           if( plots[iPlot].label == "J1pt_numBhadrons_baseline" && iBin > 0 && iBin <= 5 ){
-              LeadingBBdiscVersusNbHad[iBin-1].fill(ntuple,ntuple->Weight*lumi*customPUweights(ntuple));
+              LeadingBBdiscVersusNbHad[iBin-1].fill(ntuple,weight);
           }
           if( plots[iPlot].label == "J2pt_numBhadrons_baseline" && iBin > 0 && iBin <= 5 )
-              SubLeadingBBdiscVersusNbHad[iBin-1].fill(ntuple,ntuple->Weight*lumi*customPUweights(ntuple));
+              SubLeadingBBdiscVersusNbHad[iBin-1].fill(ntuple,weight);
       }
     }
   }
@@ -169,7 +179,7 @@ int main(int argc, char** argv){
   int numEvents = ntuple->fChain->GetEntries();
   ntupleBranchStatus<RA2bTree>(ntuple);
   int iBin=0;
-  for( int iEvt = 0 ; iEvt < numEvents ; iEvt++ ){
+  for( int iEvt = 0 ; iEvt < min(MAX_EVENTS,numEvents) ; iEvt++ ){
       ntuple->GetEntry(iEvt);
       if( iEvt % 1000000 == 0 ) cout << "data: " << iEvt << "/" << numEvents << endl;
       
