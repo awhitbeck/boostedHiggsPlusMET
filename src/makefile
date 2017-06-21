@@ -29,29 +29,29 @@ plotWtagDist:plotWtagDist.cc
 all:$(EXECS) 
 
 plotWtagDist:
-	$(CC) -g $(CFLAGS) $(LIBS) $(ROOFITLIBS) $(INCLUDES) plotWtagDist.cc -o ../bin/$@	
+	$(CC) $(CFLAGS) $(LIBS) $(ROOFITLIBS) $(INCLUDES) plotWtagDist.cc -o ../bin/$@	
 fitWpeak:
-	$(CC) -g $(CFLAGS) $(LIBS) $(ROOFITLIBS) $(INCLUDES) fitWpeak.cc -o ../bin/$@	
+	$(CC) $(CFLAGS) $(LIBS) $(ROOFITLIBS) $(INCLUDES) fitWpeak.cc -o ../bin/$@	
 WtaggingEfficiency:
-	$(CC) -g $(CFLAGS) $(LIBS) $(ROOFITLIBS) $(INCLUDES) WtaggingEfficiency.cc -o ../bin/$@
+	$(CC) $(CFLAGS) $(LIBS) $(ROOFITLIBS) $(INCLUDES) WtaggingEfficiency.cc -o ../bin/$@
 photonSkim:
-	$(CC) -g $(CFLAGS) $(LIBS) $(ROOFITLIBS) $(INCLUDES) photonSkim.cc -o ../bin/$@
+	$(CC) $(CFLAGS) $(LIBS) $(ROOFITLIBS) $(INCLUDES) photonSkim.cc -o ../bin/$@
 flavorFit:
-	$(CC) -g $(CFLAGS) $(LIBS) $(ROOFITLIBS) $(INCLUDES) flavorFit.cc -o ../bin/$@
+	$(CC) $(CFLAGS) $(LIBS) $(ROOFITLIBS) $(INCLUDES) flavorFit.cc -o ../bin/$@
 plotObs_fastFullComp:
 	$(CC) $(CFLAGS) $(LIBS) $(INCLUDES) plotObs_fastFullComp.cc -o ../bin/$@
 ALPHABET:
-	$(CC) -g $(CFLAGS) $(LIBS) $(INCLUDES) ALPHABET.cc -o ../bin/$@
+	$(CC) $(CFLAGS) $(LIBS) $(INCLUDES) ALPHABET.cc -o ../bin/$@
 ALPHABET_photon:
-	$(CC) -g $(CFLAGS) $(LIBS) $(INCLUDES) ALPHABET_photon.cc -o ../bin/$@
+	$(CC) $(CFLAGS) $(LIBS) $(INCLUDES) ALPHABET_photon.cc -o ../bin/$@
 cutFlow:
 	$(CC) $(CFLAGS) $(LIBS) $(INCLUDES) cutFlow.cc -o ../bin/$@
 frankSynch:
 	$(CC) $(CFLAGS) $(LIBS) $(INCLUDES) frankSynch.cc -o ../bin/$@
 NminusOne:
-	$(CC) -g $(CFLAGS) $(LIBS) $(INCLUDES) NminusOne.cc -o ../bin/$@
+	$(CC) $(CFLAGS) $(LIBS) $(INCLUDES) NminusOne.cc -o ../bin/$@
 plotObs_photon_baseline:
-	$(CC) -g $(CFLAGS) $(LIBS) $(INCLUDES) plotObs_photon_baseline.cc -o ../bin/$@
+	$(CC) $(CFLAGS) $(LIBS) $(INCLUDES) plotObs_photon_baseline.cc -o ../bin/$@
 plotObs_lowDPhi_baseline:
 	$(CC) $(CFLAGS) $(LIBS) $(INCLUDES) plotObs_lowDPhi_baseline.cc -o ../bin/$@
 plotObs_singleHiggsTag:
@@ -65,7 +65,7 @@ plotObs_baseline:
 plotObs_singleEleCR_baseline:
 	$(CC) $(CFLAGS) $(LIBS) $(INCLUDES) plotObs_singleEleCR_baseline.cc -o ../bin/$@	
 plotObs_singleMuCR_baseline:
-	$(CC) -g $(CFLAGS) $(LIBS) $(INCLUDES) plotObs_singleMuCR_baseline.cc -o ../bin/$@	
+	$(CC) $(CFLAGS) $(LIBS) $(INCLUDES) plotObs_singleMuCR_baseline.cc -o ../bin/$@	
 plotHiggsPt_TChiHH:
 	$(CC) $(CFLAGS) $(LIBS) $(ROOFITLIBS) $(INCLUDES) plotHiggsPt_TChiHH.cc -o ../bin/$@
 datacardInputs:
