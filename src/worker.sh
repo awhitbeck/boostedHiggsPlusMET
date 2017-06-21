@@ -1,7 +1,10 @@
 #!/bin/sh
 output_dir=$1
 executable=$2
-args=$3
+args1=$3
+args2=$4
+args3=$5
+args4=$6
 echo "output_dir ${output_dir}"
 echo "executable ${executable}"
 echo "args ${args}"
@@ -18,7 +21,10 @@ echo "PATH ${PATH}"
 cd src
 make all
 
-`echo $executable $args`
+`echo $executable $args1 $args2 $args3 $args4`
+
+ls *root
+ls ../plots/*/*
 
 for file in $(ls *root)
 do
