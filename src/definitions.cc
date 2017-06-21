@@ -5,6 +5,11 @@
 double bbtagCut = 0.3;
 TFile* puWeightFile = new TFile("../data/PileupHistograms_0121_69p2mb_pm4p6.root");
 TH1F* puWeightHist = (TH1F*) puWeightFile->Get("pu_weights_down");
+// - - - - - - weights for WJets, GJets, - - - - - - - - 
+// - - - - - - and ZJets NLO Pt distribution - - - - - - 
+TFile* NLOWeightFile = new TFile("../data/kfactors.root");
+TH1F* GJets_NLO = (TH1F*) NLOWeightFile->Get("GJets_1j_NLO/nominal_G");
+TH1F* GJets_LO = (TH1F*) NLOWeightFile->Get("GJets_LO/inv_pt_G");
 // ==============================================
 
 double CalcdPhi( double phi1 , double phi2 ){
@@ -137,6 +142,17 @@ template<typename ntupleType> bool genLevelZZcut(ntupleType* ntuple){
 /***************************************************************/
 /* - - - - - - - - - - - - custom weights - - - - - - - - - -  */
 /***************************************************************/
+template<typename ntupleType> double GJetsNLOWeights(ntupleType* ntuple){
+    if( ntuple->Photons->size() == 0 ) return 0.;
+    double photon_pt = ntuple->Photons->at(0).Pt();
+    if( photon_pt>150. ){
+        double LO = GJets_LO->GetBinContent( GJets_LO->FindBin(photon_pt) );
+        double NLO = GJets_NLO->GetBinContent( GJets_NLO->FindBin(photon_pt) );
+        return (LO==0?0.:NLO/LO);
+    }else
+        return GJets_NLO->GetBinContent(1)/GJets_LO->GetBinContent(1);
+}
+
 template<typename ntupleType> double singleMuonTrigWeights(ntupleType* ntuple){
     if( ntuple->Muons->size() == 0 ) return 0.;
     else if( ntuple->HT > 300. ){
@@ -1403,6 +1419,13 @@ template<typename ntupleType> bool doubletagSBCut(ntupleType* ntuple){
 ////////////////////////////////////////////////////////////////////////
 // - - - - - - - - - - photon specializations - - - - - - - - - - - - //
 ////////////////////////////////////////////////////////////////////////
+template<typename ntupleType> double fillPhotonPt(ntupleType* ntuple ){ 
+    if( ntuple->Photons->size() == 0 )
+        return -999.;
+    else
+        return ntuple->Photons->at(0).Pt();
+}
+
 template<typename ntupleType> bool singleHiggsTagLooseCut_photon(ntupleType* ntuple ){ 
   return ( ( ntuple->JetsAK8Clean_doubleBDiscriminator->at(0) > bbtagCut ) 
            && ( ntuple->JetsAK8Clean_doubleBDiscriminator->at(1) < bbtagCut ) ) || 
