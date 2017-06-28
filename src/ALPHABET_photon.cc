@@ -161,6 +161,11 @@ int main(int argc, char** argv){
                 bin = int((ntuple->METclean-lowestMET)/binWidth);
 
             weight = ntuple->Weight*lumi*customPUweights(ntuple);
+            if( skims.sampleName[iSample] == "GJets" ){
+                //cout << "GJets NLO correction: " << GJetsNLOWeights(ntuple) << endl;
+                weight*=GJetsNLOWeights(ntuple);
+            }
+
             if( doubletagSRCut_photon(ntuple) ){
                 plots[bin][4].fill(ntuple,weight);
                 for( int i = 0 ; i < doubletagSRPlots.size() ; i++ )

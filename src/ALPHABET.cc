@@ -214,7 +214,18 @@ int main(int argc, char** argv){
         for( int iEvt = 0 ; iEvt < min(MAX_EVENTS,numEvents) ; iEvt++ ){
             ntuple->GetEntry(iEvt);
             if( iEvt % 100000 == 0 ) cout << skims.sampleName[iSample] << ": " << iEvt << "/" << min(MAX_EVENTS,numEvents) << endl;
-            
+
+            passBaseline=true;
+            for( auto baselineCut : baselineCuts ){
+                passBaseline&=baselineCut(ntuple);
+            }
+            if( ! passBaseline ) continue;
+
+            filename = ntuple->fChain->GetFile()->GetName();
+            if( ( filename.Contains("SingleLept") || filename.Contains("DiLept") ) && ntuple->madHT>600. )continue;
+            bin = -1;
+
+            // ----------- compute weights --------------
             if(region==0){
                 std::vector<double> EfficiencyCenterUpDown = Eff_MetMhtSextetReal_CenterUpDown(ntuple->HT, ntuple->MHT, ntuple->NJets);
                 trigWeight=EfficiencyCenterUpDown[0];
@@ -226,19 +237,18 @@ int main(int argc, char** argv){
                 trigWeight=lowDphiTrigWeights(ntuple);
             }
 
-            passBaseline=true;
-            for( auto baselineCut : baselineCuts ){
-                passBaseline&=baselineCut(ntuple);
-            }
-            if( ! passBaseline ) continue;
-
-            filename = ntuple->fChain->GetFile()->GetName();
-            if( ( filename.Contains("SingleLept") || filename.Contains("DiLept") ) && ntuple->madHT>600. )continue;
-            bin = -1;
             weight = ntuple->Weight*lumi*trigWeight*customPUweights(ntuple);	   
-            //if( skims.sampleName[iSample] == "TT" ){
-            //    weight *= ISRweights(ntuple);
-            //}
+            //cout << "xsec weight: " << ntuple->Weight*lumi << endl;
+            if( skims.sampleName[iSample] == "TT" ){
+                weight *= ISRweights(ntuple);
+            //    //cout << "ISR: " << ISRweights(ntuple) << endl;
+            }
+            if( skims.sampleName[iSample] == "WJets" ){
+                weight *= WJetsNLOWeights(ntuple);
+                //cout << "WJets NLO weight: " << WJetsNLOWeights(ntuple) << endl;
+            }
+            // -------------- end weights -----------------
+
             for( int iBin = 0 ; iBin < numMETbins ; iBin++ ){
                 if( ntuple->MET > lowestMET ){
                     if( ntuple->MET > numMETbins*(binWidth-1)+lowestMET )
