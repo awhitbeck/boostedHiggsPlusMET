@@ -10,6 +10,10 @@ TH1F* puWeightHist = (TH1F*) puWeightFile->Get("pu_weights_down");
 TFile* NLOWeightFile = new TFile("../data/kfactors.root");
 TH1F* GJets_NLO = (TH1F*) NLOWeightFile->Get("GJets_1j_NLO/nominal_G");
 TH1F* GJets_LO = (TH1F*) NLOWeightFile->Get("GJets_LO/inv_pt_G");
+TH1F* WJets_NLO = (TH1F*) NLOWeightFile->Get("WJets_012j_NLO/nominal");
+TH1F* WJets_LO = (TH1F*) NLOWeightFile->Get("WJets_LO/inv_pt");
+TH1F* ZJets_NLO = (TH1F*) NLOWeightFile->Get("ZJets_01j_NLO/nominal");
+TH1F* ZJets_LO = (TH1F*) NLOWeightFile->Get("ZJets_LO/inv_pt");
 // ==============================================
 
 double CalcdPhi( double phi1 , double phi2 ){
@@ -144,13 +148,52 @@ template<typename ntupleType> bool genLevelZZcut(ntupleType* ntuple){
 /***************************************************************/
 template<typename ntupleType> double GJetsNLOWeights(ntupleType* ntuple){
     if( ntuple->Photons->size() == 0 ) return 0.;
-    double photon_pt = ntuple->Photons->at(0).Pt();
+    double photon_pt = -999.;//ntuple->Photons->at(0).Pt();
+    int photonIndex=-1;
+    for( unsigned int p = 0 ; p < ntuple->GenParticles->size() ; p++ ){
+        if( abs(ntuple->GenParticles_PdgId->at(p)) == 22 ){
+            if( photonIndex < 0 )
+                photonIndex = p;
+            else if( ntuple->GenParticles->at(p).Pt() > ntuple->GenParticles->at(photonIndex).Pt() )
+                photonIndex = p;
+        }
+    }               
+    photon_pt = ntuple->GenParticles->at(photonIndex).Pt();
+    
     if( photon_pt>150. ){
         double LO = GJets_LO->GetBinContent( GJets_LO->FindBin(photon_pt) );
         double NLO = GJets_NLO->GetBinContent( GJets_NLO->FindBin(photon_pt) );
         return (LO==0?0.:NLO/LO);
     }else
         return GJets_NLO->GetBinContent(1)/GJets_LO->GetBinContent(1);
+}
+
+template<typename ntupleType> double WJetsNLOWeights(ntupleType* ntuple){
+    double Wpt=-999.;
+    for( unsigned int p = 0 ; p < ntuple->GenParticles->size() ; p++ ){
+        if( abs(ntuple->GenParticles_PdgId->at(p)) == 24 )
+            Wpt = ntuple->GenParticles->at(p).Pt();
+    }
+    if( Wpt>150. ){
+        double LO = WJets_LO->GetBinContent( WJets_LO->FindBin(Wpt) );
+        double NLO = WJets_NLO->GetBinContent( WJets_NLO->FindBin(Wpt) );
+        return (LO==0?0.:NLO/LO/1.21);
+    }else
+        return WJets_NLO->GetBinContent(1)/WJets_LO->GetBinContent(1)/1.21;
+}
+
+template<typename ntupleType> double ZJetsNLOWeights(ntupleType* ntuple){
+    double Zpt=-999.;
+    for( unsigned int p = 0 ; p < ntuple->GenParticles->size() ; p++ ){
+        if( abs(ntuple->GenParticles_PdgId->at(p)) == 23 )
+            Zpt = ntuple->GenParticles->at(p).Pt();
+    }
+    if( Zpt>150. ){
+        double LO = ZJets_LO->GetBinContent( ZJets_LO->FindBin(Zpt) );
+        double NLO = ZJets_NLO->GetBinContent( ZJets_NLO->FindBin(Zpt) );
+        return (LO==0?0.:NLO/LO/1.23);
+    }else
+        return ZJets_NLO->GetBinContent(1)/ZJets_LO->GetBinContent(1)/1.23;
 }
 
 template<typename ntupleType> double singleMuonTrigWeights(ntupleType* ntuple){
@@ -1567,5 +1610,5 @@ template<typename ntupleType> bool lowDphiTriggerCut(ntupleType* ntuple){
 }
 
 template<typename ntupleType> bool photonTriggerCut(ntupleType* ntuple){
-    return ntuple->TriggerPass->at(53) == 1 || ntuple->TriggerPass->at(54) == 1;
+    return ntuple->TriggerPass->at(53) == 1 || ntuple->TriggerPass->at(54) == 1 ; // || ntuple->TriggerPass->at(51) || ntuple->TriggerPass->at(52);
 }

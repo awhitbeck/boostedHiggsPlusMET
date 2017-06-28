@@ -13,7 +13,7 @@ class skimSamples{
 
 public : 
 
-    TChain *WJets,*ZJets,*QCD,*SnglT,*TT,*TTExtra,*GJets,*GJets0p4,*Other,*DY,*TTinc;
+    TChain *WJets,*ZJets,*QCD,*SnglT,*TT,*GJets,*GJets0p4,*Other,*DY,*TTinc;
     TChain *T5HH750, *T5HH1000, *T5HH1100,*T5HH1200,*T5HH1300,*T5HH1400,*T5HH1500,*T5HH1600,*T5HH1700,*T5HH1800,*T5HH1900,*T5HH2000,*T5HH2100;
     TChain *data;
     std::vector<RA2bTree*> ntuples,signalNtuples;
@@ -136,7 +136,7 @@ public :
         TTincFileNames.push_back("tree_TTJets.root");
         TTinc = new TChain("tree");
         for( int i = 0 ; i < TTincFileNames.size() ; i++ ){
-            //TTinc->Add(skimTypeLDP+"/"+TTincFileNames[i]);
+            TTinc->Add(skimType+"/"+TTincFileNames[i]);
         }
         /*
         if( r == kSignal || r == kSLm || r == kSLe || r == kLowDphi ){
@@ -146,6 +146,7 @@ public :
             lineColor.push_back(kCyan);
         }
         */
+
         std::vector<TString> TTFileNames;
         TTFileNames.push_back("tree_TTJets_HT-600to800.root");
         TTFileNames.push_back("tree_TTJets_HT-800to1200.root");
@@ -217,7 +218,6 @@ public :
         QCDFileNames.push_back("tree_QCD_HT-300to500.root");
         QCDFileNames.push_back("tree_QCD_HT-500to700.root");
         QCDFileNames.push_back("tree_QCD_HT-700to1000.root");
-        QCDFileNames.push_back("tree_QCD_HT-1000to1500.root");
         QCDFileNames.push_back("tree_QCD_HT-1000to1500.root");
         QCDFileNames.push_back("tree_QCD_HT-1500to2000.root");
         QCDFileNames.push_back("tree_QCD_HT-2000toInf.root");
