@@ -177,9 +177,9 @@ template<typename ntupleType> double WJetsNLOWeights(ntupleType* ntuple){
     if( Wpt>150. ){
         double LO = WJets_LO->GetBinContent( WJets_LO->FindBin(Wpt) );
         double NLO = WJets_NLO->GetBinContent( WJets_NLO->FindBin(Wpt) );
-        return (LO==0?0.:NLO/LO);
+        return (LO==0?0.:NLO/LO/1.21);
     }else
-        return WJets_NLO->GetBinContent(1)/WJets_LO->GetBinContent(1);
+        return WJets_NLO->GetBinContent(1)/WJets_LO->GetBinContent(1)/1.21;
 }
 
 template<typename ntupleType> double ZJetsNLOWeights(ntupleType* ntuple){
@@ -191,9 +191,9 @@ template<typename ntupleType> double ZJetsNLOWeights(ntupleType* ntuple){
     if( Zpt>150. ){
         double LO = ZJets_LO->GetBinContent( ZJets_LO->FindBin(Zpt) );
         double NLO = ZJets_NLO->GetBinContent( ZJets_NLO->FindBin(Zpt) );
-        return (LO==0?0.:NLO/LO);
+        return (LO==0?0.:NLO/LO/1.23);
     }else
-        return ZJets_NLO->GetBinContent(1)/ZJets_LO->GetBinContent(1);
+        return ZJets_NLO->GetBinContent(1)/ZJets_LO->GetBinContent(1)/1.23;
 }
 
 template<typename ntupleType> double singleMuonTrigWeights(ntupleType* ntuple){
