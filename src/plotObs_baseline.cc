@@ -13,6 +13,7 @@
 #include "skimSamples.cc"
 #include "definitions.cc"
 #include "RA2bTree.cc"
+#include "TriggerEfficiencySextet.cc"
 
 using namespace std;
 
@@ -119,16 +120,29 @@ int main(int argc, char** argv){
         int numEvents = ntuple->fChain->GetEntries();
         ntupleBranchStatus<RA2bTree>(ntuple);
         TString filename;
+        double weight = 0.;
         for( int iEvt = 0 ; iEvt < min(MAX_EVENTS,numEvents) ; iEvt++ ){
             ntuple->GetEntry(iEvt);
             if( iEvt % 1000000 == 0 ) cout << skims.sampleName[iSample] << ": " << iEvt << "/" << numEvents << endl;
 
             filename = ntuple->fChain->GetFile()->GetName();
             if( ( filename.Contains("SingleLept") || filename.Contains("DiLept") ) && ntuple->madHT>600. )continue;
-
             if(! baselineCut(ntuple) ) continue;
+
+            // ---------- custom weights -----------
+            std::vector<double> EfficiencyCenterUpDown = Eff_MetMhtSextetReal_CenterUpDown(ntuple->HT, ntuple->MHT, ntuple->NJets);
+            weight = ntuple->Weight*lumi*customPUweights(ntuple)*EfficiencyCenterUpDown[0];
+            if( skims.sampleName[iSample] == "TT" )
+                weight *= ISRweights(ntuple);
+            if( skims.sampleName[iSample] == "WJets" ){
+                weight *= WJetsNLOWeights(ntuple);
+            }
+            if( skims.sampleName[iSample] == "ZJets" ){
+                weight *= ZJetsNLOWeights(ntuple);
+            }
+            // ------------ end weights -------------
             for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++ ){
-                plots[iPlot].fill(ntuple);
+                plots[iPlot].fill(ntuple,weight);
             }
         }
     }
