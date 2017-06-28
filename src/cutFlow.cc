@@ -124,7 +124,6 @@ int main(int argc, char** argv){
     // background MC samples
   
     for( int iSample = 0 ; iSample < skims.ntuples.size() ; iSample++){
-
         RA2bTree* ntuple = skims.ntuples[iSample];
         for( int iCut = 0 ; iCut < plots.size() ; iCut++){
             for( int iPlot = 0 ; iPlot < plots[iCut].size() ; iPlot++){
@@ -148,10 +147,14 @@ int main(int argc, char** argv){
             // ----------- compute weights --------------
             weight = ntuple->Weight*lumi*customPUweights(ntuple);
             //cout << "xsec weight: " << ntuple->Weight*lumi << endl;
-            //if( skims.sampleName[iSample] == "TT" ){
-            //    weight *= ISRweights(ntuple);
+            if( skims.sampleName[iSample] == "TT" ){
+                weight *= ISRweights(ntuple);
             //    //cout << "ISR: " << ISRweights(ntuple) << endl;
-            // }
+            }
+            if( skims.sampleName[iSample] == "WJets" ){
+                weight *= WJetsNLOWeights(ntuple);
+                //cout << "WJets NLO weight: " << WJetsNLOWeights(ntuple) << endl;
+            }
             if(region==0){
                 std::vector<double> EfficiencyCenterUpDown = Eff_MetMhtSextetReal_CenterUpDown(ntuple->HT, ntuple->MHT, ntuple->NJets);
                 weight*=EfficiencyCenterUpDown[0];
@@ -250,22 +253,24 @@ int main(int argc, char** argv){
         cout << " & " << skims.sampleName[iSample] ; 
     }
     for( int iSample = 0 ; iSample < ( region == 0 ? skims.signalNtuples.size() : 0 ) ; iSample++){
+        if( skims.signalSampleName[iSample] != "T5HH1300" && skims.signalSampleName[iSample] != "T5HH1700" ) continue;
         cout << " & " << skims.signalSampleName[iSample] ;
     }
     cout << endl;
     cout << "% ------------------------------------------------------------------" << endl;
     for( int iCut = 0 ; iCut < cutFlow.size() ; iCut++ ){
         plots[iCut][0].buildSum();
-        cout << cutName[iCut] << " & " << plots[iCut][0].sum->Integral();
+        cout << cutName[iCut] << " & " << plots[iCut][0].sum->Integral(0,9999);
         for( int iSample = 0 ; iSample < skims.ntuples.size() ; iSample++){ 
             RA2bTree* ntuple = skims.ntuples[iSample];
-            cout << " & " << plots[iCut][0].histoMap[ntuple]->Integral();
+            cout << " & " << plots[iCut][0].histoMap[ntuple]->Integral(0,9999);
         }
         for( int iSample = 0 ; iSample < ( region == 0 ? skims.signalNtuples.size() : 0 ) ; iSample++){
+            if( skims.signalSampleName[iSample] != "T5HH1300" && skims.signalSampleName[iSample] != "T5HH1700" ) continue;
             RA2bTree* ntuple = skims.signalNtuples[iSample];
-            cout << " & " << plots[iCut][0].signalHistoMap[ntuple]->Integral();
+            cout << " & " << plots[iCut][0].signalHistoMap[ntuple]->Integral(0,9999);
         }
-        cout << " & " << plots[iCut][0].dataHist->Integral();
+        cout << " & " << plots[iCut][0].dataHist->Integral(0,9999);
         cout << " \\\\ \\hline" << endl;
     }
 }
