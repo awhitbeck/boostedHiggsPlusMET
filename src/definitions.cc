@@ -148,7 +148,18 @@ template<typename ntupleType> bool genLevelZZcut(ntupleType* ntuple){
 /***************************************************************/
 template<typename ntupleType> double GJetsNLOWeights(ntupleType* ntuple){
     if( ntuple->Photons->size() == 0 ) return 0.;
-    double photon_pt = ntuple->Photons->at(0).Pt();
+    double photon_pt = -999.;//ntuple->Photons->at(0).Pt();
+    int photonIndex=-1;
+    for( unsigned int p = 0 ; p < ntuple->GenParticles->size() ; p++ ){
+        if( abs(ntuple->GenParticles_PdgId->at(p)) == 22 ){
+            if( photonIndex < 0 )
+                photonIndex = p;
+            else if( ntuple->GenParticles->at(p).Pt() > ntuple->GenParticles->at(photonIndex).Pt() )
+                photonIndex = p;
+        }
+    }               
+    photon_pt = ntuple->GenParticles->at(photonIndex).Pt();
+    
     if( photon_pt>150. ){
         double LO = GJets_LO->GetBinContent( GJets_LO->FindBin(photon_pt) );
         double NLO = GJets_NLO->GetBinContent( GJets_NLO->FindBin(photon_pt) );
