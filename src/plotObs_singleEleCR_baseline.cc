@@ -121,8 +121,12 @@ filename = ntuple->fChain->GetFile()->GetName();
 
       if(! singleEleBaselineCut(ntuple) ) continue;
       weight = ntuple->Weight*lumi*customPUweights(ntuple)*singleElectronTrigWeights(ntuple);
-      //if( skims.sampleName[iSample] == "TT" )
-      //    weight *= ISRweights(ntuple);
+      if( skims.sampleName[iSample] == "TT" )
+          weight *= ISRweights(ntuple);
+      if( skims.sampleName[iSample] == "WJets" ){
+          weight *= WJetsNLOWeights(ntuple);
+          //cout << "WJets NLO weight: " << WJetsNLOWeights(ntuple) << endl;
+      }
       for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++ ){
           plots[iPlot].fill(ntuple,weight);
       }

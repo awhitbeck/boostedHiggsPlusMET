@@ -127,10 +127,10 @@ int main(int argc, char** argv){
       if( skims.sampleName[iSample] == "GJets" && ntuple->Photons_nonPrompt->at(0) == 1 ) continue;
 
       weight = ntuple->Weight*lumi*customPUweights(ntuple);
-      //if( skims.sampleName[iSample] == "GJets" ){
+      if( skims.sampleName[iSample] == "GJets" ){
           //cout << "GJets NLO correction: " << GJetsNLOWeights(ntuple) << endl;
-      //    weight*=GJetsNLOWeights(ntuple);
-      //}
+          weight*=GJetsNLOWeights(ntuple);
+      }
       for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++ ){
           iBin=plots[iPlot].fill(ntuple,weight);
           if( plots[iPlot].label == "J1pt_numBhadrons_baseline" && iBin > 0 && iBin <= 5 ){
