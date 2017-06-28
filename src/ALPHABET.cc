@@ -247,6 +247,10 @@ int main(int argc, char** argv){
                 weight *= WJetsNLOWeights(ntuple);
                 //cout << "WJets NLO weight: " << WJetsNLOWeights(ntuple) << endl;
             }
+            if( skims.sampleName[iSample] == "ZJets" ){
+                weight *= ZJetsNLOWeights(ntuple);
+                //cout << "WJets NLO weight: " << WJetsNLOWeights(ntuple) << endl;
+            }
             // -------------- end weights -----------------
 
             for( int iBin = 0 ; iBin < numMETbins ; iBin++ ){
