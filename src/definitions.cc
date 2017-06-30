@@ -1291,7 +1291,7 @@ template<typename ntupleType> bool lowDphiBaselineCut(ntupleType* ntuple){
 
 template<typename ntupleType> bool photonBaselineCut(ntupleType* ntuple){
     return ( ntuple->Photons->size()==1 &&
-             ntuple->Photons->at(0).Pt() > 100. && 
+             ntuple->Photons->at(0).Pt() > 150. && 
              ntuple->Photons_fullID->size() == 1 && 
              ntuple->Photons_fullID->at(0) == 1 &&
              ntuple->METclean > 100.             &&
@@ -1318,12 +1318,12 @@ template<typename ntupleType> bool photonBaselineCut(ntupleType* ntuple){
 
 template<typename ntupleType> bool photonBaselineCut_loose(ntupleType* ntuple){
     return ( ntuple->Photons->size()==1 &&
-             ntuple->Photons->at(0).Pt() > 100. && 
+             ntuple->Photons->at(0).Pt() > 150. && 
              ntuple->Photons_fullID->size() == 1 && 
              ntuple->Photons_fullID->at(0) == 1 &&
              ntuple->METclean > 100.             &&
              ntuple->HTclean > 400.                         &&
-             ntuple->JetsAK8Clean->size()>=2 && 
+             //ntuple->JetsAK8Clean->size()>=2 && 
              ntuple->DeltaPhi1clean>0.5 && 
              ntuple->DeltaPhi2clean>0.5 &&
              ntuple->DeltaPhi3clean>0.3 && 
