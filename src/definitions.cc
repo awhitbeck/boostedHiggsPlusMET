@@ -1,5 +1,5 @@
 #include "TLorentzVector.h"
-
+#include "TRandom3.h"
 // constants
 // ==============================================
 double bbtagCut = 0.3;
@@ -1611,4 +1611,86 @@ template<typename ntupleType> bool lowDphiTriggerCut(ntupleType* ntuple){
 
 template<typename ntupleType> bool photonTriggerCut(ntupleType* ntuple){
     return ntuple->TriggerPass->at(53) == 1 || ntuple->TriggerPass->at(54) == 1 ; // || ntuple->TriggerPass->at(51) || ntuple->TriggerPass->at(52);
+}
+
+template<typename ntupleType> int getClosestGenHiggses(ntupleType* ntuple, double jeteta, double jetphi){
+    float dRMin=999999.;
+    for( int i=0 ; i < ntuple->GenParticles->size() ; i++ ){
+        if( ntuple->GenParticles_PdgId->at(i) == 25 &&
+            ntuple->GenParticles_ParentId->at(i) == 1000023 &&
+            ntuple->GenParticles_Status->at(i) == 22 ){
+                float dR=sqrt((jeteta-ntuple->GenParticles->at(i).Eta())*(jeteta-ntuple->GenParticles->at(i).Eta()) +(jetphi-ntuple->GenParticles->at(i).Phi())*(jetphi-ntuple->GenParticles->at(i).Phi()));
+                if(dRMin>dR)dRMin=dR;
+                }
+    }
+    return dRMin;
+}
+template<typename ntupleType> int getClosestGenZ(ntupleType* ntuple, double jeteta, double jetphi){
+    float dRMin=999999.;
+    for( int i=0 ; i < ntuple->GenParticles->size() ; i++ ){
+        if( ntuple->GenParticles_PdgId->at(i) == 23 &&
+            ntuple->GenParticles_ParentId->at(i) == 1000023 &&
+            ntuple->GenParticles_Status->at(i) == 22 ){
+                float dR=sqrt((jeteta-ntuple->GenParticles->at(i).Eta())*(jeteta-ntuple->GenParticles->at(i).Eta()) +(jetphi-ntuple->GenParticles->at(i).Phi())*(jetphi-ntuple->GenParticles->at(i).Phi()));
+                if(dRMin>dR)dRMin=dR;
+                }
+    }
+    return dRMin;
+}
+template<typename ntupleType>double ResolutionSmear(ntupleType* ntuple, int j,unsigned int seed, bool SFUp=false){
+TRandom3 rand(seed);
+double sigmaJMR=0;
+if(ntuple->JetsAK8_NumBhadrons->at(j)!=2)return ntuple->JetsAK8_prunedMass->at(j);
+if(ntuple->JetsAK8->at(j).Pt()>300. && ntuple->JetsAK8->at(j).Pt()<=600.)sigmaJMR=12.55;
+if(ntuple->JetsAK8->at(j).Pt()>600. && ntuple->JetsAK8->at(j).Pt()<=800.)sigmaJMR=10.24;
+if(ntuple->JetsAK8->at(j).Pt()>800. && ntuple->JetsAK8->at(j).Pt()<=1000.)sigmaJMR= 9.84;
+if(ntuple->JetsAK8->at(j).Pt()>1000.)sigmaJMR=9.43;
+sigmaJMR=sigmaJMR/110.;
+double sigmaJMRSF=1.23;
+if(SFUp)sigmaJMRSF=sigmaJMRSF+0.18;
+double dRHiggs=getClosestGenHiggses(ntuple, ntuple->JetsAK8->at(j).Eta(), ntuple->JetsAK8->at(j).Phi());
+double dRZ=getClosestGenZ(ntuple, ntuple->JetsAK8->at(j).Eta(), ntuple->JetsAK8->at(j).Phi());
+if(dRHiggs>dRZ){
+if(ntuple->JetsAK8->at(j).Pt()>300. && ntuple->JetsAK8->at(j).Pt()<=600.)sigmaJMR=8.72;
+if(ntuple->JetsAK8->at(j).Pt()>600. && ntuple->JetsAK8->at(j).Pt()<=800.)sigmaJMR=7.70;
+if(ntuple->JetsAK8->at(j).Pt()>800. && ntuple->JetsAK8->at(j).Pt()<=1000.)sigmaJMR=7.28;
+if(ntuple->JetsAK8->at(j).Pt()>1000.)sigmaJMR=7.41;
+sigmaJMR=sigmaJMR/83.;
+}
+double gausSmear=rand.Gaus(0, sigmaJMR)*sqrt((sigmaJMRSF*sigmaJMRSF -1));
+double smearmass=(gausSmear+1.)*ntuple->JetsAK8_prunedMass->at(j);
+return smearmass;
+}
+template<typename ntupleType>double SignalISRCorrection(ntupleType* ntuple){
+float ISRWeights[7]={1.0, 0.920, 0.821, 0.715, 0.662, 0.561,0.511};
+if(ntuple->NJetsISR==0) return ISRWeights[0];
+if(ntuple->NJetsISR==1) return ISRWeights[1];
+if(ntuple->NJetsISR==2) return ISRWeights[2];
+if(ntuple->NJetsISR==3) return ISRWeights[3];
+if(ntuple->NJetsISR==4) return ISRWeights[4];
+if(ntuple->NJetsISR==5) return ISRWeights[5];
+if(ntuple->NJetsISR>=6) return ISRWeights[6];
+}
+template<typename ntupleType> double doubleBSF(ntupleType* ntuple,int j){
+double doubleBSF=1.0;
+if(ntuple->JetsAK8->at(j).Pt()>300. && ntuple->JetsAK8->at(j).Pt()<=350)doubleBSF=0.96;
+if(ntuple->JetsAK8->at(j).Pt()>350. && ntuple->JetsAK8->at(j).Pt()<=430)doubleBSF=1.00;
+if(ntuple->JetsAK8->at(j).Pt()>430.)doubleBSF=1.01;
+return doubleBSF;
+}
+template<typename ntupleType> double doubleBSFUp(ntupleType* ntuple,int j){
+double doubleBSF=1.0;
+if(ntuple->JetsAK8->at(j).Pt()>300. && ntuple->JetsAK8->at(j).Pt()<=350)doubleBSF=0.96+0.03;
+if(ntuple->JetsAK8->at(j).Pt()>350. && ntuple->JetsAK8->at(j).Pt()<=430)doubleBSF=1.00+0.024;
+if(ntuple->JetsAK8->at(j).Pt()>430. && ntuple->JetsAK8->at(j).Pt()<840)doubleBSF=1.01+0.02;
+if(ntuple->JetsAK8->at(j).Pt()>840)doubleBSF=1.01+0.04;
+return doubleBSF;
+}
+template<typename ntupleType> double doubleBSFDn(ntupleType* ntuple,int j){
+double doubleBSF=1.0;
+if(ntuple->JetsAK8->at(j).Pt()>300. && ntuple->JetsAK8->at(j).Pt()<=350)doubleBSF=0.96-0.02;
+if(ntuple->JetsAK8->at(j).Pt()>350. && ntuple->JetsAK8->at(j).Pt()<=430)doubleBSF=1.00-0.043;
+if(ntuple->JetsAK8->at(j).Pt()>430. && ntuple->JetsAK8->at(j).Pt()<840)doubleBSF=1.01-0.04;
+if(ntuple->JetsAK8->at(j).Pt()>840)doubleBSF=1.01-0.08;
+return doubleBSF;
 }
