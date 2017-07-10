@@ -251,7 +251,11 @@ public :
             for( int i = 0 ; i < HTMHTFileNames.size() ; i++ ){
                 data->Add(skimType+"/"+HTMHTFileNames[i]);
             }    
-            dataNtuple = new RA2bTree(data); 
+            dataNtuple = new RA2bTree(data);
+	    ntuples.push_back(dataNtuple);
+	    sampleName.push_back("data"); 
+	    fillColor.push_back(kWhite);
+	    lineColor.push_back(1);
         }
 
         std::vector<TString> SingleElectronNames;
