@@ -17,7 +17,7 @@ for m in ModelPoints:
 		BBTagSF=NominalSF.Clone("BBTagSF_%s_%d" %(r,m))
 		MCStatErr=NominalSF.Clone("MCStatErr_%s_%d" %(r,m))
 		MassResErr=NominalSF.Clone("MassResErr_%s_%d" %(r,m))
-		for i in range(1):
+		for i in range(3):
 			if NominalSF.GetBinContent(i+1)<0.000001:Unc=1.0
 			else: Unc=SFUp.GetBinContent(i+1)/NominalSF.GetBinContent(i+1)
 			#print r,m,Unc
