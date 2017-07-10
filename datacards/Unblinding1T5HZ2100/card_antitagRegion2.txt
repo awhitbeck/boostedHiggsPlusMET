@@ -1,0 +1,20 @@
+#the tag = MET700 
+imax 1 #number of channels 
+jmax 4 #number of backgrounds 
+kmax * nuissance 
+shapes * * FAKE 
+------------ 
+bin BinantitagRegion2
+observation 4.0
+bin BinantitagRegion2 BinantitagRegion2 BinantitagRegion2 BinantitagRegion2 BinantitagRegion2 
+process sig qcd zvv W Top 
+process 0 1 2 3 4 
+rate 1e-06 1e-06 2.4278 0.5569 0.1355 
+------------ 
+lumi lnN 1.027 - - - - 
+IsoTrackEff lnN 1.02 - - - - 
+TrigEff lnN 1.02 - - - - 
+Beta2 rateParam BinantitagRegion2 Top 1 [0.00,4.00]
+Beta2 rateParam BinantitagRegion2 zvv 1 [0.00,4.00]
+Beta2 rateParam BinantitagRegion2 W 1 [0.00,4.00]
+Beta2 rateParam BinantitagRegion2 qcd 1 [0.00,4.00]

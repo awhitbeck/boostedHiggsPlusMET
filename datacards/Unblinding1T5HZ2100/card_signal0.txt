@@ -1,0 +1,21 @@
+#the tag = MET300 
+imax 1 #number of channels 
+jmax 4 #number of backgrounds 
+kmax * nuissance 
+shapes * * FAKE 
+------------ 
+bin Binsignal0
+observation 0.84947481975
+bin Binsignal0 Binsignal0 Binsignal0 Binsignal0 Binsignal0 
+process sig qcd zvv W Top 
+process 0 1 2 3 4 
+rate 0.0269 0.0451 0.1535 0.1034 0.5474 
+------------ 
+lumi lnN 1.027 - - - - 
+IsoTrackEff lnN 1.02 - - - - 
+TrigEff lnN 1.02 - - - - 
+kappa0 param 0.66  0.19
+Alpha0 rateParam Binsignal0 qcd ((@0*@1/@2)*@3) Beta0,Gamma0,Delta0,kappa0 
+Alpha0 rateParam Binsignal0 zvv ((@0*@1/@2)*@3) Beta0,Gamma0,Delta0,kappa0 
+Alpha0 rateParam Binsignal0 Top ((@0*@1/@2)*@3) Beta0,Gamma0,Delta0,kappa0 
+Alpha0 rateParam Binsignal0 W ((@0*@1/@2)*@3) Beta0,Gamma0,Delta0,kappa0 

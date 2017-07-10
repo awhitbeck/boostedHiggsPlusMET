@@ -48,12 +48,27 @@ class searchRegion:
 					#for j in range(len(channel)):
 					sysname=val1.GetXaxis().GetBinLabel(i+1)
                                         self._singleBins[i].addGammaSystematic( valCS.GetXaxis().GetBinLabel(i+1),'gmN', channel, valCS.GetBinContent(i+1),val1.GetBinContent(i+1));
-
         def addCorrelGammaSystematic(self,channel,valCS,val1,val2):
                 for i in range(self._nBins):
 					#for j in range(len(channel)):
 					sysname=val1.GetXaxis().GetBinLabel(i+1)+"_StatUnc"
                                         self._singleBins[i].addGammaCorrelSystematic( val1.GetXaxis().GetBinLabel(i+1),'gmN', channel, valCS.GetBinContent(i+1),val1.GetBinContent(i+1),val2.GetBinContent(i+1) );
+				
+	def addABCDFormula(self,sysname,systype,channel,initval,minval,maxval,index=None,varnames=""):
+		for i in range(self._nBins):
+			#print varnames
+			if index == None:self._singleBins[i].addRateParamFormula(sysname,systype,channel,varnames)
+                        if index==self._singleBins[i]._index:
+                                self._singleBins[i].addRateParamFormula(sysname,systype,channel,varnames)
+	def addABCDSystematic(self,sysname,systype,channel,initval,minval,maxval,index=None):
+		for i in range(self._nBins):				
+			if index == None:self._singleBins[i].addRateParam(sysname,systype,channel,initval,minval,maxval)
+			if index==self._singleBins[i]._index: 
+				self._singleBins[i].addRateParam(sysname,systype,channel,initval,minval,maxval)
+	def addGausSystematic(self,sysname,systype,mean, sigma,index=None):
+		 for i in range(self._nBins):
+		 	if index == None:self._singleBins[i].addGausParam(sysname,systype,mean,sigma)
+			if index==self._singleBins[i]._index:self._singleBins[i].addGausParam(sysname,systype,mean,sigma)
 	def addSingleSystematic(self,sysname,systype,channel,val,identifier='',index=None):
 		
 		#print "Looking for ",identifier;

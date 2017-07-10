@@ -122,4 +122,30 @@ def textToListStr(fn,column):
         for line in f:
                 olist.append((line.strip().split()[column]) );
         return olist;
-
+def readSFFile(fn, region):
+	olist=[]
+	f=open(fn, 'r')
+	for line in f:
+		parse=line.split("&")
+		tableIndex=0;
+		if region=="tagSR":tableIndex=0;
+		if region=="doubletagSR":tableIndex=1;
+		if region=="antitagSR":tableIndex=2;
+		if region=="tagSB":tableIndex=3;
+		if region=="doubletagSB":tableIndex=4;
+		if region=="antitagSB":tableIndex=5;
+		centralValue=float(parse[tableIndex].split("\pm")[0])
+		olist.append(centralValue)
+	return olist
+def readKappaFile(fn, region,Unc=False):
+        olist=[]
+        f=open(fn, 'r')
+	for line in f:
+		parse=line.split("&")
+		tableIndex=0
+		if region=="doubletagSR":tableIndex=1;
+		centralValue=float(parse[tableIndex].split("\pm")[0])
+		UncValue=float(parse[tableIndex].split("\pm")[1])
+		if Unc: olist.append(UncValue)
+		else:olist.append(centralValue)
+	return olist	
