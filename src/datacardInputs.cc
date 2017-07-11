@@ -137,8 +137,8 @@ int main(int argc, char** argv){
             trigWeight=EfficiencyCenterUpDown[0];
             weight = trigWeight;
 	    weight*=SignalISRCorrection(ntuple);	
-	    double DoubleTagSF=doubleBSF(ntuple,0)*doubleBSF(ntuple,1);
-	    double AntiTagSF=1.0/(doubleBSF(ntuple,0))*1.0/(doubleBSF(ntuple,1));
+	    double DoubleTagSF=doubleBSFDn(ntuple,0)*doubleBSFDn(ntuple,1);
+	    double AntiTagSF=1.0/(doubleBSFDn(ntuple,0))*1.0/(doubleBSFDn(ntuple,1));
                 jetMass1 = fillLeadingJetMass(ntuple);
                 jetMass2 = fillSubLeadingJetMass(ntuple);
 	
@@ -166,8 +166,8 @@ int main(int argc, char** argv){
                 if( singleHiggsTagLooseCut(ntuple) ){
                 //    jetMass1 = fillLeadingJetMass(ntuple);
                 //    jetMass2 = fillSubLeadingJetMass(ntuple);
-	    	    double SingleTagSF=doubleBSF(ntuple,0)*1.0/doubleBSF(ntuple,1);
-  		  if( ntuple->JetsAK8_doubleBDiscriminator->at(1) > bbtagCut ) SingleTagSF=doubleBSF(ntuple,1)*1.0/doubleBSF(ntuple,0);
+	    	    double SingleTagSF=doubleBSFDn(ntuple,0)*1.0/doubleBSFDn(ntuple,1);
+  		  if( ntuple->JetsAK8_doubleBDiscriminator->at(1) > bbtagCut ) SingleTagSF=doubleBSFDn(ntuple,1)*1.0/doubleBSFDn(ntuple,0);
 		  weight*=SingleTagSF;
                   if( ( jetMass1 > 85 && jetMass1 < 135 ) && ( jetMass2 > 85 && jetMass2 < 135 ) ){
                         if(getNumGenHiggses(ntuple)==2)AnalysisMETT5HH_tagSR->Fill(MET,weight);
@@ -244,7 +244,7 @@ int main(int argc, char** argv){
     */
     //}
     // }
-    TFile* outputFile = new TFile("datacardInputsUnblinding.root","RECREATE");
+    TFile* outputFile = new TFile("datacardInputsUnblindingDoublebSFDn.root","RECREATE");
     for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++){
         //plots[iPlot].Draw(can,skims.ntuples,skims.signalNtuples);
         outputFile->cd();

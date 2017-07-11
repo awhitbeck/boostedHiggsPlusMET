@@ -1647,7 +1647,7 @@ if(ntuple->JetsAK8->at(j).Pt()>800. && ntuple->JetsAK8->at(j).Pt()<=1000.)sigmaJ
 if(ntuple->JetsAK8->at(j).Pt()>1000.)sigmaJMR=9.44;
 sigmaJMR=sigmaJMR/110.;
 double sigmaJMRSF=1.23;
-if(SFUp)sigmaJMRSF=sigmaJMRSF+0.18;
+if(SFUp)sigmaJMRSF=sigmaJMRSF-0.18;
 double dRHiggs=getClosestGenHiggses(ntuple, ntuple->JetsAK8->at(j).Eta(), ntuple->JetsAK8->at(j).Phi());
 double dRZ=getClosestGenZ(ntuple, ntuple->JetsAK8->at(j).Eta(), ntuple->JetsAK8->at(j).Phi());
 if(dRHiggs>dRZ){

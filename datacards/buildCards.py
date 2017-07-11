@@ -219,8 +219,8 @@ if __name__ == '__main__':
         for i in range(antitagRegion._nBins):
 		tmpList = [];
                 srobs = 0;
-		#tmpList.append(AntitagT5HH.GetBinContent(i+1));
-		tmpList.append(0.0);
+		tmpList.append(AntitagT5HH.GetBinContent(i+1));
+		#tmpList.append(0.0);
 		tmpList.append(QCDMCAntitagRegion.GetBinContent(i+1));		
 		tmpList.append(ZJetsMCAntitagRegion.GetBinContent(i+1));		
 		tmpList.append(WJetsMCAntitagRegion.GetBinContent(i+1));		
@@ -232,8 +232,8 @@ if __name__ == '__main__':
                 antitagRegion_Obs.append(srobs)	
 		tmpList = [];
                 srobs = 0;
-		#tmpList.append(AntitagSBT5HH.GetBinContent(i+1));
-		tmpList.append(0.0);
+		tmpList.append(AntitagSBT5HH.GetBinContent(i+1));
+		#tmpList.append(0.0);
 		tmpList.append(QCDMCAntitagRegionSB.GetBinContent(i+1));		
 		tmpList.append(ZJetsMCAntitagRegionSB.GetBinContent(i+1));		
 		tmpList.append(WJetsMCAntitagRegionSB.GetBinContent(i+1));		
@@ -246,8 +246,8 @@ if __name__ == '__main__':
 	for i in range(sidebandRegion._nBins):
 		tmpList = [];
 		srobs = 0;
-		#tmpList.append(SidebandT5HH_2H.GetBinContent(i+1));	
-		tmpList.append(0.0);	
+		tmpList.append(SidebandT5HH_2H.GetBinContent(i+1));	
+		#tmpList.append(0.0);	
 		tmpList.append(QCDMCSideband2H.GetBinContent(i+1));	
 		tmpList.append(ZJetsMCSideband2H.GetBinContent(i+1));	
 		tmpList.append(WJetsMCSideband2H.GetBinContent(i+1));	
@@ -258,8 +258,8 @@ if __name__ == '__main__':
 		sideband_Rates.append(tmpList)
 		sideband_Obs.append(srobs)
 		tmpList = [];
-		#tmpList.append(SidebandT5HH_1H.GetBinContent(i+1));
-		tmpList.append(0.0);
+		tmpList.append(SidebandT5HH_1H.GetBinContent(i+1));
+		#tmpList.append(0.0);
                 tmpList.append(QCDMCSideband1H.GetBinContent(i+1));
                 tmpList.append(ZJetsMCSideband1H.GetBinContent(i+1));
                 tmpList.append(WJetsMCSideband1H.GetBinContent(i+1));
@@ -295,6 +295,93 @@ if __name__ == '__main__':
 	kappa1H=readKappaFile("./bkgInputs/KappaInputs.txt", "tagSR")
 	kappa2Hsigma=readKappaFile("./bkgInputs/KappaInputs.txt", "doubletagSR", True)
 	kappa1Hsigma=readKappaFile("./bkgInputs/KappaInputs.txt", "tagSR", True)
+	signalSysInput=TFile("SignalSysInputs/SignalSysCommon.root", "READ")
+	signalSysInput2=TFile("SignalSysInputs/SignalSysT5HH.root", "READ")
+	ResErrdoubletagSR=binsToList(signalSysInput2.Get("MassResErr_doubletagSR_%s%s" %(options.model, options.mGo)))
+	ResErrdoubletagSB=binsToList(signalSysInput2.Get("MassResErr_doubletagSB_%s%s" %(options.model, options.mGo)))
+	ResErrtagSR=binsToList(signalSysInput2.Get("MassResErr_tagSR_%s%s" %(options.model, options.mGo)))
+	ResErrtagSB=binsToList(signalSysInput2.Get("MassResErr_tagSB_%s%s" %(options.model, options.mGo)))
+	ResErrantitagSR=binsToList(signalSysInput2.Get("MassResErr_antitagSR_%s%s" %(options.model, options.mGo)))
+	ResErrantitagSB=binsToList(signalSysInput2.Get("MassResErr_antitagSB_%s%s" %(options.model, options.mGo)))
+	for i in range(3):
+		sidebandRegion1H.addSingleSystematic("MassResoUnc_MET%d_tag" %i, 'lnN', ['sig'], ResErrtagSB, '', i)
+		signalRegion1H.addSingleSystematic("MassResoUnc_MET%d_tag" %i, 'lnN', ['sig'], ResErrtagSR, '', i)
+		signalRegion.addSingleSystematic("MassResoUnc_MET%d_doubletag" %i, 'lnN', ['sig'], ResErrdoubletagSR, '', i)
+		sidebandRegion.addSingleSystematic("MassResoUnc_MET%d_doubletag" %i, 'lnN', ['sig'], ResErrdoubletagSB, '', i)
+		antitagRegion.addSingleSystematic("MassResoUnc_MET%d_antitag" %i, 'lnN', ['sig'], ResErrantitagSR, '', i)
+		sidebandATRegion.addSingleSystematic("MassResoUnc_MET%d_antitag" %i, 'lnN', ['sig'], ResErrantitagSB, '', i)
+	StatErrdoubletagSR=binsToList(signalSysInput2.Get("MCStatErr_doubletagSR_%s%s" %(options.model, options.mGo)))
+	StatErrdoubletagSB=binsToList(signalSysInput2.Get("MCStatErr_doubletagSB_%s%s" %(options.model, options.mGo)))
+	StatErrtagSR=binsToList(signalSysInput2.Get("MCStatErr_tagSR_%s%s" %(options.model, options.mGo)))
+	StatErrtagSB=binsToList(signalSysInput2.Get("MCStatErr_tagSB_%s%s" %(options.model, options.mGo)))
+	StatErrantitagSR=binsToList(signalSysInput2.Get("MCStatErr_antitagSR_%s%s" %(options.model, options.mGo)))
+	StatErrantitagSB=binsToList(signalSysInput2.Get("MCStatErr_antitagSB_%s%s" %(options.model, options.mGo)))
+	for i in range(3):
+		 sidebandRegion1H.addSingleSystematic("MCStatUnc_sideband1H_MET%d" %i, 'lnN', ['sig'], StatErrtagSB, '', i)
+		 sidebandRegion.addSingleSystematic("MCStatUnc_sideband_MET%d" %i, 'lnN', ['sig'], StatErrdoubletagSB, '', i)
+		 signalRegion.addSingleSystematic("MCStatUnc_doubletag_MET%d" %i, 'lnN', ['sig'], StatErrdoubletagSR, '', i)
+		 signalRegion1H.addSingleSystematic("MCStatUnc_tag_MET%d" %i, 'lnN', ['sig'], StatErrtagSR, '', i)
+		 antitagRegion.addSingleSystematic("MCStatUnc_antitag_MET%d" %i,'lnN', ['sig'], StatErrantitagSR, '', i)
+		 sidebandATRegion.addSingleSystematic("MCStatUnc_antitagSB_MET%d" %i,'lnN', ['sig'], StatErrantitagSB, '', i)
+	BBTagSFdoubletag=binsToList(signalSysInput2.Get("BBTagSF_doubletagSR_%s%s"%(options.model, options.mGo)))
+	BBTagSFtag=binsToList(signalSysInput2.Get("BBTagSF_doubletagSR_%s%s"%(options.model, options.mGo)))
+	BBTagSFantitag=binsToList(signalSysInput2.Get("BBTagSF_antitagSR_%s%s"%(options.model, options.mGo)))
+	BBTagSFantitagSB=binsToList(signalSysInput2.Get("BBTagSF_antitagSB_%s%s"%(options.model, options.mGo)))
+	BBTagSFsideband=binsToList(signalSysInput2.Get("BBTagSF_doubletagSB_%s%s"%(options.model, options.mGo)))
+	BBTagSFsideband1H=binsToList(signalSysInput2.Get("BBTagSF_tagSB_%s%s"%(options.model, options.mGo)))
+	BBTagSFDndoubletag=binsToList(signalSysInput2.Get("BBTagSFDn_doubletagSR_%s%s"%(options.model, options.mGo)))
+	BBTagSFDntag=binsToList(signalSysInput2.Get("BBTagSFDn_doubletagSR_%s%s"%(options.model, options.mGo)))
+	BBTagSFDnantitag=binsToList(signalSysInput2.Get("BBTagSFDn_antitagSR_%s%s"%(options.model, options.mGo)))
+	BBTagSFDnantitagSB=binsToList(signalSysInput2.Get("BBTagSFDn_antitagSB_%s%s"%(options.model, options.mGo)))
+	BBTagSFDnsideband=binsToList(signalSysInput2.Get("BBTagSFDn_doubletagSB_%s%s"%(options.model, options.mGo)))
+	BBTagSFDnsideband1H=binsToList(signalSysInput2.Get("BBTagSFDn_tagSB_%s%s"%(options.model, options.mGo)))
+	for i in range(3):
+		#In Mass Window
+		signalRegion.addAsymSystematic("DoubleBTagSF_MET%d_SR" %i,'lnN', ['sig'], BBTagSFdoubletag,BBTagSFDndoubletag, '', i) 
+		signalRegion1H.addAsymSystematic("DoubleBTagSF_MET%d_SR" %i,'lnN', ['sig'], BBTagSFtag,BBTagSFDntag, '', i) 
+		antitagRegion.addAsymSystematic("DoubleBTagSF_MET%d_SR" %i,'lnN', ['sig'], BBTagSFantitag,BBTagSFDnantitag, '', i) 
+		#In Sideband
+		sidebandRegion.addAsymSystematic("DoubleBTagSF_MET%d_SB" %i,'lnN', ['sig'], BBTagSFsideband, BBTagSFDnsideband,'', i) 
+		sidebandRegion1H.addAsymSystematic("DoubleBTagSF_MET%d_SB" %i,'lnN', ['sig'], BBTagSFsideband1H, BBTagSFDnsideband1H,'', i) 
+		sidebandATRegion.addAsymSystematic("DoubleBTagSF_MET%d_SB" %i,'lnN', ['sig'], BBTagSFantitagSB, BBTagSFDnantitagSB,'', i) 
+
+	ISRSysUp=binsToList(signalSysInput.Get("ISRUp_%s" %options.mGo));	
+	ISRSysDn=binsToList(signalSysInput.Get("ISRDn_%s" %options.mGo));	
+	JECSysUp=binsToList(signalSysInput.Get("JECUp_%s" %options.mGo));	
+	JECSysDn=binsToList(signalSysInput.Get("JECDn_%s" %options.mGo));	
+	JERSysUp=binsToList(signalSysInput.Get("JERUp_%s" %options.mGo));	
+	JERSysDn=binsToList(signalSysInput.Get("JERDn_%s" %options.mGo));	
+	ScaleSysUp=binsToList(signalSysInput.Get("ScaleUp_%s" %options.mGo));	
+	ScaleSysDn=binsToList(signalSysInput.Get("ScaleDn_%s" %options.mGo));	
+	
+	signalRegion.addAsymSystematic("JECUnc", 'lnN', ['sig'], JECSysUp, JECSysDn)
+	signalRegion1H.addAsymSystematic("JECUnc", 'lnN', ['sig'], JECSysUp, JECSysDn)
+	antitagRegion.addAsymSystematic("JECUnc", 'lnN', ['sig'], JECSysUp, JECSysDn)
+	sidebandRegion1H.addAsymSystematic("JECUnc", 'lnN', ['sig'], JECSysUp, JECSysDn)
+	sidebandRegion.addAsymSystematic("JECUnc", 'lnN', ['sig'], JECSysUp, JECSysDn)
+	sidebandATRegion.addAsymSystematic("JECUnc", 'lnN', ['sig'], JECSysUp, JECSysDn)
+	
+	signalRegion.addSingleSystematic("JERUnc", 'lnN', ['sig'], JERSysUp)
+	signalRegion1H.addSingleSystematic("JERUnc", 'lnN', ['sig'], JERSysUp)
+	antitagRegion.addSingleSystematic("JERUnc", 'lnN', ['sig'], JERSysUp)
+	sidebandRegion1H.addSingleSystematic("JERUnc", 'lnN', ['sig'], JERSysUp)
+	sidebandRegion.addSingleSystematic("JERUnc", 'lnN', ['sig'], JERSysUp)
+	sidebandATRegion.addSingleSystematic("JERUnc", 'lnN', ['sig'], JERSysUp)
+
+	signalRegion.addAsymSystematic("ScaleUnc", 'lnN', ['sig'], ScaleSysUp, ScaleSysDn)
+	signalRegion1H.addAsymSystematic("ScaleUnc", 'lnN', ['sig'], ScaleSysUp, ScaleSysDn)
+	antitagRegion.addAsymSystematic("ScaleUnc", 'lnN', ['sig'], ScaleSysUp, ScaleSysDn)
+	sidebandRegion1H.addAsymSystematic("ScaleUnc", 'lnN', ['sig'], ScaleSysUp, ScaleSysDn)
+	sidebandRegion.addAsymSystematic("ScaleUnc", 'lnN', ['sig'], ScaleSysUp, ScaleSysDn)
+	sidebandATRegion.addAsymSystematic("ScaleUnc", 'lnN', ['sig'], ScaleSysUp, ScaleSysDn)
+	
+	signalRegion.addAsymSystematic("ISRUnc", 'lnN', ['sig'], ISRSysUp, ISRSysDn)
+	signalRegion1H.addAsymSystematic("ISRUnc", 'lnN', ['sig'], ISRSysUp, ISRSysDn)
+	antitagRegion.addAsymSystematic("ISRUnc", 'lnN', ['sig'], ISRSysUp, ISRSysDn)
+	sidebandRegion1H.addAsymSystematic("ISRUnc", 'lnN', ['sig'], ISRSysUp, ISRSysDn)
+	sidebandRegion.addAsymSystematic("ISRUnc", 'lnN', ['sig'], ISRSysUp, ISRSysDn)
+	sidebandATRegion.addAsymSystematic("ISRUnc", 'lnN', ['sig'], ISRSysUp, ISRSysDn)
+
 	signalRegion.addSingleSystematic('lumi','lnN',['sig'],1.027);
 	signalRegion.addSingleSystematic('IsoTrackEff','lnN',['sig'],1.02);
 	signalRegion.addSingleSystematic('TrigEff','lnN',['sig'],1.02);

@@ -9,8 +9,15 @@ observation 12.0
 bin BinantitagRegion1 BinantitagRegion1 BinantitagRegion1 BinantitagRegion1 BinantitagRegion1 
 process sig qcd zvv W Top 
 process 0 1 2 3 4 
-rate 1e-06 1e-06 5.1001 1.7401 0.6877 
+rate 0.0166 1e-06 5.1001 1.7401 0.6877 
 ------------ 
+MassResoUnc_MET1_antitag lnN 0.977531283467 - - - - 
+MCStatUnc_antitag_MET1 lnN 1.05227928589 - - - - 
+DoubleBTagSF_MET1_SR lnN 1.13779375119/0.940215068884  -  -  -  - 
+JECUnc lnN 0.997119426727/1.00052237511  -  -  -  - 
+JERUnc lnN 0.999123156071 - - - - 
+ScaleUnc lnN 1.00109779835/0.998862862587  -  -  -  - 
+ISRUnc lnN 0.997807264328/1.00195777416  -  -  -  - 
 lumi lnN 1.027 - - - - 
 IsoTrackEff lnN 1.02 - - - - 
 TrigEff lnN 1.02 - - - - 

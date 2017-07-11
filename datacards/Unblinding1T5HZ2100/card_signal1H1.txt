@@ -11,6 +11,13 @@ process sig qcd zvv W Top
 process 0 1 2 3 4 
 rate 0.0450 1e-06 1.5008 0.2998 0.3691 
 ------------ 
+MassResoUnc_MET1_tag lnN 0.965839510139 - - - - 
+MCStatUnc_tag_MET1 lnN 1.03253654279 - - - - 
+DoubleBTagSF_MET1_SR lnN 0.887307482832/1.05976484514  -  -  -  - 
+JECUnc lnN 0.997119426727/1.00052237511  -  -  -  - 
+JERUnc lnN 0.999123156071 - - - - 
+ScaleUnc lnN 1.00109779835/0.998862862587  -  -  -  - 
+ISRUnc lnN 0.997807264328/1.00195777416  -  -  -  - 
 lumi lnN 1.027 - - - - 
 IsoTrackEff lnN 1.02 - - - - 
 TrigEff lnN 1.02 - - - - 
