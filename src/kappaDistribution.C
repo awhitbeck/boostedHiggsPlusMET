@@ -17,7 +17,7 @@ void kappaDistribution(
                        double corrQCD_B=1.2,     double corrErrQCD_B=0.16 ,
                        double corrQCD_C=0.93,     double corrErrQCD_C=0.1 ,
                        double corrQCD_D=0.71,     double corrErrQCD_D=0.027,
-                        bool doubletag = true
+                       bool doubletag = true
                        /*
 			double corrTT_A=0.58,      double corrErrTT_A=0.12 , //signal          
                        double corrTT_B=0.58,       double corrErrTT_B=0.049 ,//sideband       
@@ -65,6 +65,7 @@ void kappaDistribution(
 
     if(doubletag){
 	//MET systematics For TTBar, W and Z
+	/*
 	corrErrTT_A=sqrt((corrErrTT_A*corrErrTT_A)+(corrTT_A*0.8 * corrTT_A*0.8));
 	corrErrTT_B=sqrt((corrErrTT_B*corrErrTT_B)+(corrTT_B*0.8 * corrTT_B*0.8));
 	corrErrTT_C=sqrt((corrErrTT_C*corrErrTT_C)+(corrTT_C*0.8 * corrTT_C*0.8));
@@ -77,6 +78,7 @@ void kappaDistribution(
 	corrErrZJets_B=sqrt((corrErrZJets_B*corrErrZJets_B)+(corrZJets_B*0.6 * corrZJets_B*0.6));
 	corrErrZJets_C=sqrt((corrErrZJets_C*corrErrZJets_C)+(corrZJets_C*0.6 * corrZJets_C*0.6));
 	corrErrZJets_D=sqrt((corrErrZJets_D*corrErrZJets_D)+(corrZJets_D*0.6 * corrZJets_D*0.6));
+	*/
     }
     vector<double> tempKappa,tempKappaPC,tempKappaFC,tempKappaFAC;
     TRandom rand;
