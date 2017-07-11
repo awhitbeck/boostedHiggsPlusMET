@@ -20,16 +20,11 @@ int main(int argc, char** argv){
 
     gROOT->ProcessLine(".L ./tdrstyle.C");
     gROOT->ProcessLine("setTDRStyle()");
-
-    TString baseDir="./";
-    if( argc > 0 ){
-        baseDir = argv[1];
-    }
   
     skimSamples skims;
     typedef plot<RA2bTree> plot;
     double METBins[4] = {300.,500.,700.,2500.};
-    TFile*inputFile = new TFile(baseDir+"ALPHABEThistosWeights.root","read");  
+    TFile*inputFile = new TFile("ALPHABEThistos.root","read");  
     /*
       plot BinsSRSingleHiggsPlot(*fillAnalysisBins<RA2bTree>,"AnalysisMETBins_tagSR","MET",3,METBins);
       plot BinsSRAntiTagPlot(*fillAnalysisBins<RA2bTree>,"AnalysisMETBins_antitagSR","MET",3,METBins);
@@ -91,7 +86,12 @@ int main(int argc, char** argv){
 
     // Signal samples
     for( int iSample = 0 ; iSample < skims.signalNtuples.size() ; iSample++){
-        TH1D*AnalysisMETT5HH_tagSR=new TH1D("AnalysisMETT5HH_tagSR_"+skims.signalSampleName[iSample],"MET",3,METBins) ;
+	TH1D*JetMassSmear1=new TH1D("JetMassSmear1_"+skims.signalSampleName[iSample], "", 200, 50,250);
+	TH1D*JetMassSmear2=new TH1D("JetMassSmear2_"+skims.signalSampleName[iSample], "", 200, 50,250);
+        
+	TH1D*JetMassUnsmear1=new TH1D("JetMassUnsmear1_"+skims.signalSampleName[iSample], "", 200, 50,250);
+	TH1D*JetMassUnsmear2=new TH1D("JetMassUnsmear2_"+skims.signalSampleName[iSample], "", 200, 50,250);
+	TH1D*AnalysisMETT5HH_tagSR=new TH1D("AnalysisMETT5HH_tagSR_"+skims.signalSampleName[iSample],"MET",3,METBins) ;
         TH1D*AnalysisMETT5HH_antitagSR=new TH1D("AnalysisMETT5HH_antitagSR_"+skims.signalSampleName[iSample],"MET",3,METBins) ;
         TH1D*AnalysisMETT5HH_tagSB=new TH1D("AnalysisMETT5HH_tagSB_"+skims.signalSampleName[iSample],"MET",3,METBins) ;
         TH1D*AnalysisMETT5HH_antitagSB=new TH1D("AnalysisMETT5HH_antitagSB_"+skims.signalSampleName[iSample],"MET",3,METBins) ;
@@ -128,17 +128,29 @@ int main(int argc, char** argv){
         for( int iEvt = 0 ; iEvt < numEvents ; iEvt++ ){
             ntuple->GetEntry(iEvt);
             if( iEvt % 10000 == 0 ) cout << skims.signalSampleName[iSample] << ": " << iEvt << "/" << numEvents << endl;
+	    //if(skims.signalSampleName[iSample]!="T5HH750")break;
             if(!baselineCut(ntuple) ) continue;
             //std::cout<<"Gen Higgs Content "<<getNumGenHiggses(ntuple)<<std::endl;
-            //      if(getNumGenHiggses(ntuple)!=2) continue;
+            //    if(getNumGenHiggses(ntuple)!=2) continue;
             MET=ntuple->MET;
             EfficiencyCenterUpDown = Eff_MetMhtSextetReal_CenterUpDown(ntuple->HT, ntuple->MHT, ntuple->NJets);
             trigWeight=EfficiencyCenterUpDown[0];
-            weight = customPUweights(ntuple)*trigWeight;	
-            if( doubleTaggingLooseCut(ntuple) ){
+            weight = trigWeight;
+	    weight*=SignalISRCorrection(ntuple);	
+	    double DoubleTagSF=doubleBSFDn(ntuple,0)*doubleBSFDn(ntuple,1);
+	    double AntiTagSF=1.0/(doubleBSFDn(ntuple,0))*1.0/(doubleBSFDn(ntuple,1));
                 jetMass1 = fillLeadingJetMass(ntuple);
                 jetMass2 = fillSubLeadingJetMass(ntuple);
-                if( ( jetMass1 > 85 && jetMass1 < 135 ) /*&& ( jetMass2 > 85 && jetMass2 < 135 )*/ ){
+	
+       	JetMassUnsmear1->Fill(jetMass1);
+       	JetMassUnsmear2->Fill(jetMass2);
+	jetMass1=ResolutionSmear(ntuple, 0, iEvt,false);
+	jetMass2=ResolutionSmear(ntuple, 1, iEvt,false);
+       	JetMassSmear1->Fill(jetMass1);
+       	JetMassSmear2->Fill(jetMass2);
+	     if( doubleTaggingLooseCut(ntuple) ){
+		weight*=DoubleTagSF;
+                if( ( jetMass1 > 85 && jetMass1 < 135 ) && ( jetMass2 > 85 && jetMass2 < 135 ) ){
                     if(getNumGenHiggses(ntuple)==2)AnalysisMETT5HH_doubletagSR->Fill(MET,weight);
                     if(getNumGenHiggses(ntuple)==1)AnalysisMETT5HZ_doubletagSR->Fill(MET,weight);  
                     if(getNumGenHiggses(ntuple)==0)AnalysisMETT5ZZ_doubletagSR->Fill(MET,weight); 
@@ -152,9 +164,12 @@ int main(int argc, char** argv){
                 }
             }else{
                 if( singleHiggsTagLooseCut(ntuple) ){
-                    jetMass1 = fillLeadingJetMass(ntuple);
-                    jetMass2 = fillSubLeadingJetMass(ntuple);
-                    if( ( jetMass1 > 85 && jetMass1 < 135 ) /*&& ( jetMass2 > 85 && jetMass2 < 135 )*/ ){
+                //    jetMass1 = fillLeadingJetMass(ntuple);
+                //    jetMass2 = fillSubLeadingJetMass(ntuple);
+	    	    double SingleTagSF=doubleBSFDn(ntuple,0)*1.0/doubleBSFDn(ntuple,1);
+  		  if( ntuple->JetsAK8_doubleBDiscriminator->at(1) > bbtagCut ) SingleTagSF=doubleBSFDn(ntuple,1)*1.0/doubleBSFDn(ntuple,0);
+		  weight*=SingleTagSF;
+                  if( ( jetMass1 > 85 && jetMass1 < 135 ) && ( jetMass2 > 85 && jetMass2 < 135 ) ){
                         if(getNumGenHiggses(ntuple)==2)AnalysisMETT5HH_tagSR->Fill(MET,weight);
                         if(getNumGenHiggses(ntuple)==1)AnalysisMETT5HZ_tagSR->Fill(MET,weight);  
                         if(getNumGenHiggses(ntuple)==0)AnalysisMETT5ZZ_tagSR->Fill(MET,weight); 
@@ -168,9 +183,8 @@ int main(int argc, char** argv){
                     }
                 }
                 if( antiTaggingLooseCut(ntuple) ){
-                    jetMass1 = fillLeadingJetMass(ntuple);
-                    jetMass2 = fillSubLeadingJetMass(ntuple);
-                    if( ( jetMass1 > 85 && jetMass1 < 135 ) /*&& ( jetMass2 > 85 && jetMass2 < 135 )*/ ){
+		weight*=AntiTagSF;
+                    if( ( jetMass1 > 85 && jetMass1 < 135 ) && ( jetMass2 > 85 && jetMass2 < 135 ) ){
                         if(getNumGenHiggses(ntuple)==2)AnalysisMETT5HH_antitagSR->Fill(MET,weight);
                         if(getNumGenHiggses(ntuple)==1)AnalysisMETT5HZ_antitagSR->Fill(MET,weight);
                         if(getNumGenHiggses(ntuple)==0)AnalysisMETT5ZZ_antitagSR->Fill(MET,weight);	
@@ -184,13 +198,16 @@ int main(int argc, char** argv){
             }
 
         }
+	plots.push_back(JetMassSmear1);
+	plots.push_back(JetMassSmear2);
+	plots.push_back(JetMassUnsmear1);
+	plots.push_back(JetMassUnsmear2);
         plots.push_back(AnalysisMETT5HH_tagSR);
         plots.push_back(AnalysisMETT5HH_antitagSR);
         plots.push_back(AnalysisMETT5HH_tagSB);
         plots.push_back(AnalysisMETT5HH_antitagSB);
         plots.push_back(AnalysisMETT5HH_doubletagSB);
         plots.push_back(AnalysisMETT5HH_doubletagSR);
-
         plots.push_back(AnalysisMETT5HZ_tagSR);
         plots.push_back(AnalysisMETT5HZ_antitagSR);
         plots.push_back(AnalysisMETT5HZ_tagSB);
@@ -227,7 +244,7 @@ int main(int argc, char** argv){
     */
     //}
     // }
-    TFile* outputFile = new TFile("datacardInputsTest.root","RECREATE");
+    TFile* outputFile = new TFile("datacardInputsUnblindingDoublebSFDn.root","RECREATE");
     for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++){
         //plots[iPlot].Draw(can,skims.ntuples,skims.signalNtuples);
         outputFile->cd();

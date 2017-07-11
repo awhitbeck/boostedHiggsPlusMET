@@ -1,0 +1,27 @@
+#the tag = MET300 
+imax 1 #number of channels 
+jmax 4 #number of backgrounds 
+kmax * nuissance 
+shapes * * FAKE 
+------------ 
+bin BinantitagRegion0
+observation 46.0
+bin BinantitagRegion0 BinantitagRegion0 BinantitagRegion0 BinantitagRegion0 BinantitagRegion0 
+process sig qcd zvv W Top 
+process 0 1 2 3 4 
+rate 0.0139 0.8124 17.3110 10.1586 4.7727 
+------------ 
+MassResoUnc_MET0_antitag lnN 0.984308654937 - - - - 
+MCStatUnc_antitag_MET0 lnN 1.05592194697 - - - - 
+DoubleBTagSF_MET0_SR lnN 1.14070855339/0.938880724928  -  -  -  - 
+JECUnc lnN 0.997094750404/1.00060796738  -  -  -  - 
+JERUnc lnN 1.00049757957 - - - - 
+ScaleUnc lnN 1.00179958344/0.998016357422  -  -  -  - 
+ISRUnc lnN 0.999493062496/1.00045740604  -  -  -  - 
+lumi lnN 1.027 - - - - 
+IsoTrackEff lnN 1.02 - - - - 
+TrigEff lnN 1.02 - - - - 
+Beta0 rateParam BinantitagRegion0 Top 1 [0.00,4.00]
+Beta0 rateParam BinantitagRegion0 zvv 1 [0.00,4.00]
+Beta0 rateParam BinantitagRegion0 W 1 [0.00,4.00]
+Beta0 rateParam BinantitagRegion0 qcd 1 [0.00,4.00]

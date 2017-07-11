@@ -251,7 +251,11 @@ public :
             for( int i = 0 ; i < HTMHTFileNames.size() ; i++ ){
                 data->Add(skimType+"/"+HTMHTFileNames[i]);
             }    
-            dataNtuple = new RA2bTree(data); 
+            dataNtuple = new RA2bTree(data);
+	    ntuples.push_back(dataNtuple);
+	    sampleName.push_back("data"); 
+	    fillColor.push_back(kWhite);
+	    lineColor.push_back(1);
         }
 
         std::vector<TString> SingleElectronNames;
@@ -328,6 +332,7 @@ public :
         for(unsigned int i=0; i<8; ++i)T5HH1700FilesNames.push_back(TString::Format("root://cmseos.fnal.gov//store/user/fojensen/T5qqqqZHProduction/Summer16.SMS-T5qqqqZH-mGluino1700_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_%d_RA2AnalysisTree.root",i));
         for(unsigned int i=0; i<9; ++i)T5HH1800FilesNames.push_back(TString::Format("root://cmseos.fnal.gov//store/user/fojensen/T5qqqqZHProduction/Summer16.SMS-T5qqqqZH-mGluino1800_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_%d_RA2AnalysisTree.root",i));
         for(unsigned int i=0; i<9; ++i)T5HH1900FilesNames.push_back(TString::Format("root://cmseos.fnal.gov//store/user/fojensen/T5qqqqZHProduction/Summer16.SMS-T5qqqqZH-mGluino1900_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_%d_RA2AnalysisTree.root",i));
+        for(unsigned int i=0; i<29; ++i)T5HH2000FilesNames.push_back(TString::Format("root://cmseos.fnal.gov//store/user/fojensen/T5qqqqZHProduction_18052017/Summer16.SMS-T5qqqqZH-mGluino2000_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_%d_RA2AnalysisTree.root",i));
         for(unsigned int i=0; i<26; ++i)T5HH2100FilesNames.push_back(TString::Format("root://cmseos.fnal.gov//store/user/fojensen/T5qqqqZHProduction/Summer16.SMS-T5qqqqZH-mGluino2100_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_%d_RA2AnalysisTree.root",i));
         if( r == kSignal ){
             T5HH750 = new TChain("TreeMaker2/PreSelection");
@@ -426,6 +431,15 @@ public :
             }
             signalNtuples.push_back(new RA2bTree(T5HH1900));
             signalSampleName.push_back("T5HH1900");
+            sigLineColor.push_back(kRed);
+        }
+        if( r == kSignal ){
+            T5HH2000 = new TChain("TreeMaker2/PreSelection");
+            for( int i = 0 ; i < T5HH2000FilesNames.size() ; i++ ){
+                T5HH2000->Add(T5HH2000FilesNames[i]);
+            }
+            signalNtuples.push_back(new RA2bTree(T5HH2000));
+            signalSampleName.push_back("T5HH2000");
             sigLineColor.push_back(kRed);
         }
         if( r == kSignal ){

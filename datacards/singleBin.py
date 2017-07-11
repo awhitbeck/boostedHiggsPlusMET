@@ -63,7 +63,7 @@ class singleBin:
 		self._allLines.append(line);
 
 		line = "rate ";
-		zeroProxy = 0.0001;
+		zeroProxy = 0.000001;
 		for rate in self._rates: 
 			if rate < 0.000001: line += str(zeroProxy) + " ";
 			else: line += "%.4f " %round(rate,4);
@@ -177,6 +177,30 @@ class singleBin:
                         else: line += "- ";
                 line += "\n";
                 self._allLines.append(line);	
+        #def addRateParam(self,sysname,systype,bins,valCS,val):
+        def addGausParam(self,sysname,systype,mean,sigma):
+                line = "";
+		#print "Bin"+self._name	
+                line += sysname + " " + systype +" "+ "%g  %g" %(mean, sigma);
+                line += "\n";
+		#print line 
+                self._allLines.append(line);	
+        def addRateParam(self,sysname,systype,bkgprocess,initval,minval,maxval):
+                line = "";
+		#print "Bin"+self._name	
+                line += sysname + " " + systype + " "+"Bin"+self._name+" "+bkgprocess+" "+ "%g [%2.2f,%2.2f]" %(initval,minval,maxval);
+                line += "\n";
+		#print line 
+                self._allLines.append(line);	
+        def addRateParamFormula(self,sysname,systype,bkgprocess,varnames):
+                line = "";
+		#print "Bin"+self._name
+		formula="((@0*@1/@2)*@3)"	
+                line += sysname + " " + systype + " "+"Bin"+self._name+" "+bkgprocess+" "+ "%s %s " %(formula,varnames);
+                line += "\n";
+		print line 
+                self._allLines.append(line);	
+		
 	def addAsymSystematic(self,sysname,systype,bins,valup, valdown ):
 		line = "";
 		line += sysname + " " + systype + " ";
