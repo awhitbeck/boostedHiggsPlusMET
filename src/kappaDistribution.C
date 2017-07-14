@@ -1,6 +1,7 @@
 #include "computeKappa.C"
 
 void kappaDistribution(
+			/*
                        double corrTT_A=0.6,      double corrErrTT_A=0.25 ,
                        double corrTT_B=0.74,       double corrErrTT_B=0.14 ,
                        double corrTT_C=0.53,      double corrErrTT_C=0.08 ,
@@ -18,7 +19,7 @@ void kappaDistribution(
                        double corrQCD_C=0.93,     double corrErrQCD_C=0.1 ,
                        double corrQCD_D=0.71,     double corrErrQCD_D=0.027,
                        bool doubletag = true
-                       /*
+                       */
 			double corrTT_A=0.58,      double corrErrTT_A=0.12 , //signal          
                        double corrTT_B=0.58,       double corrErrTT_B=0.049 ,//sideband       
                        double corrTT_C=0.53,      double corrErrTT_C=0.08 ,//antitag          
@@ -36,7 +37,6 @@ void kappaDistribution(
                        double corrQCD_C=0.93,     double corrErrQCD_C=0.1 ,                   
                        double corrQCD_D=0.71,     double corrErrQCD_D=0.027,                  
                        bool doubletag = false                                                                                                                                                         
-		       */
                        ){
 
     gROOT->ProcessLine(".L tdrstyle.C");

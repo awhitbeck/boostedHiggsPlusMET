@@ -45,22 +45,23 @@ def ExtractFile(iname, tag):
 if __name__ == '__main__':
 
 	#idir = "/eos/uscms/store/user/ntran/SUSY/statInterp/scanOutput/Dec6";
-	idir = "/uscms_data/d2/rgp230/BoostedHPush/NewCommit/CMSSW_7_4_2/src/boostedHiggsPlusMET/datacardsRateParamTest/";
+	#idir = "/uscms_data/d2/rgp230/BoostedHPush/NewCommit/CMSSW_7_4_2/src/boostedHiggsPlusMET/datacardsRateParamTest/";
+	idir = "./";
 	results = [];
 	#results.append( ExtractFile(idir+'/results_T2tt_175_1_mu0.0.root','175') );
-	results.append( ExtractFile(idir+'/higgsCombineFullKappaScale0UncSignalT5HZ750.Asymptotic.mH120.root','750') );
-	results.append( ExtractFile(idir+'/higgsCombineFullKappaScale0UncSignalT5HZ1000.Asymptotic.mH120.root','1000') );
-	results.append( ExtractFile(idir+'/higgsCombineFullKappaScale0UncSignalT5HZ1100.Asymptotic.mH120.root','1100') );
-	results.append( ExtractFile(idir+'/higgsCombineFullKappaScale0UncSignalT5HZ1200.Asymptotic.mH120.root','1200') );
-	results.append( ExtractFile(idir+'/higgsCombineFullKappaScale0UncSignalT5HZ1300.Asymptotic.mH120.root','1300') );
-	results.append( ExtractFile(idir+'/higgsCombineFullKappaScale0UncSignalT5HZ1400.Asymptotic.mH120.root','1400') );
-	results.append( ExtractFile(idir+'/higgsCombineFullKappaScale0UncSignalT5HZ1500.Asymptotic.mH120.root','1500') );
-	results.append( ExtractFile(idir+'/higgsCombineFullKappaScale0UncSignalT5HZ1600.Asymptotic.mH120.root','1600') );
-	results.append( ExtractFile(idir+'/higgsCombineFullKappaScale0UncSignalT5HZ1700.Asymptotic.mH120.root','1700') );
-	results.append( ExtractFile(idir+'/higgsCombineFullKappaScale0UncSignalT5HZ1800.Asymptotic.mH120.root','1800') );
-	results.append( ExtractFile(idir+'/higgsCombineFullKappaScale0UncSignalT5HZ1900.Asymptotic.mH120.root','1900') );
-	results.append( ExtractFile(idir+'/higgsCombineFullKappaScale0UncSignalT5HZ2000.Asymptotic.mH120.root','2000') );
-	results.append( ExtractFile(idir+'/higgsCombineFullKappaScale0UncSignalT5HZ2100.Asymptotic.mH120.root','2100') );
+	results.append( ExtractFile(idir+'/higgsCombineUnblindingT5HZ750.Asymptotic.mH120.root','750') );
+	results.append( ExtractFile(idir+'/higgsCombineUnblindingT5HZ1000.Asymptotic.mH120.root','1000') );
+	results.append( ExtractFile(idir+'/higgsCombineUnblindingT5HZ1100.Asymptotic.mH120.root','1100') );
+	results.append( ExtractFile(idir+'/higgsCombineUnblindingT5HZ1200.Asymptotic.mH120.root','1200') );
+	results.append( ExtractFile(idir+'/higgsCombineUnblindingT5HZ1300.Asymptotic.mH120.root','1300') );
+	results.append( ExtractFile(idir+'/higgsCombineUnblindingT5HZ1400.Asymptotic.mH120.root','1400') );
+	results.append( ExtractFile(idir+'/higgsCombineUnblindingT5HZ1500.Asymptotic.mH120.root','1500') );
+	results.append( ExtractFile(idir+'/higgsCombineUnblindingT5HZ1600.Asymptotic.mH120.root','1600') );
+	results.append( ExtractFile(idir+'/higgsCombineUnblindingT5HZ1700.Asymptotic.mH120.root','1700') );
+	results.append( ExtractFile(idir+'/higgsCombineUnblindingT5HZ1800.Asymptotic.mH120.root','1800') );
+	results.append( ExtractFile(idir+'/higgsCombineUnblindingT5HZ1900.Asymptotic.mH120.root','1900') );
+	results.append( ExtractFile(idir+'/higgsCombineUnblindingT5HZ2000.Asymptotic.mH120.root','2000') );
+	results.append( ExtractFile(idir+'/higgsCombineUnblindingT5HZ2100.Asymptotic.mH120.root','2100') );
 	#results.append( ExtractFile(idir+'/results_T1bbbb_1000_800.root','T1bbbb1000') );
 	#results.append( ExtractFile(idir+'/results_T1tttt_1500_100.root','T1tttt1500') );
 	# results.append( ExtractFile(idir+'/results_T1tttt_1200_800.root','T1tttt1200') );
@@ -169,7 +170,7 @@ if __name__ == '__main__':
 	leg.SetBorderSize(1);  
 	# leg.SetNColumns(2);
 	leg.AddEntry(g_exp,"expected","l")
-	#leg.AddEntry(g_obs,"observed","l")
+	leg.AddEntry(g_obs,"observed","l")
 	leg.AddEntry(g_2sig,"expected 2#sigma","f")
 	leg.AddEntry(g_1sig,"expected 1#sigma","f")
   	leg.AddEntry(g_xsec, "Theory cross-section", "l") 
@@ -188,7 +189,7 @@ if __name__ == '__main__':
 	g_2sig.Draw('f');
 	g_1sig.Draw('fsames');
 	#g_1sig.Draw('f');
-	#g_obs.Draw('lsames');
+	g_obs.Draw('lsames');
 	g_exp.Draw('lsames');
 	for i in range(0,100):
 		print "Mass %d  Exp Excl %g " %(1800+i,g_exp.Eval(1800+i))
@@ -203,4 +204,3 @@ if __name__ == '__main__':
 	g_xsec.SetLineColor(ROOT.kBlue);
 	g_xsec.Draw("lsame")
 	can.SaveAs('brazilT5HZResults.pdf');
-

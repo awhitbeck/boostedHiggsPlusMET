@@ -198,13 +198,13 @@ void MCclosure(TString tag = "", bool doubleHiggsRegion = false, TString baseDir
     cout << "\\end{table}" << endl;
 
     if( doubleHiggsRegion ){
-        can->SaveAs("MCclosure_doubleHiggsRegion.png");
-        can->SaveAs("MCclosure_doubleHiggsRegion.pdf");
-        can->SaveAs("MCclosure_doubleHiggsRegion.eps");
+        can->SaveAs("Unblinding_doubleHiggsRegion.png");
+        can->SaveAs("Unblinding_doubleHiggsRegion.pdf");
+        can->SaveAs("Unblinding_doubleHiggsRegion.eps");
     }else{
-        can->SaveAs("MCclosure_singleHiggsRegion.png");
-        can->SaveAs("MCclosure_singleHiggsRegion.pdf");
-        can->SaveAs("MCclosure_singleHiggsRegion.eps");        
+        can->SaveAs("Unblinding_singleHiggsRegion.png");
+        can->SaveAs("Unblinding_singleHiggsRegion.pdf");
+        can->SaveAs("Unblinding_singleHiggsRegion.eps");        
     }
 }
 

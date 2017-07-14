@@ -20,7 +20,7 @@ parser.add_option("--model", dest="model", default = "T5HH",help="mass of LSP", 
 if __name__ == '__main__':
 
 	#open ABCD Signal and Bkg
-	odir="Unblinding%dT5HZ%s" %(int(options.ScaleSyst),options.mGo)
+	odir="Unblinding%s%s" %(options.model,options.mGo)
 	if os.path.exists(odir): os.system( "rm -rf %s" % (odir) );
 	os.makedirs(odir);
 	tagsForSignalRegion=["MET300", "MET500","MET700"]
@@ -31,6 +31,8 @@ if __name__ == '__main__':
 	WJetsMCSignalRegion2H=inputfile.Get("AnalysisMETBins_doubletagSR_WJets");
 	ZJetsMCSignalRegion2H=inputfile.Get("AnalysisMETBins_doubletagSR_ZJets");
 	TTJetsMCSignalRegion2H=inputfile.Get("AnalysisMETBins_doubletagSR_TT");
+	SnglTMCSignalRegion2H=inputfile.Get("AnalysisMETBins_doubletagSR_SnglT");
+	OtherMCSignalRegion2H=inputfile.Get("AnalysisMETBins_doubletagSR_Other");
 	#TTJetsLeptonsMCSignalRegion2H=inputfile.Get("AnalysisMETBins_doubletagSR_TTExtra");
 	#TTJetsMCSignalRegion2H.Add(TTJetsLeptonsMCSignalRegion2H);
 	SignalT5HH_2H=inputfile.Get("AnalysisMET%s_doubletagSR_T5HH%s" %(options.model,options.mGo))
@@ -48,8 +50,9 @@ if __name__ == '__main__':
 	if options.mGo=="1900": Sigweight=35862.824*0.00163547/(404812);
 	if options.mGo=="2000": Sigweight=35862.824*0.000981077/(417293);
 	if options.mGo=="2100": Sigweight=35862.824*0.000591918/(391445);
-	if options.model=="T5HH":Sigweight/0.25
-	if options.model=="T5HZ":Sigweight/0.5
+	if  options.model=="T5HH":Sigweight=Sigweight/0.25
+	if options.model=="T5HZ":Sigweight=Sigweight/0.5
+	#print Sigweight
 	SignalT5HH_2H.Scale(Sigweight)
 	#Signal Region 1H
 	DataSignalRegion1H=inputfile.Get("AnalysisMETBins_tagSR_data");
@@ -57,6 +60,8 @@ if __name__ == '__main__':
 	WJetsMCSignalRegion1H=inputfile.Get("AnalysisMETBins_tagSR_WJets");
 	ZJetsMCSignalRegion1H=inputfile.Get("AnalysisMETBins_tagSR_ZJets");
 	TTJetsMCSignalRegion1H=inputfile.Get("AnalysisMETBins_tagSR_TT");
+	SnglTMCSignalRegion1H=inputfile.Get("AnalysisMETBins_tagSR_SnglT");
+	OtherMCSignalRegion1H=inputfile.Get("AnalysisMETBins_tagSR_Other");
 	SignalT5HH_1H=inputfile.Get("AnalysisMET%s_tagSR_T5HH%s" %(options.model,options.mGo))
 	SignalT5HH_1H.Scale(Sigweight)		
 	#Sideband Region 
@@ -65,6 +70,8 @@ if __name__ == '__main__':
 	WJetsMCSideband2H=inputfile.Get("AnalysisMETBins_doubletagSB_WJets");
 	ZJetsMCSideband2H=inputfile.Get("AnalysisMETBins_doubletagSB_ZJets");
 	TTJetsMCSideband2H=inputfile.Get("AnalysisMETBins_doubletagSB_TT");
+	SnglTMCSideband2H=inputfile.Get("AnalysisMETBins_doubletagSB_SnglT");
+	OtherMCSideband2H=inputfile.Get("AnalysisMETBins_doubletagSB_Other");
 				     
 	SidebandT5HH_2H=inputfile.Get("AnalysisMET%s_doubletagSB_T5HH%s" %(options.model,options.mGo))
 	SidebandT5HH_2H.Scale(Sigweight)	
@@ -74,6 +81,8 @@ if __name__ == '__main__':
 	WJetsMCSideband1H=inputfile.Get("AnalysisMETBins_tagSB_WJets");
 	ZJetsMCSideband1H=inputfile.Get("AnalysisMETBins_tagSB_ZJets");
 	TTJetsMCSideband1H=inputfile.Get("AnalysisMETBins_tagSB_TT");
+	SnglTMCSideband1H=inputfile.Get("AnalysisMETBins_tagSB_SnglT");
+	OtherMCSideband1H=inputfile.Get("AnalysisMETBins_tagSB_Other");
 	SidebandT5HH_1H=inputfile.Get("AnalysisMET%s_tagSB_T5HH%s" %(options.model,options.mGo))
 	SidebandT5HH_1H.Scale(Sigweight)	
 	#Antitag Region
@@ -82,6 +91,8 @@ if __name__ == '__main__':
 	WJetsMCAntitagRegion=inputfile.Get("AnalysisMETBins_antitagSR_WJets");
 	ZJetsMCAntitagRegion=inputfile.Get("AnalysisMETBins_antitagSR_ZJets");
 	TTJetsMCAntitagRegion=inputfile.Get("AnalysisMETBins_antitagSR_TT");
+	SnglTMCAntitagRegion=inputfile.Get("AnalysisMETBins_antitagSR_SnglT");
+	OtherMCAntitagRegion=inputfile.Get("AnalysisMETBins_antitagSR_Other");
 	AntitagT5HH=inputfile.Get("AnalysisMET%s_antitagSR_T5HH%s" %(options.model,options.mGo))
 	AntitagT5HH.Scale(Sigweight)
 	#Sideband Antitag Region 
@@ -90,6 +101,8 @@ if __name__ == '__main__':
 	WJetsMCAntitagRegionSB=inputfile.Get("AnalysisMETBins_antitagSB_WJets");
 	ZJetsMCAntitagRegionSB=inputfile.Get("AnalysisMETBins_antitagSB_ZJets");
 	TTJetsMCAntitagRegionSB=inputfile.Get("AnalysisMETBins_antitagSB_TT");
+	SnglTMCAntitagRegionSB=inputfile.Get("AnalysisMETBins_antitagSB_SnglT");
+	OtherMCAntitagRegionSB=inputfile.Get("AnalysisMETBins_antitagSB_Other");
 	AntitagSBT5HH=inputfile.Get("AnalysisMET%s_antitagSB_T5HH%s" %(options.model,options.mGo))
 	AntitagSBT5HH.Scale(Sigweight)
 	contributionsPerBin = [];
@@ -100,6 +113,7 @@ if __name__ == '__main__':
 		tmpcontributions.append('zvv')
 		tmpcontributions.append('W')
 		tmpcontributions.append('Top')
+		tmpcontributions.append('rare')
 		contributionsPerBin.append(tmpcontributions)
 	signalRegion = searchRegion('signal', contributionsPerBin, tagsForSignalRegion)	
 	signalRegion1H = searchRegion('signal1H', contributionsPerBin, tagsForSignalRegion)	
@@ -140,16 +154,22 @@ if __name__ == '__main__':
 	ZJetsMCSignalRegion2H.Scale(doubletagSRSF[2])
 
 	QCDMCAntitagRegion.Scale(antitagSRSF[0])
-	WJetsMCAntitagRegion.Scale(antitagSRSF[1])
-	TTJetsMCAntitagRegion.Scale(antitagSRSF[1])
+	#WJetsMCAntitagRegion.Scale(antitagSRSF[1])
+	#TTJetsMCAntitagRegion.Scale(antitagSRSF[1])
 	ZJetsMCAntitagRegion.Scale(antitagSRSF[2])
 
 	QCDMCAntitagRegionSB.Scale(antitagSBSF[0])
-	WJetsMCAntitagRegionSB.Scale(antitagSBSF[1])
-	TTJetsMCAntitagRegionSB.Scale(antitagSBSF[1])
+	#WJetsMCAntitagRegionSB.Scale(antitagSBSF[1])
+	#TTJetsMCAntitagRegionSB.Scale(antitagSBSF[1])
 	ZJetsMCAntitagRegionSB.Scale(antitagSBSF[2])
-
-	QCDMCSideband1H.Scale(tagSBSF[0])
+	METDependSFATSR=[0.56, 0.43, 0.17, 0.11]
+	METDependSFATSB=[0.52, 0.54, 0.32, 0.13]
+	for i in range(1,4):
+		TTJetsMCAntitagRegionSB.SetBinContent(i,TTJetsMCAntitagRegionSB.GetBinContent(i)*METDependSFATSB[i-1])	
+		WJetsMCAntitagRegionSB.SetBinContent(i,WJetsMCAntitagRegionSB.GetBinContent(i)*METDependSFATSB[i-1])	
+		TTJetsMCAntitagRegion.SetBinContent(i,TTJetsMCAntitagRegion.GetBinContent(i)*METDependSFATSR[i-1])	
+		WJetsMCAntitagRegion.SetBinContent(i,WJetsMCAntitagRegion.GetBinContent(i)*METDependSFATSR[i-1])	
+	QCDMCSideband1H.Scale(tagSBSF[0]) 
 	WJetsMCSideband1H.Scale(tagSBSF[1])
 	TTJetsMCSideband1H.Scale(tagSBSF[1])
 	ZJetsMCSideband1H.Scale(tagSBSF[2])
@@ -179,8 +199,9 @@ if __name__ == '__main__':
 		tmpList.append(ZJetsMCSignalRegion2H.GetBinContent(i+1));	
 		tmpList.append(WJetsMCSignalRegion2H.GetBinContent(i+1));	
 		tmpList.append(TTJetsMCSignalRegion2H.GetBinContent(i+1));
+		tmpList.append(SnglTMCSignalRegion2H.GetBinContent(i+1)+OtherMCSignalRegion2H.GetBinContent(i+1));
 		###Still Blinded	
-		srobs=QCDMCSignalRegion2H.GetBinContent(i+1)+ZJetsMCSignalRegion2H.GetBinContent(i+1)+WJetsMCSignalRegion2H.GetBinContent(i+1)+TTJetsMCSignalRegion2H.GetBinContent(i+1)
+		srobs=QCDMCSignalRegion2H.GetBinContent(i+1)+ZJetsMCSignalRegion2H.GetBinContent(i+1)+WJetsMCSignalRegion2H.GetBinContent(i+1)+TTJetsMCSignalRegion2H.GetBinContent(i+1)+SnglTMCSignalRegion2H.GetBinContent(i+1)+OtherMCSignalRegion2H.GetBinContent(i+1)
 		signalRegion_Rates.append(tmpList)
 		signalRegion_Obs.append(srobs)
 		tmpList = [];
@@ -189,8 +210,9 @@ if __name__ == '__main__':
                 tmpList.append(ZJetsMCSignalRegion1H.GetBinContent(i+1));
                 tmpList.append(WJetsMCSignalRegion1H.GetBinContent(i+1));
                 tmpList.append(TTJetsMCSignalRegion1H.GetBinContent(i+1));
+		tmpList.append(SnglTMCSignalRegion1H.GetBinContent(i+1)+OtherMCSignalRegion1H.GetBinContent(i+1));
 		#still Blinded
-                srobs=QCDMCSignalRegion1H.GetBinContent(i+1)+ZJetsMCSignalRegion1H.GetBinContent(i+1)+WJetsMCSignalRegion1H.GetBinContent(i+1)+TTJetsMCSignalRegion1H.GetBinContent(i+1)
+                srobs=QCDMCSignalRegion1H.GetBinContent(i+1)+ZJetsMCSignalRegion1H.GetBinContent(i+1)+WJetsMCSignalRegion1H.GetBinContent(i+1)+TTJetsMCSignalRegion1H.GetBinContent(i+1)+SnglTMCSignalRegion1H.GetBinContent(i+1)+OtherMCSignalRegion1H.GetBinContent(i+1)
                 signalRegion1H_Rates.append(tmpList)
                 signalRegion1H_Obs.append(srobs)
 		Signal2H.SetBinContent(i+1,SignalT5HH_2H.GetBinContent(i+1));
@@ -225,6 +247,7 @@ if __name__ == '__main__':
 		tmpList.append(ZJetsMCAntitagRegion.GetBinContent(i+1));		
 		tmpList.append(WJetsMCAntitagRegion.GetBinContent(i+1));		
 		tmpList.append(TTJetsMCAntitagRegion.GetBinContent(i+1));
+		tmpList.append(SnglTMCAntitagRegion.GetBinContent(i+1)+OtherMCAntitagRegion.GetBinContent(i+1));
 		#srobs=QCDMCAntitagRegion.GetBinContent(i+1)+ZJetsMCAntitagRegion.GetBinContent(i+1)+WJetsMCAntitagRegion.GetBinContent(i+1)+TTJetsMCAntitagRegion.GetBinContent(i+1)
 		srobs=DataAntitagRegion.GetBinContent(i+1)
 		#srobs=float(options.mu)*AntitagT5HH.GetBinContent(i+1)+QCDMCAntitagRegion.GetBinContent(i+1)+ZJetsMCAntitagRegion.GetBinContent(i+1)+WJetsMCAntitagRegion.GetBinContent(i+1)+TTJetsMCAntitagRegion.GetBinContent(i+1)
@@ -238,6 +261,7 @@ if __name__ == '__main__':
 		tmpList.append(ZJetsMCAntitagRegionSB.GetBinContent(i+1));		
 		tmpList.append(WJetsMCAntitagRegionSB.GetBinContent(i+1));		
 		tmpList.append(TTJetsMCAntitagRegionSB.GetBinContent(i+1));
+		tmpList.append(SnglTMCAntitagRegionSB.GetBinContent(i+1)+OtherMCAntitagRegionSB.GetBinContent(i+1));
 		srobs=DataAntitagRegionSB.GetBinContent(i+1)
 		#srobs=float(options.mu)*AntitagSBT5HH.GetBinContent(i+1)+QCDMCAntitagRegionSB.GetBinContent(i+1)+ZJetsMCAntitagRegionSB.GetBinContent(i+1)+WJetsMCAntitagRegionSB.GetBinContent(i+1)+TTJetsMCAntitagRegionSB.GetBinContent(i+1)
                 antitagRegionSB_Rates.append(tmpList)
@@ -252,6 +276,7 @@ if __name__ == '__main__':
 		tmpList.append(ZJetsMCSideband2H.GetBinContent(i+1));	
 		tmpList.append(WJetsMCSideband2H.GetBinContent(i+1));	
 		tmpList.append(TTJetsMCSideband2H.GetBinContent(i+1));	
+		tmpList.append(SnglTMCSideband2H.GetBinContent(i+1)+OtherMCSideband2H.GetBinContent(i+1));
 		#srobs=QCDMCSideband2H.GetBinContent(i+1)+ZJetsMCSideband2H.GetBinContent(i+1)+WJetsMCSideband2H.GetBinContent(i+1)+TTJetsMCSideband2H.GetBinContent(i+1)
 		srobs=DataSideband2H.GetBinContent(i+1)
 		#srobs=float(options.mu)*SidebandT5HH_2H.GetBinContent(i+1)+QCDMCSideband2H.GetBinContent(i+1)+ZJetsMCSideband2H.GetBinContent(i+1)+WJetsMCSideband2H.GetBinContent(i+1)+TTJetsMCSideband2H.GetBinContent(i+1)
@@ -264,6 +289,7 @@ if __name__ == '__main__':
                 tmpList.append(ZJetsMCSideband1H.GetBinContent(i+1));
                 tmpList.append(WJetsMCSideband1H.GetBinContent(i+1));
                 tmpList.append(TTJetsMCSideband1H.GetBinContent(i+1));
+		tmpList.append(SnglTMCSideband1H.GetBinContent(i+1)+OtherMCSideband1H.GetBinContent(i+1));
                 srobs=DataSideband1H.GetBinContent(i+1)
                 #srobs=float(options.mu)*SidebandT5HH_1H.GetBinContent(i+1)+QCDMCSideband1H.GetBinContent(i+1)+ZJetsMCSideband1H.GetBinContent(i+1)+WJetsMCSideband1H.GetBinContent(i+1)+TTJetsMCSideband1H.GetBinContent(i+1)
                 sideband1H_Rates.append(tmpList)
