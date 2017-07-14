@@ -21,8 +21,8 @@ vector<double> computeKappa(double corrTT_A=1.0,
 
     //TFile* f = new TFile("ALPHABEThistos_newSBdef.root","READ");
     //TFile* f = new TFile("~/eos/boostedHiggsPlusMET/ae9d4e104fd7627f36dec4c410c4b591f7ae4036/ALPHABEThistos.root","READ");
-    TFile* f = new TFile("/uscms_data/d2/rgp230/BoostedHPush/NewCommit/NewBugFixes/CMSSW_7_4_2/src/boostedHiggsPlusMET/src/ALPHABEThistosSynch.root","READ");
-
+    //TFile* f = new TFile("/uscms_data/d2/rgp230/BoostedHPush/NewCommit/NewBugFixes/CMSSW_7_4_2/src/boostedHiggsPlusMET/src/ALPHABEThistosSynch.root","READ");
+    TFile* f = new TFile("ALPHABEThistos.root","READ");
     ////////////////////////////////////////////////////////////
     // - - - - - - - - - data/MC corrections - - - - - - - -  //
     ////////////////////////////////////////////////////////////
