@@ -1,0 +1,27 @@
+#the tag = MET700 
+imax 1 #number of channels 
+jmax 4 #number of backgrounds 
+kmax * nuissance 
+shapes * * FAKE 
+------------ 
+bin BinsidebandRegion1H2
+observation 5.0
+bin BinsidebandRegion1H2 BinsidebandRegion1H2 BinsidebandRegion1H2 BinsidebandRegion1H2 BinsidebandRegion1H2 
+process sig qcd zvv W Top 
+process 0 1 2 3 4 
+rate 0.2309 1e-06 5.4982 0.5966 0.4369 
+------------ 
+MassResoUnc_MET2_tag lnN 1.05087906506 - - - - 
+MCStatUnc_sideband1H_MET2 lnN 1.01442732896 - - - - 
+DoubleBTagSF_MET2_SB lnN 1.0026543715/0.998963806962  -  -  -  - 
+JECUnc lnN 0.996601462364/1.00055587292  -  -  -  - 
+JERUnc lnN 0.999638140202 - - - - 
+ScaleUnc lnN 1.00099873543/0.998878657818  -  -  -  - 
+ISRUnc lnN 1.000426054/0.999642074108  -  -  -  - 
+lumi lnN 1.027 - - - - 
+IsoTrackEff lnN 1.02 - - - - 
+TrigEff lnN 1.02 - - - - 
+Gamma_1H_2 rateParam BinsidebandRegion1H2 Top 1 [0.00,4.00]
+Gamma_1H_2 rateParam BinsidebandRegion1H2 zvv 1 [0.00,4.00]
+Gamma_1H_2 rateParam BinsidebandRegion1H2 W 1 [0.00,4.00]
+Gamma_1H_2 rateParam BinsidebandRegion1H2 qcd 1 [0.00,4.00]

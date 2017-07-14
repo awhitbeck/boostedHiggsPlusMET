@@ -1,6 +1,7 @@
 #include "computeKappa.C"
 
 void kappaDistribution(
+			/*
                        double corrTT_A=0.6,      double corrErrTT_A=0.25 ,
                        double corrTT_B=0.74,       double corrErrTT_B=0.14 ,
                        double corrTT_C=0.53,      double corrErrTT_C=0.08 ,
@@ -17,9 +18,9 @@ void kappaDistribution(
                        double corrQCD_B=1.2,     double corrErrQCD_B=0.16 ,
                        double corrQCD_C=0.93,     double corrErrQCD_C=0.1 ,
                        double corrQCD_D=0.71,     double corrErrQCD_D=0.027,
-                        bool doubletag = true
-                       /*                                                                                                                                                                                        
-                       double corrTT_A=0.58,      double corrErrTT_A=0.12 , //signal          
+                       bool doubletag = true
+                       */
+			double corrTT_A=0.58,      double corrErrTT_A=0.12 , //signal          
                        double corrTT_B=0.58,       double corrErrTT_B=0.049 ,//sideband       
                        double corrTT_C=0.53,      double corrErrTT_C=0.08 ,//antitag          
                        double corrTT_D=0.48,      double corrErrTT_D=0.031 ,//antitag sideband
@@ -36,7 +37,7 @@ void kappaDistribution(
                        double corrQCD_C=0.93,     double corrErrQCD_C=0.1 ,                   
                        double corrQCD_D=0.71,     double corrErrQCD_D=0.027,                  
                        bool doubletag = false                                                                                                                                                         
-                       */){
+                       ){
 
     gROOT->ProcessLine(".L tdrstyle.C");
     gROOT->ProcessLine("setTDRStyle()");
@@ -62,6 +63,23 @@ void kappaDistribution(
     TH2F* kappaDistFC = new TH2F("kappaDistFC","kappaDistFC",3,340.,940.,100,0.,3.);
     TH2F* kappaDistFAC = new TH2F("kappaDistFAC","kappaDistFAC",3,360.,960.,100,0.,3.);
 
+    if(doubletag){
+	//MET systematics For TTBar, W and Z
+	/*
+	corrErrTT_A=sqrt((corrErrTT_A*corrErrTT_A)+(corrTT_A*0.8 * corrTT_A*0.8));
+	corrErrTT_B=sqrt((corrErrTT_B*corrErrTT_B)+(corrTT_B*0.8 * corrTT_B*0.8));
+	corrErrTT_C=sqrt((corrErrTT_C*corrErrTT_C)+(corrTT_C*0.8 * corrTT_C*0.8));
+	corrErrTT_D=sqrt((corrErrTT_D*corrErrTT_D)+(corrTT_D*0.8 * corrTT_D*0.8));
+	corrErrWJets_A=sqrt((corrErrWJets_A*corrErrWJets_A)+(corrWJets_A*0.8 * corrWJets_A*0.8));
+	corrErrWJets_B=sqrt((corrErrWJets_B*corrErrWJets_B)+(corrWJets_B*0.8 * corrWJets_B*0.8));
+	corrErrWJets_C=sqrt((corrErrWJets_C*corrErrWJets_C)+(corrWJets_C*0.8 * corrWJets_C*0.8));
+	corrErrWJets_D=sqrt((corrErrWJets_D*corrErrWJets_D)+(corrWJets_D*0.8 * corrWJets_D*0.8));
+	corrErrZJets_A=sqrt((corrErrZJets_A*corrErrZJets_A)+(corrZJets_A*0.6 * corrZJets_A*0.6));
+	corrErrZJets_B=sqrt((corrErrZJets_B*corrErrZJets_B)+(corrZJets_B*0.6 * corrZJets_B*0.6));
+	corrErrZJets_C=sqrt((corrErrZJets_C*corrErrZJets_C)+(corrZJets_C*0.6 * corrZJets_C*0.6));
+	corrErrZJets_D=sqrt((corrErrZJets_D*corrErrZJets_D)+(corrZJets_D*0.6 * corrZJets_D*0.6));
+	*/
+    }
     vector<double> tempKappa,tempKappaPC,tempKappaFC,tempKappaFAC;
     TRandom rand;
 
@@ -219,10 +237,15 @@ void kappaDistribution(
     profFAC->Draw("SAME");
     kappaDistNV->Draw("SAME");
 
+
     cout << "kappa(300<MET<500): " << prof->GetBinContent(1) << " +/- " << prof->GetBinError(1) << endl;
     cout << "kappa(500<MET<700): " << prof->GetBinContent(2) << " +/- " << prof->GetBinError(2) << endl;
     cout << "kappa(700<MET<inf): " << prof->GetBinContent(3) << " +/- " << prof->GetBinError(3) << endl;
-
+    QuantilekappaDist=(TH1D*)kappaDist->QuantilesX(0.5, "METBinKappa");
+    QuantilekappaDistSigma=(TH1D*)kappaDist->QuantilesX(0.5+0.34, "METBinKappaSigma");
+    cout<<"kappa(300<MET<500): Quantiles "<<QuantilekappaDist->GetBinContent(1)<<" +/- "<< QuantilekappaDistSigma->GetBinContent(1)-QuantilekappaDist->GetBinContent(1)<<endl;
+    cout<<"kappa(500<MET<700): Quantiles "<<QuantilekappaDist->GetBinContent(2)<<" +/- "<< QuantilekappaDistSigma->GetBinContent(2)-QuantilekappaDist->GetBinContent(2)<<endl;
+    cout<<"kappa(700<MET): Quantiles "<<QuantilekappaDist->GetBinContent(3)<<" +/- "<< QuantilekappaDistSigma->GetBinContent(3)-QuantilekappaDist->GetBinContent(3)<<endl;
     cout << "kappaPC(300<MET<500): " << profPC->GetBinContent(1) << " +/- " << profPC->GetBinError(1) << endl;
     cout << "kappaPC(500<MET<700): " << profPC->GetBinContent(2) << " +/- " << profPC->GetBinError(2) << endl;
     cout << "kappaPC(700<MET<inf): " << profPC->GetBinContent(3) << " +/- " << profPC->GetBinError(3) << endl;

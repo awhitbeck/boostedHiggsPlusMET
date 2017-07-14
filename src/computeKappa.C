@@ -21,8 +21,8 @@ vector<double> computeKappa(double corrTT_A=1.0,
 
     //TFile* f = new TFile("ALPHABEThistos_newSBdef.root","READ");
     //TFile* f = new TFile("~/eos/boostedHiggsPlusMET/ae9d4e104fd7627f36dec4c410c4b591f7ae4036/ALPHABEThistos.root","READ");
-    TFile* f = new TFile("/uscms_data/d2/rgp230/BoostedHPush/NewCommit/NewBugFixes/CMSSW_7_4_2/src/boostedHiggsPlusMET/src/ALPHABEThistosSynch.root","READ");
-
+    //TFile* f = new TFile("/uscms_data/d2/rgp230/BoostedHPush/NewCommit/NewBugFixes/CMSSW_7_4_2/src/boostedHiggsPlusMET/src/ALPHABEThistosSynch.root","READ");
+    TFile* f = new TFile("ALPHABEThistos.root","READ");
     ////////////////////////////////////////////////////////////
     // - - - - - - - - - data/MC corrections - - - - - - - -  //
     ////////////////////////////////////////////////////////////
@@ -103,7 +103,7 @@ vector<double> computeKappa(double corrTT_A=1.0,
         histoName="mJ_antitagSB_"; histoName+=METbins[i]; histoName+="_SnglT";
         hD->Add((TH1F*) f->Get(histoName),1.0);
         D = hD->IntegralAndError(1,40,Derr);
-        kappa[i] = C*B/D/A ;
+        kappa[i] = A/(B*C/D);//C*B/D/A ;
         kappa[numMETbins+i]=sqrt(Berr*Berr/B/B+Cerr*Cerr/C/C+Derr*Derr/D/D+Aerr*Aerr/A/A)*C*B/D/A ;
         if( verbose ){
             cout << "B: " << B << " +/- " << Berr << endl;

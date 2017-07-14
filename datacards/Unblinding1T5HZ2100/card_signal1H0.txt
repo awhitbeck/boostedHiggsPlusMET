@@ -1,0 +1,28 @@
+#the tag = MET300 
+imax 1 #number of channels 
+jmax 4 #number of backgrounds 
+kmax * nuissance 
+shapes * * FAKE 
+------------ 
+bin Binsignal1H0
+observation 11.1748921013
+bin Binsignal1H0 Binsignal1H0 Binsignal1H0 Binsignal1H0 Binsignal1H0 
+process sig qcd zvv W Top 
+process 0 1 2 3 4 
+rate 0.0324 1e-06 4.7972 1.8908 4.4868 
+------------ 
+MassResoUnc_MET0_tag lnN 0.943895185671 - - - - 
+MCStatUnc_tag_MET0 lnN 1.03747951963 - - - - 
+DoubleBTagSF_MET0_SR lnN 0.886489422411/1.06036651733  -  -  -  - 
+JECUnc lnN 0.997094750404/1.00060796738  -  -  -  - 
+JERUnc lnN 1.00049757957 - - - - 
+ScaleUnc lnN 1.00179958344/0.998016357422  -  -  -  - 
+ISRUnc lnN 0.999493062496/1.00045740604  -  -  -  - 
+lumi lnN 1.027 - - - - 
+IsoTrackEff lnN 1.02 - - - - 
+TrigEff lnN 1.02 - - - - 
+kappa0_1H param 0.98  0.13
+Alpha_1H0 rateParam Binsignal1H0 qcd ((@0*@1/@2)*@3) Beta0,Gamma_1H_0,Delta0,kappa0_1H 
+Alpha_1H0 rateParam Binsignal1H0 zvv ((@0*@1/@2)*@3) Beta0,Gamma_1H_0,Delta0,kappa0_1H 
+Alpha_1H0 rateParam Binsignal1H0 Top ((@0*@1/@2)*@3) Beta0,Gamma_1H_0,Delta0,kappa0_1H 
+Alpha_1H0 rateParam Binsignal1H0 W ((@0*@1/@2)*@3) Beta0,Gamma_1H_0,Delta0,kappa0_1H 
