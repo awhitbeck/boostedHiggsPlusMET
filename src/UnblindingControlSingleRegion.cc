@@ -77,10 +77,10 @@ void UnblindingControlSingleRegion(TString tag = "", bool doubleHiggsRegion = fa
 	float ATSB_SLSF[3]={0.539, 0.32125, 0.134205};
 	float ATSB_SLSFErr[3]={0.0315, 0.0694853, 0.0712219};
 	//update this
-	float PhoSF_1H[4]={0.79, 0.49, 0.91, 0.67};
-	float PhoSFErr_1H[4]={0.15, 0.05, 0.06, 0.04};
-	float PhoSF_2H[4]={0.51, 0.49, 2.42, 0.67};
-	float PhoSFErr_2H[4]={0.18, 0.05, 0.72, 0.04};
+	float PhoSF_1H[4]={0.79, 0.36, 0.91, 0.67};
+	float PhoSFErr_1H[4]={0.15, 0.02, 0.06, 0.04};
+	float PhoSF_2H[4]={0.51, 0.36, 2.42, 0.67};
+	float PhoSFErr_2H[4]={0.18, 0.02, 0.72, 0.04};
 
     if( ! doubleHiggsRegion ){
         regionLabels[0] = "tagSR";
