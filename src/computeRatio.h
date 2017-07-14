@@ -6,7 +6,8 @@
 
 
 void SetRatioErr(TH1F*TotalBkg, TH1F*Pred, TGraphAsymmErrors &Closure,
-                 int nBins = 4 , double lowerBound = 100. , double upperBound = 900.){
+                 int nBins = 4 , double lowerBound = 100. , double upperBound = 900.,
+                 bool verbose = false){
     double binWidth = (upperBound-lowerBound)/nBins;
     TRandom3 rand;
     TH1F*hratio=new TH1F("hratio", "", 100,0.0, 3.);
@@ -32,7 +33,8 @@ void SetRatioErr(TH1F*TotalBkg, TH1F*Pred, TGraphAsymmErrors &Closure,
         Closure.SetPoint(m-1, TotalBkg->GetBinCenter(m), METBinKappa->GetBinContent(m));
         Closure.SetPointError(m-1, binWidth/2., binWidth/2., RatioErrorDn,RatioErrorUp);
         if(m==4) Closure.SetPointError(m-1, binWidth/2.,binWidth/2., RatioErrorDn,RatioErrorUp);
-        std::cout<<"Mean: "<<METBinKappa->GetBinContent(m)<<" +/- "<< RatioErrorUp<<std::endl;
+        if( verbose )
+            std::cout<<"Mean: "<<METBinKappa->GetBinContent(m)<<" +/- "<< RatioErrorUp<<std::endl;
     }
 
 }
