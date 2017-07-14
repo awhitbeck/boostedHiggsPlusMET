@@ -341,7 +341,7 @@ int main(int argc, char** argv){
         if( bin < 0 ) continue;
 
         if( doubletagSRCut( ntuple ) ){
-            if( region != 0 ){
+            if( !blind || region != 0 ){
                 plots[bin][4].fillData(ntuple);
                 for( int i = 0 ; i < doubletagSRPlots.size() ; i++ )
                     doubletagSRPlots[i].fillData(ntuple);
