@@ -6,12 +6,18 @@
 
 
 void SetRatioErr(TH1F*TotalBkg, TH1F*Pred, TGraphAsymmErrors &Closure,
-                 int nBins = 4 , double lowerBound = 100. , double upperBound = 900.,
+                 //int nBins = 4 , double lowerBound = 100. , double upperBound = 900.,
                  bool verbose = false){
-    double binWidth = (upperBound-lowerBound)/nBins;
     TRandom3 rand;
-    TH1F*hratio=new TH1F("hratio", "", 100,0.0, 3.);
-    TH2F* kappaDist = new TH2F("kappaDist","kappaDist",nBins,lowerBound,upperBound,1000,0.,5.);
+    const int nBins =TotalBkg->GetNbinsX(); 
+    double bins[nBins+1];
+    for( int i = 1 ; i <= nBins ; i++ ){
+        bins[i-1] = TotalBkg->GetBinLowEdge(i);
+    }
+    bins[nBins] = TotalBkg->GetBinLowEdge(nBins)+TotalBkg->GetBinWidth(nBins);
+
+    TH1F*hratio=new TH1F("hratio", "", nBins,bins);
+    TH2F* kappaDist = new TH2F("kappaDist","kappaDist",nBins,bins,1000,0.,5.);
     kappaDist->Reset();
     for( int m=1; m<=nBins; ++m){
         for(int i=0; i<1000; ++i){
@@ -22,7 +28,7 @@ void SetRatioErr(TH1F*TotalBkg, TH1F*Pred, TGraphAsymmErrors &Closure,
                 den=rand.Gaus(Pred->GetBinContent(m),Pred->GetBinError(m));
                 den=1.0+den;
             }
-            if( TotalBkg->GetBinCenter(m)<upperBound && TotalBkg->GetBinContent(m) > 0.0001 && Pred->GetBinContent(m) > 0.0001 )
+            if( TotalBkg->GetBinCenter(m)<bins[nBins] && TotalBkg->GetBinContent(m) > 0.0001 && Pred->GetBinContent(m) > 0.0001 )
                 kappaDist->Fill(TotalBkg->GetBinCenter(m),num/den);
         }
         TH1D*METBinKappa=(TH1D*)kappaDist->QuantilesX(0.5, "METBinKappa");
@@ -31,8 +37,8 @@ void SetRatioErr(TH1F*TotalBkg, TH1F*Pred, TGraphAsymmErrors &Closure,
         float RatioErrorUp=fabs(METBinKappaUncUp->GetBinContent(m)-METBinKappa->GetBinContent(m));
         float RatioErrorDn=METBinKappa->GetBinContent(m)-METBinKappaUncDn->GetBinContent(m);
         Closure.SetPoint(m-1, TotalBkg->GetBinCenter(m), METBinKappa->GetBinContent(m));
-        Closure.SetPointError(m-1, binWidth/2., binWidth/2., RatioErrorDn,RatioErrorUp);
-        if(m==4) Closure.SetPointError(m-1, binWidth/2.,binWidth/2., RatioErrorDn,RatioErrorUp);
+        Closure.SetPointError(m-1, (bins[m]-bins[m-1])/2., (bins[m]-bins[m-1])/2., RatioErrorDn,RatioErrorUp);
+        if(m==4) Closure.SetPointError(m-1, (bins[m]-bins[m-1])/2.,(bins[m]-bins[m-1])/2., RatioErrorDn,RatioErrorUp);
         if( verbose )
             std::cout<<"Mean: "<<METBinKappa->GetBinContent(m)<<" +/- "<< RatioErrorUp<<std::endl;
     }

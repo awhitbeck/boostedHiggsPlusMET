@@ -105,7 +105,9 @@ int main(int argc, char** argv){
     }
 
     //vector<plot> tempPlots;
-    plot MET_Plot(*fillMET<RA2bTree>,"MET","m_{J} [GeV]",3,100,700);
+    double met_bins[9]={100.,150.,200.,250.,300.,400.,500.,600.,700.};
+    plot METfine_Plot(*fillMET<RA2bTree>,"METfine","MET [GeV]",8,met_bins);
+    plot MET_Plot(*fillMET<RA2bTree>,"MET","MET [GeV]",3,100,700);
     plot J1pt_Ptplot(*fillLeadingJetPt<RA2bTree>,"J1pt_Pt","p_{T,J} [GeV]",50,300.,1300.);
     plot J2pt_Ptplot(*fillSubLeadingJetPt<RA2bTree>,"J2pt_Pt","p_{T,J} [GeV]",50,300.,1300.);
     plot J1pt_Mplot(*fillLeadingJetMass<RA2bTree>,"J1pt_M","m_{J} [GeV]",50,50.,250.);
@@ -115,6 +117,7 @@ int main(int argc, char** argv){
 
     vector<plot> doubletagSRPlots;
     doubletagSRPlots.push_back(plot(MET_Plot));
+    doubletagSRPlots.push_back(plot(METfine_Plot));
     doubletagSRPlots.push_back(plot(J1pt_Ptplot));
     doubletagSRPlots.push_back(plot(J2pt_Ptplot));
     doubletagSRPlots.push_back(plot(J1pt_Mplot));
@@ -124,6 +127,7 @@ int main(int argc, char** argv){
 
     vector<plot> doubletagSBPlots;
     doubletagSBPlots.push_back(plot(MET_Plot));
+    doubletagSBPlots.push_back(plot(METfine_Plot));
     doubletagSBPlots.push_back(plot(J1pt_Ptplot));
     doubletagSBPlots.push_back(plot(J2pt_Ptplot));
     doubletagSBPlots.push_back(plot(J1pt_Mplot));    
@@ -133,6 +137,7 @@ int main(int argc, char** argv){
 
     vector<plot> tagSRPlots;
     tagSRPlots.push_back(plot(MET_Plot));
+    tagSRPlots.push_back(plot(METfine_Plot));
     tagSRPlots.push_back(plot(J1pt_Ptplot));
     tagSRPlots.push_back(plot(J2pt_Ptplot));    
     tagSRPlots.push_back(plot(J1pt_Mplot));
@@ -142,6 +147,7 @@ int main(int argc, char** argv){
 
     vector<plot> tagSBPlots;
     tagSBPlots.push_back(plot(MET_Plot));
+    tagSBPlots.push_back(plot(METfine_Plot));
     tagSBPlots.push_back(plot(J1pt_Ptplot));
     tagSBPlots.push_back(plot(J2pt_Ptplot));    
     tagSBPlots.push_back(plot(J1pt_Mplot));
@@ -151,6 +157,7 @@ int main(int argc, char** argv){
 
     vector<plot> antitagSRPlots;
     antitagSRPlots.push_back(plot(MET_Plot));
+    antitagSRPlots.push_back(plot(METfine_Plot));
     antitagSRPlots.push_back(plot(J1pt_Ptplot));
     antitagSRPlots.push_back(plot(J2pt_Ptplot));    
     antitagSRPlots.push_back(plot(J1pt_Mplot));
@@ -160,6 +167,7 @@ int main(int argc, char** argv){
 
     vector<plot> antitagSBPlots;
     antitagSBPlots.push_back(plot(MET_Plot));
+    antitagSBPlots.push_back(plot(METfine_Plot));
     antitagSBPlots.push_back(plot(J1pt_Ptplot));
     antitagSBPlots.push_back(plot(J2pt_Ptplot));    
     antitagSBPlots.push_back(plot(J1pt_Mplot));
