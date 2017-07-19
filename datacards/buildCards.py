@@ -145,13 +145,13 @@ if __name__ == '__main__':
 	antitagSBSF=readSFFile("bkgInputs/SFInputs.txt", "antitagSB")
 
 	QCDMCSignalRegion1H.Scale(tagSRSF[0])
-	#WJetsMCSignalRegion1H.Scale(tagSRSF[1])
-	#TTJetsMCSignalRegion1H.Scale(tagSRSF[1])
+	WJetsMCSignalRegion1H.Scale(tagSRSF[1])
+	TTJetsMCSignalRegion1H.Scale(tagSRSF[1])
 	ZJetsMCSignalRegion1H.Scale(tagSRSF[2])
 
 	QCDMCSignalRegion2H.Scale(doubletagSRSF[0])
-	#WJetsMCSignalRegion2H.Scale(doubletagSRSF[1])
-	#TTJetsMCSignalRegion2H.Scale(doubletagSRSF[1])
+	WJetsMCSignalRegion2H.Scale(doubletagSRSF[1])
+	TTJetsMCSignalRegion2H.Scale(doubletagSRSF[1])
 	ZJetsMCSignalRegion2H.Scale(doubletagSRSF[2])
 
 	QCDMCAntitagRegion.Scale(antitagSRSF[0])
