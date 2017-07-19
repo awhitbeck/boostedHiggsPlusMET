@@ -25,6 +25,7 @@ if __name__ == '__main__':
 	os.makedirs(odir);
 	tagsForSignalRegion=["MET300", "MET500","MET700"]
 	inputfile =TFile.Open("bkgInputs/datacardInputsUnblinding.root")
+	#inputfile =TFile.Open("datacardInputsTest.root")
 	#Signal Region 2H
 	DataSignalRegion2H=inputfile.Get("AnalysisMETBins_doubletagSR_data");
 	QCDMCSignalRegion2H=inputfile.Get("AnalysisMETBins_doubletagSR_QCD");
@@ -144,13 +145,13 @@ if __name__ == '__main__':
 	antitagSBSF=readSFFile("bkgInputs/SFInputs.txt", "antitagSB")
 
 	QCDMCSignalRegion1H.Scale(tagSRSF[0])
-	WJetsMCSignalRegion1H.Scale(tagSRSF[1])
-	TTJetsMCSignalRegion1H.Scale(tagSRSF[1])
+	#WJetsMCSignalRegion1H.Scale(tagSRSF[1])
+	#TTJetsMCSignalRegion1H.Scale(tagSRSF[1])
 	ZJetsMCSignalRegion1H.Scale(tagSRSF[2])
 
 	QCDMCSignalRegion2H.Scale(doubletagSRSF[0])
-	WJetsMCSignalRegion2H.Scale(doubletagSRSF[1])
-	TTJetsMCSignalRegion2H.Scale(doubletagSRSF[1])
+	#WJetsMCSignalRegion2H.Scale(doubletagSRSF[1])
+	#TTJetsMCSignalRegion2H.Scale(doubletagSRSF[1])
 	ZJetsMCSignalRegion2H.Scale(doubletagSRSF[2])
 
 	QCDMCAntitagRegion.Scale(antitagSRSF[0])
@@ -407,7 +408,6 @@ if __name__ == '__main__':
 	sidebandRegion1H.addAsymSystematic("ISRUnc", 'lnN', ['sig'], ISRSysUp, ISRSysDn)
 	sidebandRegion.addAsymSystematic("ISRUnc", 'lnN', ['sig'], ISRSysUp, ISRSysDn)
 	sidebandATRegion.addAsymSystematic("ISRUnc", 'lnN', ['sig'], ISRSysUp, ISRSysDn)
-
 	signalRegion.addSingleSystematic('lumi','lnN',['sig'],1.027);
 	signalRegion.addSingleSystematic('IsoTrackEff','lnN',['sig'],1.02);
 	signalRegion.addSingleSystematic('TrigEff','lnN',['sig'],1.02);
