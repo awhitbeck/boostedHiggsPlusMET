@@ -68,19 +68,20 @@
 		float LDPSF_2H[4]={0.85, 0.93,1.2,0.71};
 		float LDPSFErr_2H[4]={0.12, 0.1, 0.16,0.027};
 		//update this (need the MET Dependant numbers)
-		float SLSF_1H[4]={0.58, 0.53, 0.58, 0.48};
-		float SLSFErr_1H[4]={0.12, 0.08, 0.049, 0.03};
-		float SLSF_2H[4]={0.6, 0.53, 0.74, 0.48};
-		float SLSFErr_2H[4]={0.25, 0.08, 0.14, 0.03};
+		float SLSF_1H[4]={0.63, 0.53, 0.65, 0.48};
+		float SLSFErr_1H[4]={0.069, 0.08, 0.1, 0.03};
+
+		float SLSF_2H[4]={0.64, 0.53, 0.71, 0.48};
+		float SLSFErr_2H[4]={0.15, 0.08, 0.06, 0.03};
 		float ATSR_SLSF[3]={ 0.429583, 0.1725, 0.11};
 		float ATSR_SLSFErr[3]={0.0731061, 0.0807372, 0.11};
 		float ATSB_SLSF[3]={0.539, 0.32125, 0.134205};
 		float ATSB_SLSFErr[3]={0.0315, 0.0694853, 0.0712219};
 		//update this
-		float PhoSF_1H[4]={0.79, 0.36, 0.91, 0.67};
-		float PhoSFErr_1H[4]={0.15, 0.02, 0.06, 0.04};
-		float PhoSF_2H[4]={0.51, 0.36, 2.42, 0.67};
-		float PhoSFErr_2H[4]={0.18, 0.02, 0.72, 0.04};
+		float PhoSF_1H[4]={0.75, 0.50, 0.98, 0.71};
+		float PhoSFErr_1H[4]={0.29, 0.07, 0.094, 0.035};
+		float PhoSF_2H[4]={0.61, 0.50, 2.58, 0.71};
+		float PhoSFErr_2H[4]={0.088, 0.07, 0.63, 0.035};
 
 	    if( ! doubleHiggsRegion ){
 		regionLabels[0] = "tagSR";
@@ -120,18 +121,6 @@
 			MCQCD->SetBinContent(b-1, QCD->GetBinContent(b));	
 			MCOther->SetBinContent(b-1, Other->GetBinContent(b));	
 			MCSnglT->SetBinContent(b-1, SnglT->GetBinContent(b));
-	/*
-			float QCDErr=sqrt((QCD->GetBinError(b)/QCD->GetBinContent(b))*(QCD->GetBinError(b)/QCD->GetBinContent(b))+(LDPSFErr_1H[r]/LDPSF_1H[r]*LDPSFErr_1H[r]/LDPSF_1H[r]))*LDPSF_1H[r]*QCD->GetBinContent(b);
-			if(MCQCD->GetBinContent(b)<0.000001)QCDErr=LDPSFErr_1H[r];
-			float ZErr=sqrt((ZJets->GetBinError(b)/ZJets->GetBinContent(b))*(ZJets->GetBinError(b)/ZJets->GetBinContent(b))+(PhoSFErr_1H[r]/PhoSF_1H[r]*PhoSFErr_1H[r]/PhoSF_1H[r]))*PhoSF_1H[r]*ZJets->GetBinContent(b);
-			float WErr=sqrt((WJets->GetBinError(b)/WJets->GetBinContent(b))*(WJets->GetBinError(b)/WJets->GetBinContent(b))+(SLSFErr_1H[r]/SLSF_1H[r]*SLSFErr_1H[r]/SLSF_1H[r]))*SLSF_1H[r]*WJets->GetBinContent(b);
-			float TErr=sqrt((TTJets->GetBinError(b)/TTJets->GetBinContent(b))*(TTJets->GetBinError(b)/TTJets->GetBinContent(b))+(SLSFErr_1H[r]/SLSF_1H[r]*SLSFErr_1H[r]/SLSF_1H[r]))*SLSF_1H[r]*TTJets->GetBinContent(b);
-
-			MCQCD->SetBinError(b,QCDErr);
-			MCZJets->SetBinError(b,ZErr);
-			MCWJets->SetBinError(b,WErr);
-			MCTTJets->SetBinError(b,TErr);
-	*/
 		}
 		if( ! doubleHiggsRegion ){
 		MCQCD->Scale(LDPSF_1H[0]);
@@ -199,8 +188,11 @@
 		    if(!doubleHiggsRegion){
 			if(r==1){SLSF_1H[r]=ATSR_SLSF[b-2]; SLSFErr_1H[r]=ATSR_SLSFErr[b-2];}
 			if(r==3){SLSF_1H[r]=ATSB_SLSF[b-2]; SLSFErr_1H[r]=ATSB_SLSFErr[b-2];}
+			if(b-1==1 && (r==0|| r==2) )SLSFErr_1H[b-2]=sqrt((SLSFErr_1H[b-2]*SLSFErr_1H[b-2])+(0.015*0.015));
+			if(b-1==2 && (r==0 || r==2) )SLSFErr_1H[b-2]=sqrt((SLSFErr_1H[b-2]*SLSFErr_1H[b-2])+(0.19*0.19));
+			if(b-1==3 && (r==0|| r==2) )SLSFErr_1H[b-2]=sqrt((SLSFErr_1H[b-2]*SLSFErr_1H[b-2])+(0.41*0.41));
 			float QCDErr=sqrt((tempQCD->GetBinError(b)/tempQCD->GetBinContent(b))*(tempQCD->GetBinError(b)/tempQCD->GetBinContent(b))+(LDPSFErr_1H[r]/LDPSF_1H[r]*LDPSFErr_1H[r]/LDPSF_1H[r]))*LDPSF_1H[r]*tempQCD->GetBinContent(b);
-			if(tempQCD->GetBinContent(b)<0.000001)QCDErr=LDPSFErr_1H[r];
+			if(tempQCD->GetBinContent(b)<0.000001)QCDErr=0;//LDPSFErr_1H[r];
 			float ZErr=sqrt((tempZ->GetBinError(b)/tempZ->GetBinContent(b))*(tempZ->GetBinError(b)/tempZ->GetBinContent(b))+(PhoSFErr_1H[r]/PhoSF_1H[r]*PhoSFErr_1H[r]/PhoSF_1H[r]))*PhoSF_1H[r]*tempZ->GetBinContent(b);
 			float WErr=sqrt((tempW->GetBinError(b)/tempW->GetBinContent(b))*(tempW->GetBinError(b)/tempW->GetBinContent(b))+(SLSFErr_1H[r]/SLSF_1H[r]*SLSFErr_1H[r]/SLSF_1H[r]))*SLSF_1H[r]*tempW->GetBinContent(b);
 			float TErr=sqrt((tempT->GetBinError(b)/tempT->GetBinContent(b))*(tempT->GetBinError(b)/tempT->GetBinContent(b))+(SLSFErr_1H[r]/SLSF_1H[r]*SLSFErr_1H[r]/SLSF_1H[r]))*SLSF_1H[r]*tempT->GetBinContent(b);
@@ -217,14 +209,17 @@
 			//update for the MET Dependant SF for antit-tag region for SL
 			if(r==1){SLSF_2H[r]=ATSR_SLSF[b-2]; SLSFErr_2H[r]=ATSR_SLSFErr[b-2];}
 			if(r==3){SLSF_2H[r]=ATSB_SLSF[b-2]; SLSFErr_2H[r]=ATSB_SLSFErr[b-2];}
+			if(b-1==1 && (r==0|| r==2) )SLSFErr_2H[b-2]=sqrt((SLSFErr_2H[b-2]*SLSFErr_2H[b-2])+(0.015*0.015));
+			if(b-1==2 && (r==0 || r==2) )SLSFErr_2H[b-2]=sqrt((SLSFErr_2H[b-2]*SLSFErr_2H[b-2])+(0.19*0.19));
+			if(b-1==3 && (r==0|| r==2) )SLSFErr_2H[b-2]=sqrt((SLSFErr_2H[b-2]*SLSFErr_2H[b-2])+(0.41*0.41));
 			float QCDErr=sqrt((tempQCD->GetBinError(b)/tempQCD->GetBinContent(b))*(tempQCD->GetBinError(b)/tempQCD->GetBinContent(b))+(LDPSFErr_2H[r]/LDPSF_2H[r]*LDPSFErr_2H[r]/LDPSF_2H[r]))*LDPSF_2H[r]*tempQCD->GetBinContent(b);
-			if(tempQCD->GetBinContent(b)<0.000001)QCDErr=LDPSFErr_2H[r];
+			if(tempQCD->GetBinContent(b)<0.000001)QCDErr=0;//LDPSFErr_2H[r];
 			float ZErr=sqrt((tempZ->GetBinError(b)/tempZ->GetBinContent(b))*(tempZ->GetBinError(b)/tempZ->GetBinContent(b))+(PhoSFErr_2H[r]/PhoSF_2H[r]*PhoSFErr_2H[r]/PhoSF_2H[r]))*PhoSF_2H[r]*tempZ->GetBinContent(b);
 			float WErr=sqrt((tempW->GetBinError(b)/tempW->GetBinContent(b))*(tempW->GetBinError(b)/tempW->GetBinContent(b))+(SLSFErr_2H[r]/SLSF_2H[r]*SLSFErr_2H[r]/SLSF_2H[r]))*SLSF_2H[r]*tempW->GetBinContent(b);
-			if(tempW->GetBinContent(b)<0.000001)WErr=SLSF_2H[r];
+			if(tempW->GetBinContent(b)<0.000001)WErr=0;//SLSF_2H[r];
 			float TErr=sqrt((tempT->GetBinError(b)/tempT->GetBinContent(b))*(tempT->GetBinError(b)/tempT->GetBinContent(b))+(SLSFErr_2H[r]/SLSF_2H[r]*SLSFErr_2H[r]/SLSF_2H[r]))*SLSF_2H[r]*tempT->GetBinContent(b);
-			if(tempT->GetBinContent(b)<0.0000001)TErr=SLSF_2H[r];
-			//tempQCD->SetBinError(b, QCDErr);
+			if(tempT->GetBinContent(b)<0.0000001)TErr=0;//SLSF_2H[r];
+			tempQCD->SetBinError(b, QCDErr);
 			tempZ->SetBinError(b, ZErr);
 			tempW->SetBinError(b,WErr);
 			tempT->SetBinError(b,TErr);
@@ -244,7 +239,7 @@
 		    Data[r]->SetBinContent(b-1, tempData->GetBinContent(b));
 		    MC[r]->SetBinContent(b-1,temp->GetBinContent(b));
 		    MC[r]->SetBinError(b-1,temp->GetBinError(b));
-		    cout << " & " <<  MC[r]->GetBinContent(b) << " $\\pm$ " << MC[r]->GetBinError(b) ;
+		    cout << "MC Total  & " <<  MC[r]->GetBinContent(b-1) << " $\\pm$ " << MC[r]->GetBinError(b-1)<<endl; ;
 		}
 	    }
 
@@ -276,7 +271,6 @@
 	    Closure->SetMarkerStyle(8);
 	    Closure->SetLineColor(1);
 	    Closure->GetYaxis()->SetRangeUser(0.,4.);
-		
 	    Closure->GetYaxis()->SetLabelFont(43);
 	    Closure->GetYaxis()->SetLabelSize(14);
 	    Closure->GetYaxis()->SetTitleFont(43);
@@ -301,6 +295,7 @@
 	    botPad->Draw();
 	    topPad->cd();
 	     MCprediction->GetYaxis()->SetRangeUser(0.0,2.0);
+	    if(!doubleHiggsRegion)MCprediction->GetYaxis()->SetRangeUser(0.,20.);	
     MCprediction->Draw("e2");
    // Dataprediction->Draw("pesame");
    // MCprediction->Draw("e2same");
