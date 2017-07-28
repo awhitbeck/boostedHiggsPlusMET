@@ -359,7 +359,7 @@ int main(int argc, char** argv){
             for( int i = 0 ; i < doubletagSBPlots.size() ; i++ )
                 doubletagSBPlots[i].fillData(ntuple);
         }else if( tagSRCut( ntuple ) ){
-            if( region != 0 ){
+            if( !blind || region != 0 ){
                 plots[bin][0].fillData(ntuple);
                 for( int i = 0 ; i < tagSRPlots.size() ; i++ )
                     tagSRPlots[i].fillData(ntuple);
