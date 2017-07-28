@@ -134,11 +134,19 @@ int main(int argc, char** argv){
     regionTags[2] = "antitagSR";
     regionTags[3] = "antitagSB";
 
+    // these are relative uncertainties!
+    vector<double> singleLepMETunc={0.025,0.025,0.32,0.69};
+
     if( doubletag ){
-        corrTT[0]=vector<double>(4,0.6);       corrErrTT[0]=vector<double>(4,0.25);
-        corrTT[1]=vector<double>(4,0.74);      corrErrTT[1]=vector<double>(4,0.14);
+        corrTT[0]=vector<double>(4,0.64);       corrErrTT[0]=vector<double>(4,0.15);
+        corrTT[1]=vector<double>(4,0.71);      corrErrTT[1]=vector<double>(4,0.059);
         corrTT[2]={0.56,0.43,0.17,0.11};       corrErrTT[2]={0.07,0.08,0.11,0.11};
         corrTT[3]={0.52,0.54,0.32,0.13};       corrErrTT[3]={0.02,0.03,0.07,0.07};
+        // inflate uncertainties to account for MET systematics
+        for( int i = 0 ; i < corrErrTT[0].size() ; i++ ){
+            corrErrTT[0][i] = sqrt(corrErrTT[0][i]*corrErrTT[0][i]/corrTT[0][i]/corrTT[0][i]+singleLepMETunc[i]*singleLepMETunc[i])*corrTT[0][i];
+            corrErrTT[1][i] = sqrt(corrErrTT[1][i]*corrErrTT[1][i]/corrTT[1][i]/corrTT[1][i]+singleLepMETunc[i]*singleLepMETunc[i])*corrTT[1][i];
+        }
         corrWJets[0]=corrTT[0];                corrErrWJets[0]=corrErrTT[0];
         corrWJets[1]=corrTT[1];                corrErrWJets[1]=corrErrTT[1];
         corrWJets[2]=corrTT[2];                corrErrWJets[2]=corrErrTT[2];
@@ -152,10 +160,15 @@ int main(int argc, char** argv){
         corrQCD[2]=vector<double>(4,0.93);     corrErrQCD[2]=vector<double>(4,0.1);
         corrQCD[3]=vector<double>(4,0.71);     corrErrQCD[3]=vector<double>(4,0.027);
     }else{
-        corrTT[0]=vector<double>(4,0.58);      corrErrTT[0]=vector<double>(4,0.12); //signal          
-        corrTT[1]=vector<double>(4,0.58);      corrErrTT[1]=vector<double>(4,0.049);//sideband       
+        corrTT[0]=vector<double>(4,0.63);      corrErrTT[0]=vector<double>(4,0.069); //signal          
+        corrTT[1]=vector<double>(4,0.65);      corrErrTT[1]=vector<double>(4,0.1);//sideband       
         corrTT[2]={0.56,0.43,0.17,0.11};       corrErrTT[2]={0.07,0.08,0.11,0.11};
         corrTT[3]={0.52,0.54,0.32,0.13};       corrErrTT[3]={0.02,0.03,0.07,0.07};
+        // inflate uncertainties to account for MET systematics
+        for( int i = 0 ; i < corrErrTT[0].size() ; i++ ){
+            corrErrTT[0][i] = sqrt(corrErrTT[0][i]*corrErrTT[0][i]/corrTT[0][i]/corrTT[0][i]+singleLepMETunc[i]*singleLepMETunc[i])*corrTT[0][i];
+            corrErrTT[1][i] = sqrt(corrErrTT[1][i]*corrErrTT[1][i]/corrTT[1][i]/corrTT[1][i]+singleLepMETunc[i]*singleLepMETunc[i])*corrTT[1][i];
+        }
         corrWJets[0]=corrTT[0];    corrErrWJets[0]=corrErrTT[0];              
         corrWJets[1]=corrTT[1];    corrErrWJets[1]=corrErrTT[1];              
         corrWJets[2]=corrTT[2];    corrErrWJets[2]=corrErrTT[2];              

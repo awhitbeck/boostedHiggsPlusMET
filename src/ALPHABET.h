@@ -1,6 +1,6 @@
 namespace alphabet{
 
-    bool blind = true;
+    bool blind = false;
 
     const int numMETbins=4;
     const int lowestMET=100.;
