@@ -25,7 +25,7 @@ public :
     enum region {kSignal,kPhoton,kSLm,kSLe,kLowDphi, kNumRegions};
     TString regionNames[kNumRegions]={"signal","photon","SLm","SLe","kLowDphi"};
 
-    TString skimType;
+    TString skimType,skimTypeLDP;
 
     skimSamples(region r=kSignal){
 
@@ -33,15 +33,18 @@ public :
 
         if( r == kSignal ){
             skimType=BASE_DIR+"tree_signal/";
+            skimTypeLDP=BASE_DIR+"tree_LDP/";
         }
         if( r == kPhoton ){
             skimType="root://cmseos.fnal.gov//store/user/fojensen/boostedSkims_19062017/Run2ProductionV12/tree_GJet/";
         }
         if( r == kSLm ){
             skimType=BASE_DIR+"tree_SLm/";
+            skimTypeLDP=BASE_DIR+"tree_SLmLDP/";
         }
         if( r == kSLe ){
             skimType=BASE_DIR+"tree_SLe/";
+            skimTypeLDP=BASE_DIR+"tree_SLeLDP/";
         }
         if(r==kLowDphi){
             skimType=BASE_DIR+"tree_LDP/";
@@ -69,6 +72,7 @@ public :
         Other = new TChain("tree");
         for( int i = 0 ; i < OtherFileNames.size() ; i++ ){
             Other->Add(skimType+"/"+OtherFileNames[i]);
+            Other->Add(skimTypeLDP+"/"+OtherFileNames[i]);
         }
         if( r == kSignal || r == kSLm || r == kSLe || r == kLowDphi || r == kPhoton ){
             ntuples.push_back(new RA2bTree(Other));
@@ -88,6 +92,7 @@ public :
         ZJets = new TChain("tree");
         for( int i = 0 ; i < ZJetsFileNames.size() ; i++ ){
             ZJets->Add(skimType+"/"+ZJetsFileNames[i]);
+            ZJets->Add(skimTypeLDP+"/"+ZJetsFileNames[i]);
         }
         if( r == kSignal || r == kLowDphi ){ 
             ntuples.push_back(new RA2bTree(ZJets));
@@ -107,6 +112,7 @@ public :
         WJets = new TChain("tree");
         for( int i = 0 ; i < WJetsFileNames.size() ; i++ ){
             WJets->Add(skimType+"/"+WJetsFileNames[i]);
+            WJets->Add(skimTypeLDP+"/"+WJetsFileNames[i]);
         }
         if( r == kSignal || r == kSLm || r == kSLe || r == kLowDphi ){
             ntuples.push_back(new RA2bTree(WJets));
@@ -124,6 +130,7 @@ public :
         SnglT = new TChain("tree");
         for( int i = 0 ; i < SnglTFileNames.size() ; i++ ) {
             SnglT->Add(skimType+"/"+SnglTFileNames[i]);
+            SnglT->Add(skimTypeLDP+"/"+SnglTFileNames[i]);
         }
         if( r == kSignal || r == kSLm || r == kSLe ){
             ntuples.push_back(new RA2bTree(SnglT));
@@ -137,6 +144,7 @@ public :
         TTinc = new TChain("tree");
         for( int i = 0 ; i < TTincFileNames.size() ; i++ ){
             TTinc->Add(skimType+"/"+TTincFileNames[i]);
+            TTinc->Add(skimTypeLDP+"/"+TTincFileNames[i]);
         }
         /*
         if( r == kSignal || r == kSLm || r == kSLe || r == kLowDphi ){
@@ -158,6 +166,7 @@ public :
         TT = new TChain("tree");
         for( int i = 0 ; i < TTFileNames.size() ; i++ ){
             TT->Add(skimType+"/"+TTFileNames[i]);
+            TT->Add(skimTypeLDP+"/"+TTFileNames[i]);
         }
         if( r == kSignal || r == kSLm || r == kSLe || r == kLowDphi ){
             ntuples.push_back(new RA2bTree(TT));
@@ -174,7 +183,7 @@ public :
         DY = new TChain("tree");
         for( int i = 0 ; i < DYFileNames.size() ; i++ ){
             DY->Add(skimType+"/"+DYFileNames[i]);
-            //DY->Add(skimTypeLDP+"/"+DYFileNames[i]);
+            DY->Add(skimTypeLDP+"/"+DYFileNames[i]);
         }
         //ntuples.push_back(new RA2bTree(DY));
         //sampleName.push_back("DY");
@@ -224,6 +233,7 @@ public :
         QCD = new TChain("tree");
         for( int i = 0 ; i < QCDFileNames.size() ; i++ ){
             QCD->Add(skimType+"/"+QCDFileNames[i]);
+            QCD->Add(skimTypeLDP+"/"+QCDFileNames[i]);
         }
         if( r == kSignal || r == kPhoton || r == kLowDphi ){
             ntuples.push_back(new RA2bTree(QCD));
@@ -250,12 +260,13 @@ public :
             data = new TChain("tree");
             for( int i = 0 ; i < HTMHTFileNames.size() ; i++ ){
                 data->Add(skimType+"/"+HTMHTFileNames[i]);
+                data->Add(skimTypeLDP+"/"+HTMHTFileNames[i]);
             }    
             dataNtuple = new RA2bTree(data);
-	    ntuples.push_back(dataNtuple);
-	    sampleName.push_back("data"); 
-	    fillColor.push_back(kWhite);
-	    lineColor.push_back(1);
+            ntuples.push_back(dataNtuple);
+            sampleName.push_back("data"); 
+            fillColor.push_back(kWhite);
+            lineColor.push_back(1);
         }
 
         std::vector<TString> SingleElectronNames;
@@ -270,6 +281,7 @@ public :
             data = new TChain("tree");
             for( int i = 0 ; i < SingleElectronNames.size() ; i++ ){
                 data->Add(skimType+"/"+SingleElectronNames[i]);
+                data->Add(skimTypeLDP+"/"+SingleElectronNames[i]);
             }
             dataNtuple = new RA2bTree(data);
         }
@@ -287,6 +299,7 @@ public :
             data = new TChain("tree");
             for( int i = 0 ; i < SingleMuonNames.size() ; i++ ){
                 data->Add(skimType+"/"+SingleMuonNames[i]);
+                data->Add(skimTypeLDP+"/"+SingleMuonNames[i]);
             }
             dataNtuple = new RA2bTree(data);
         }
@@ -304,6 +317,7 @@ public :
             data = new TChain("tree");
             for( int i = 0 ; i < SinglePhotonFileNames.size() ; i++ ){
                 data->Add(skimType+"/"+SinglePhotonFileNames[i]);
+                data->Add(skimTypeLDP+"/"+SinglePhotonFileNames[i]);
             }
             dataNtuple = new RA2bTree(data);
         }

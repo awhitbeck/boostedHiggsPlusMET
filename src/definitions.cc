@@ -1206,7 +1206,7 @@ template<typename ntupleType> bool baselineCut(ntupleType* ntuple){
            ntuple->JetsAK8->at(1).Pt() > 300. &&
            ntuple->JetsAK8_prunedMass->at(1) > 50. && 
            ntuple->JetsAK8_prunedMass->at(1) < 250.&&
-           DeltaPhiCuts(ntuple) && 
+           //DeltaPhiCuts(ntuple) && 
            ntuple->Muons->size()+ntuple->Electrons->size()==0 
            && ntuple->isoElectronTracks+ntuple->isoMuonTracks +ntuple->isoPionTracks==0 &&
 	   
@@ -1242,7 +1242,7 @@ template<typename ntupleType> bool singleMuBaselineCut(ntupleType* ntuple){
              ntuple->JetsAK8->at(1).Pt() > 300. &&
              ntuple->JetsAK8_prunedMass->at(1) > 50. && 
              ntuple->JetsAK8_prunedMass->at(1) < 250.&&
-             DeltaPhiCuts( ntuple ) && 
+             //DeltaPhiCuts( ntuple ) && 
              FiltersCut(ntuple) &&
              ntuple->JetID == 1);
     
@@ -1267,7 +1267,7 @@ template<typename ntupleType> bool singleEleBaselineCut(ntupleType* ntuple){
              ntuple->JetsAK8->at(1).Pt() > 300. &&
              ntuple->JetsAK8_prunedMass->at(1) > 50. && 
              ntuple->JetsAK8_prunedMass->at(1) < 250.&&
-             DeltaPhiCuts( ntuple ) && 
+             //DeltaPhiCuts( ntuple ) && 
              FiltersCut(ntuple) &&
              ntuple->JetID == 1);
     
@@ -1303,10 +1303,10 @@ template<typename ntupleType> bool photonBaselineCut(ntupleType* ntuple){
              ntuple->JetsAK8Clean->at(1).Pt() > 300. &&
              ntuple->JetsAK8Clean_prunedMass->at(1) > 50. && 
              ntuple->JetsAK8Clean_prunedMass->at(1) < 250.&&
-             ntuple->DeltaPhi1clean>0.5 && 
-             ntuple->DeltaPhi2clean>0.5 &&
-             ntuple->DeltaPhi3clean>0.3 && 
-             ntuple->DeltaPhi4clean>0.3 &&
+             //ntuple->DeltaPhi1clean>0.5 && 
+             //ntuple->DeltaPhi2clean>0.5 &&
+             //ntuple->DeltaPhi3clean>0.3 && 
+             //ntuple->DeltaPhi4clean>0.3 &&
              ntuple->isoElectronTracksclean==0 &&
              ntuple->isoMuonTracksclean == 0 && 
              ntuple->isoPionTracksclean == 0 &&
@@ -1324,10 +1324,10 @@ template<typename ntupleType> bool photonBaselineCut_loose(ntupleType* ntuple){
              ntuple->METclean > 100.             &&
              ntuple->HTclean > 400.                         &&
              ntuple->JetsAK8Clean->size()>=2 && 
-             ntuple->DeltaPhi1clean>0.5 && 
-             ntuple->DeltaPhi2clean>0.5 &&
-             ntuple->DeltaPhi3clean>0.3 && 
-             ntuple->DeltaPhi4clean>0.3 &&
+             //ntuple->DeltaPhi1clean>0.5 && 
+             //ntuple->DeltaPhi2clean>0.5 &&
+             //ntuple->DeltaPhi3clean>0.3 && 
+             //ntuple->DeltaPhi4clean>0.3 &&
              ntuple->isoElectronTracksclean==0 &&
              ntuple->isoMuonTracksclean == 0 && 
              ntuple->isoPionTracksclean == 0 &&
