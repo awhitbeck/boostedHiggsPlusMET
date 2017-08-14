@@ -39,6 +39,11 @@ int main(int argc, char** argv){
   plot BTagsplot(*fillBTags<RA2bTree>,"BTags_singleMuCR_baseline","n_{b}",6,-0.5,5.5);
   plot Binsplot(*fillAnalysisBins<RA2bTree>,"AnalysisBins_singleMuCR_baseline","i^th Bin",8,0.5,8.5);
 
+  plot DeltaPhi1plot(*fillDeltaPhi1<RA2bTree>,"DeltaPhi1_singleMuCR_baseline","#Delta#Phi_{1}",20,0,3.1415);
+  plot DeltaPhi2plot(*fillDeltaPhi2<RA2bTree>,"DeltaPhi2_singleMuCR_baseline","#Delta#Phi_{2}",20,0,3.1415);
+  plot DeltaPhi3plot(*fillDeltaPhi3<RA2bTree>,"DeltaPhi3_singleMuCR_baseline","#Delta#Phi_{3}",20,0,3.1415);
+  plot DeltaPhi4plot(*fillDeltaPhi4<RA2bTree>,"DeltaPhi4_singleMuCR_baseline","#Delta#Phi_{4}",20,0,3.1415);
+
   plot Ak4JetPt1(*fillJetPt1<RA2bTree>,"Ak4JetPt1_singleMuCR_baseline","p_{T,j1} [GeV]",40,0,600);
   plot Ak4JetPt2(*fillJetPt2<RA2bTree>,"Ak4JetPt2_singleMuCR_baseline","p_{T,j2} [GeV]",40,0,600);
   plot Ak4JetPt3(*fillJetPt3<RA2bTree>,"Ak4JetPt3_singleMuCR_baseline","p_{T,j3} [GeV]",40,0,600);
@@ -124,6 +129,10 @@ int main(int argc, char** argv){
   plots.push_back(NJetsplot);
   plots.push_back(BTagsplot);
   plots.push_back(Binsplot);
+  plots.push_back(DeltaPhi1plot);
+  plots.push_back(DeltaPhi2plot);
+  plots.push_back(DeltaPhi3plot);
+  plots.push_back(DeltaPhi4plot);
   plots.push_back(J1dR_Massplot);
   plots.push_back(J2dR_Massplot);
   plots.push_back(J1dR_BBplot);
