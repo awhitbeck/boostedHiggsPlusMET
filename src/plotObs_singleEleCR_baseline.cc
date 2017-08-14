@@ -29,7 +29,10 @@ int main(int argc, char** argv){
   plot NJetsplot(*fillNJets<RA2bTree>,"NJets_singleEleCR_baseline","n_{j}",14,1.5,15.5);
   plot BTagsplot(*fillBTags<RA2bTree>,"BTags_singleEleCR_baseline","n_{b}",6,-0.5,5.5);
   plot Binsplot(*fillAnalysisBins<RA2bTree>,"AnalysisBins_singleEleCR_baseline","i^th Bin",8,0.5,8.5);
-
+  plot DeltaPhi1plot(*fillDeltaPhi1<RA2bTree>,"DeltaPhi1_singleEleCR_baseline","#Delta#Phi_{1}",20,0,3.1415);
+  plot DeltaPhi2plot(*fillDeltaPhi2<RA2bTree>,"DeltaPhi2_singleEleCR_baseline","#Delta#Phi_{2}",20,0,3.1415);
+  plot DeltaPhi3plot(*fillDeltaPhi3<RA2bTree>,"DeltaPhi3_singleEleCR_baseline","#Delta#Phi_{3}",20,0,3.1415);
+  plot DeltaPhi4plot(*fillDeltaPhi4<RA2bTree>,"DeltaPhi4_singleEleCR_baseline","#Delta#Phi_{4}",20,0,3.1415);
   plot J1dR_Massplot(*leadJetMuondR_mass<RA2bTree>,"J1dR_Mass_singleEleCR_baseline","m_{J} [GeV]",20,50.,250.);
   plot J2dR_Massplot(*subleadJetMuondR_mass<RA2bTree>,"J2dR_Mass_singleEleCR_baseline","m_{J} [GeV]",20,50.,250.);
   plot J1dR_BBplot(*leadJetMuondR_bbdisc<RA2bTree>,"J1dR_BBdisc_singleEleCR_baseline","bb-disc",20,-1.,1.);
@@ -70,6 +73,10 @@ int main(int argc, char** argv){
   plots.push_back(NJetsplot);
   plots.push_back(BTagsplot);
   plots.push_back(Binsplot);
+  plots.push_back(DeltaPhi1plot);
+  plots.push_back(DeltaPhi2plot);
+  plots.push_back(DeltaPhi3plot);
+  plots.push_back(DeltaPhi4plot);
   plots.push_back(J1dR_Massplot);
   plots.push_back(J2dR_Massplot);
   plots.push_back(J1dR_BBplot);
