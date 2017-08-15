@@ -53,7 +53,7 @@ For the signal region, and each of the validation regions, a function is defined
 
 #### Comparisons of ABCD predictions
 
-To access the consistency between data/MC predicitons, yields from data and MC are compared in each of the ABCD regions.  Scale factors are also derived from these plots.  In region A, the observed yeild in data is compared to the prediction from data.  To reproduce these plots, first create histograms:
+To access the consistency between data/MC predicitons, yields from data and MC are compared in each of the ABCD regions.  Scale factors are also derived from these plots.  In region A, the observed yield in data is compared to the prediction from data.  To reproduce these plots, first create histograms:
 
 see code `ALPHABET.cc` -- [here](https://github.com/awhitbeck/boostedHiggsPlusMET/blob/RA2b_V12_v0/src/ALPHABET.cc) 
 
@@ -67,6 +67,16 @@ compile code with:
 make ALPHABET
 make ALPHABET_photon
 ```
+to execute:
+```bash
+ALPHABET <region> <loose cut> <max events>
+```
+region: 0 kSignal; 1 kSLm; 2 kSLe; 3 kLowDphi
+ 
+loose cut: 0 nominal; 1 loose
+ 
+max events: ...
+
 #### plots basic distributions after baseline selection
 
 A number of basic distributions after baseline cuts can be plotted with `plotObs_*_baseline.cc`.  This code will produce all of the plots and save the histograms to a root file.  E.g. for the single muon validation region:
