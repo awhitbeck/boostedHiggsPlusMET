@@ -18,8 +18,27 @@ using namespace std;
 
 int main(int argc, char** argv){
 
+  bool looseCuts(false);
+  int MAX_EVENTS(99999999);
+  if( argc >= 2 )
+      looseCuts = atoi(argv[1]);    
+  if( argc >= 3 )
+      MAX_EVENTS = atoi(argv[2]);
+
   gROOT->ProcessLine(".L tdrstyle.C");
   gROOT->ProcessLine("setTDRStyle()");
+
+  typedef bool(*cuts)(RA2bTree*);
+  vector<cuts> baselineCuts;
+
+  if( looseCuts ){
+      baselineCuts.push_back(*FiltersCut<RA2bTree>);
+      baselineCuts.push_back(*singleEleCut<RA2bTree>);
+      baselineCuts.push_back(*METHTlooseCut<RA2bTree>);
+      baselineCuts.push_back(*AK8MultCut<RA2bTree>);
+  }else{
+      baselineCuts.push_back(*singleEleBaselineCut<RA2bTree>);
+  }
   
   skimSamples skims(skimSamples::kSLe);
   typedef plot<RA2bTree> plot;
@@ -118,15 +137,21 @@ int main(int argc, char** argv){
     int numEvents = ntuple->fChain->GetEntries();
     ntupleBranchStatus<RA2bTree>(ntuple);
     double weight=0.;
+    bool passBaseline;
     TString filename;
-    for( int iEvt = 0 ; iEvt < numEvents ; iEvt++ ){
+    for( int iEvt = 0 ; iEvt < min(numEvents,MAX_EVENTS) ; iEvt++ ){
       ntuple->GetEntry(iEvt);
       if( iEvt % 1000000 == 0 ) cout << skims.sampleName[iSample] << ": " << iEvt << "/" << numEvents << endl;
       
 filename = ntuple->fChain->GetFile()->GetName();
       if( ( filename.Contains("SingleLept") || filename.Contains("DiLept") ) && ntuple->madHT>600. )continue;
 
-      if(! singleEleBaselineCut(ntuple) ) continue;
+            passBaseline=true;
+      for( auto baselineCut : baselineCuts ){
+          passBaseline&=baselineCut(ntuple);
+      }
+      if( ! passBaseline ) continue;
+
       weight = ntuple->Weight*lumi*customPUweights(ntuple)*singleElectronTrigWeights(ntuple);
       //if( skims.sampleName[iSample] == "TT" )
       //    weight *= ISRweights(ntuple);
@@ -167,10 +192,17 @@ filename = ntuple->fChain->GetFile()->GetName();
 
   int numEvents = ntuple->fChain->GetEntries();
   ntupleBranchStatus<RA2bTree>(ntuple);
+  bool passBaseline;
   for( int iEvt = 0 ; iEvt < numEvents ; iEvt++ ){
       ntuple->GetEntry(iEvt);
       if( iEvt % 1000000 == 0 ) cout << "data: " << iEvt << "/" << numEvents << endl;
-      if(! singleEleBaselineCut(ntuple) ) continue;
+
+      passBaseline=true;
+      for( auto baselineCut : baselineCuts ){
+          passBaseline&=baselineCut(ntuple);
+      }
+      if( ! passBaseline ) continue;
+
       if( singleEleTriggerCut(ntuple) ){
           for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++){
               plots[iPlot].fillData(ntuple);
@@ -181,6 +213,6 @@ filename = ntuple->fChain->GetFile()->GetName();
   for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++){
       TCanvas* can = new TCanvas("can","can",500,500);
       can->SetTopMargin(0.05);
-      plots[iPlot].Draw(can,skims.ntuples,skims.signalNtuples,"../plots/plotObs_singleEleCR_baseline_plots",0.1,2.0,true);
+      plots[iPlot].Draw(can,skims.ntuples,skims.signalNtuples,"../plots/plotObs_singleEleCR_baseline_"+(looseCuts?TString("looseCuts_"):TString(""))+"plots",0.1,2.0,true);
   }
 }
