@@ -17,8 +17,11 @@
 
 using namespace std;
 
-const int MAX_EVENTS = 99999999;
 int main(int argc, char** argv){
+
+    int MAX_EVENTS(99999999);
+    if( argc > 1 ) 
+        MAX_EVENTS = atoi(argv[1]);
 
     gROOT->ProcessLine(".L tdrstyle.C");
     gROOT->ProcessLine("setTDRStyle()");
@@ -193,7 +196,12 @@ int main(int argc, char** argv){
         }
     }
 
+    TFile* outputFile = new TFile("plotObs_baseline.root","RECREATE");
+
     for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++){
+        plots[iPlot].buildSum();
+        plots[iPlot].Write();
+        plots[iPlot].sum->Write();
         TCanvas* can = new TCanvas("can","can",500,500);
         plots[iPlot].dataHist = NULL;
         plots[iPlot].DrawNoRatio(can,skims.ntuples,sigSamples,"../plots/plotObs_baseline_plots");
