@@ -10,6 +10,10 @@ COMMIT=$1
 
 echo "COMMIT: ${COMMIT}"
 
+hadd -f ~/eos/boostedHiggsPlusMET/$COMMIT/ALPHABEThistos_singleLep.root ~/eos/boostedHiggsPlusMET/$COMMIT/ALPHABEThistos_singleEle.root ~/eos/boostedHiggsPlusMET/$COMMIT/ALPHABEThistos_singleMu.root
+
+hadd -f ~/eos/boostedHiggsPlusMET/$COMMIT/ALPHABEThistos_looseCuts_singleLep.root ~/eos/boostedHiggsPlusMET/$COMMIT/ALPHABEThistos_looseCuts_singleEle.root ~/eos/boostedHiggsPlusMET/$COMMIT/ALPHABEThistos_looseCuts_singleMu.root
+
 regions="_looseCuts_photon _photon _singleMu _looseCuts_singleMu _singleEle _looseCuts_singleEle _singleLep _looseCuts_singleLep _lowDphi _looseCuts_lowDphi"
 
 echo "^^^^ Signal region ^^^^^" 
