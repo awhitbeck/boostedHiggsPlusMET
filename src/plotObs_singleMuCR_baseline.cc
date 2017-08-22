@@ -42,11 +42,14 @@ int main(int argc, char** argv){
   if( looseCuts ){
       baselineCuts.push_back(*FiltersCut<RA2bTree>);
       baselineCuts.push_back(*singleMuCut<RA2bTree>);
-      baselineCuts.push_back(*METHTlooseCut<RA2bTree>);
-      baselineCuts.push_back(*AK8MultCut<RA2bTree>);
+      baselineCuts.push_back(*METHTsingleLeptonCut<RA2bTree>);
+      //baselineCuts.push_back(*AK8MultCut<RA2bTree>);
+      baselineCuts.push_back(*AK8JetLooseMassCut<RA2bTree>);  
   }else{
       baselineCuts.push_back(*singleMuBaselineCut<RA2bTree>);
   }
+
+  cout << "baseline cuts size : " << baselineCuts.size() << endl;
 
   skimSamples skims(skimSamples::kSLm);
   typedef plot<RA2bTree> plot;
@@ -57,6 +60,11 @@ int main(int argc, char** argv){
   plot NJetsplot(*fillNJets<RA2bTree>,"NJets_singleMuCR_baseline","n_{j}",14,1.5,15.5);
   plot BTagsplot(*fillBTags<RA2bTree>,"BTags_singleMuCR_baseline","n_{b}",6,-0.5,5.5);
   plot Binsplot(*fillAnalysisBins<RA2bTree>,"AnalysisBins_singleMuCR_baseline","i^th Bin",8,0.5,8.5);
+
+  plot DeltaPhi1plot(*fillDeltaPhi1<RA2bTree>,"DeltaPhi1_singleMuCR_baseline","#Delta#Phi_{1}",20,0,3.1415);
+  plot DeltaPhi2plot(*fillDeltaPhi2<RA2bTree>,"DeltaPhi2_singleMuCR_baseline","#Delta#Phi_{2}",20,0,3.1415);
+  plot DeltaPhi3plot(*fillDeltaPhi3<RA2bTree>,"DeltaPhi3_singleMuCR_baseline","#Delta#Phi_{3}",20,0,3.1415);
+  plot DeltaPhi4plot(*fillDeltaPhi4<RA2bTree>,"DeltaPhi4_singleMuCR_baseline","#Delta#Phi_{4}",20,0,3.1415);
 
   plot Ak4JetPt1(*fillJetPt1<RA2bTree>,"Ak4JetPt1_singleMuCR_baseline","p_{T,j1} [GeV]",40,0,600);
   plot Ak4JetPt2(*fillJetPt2<RA2bTree>,"Ak4JetPt2_singleMuCR_baseline","p_{T,j2} [GeV]",40,0,600);
@@ -143,6 +151,10 @@ int main(int argc, char** argv){
   plots.push_back(NJetsplot);
   plots.push_back(BTagsplot);
   plots.push_back(Binsplot);
+  plots.push_back(DeltaPhi1plot);
+  plots.push_back(DeltaPhi2plot);
+  plots.push_back(DeltaPhi3plot);
+  plots.push_back(DeltaPhi4plot);
   plots.push_back(J1dR_Massplot);
   plots.push_back(J2dR_Massplot);
   plots.push_back(J1dR_BBplot);
@@ -213,8 +225,8 @@ int main(int argc, char** argv){
       if( ( filename.Contains("SingleLept") || filename.Contains("DiLept") ) && ntuple->madHT>600. )continue;
 
       passBaseline=true;
-      for( auto baselineCut : baselineCuts ){
-          passBaseline&=baselineCut(ntuple);
+      for( int i = 0 ; i < baselineCuts.size() ; i++ ){
+          passBaseline&=baselineCuts[i](ntuple);
       }
       if( ! passBaseline ) continue;
 
@@ -281,8 +293,8 @@ int main(int argc, char** argv){
       if( iEvt % 1000000 == 0 ) cout << "data: " << iEvt << "/" << numEvents << endl;
       
       passBaseline=true;
-      for( auto baselineCut : baselineCuts ){
-          passBaseline&=baselineCut(ntuple);
+      for( int i = 0 ; i < baselineCuts.size() ; i++ ){
+          passBaseline&=baselineCuts[i](ntuple);
       }
       if( ! passBaseline ) continue;
 
