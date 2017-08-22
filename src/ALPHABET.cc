@@ -60,14 +60,16 @@ int main(int argc, char** argv){
             baselineCuts.push_back(*METHTCut<RA2bTree>);
         }
         if( region == 1 ){
+            baselineCuts.push_back(*DeltaPhiCuts<RA2bTree>);
             baselineCuts.push_back(*singleMuCut<RA2bTree>);
             baselineCuts.push_back(*METHTsingleLeptonCut<RA2bTree>);
         }
         if( region == 2 ){
+            baselineCuts.push_back(*DeltaPhiCuts<RA2bTree>);
             baselineCuts.push_back(*singleEleCut<RA2bTree>);
             baselineCuts.push_back(*METHTsingleLeptonCut<RA2bTree>);
         }
-        baselineCuts.push_back(*AK8MultCut<RA2bTree>);
+        baselineCuts.push_back(*AK8JetLooseMassCut<RA2bTree>);
 
     }else{
         if( region == 0 ){
