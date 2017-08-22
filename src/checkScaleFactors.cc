@@ -9,7 +9,7 @@ void setStyle(TH1F& hist, TString ylabel="Data/MC");
 TH1F* makeRatio(TH1F* num , TH1F* denom, TString ylabel="Data/MC");
 TLine* makeRatioLine(TH1F* num , TH1F* denom, double lower, double upper=900.);
 
-void checkScaleFactors(TString tag = "_singleMu", bool doubletag = true, TString baseDir="./",TString histTag="MET",int integrate_from=1,int integrate_to=4){
+void checkScaleFactors(TString tag = "_singleMu", bool doubletag = true, TString baseDir="./",TString histTag="MET",int integrate_from=1,int integrate_to=4,TString outputDir="../plots/ABCDscaleFactors/"){
 
     gROOT->ProcessLine(".L tdrstyle.C");
     gROOT->ProcessLine("setTDRStyle()");
@@ -255,9 +255,9 @@ void checkScaleFactors(TString tag = "_singleMu", bool doubletag = true, TString
     TLine* scaleFactor = makeRatioLine(doubletagSRdata,doubletagSRmc,(tag=="_lowDphi"||tag == "_looseCuts_lowDphi"?300.:100.));
     scaleFactor->Draw();
 
-    can->SaveAs("../plots/ABCDscaleFactors/ABCDscaleFactors_"+histTag+"_"+legLabel+"SR"+tag+".png");
-    can->SaveAs("../plots/ABCDscaleFactors/ABCDscaleFactors_"+histTag+"_"+legLabel+"SR"+tag+".eps");
-    can->SaveAs("../plots/ABCDscaleFactors/ABCDscaleFactors_"+histTag+"_"+legLabel+"SR"+tag+".pdf");
+    can->SaveAs(outputDir+"ABCDscaleFactors_"+histTag+"_"+legLabel+"SR"+tag+".png");
+    can->SaveAs(outputDir+"ABCDscaleFactors_"+histTag+"_"+legLabel+"SR"+tag+".eps");
+    can->SaveAs(outputDir+"ABCDscaleFactors_"+histTag+"_"+legLabel+"SR"+tag+".pdf");
     
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 
@@ -293,9 +293,9 @@ void checkScaleFactors(TString tag = "_singleMu", bool doubletag = true, TString
     scaleFactor = makeRatioLine(doubletagSRdata,prediction,(tag=="_lowDphi"||tag == "_looseCuts_lowDphi"?300.:100.));
     scaleFactor->Draw();
 
-    can->SaveAs("../plots/ABCDscaleFactors/dataClosure_"+histTag+"_double-tagSR"+tag+".png");
-    can->SaveAs("../plots/ABCDscaleFactors/dataClosure_"+histTag+"_double-tagSR"+tag+".eps");
-    can->SaveAs("../plots/ABCDscaleFactors/dataClosure_"+histTag+"_double-tagSR"+tag+".pdf");
+    can->SaveAs(outputDir+"dataClosure_"+histTag+"_double-tagSR"+tag+".png");
+    can->SaveAs(outputDir+"dataClosure_"+histTag+"_double-tagSR"+tag+".eps");
+    can->SaveAs(outputDir+"dataClosure_"+histTag+"_double-tagSR"+tag+".pdf");
 
 
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
@@ -331,9 +331,9 @@ void checkScaleFactors(TString tag = "_singleMu", bool doubletag = true, TString
     scaleFactor = makeRatioLine(tagSRdata,prediction_single,(tag=="_lowDphi"||tag == "_looseCuts_lowDphi"?300.:100.));
     scaleFactor->Draw();
 
-    can->SaveAs("../plots/ABCDscaleFactors/dataClosure_"+histTag+"_single-tagSR"+tag+".png");
-    can->SaveAs("../plots/ABCDscaleFactors/dataClosure_"+histTag+"_single-tagSR"+tag+".eps");
-    can->SaveAs("../plots/ABCDscaleFactors/dataClosure_"+histTag+"_single-tagSR"+tag+".pdf");
+    can->SaveAs(outputDir+"dataClosure_"+histTag+"_single-tagSR"+tag+".png");
+    can->SaveAs(outputDir+"dataClosure_"+histTag+"_single-tagSR"+tag+".eps");
+    can->SaveAs(outputDir+"dataClosure_"+histTag+"_single-tagSR"+tag+".pdf");
 
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 
@@ -371,9 +371,9 @@ void checkScaleFactors(TString tag = "_singleMu", bool doubletag = true, TString
     scaleFactor = makeRatioLine(doubletagSBdata,doubletagSBmc,(tag=="_lowDphi"||tag == "_looseCuts_lowDphi"?300.:100.));
     scaleFactor->Draw();
 
-    can->SaveAs("../plots/ABCDscaleFactors/ABCDscaleFactors_"+histTag+"_"+legLabel+"SB"+tag+".png");
-    can->SaveAs("../plots/ABCDscaleFactors/ABCDscaleFactors_"+histTag+"_"+legLabel+"SB"+tag+".eps");
-    can->SaveAs("../plots/ABCDscaleFactors/ABCDscaleFactors_"+histTag+"_"+legLabel+"SB"+tag+".pdf");
+    can->SaveAs(outputDir+"ABCDscaleFactors_"+histTag+"_"+legLabel+"SB"+tag+".png");
+    can->SaveAs(outputDir+"ABCDscaleFactors_"+histTag+"_"+legLabel+"SB"+tag+".eps");
+    can->SaveAs(outputDir+"ABCDscaleFactors_"+histTag+"_"+legLabel+"SB"+tag+".pdf");
 
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 
@@ -409,9 +409,9 @@ void checkScaleFactors(TString tag = "_singleMu", bool doubletag = true, TString
     scaleFactor = makeRatioLine(antitagSRdata,antitagSRmc,(tag=="_lowDphi"||tag == "_looseCuts_lowDphi"?300.:100.));
     scaleFactor->Draw();
 
-    can->SaveAs("../plots/ABCDscaleFactors/ABCDscaleFactors_"+histTag+"_antitagSR"+tag+".png");
-    can->SaveAs("../plots/ABCDscaleFactors/ABCDscaleFactors_"+histTag+"_antitagSR"+tag+".eps");
-    can->SaveAs("../plots/ABCDscaleFactors/ABCDscaleFactors_"+histTag+"_antitagSR"+tag+".pdf");
+    can->SaveAs(outputDir+"ABCDscaleFactors_"+histTag+"_antitagSR"+tag+".png");
+    can->SaveAs(outputDir+"ABCDscaleFactors_"+histTag+"_antitagSR"+tag+".eps");
+    can->SaveAs(outputDir+"ABCDscaleFactors_"+histTag+"_antitagSR"+tag+".pdf");
 
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 
@@ -447,9 +447,9 @@ void checkScaleFactors(TString tag = "_singleMu", bool doubletag = true, TString
     scaleFactor = makeRatioLine(tagSRdata,tagSRmc,(tag=="_lowDphi"||tag == "_looseCuts_lowDphi"?300.:100.));
     scaleFactor->Draw();
 
-    can->SaveAs("../plots/ABCDscaleFactors/ABCDscaleFactors_"+histTag+"_tagSR"+tag+".png");
-    can->SaveAs("../plots/ABCDscaleFactors/ABCDscaleFactors_"+histTag+"_tagSR"+tag+".eps");
-    can->SaveAs("../plots/ABCDscaleFactors/ABCDscaleFactors_"+histTag+"_tagSR"+tag+".pdf");
+    can->SaveAs(outputDir+"ABCDscaleFactors_"+histTag+"_tagSR"+tag+".png");
+    can->SaveAs(outputDir+"ABCDscaleFactors_"+histTag+"_tagSR"+tag+".eps");
+    can->SaveAs(outputDir+"ABCDscaleFactors_"+histTag+"_tagSR"+tag+".pdf");
 
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 
@@ -485,9 +485,9 @@ void checkScaleFactors(TString tag = "_singleMu", bool doubletag = true, TString
     scaleFactor = makeRatioLine(tagSBdata,tagSBmc,(tag=="_lowDphi"||tag == "_looseCuts_lowDphi"?300.:100.));
     scaleFactor->Draw();
 
-    can->SaveAs("../plots/ABCDscaleFactors/ABCDscaleFactors_"+histTag+"_tagSB"+tag+".png");
-    can->SaveAs("../plots/ABCDscaleFactors/ABCDscaleFactors_"+histTag+"_tagSB"+tag+".eps");
-    can->SaveAs("../plots/ABCDscaleFactors/ABCDscaleFactors_"+histTag+"_tagSB"+tag+".pdf");
+    can->SaveAs(outputDir+"ABCDscaleFactors_"+histTag+"_tagSB"+tag+".png");
+    can->SaveAs(outputDir+"ABCDscaleFactors_"+histTag+"_tagSB"+tag+".eps");
+    can->SaveAs(outputDir+"ABCDscaleFactors_"+histTag+"_tagSB"+tag+".pdf");
 
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 
@@ -523,9 +523,9 @@ void checkScaleFactors(TString tag = "_singleMu", bool doubletag = true, TString
     scaleFactor = makeRatioLine(antitagSBdata,antitagSBmc,(tag=="_lowDphi"||tag == "_looseCuts_lowDphi"?300.:100.));
     scaleFactor->Draw();
 
-    can->SaveAs("../plots/ABCDscaleFactors/ABCDscaleFactors_"+histTag+"_antitagSB"+tag+".png");
-    can->SaveAs("../plots/ABCDscaleFactors/ABCDscaleFactors_"+histTag+"_antitagSB"+tag+".eps");
-    can->SaveAs("../plots/ABCDscaleFactors/ABCDscaleFactors_"+histTag+"_antitagSB"+tag+".pdf");
+    can->SaveAs(outputDir+"ABCDscaleFactors_"+histTag+"_antitagSB"+tag+".png");
+    can->SaveAs(outputDir+"ABCDscaleFactors_"+histTag+"_antitagSB"+tag+".eps");
+    can->SaveAs(outputDir+"ABCDscaleFactors_"+histTag+"_antitagSB"+tag+".pdf");
 
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 
@@ -561,9 +561,9 @@ void checkScaleFactors(TString tag = "_singleMu", bool doubletag = true, TString
     scaleFactor = makeRatioLine(allRegionsdata,allRegionsmc,(tag=="_lowDphi"||tag == "_looseCuts_lowDphi"?300.:100.));
     scaleFactor->Draw();
 
-    can->SaveAs("../plots/ABCDscaleFactors/ABCDscaleFactors_"+histTag+"_allregions"+tag+".png");
-    can->SaveAs("../plots/ABCDscaleFactors/ABCDscaleFactors_"+histTag+"_allregions"+tag+".eps");
-    can->SaveAs("../plots/ABCDscaleFactors/ABCDscaleFactors_"+histTag+"_allregions"+tag+".pdf");
+    can->SaveAs(outputDir+"ABCDscaleFactors_"+histTag+"_allregions"+tag+".png");
+    can->SaveAs(outputDir+"ABCDscaleFactors_"+histTag+"_allregions"+tag+".eps");
+    can->SaveAs(outputDir+"ABCDscaleFactors_"+histTag+"_allregions"+tag+".pdf");
 
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 
