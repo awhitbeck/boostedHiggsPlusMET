@@ -1177,6 +1177,10 @@ template<typename ntupleType> bool METHTlooseCut(ntupleType* ntuple){
   return ( ntuple->MET > 100. && ntuple->HT > 300. );
 }
 
+template<typename ntupleType> bool METHTsingleLeptonCut(ntupleType* ntuple){
+  return ( ntuple->MET > 100. && ntuple->HT > 600. );
+}
+
 template<typename ntupleType> bool METHTCut(ntupleType* ntuple){
   return ( ntuple->MET > 300. && ntuple->HT > 600. );
 }
@@ -1188,10 +1192,11 @@ template<typename ntupleType> bool AK8JetPtCut(ntupleType* ntuple){
 }
 
 template<typename ntupleType> bool AK8JetLooseMassCut(ntupleType* ntuple){
-  return ( ntuple->JetsAK8_prunedMass->at(0) > 50. &&
-	   ntuple->JetsAK8_prunedMass->at(0) < 250. &&
-           ntuple->JetsAK8_prunedMass->at(1) > 50. &&
-	   ntuple->JetsAK8_prunedMass->at(1) < 250. );	   
+    return ( ntuple->JetsAK8_prunedMass->size() >= 2  &&
+             ntuple->JetsAK8_prunedMass->at(0) > 50. &&
+             ntuple->JetsAK8_prunedMass->at(0) < 250. &&
+             ntuple->JetsAK8_prunedMass->at(1) > 50. &&
+             ntuple->JetsAK8_prunedMass->at(1) < 250. );	   
 }
 
 

@@ -42,11 +42,14 @@ int main(int argc, char** argv){
   if( looseCuts ){
       baselineCuts.push_back(*FiltersCut<RA2bTree>);
       baselineCuts.push_back(*singleMuCut<RA2bTree>);
-      baselineCuts.push_back(*METHTlooseCut<RA2bTree>);
-      baselineCuts.push_back(*AK8MultCut<RA2bTree>);
+      baselineCuts.push_back(*METHTsingleLeptonCut<RA2bTree>);
+      //baselineCuts.push_back(*AK8MultCut<RA2bTree>);
+      baselineCuts.push_back(*AK8JetLooseMassCut<RA2bTree>);  
   }else{
       baselineCuts.push_back(*singleMuBaselineCut<RA2bTree>);
   }
+
+  cout << "baseline cuts size : " << baselineCuts.size() << endl;
 
   skimSamples skims(skimSamples::kSLm);
   typedef plot<RA2bTree> plot;
@@ -222,8 +225,8 @@ int main(int argc, char** argv){
       if( ( filename.Contains("SingleLept") || filename.Contains("DiLept") ) && ntuple->madHT>600. )continue;
 
       passBaseline=true;
-      for( auto baselineCut : baselineCuts ){
-          passBaseline&=baselineCut(ntuple);
+      for( int i = 0 ; i < baselineCuts.size() ; i++ ){
+          passBaseline&=baselineCuts[i](ntuple);
       }
       if( ! passBaseline ) continue;
 
@@ -290,8 +293,8 @@ int main(int argc, char** argv){
       if( iEvt % 1000000 == 0 ) cout << "data: " << iEvt << "/" << numEvents << endl;
       
       passBaseline=true;
-      for( auto baselineCut : baselineCuts ){
-          passBaseline&=baselineCut(ntuple);
+      for( int i = 0 ; i < baselineCuts.size() ; i++ ){
+          passBaseline&=baselineCuts[i](ntuple);
       }
       if( ! passBaseline ) continue;
 

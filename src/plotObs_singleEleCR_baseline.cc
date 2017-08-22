@@ -34,8 +34,9 @@ int main(int argc, char** argv){
   if( looseCuts ){
       baselineCuts.push_back(*FiltersCut<RA2bTree>);
       baselineCuts.push_back(*singleEleCut<RA2bTree>);
-      baselineCuts.push_back(*METHTlooseCut<RA2bTree>);
-      baselineCuts.push_back(*AK8MultCut<RA2bTree>);
+      baselineCuts.push_back(*METHTsingleLeptonCut<RA2bTree>);
+      //baselineCuts.push_back(*AK8MultCut<RA2bTree>);
+      baselineCuts.push_back(*AK8JetLooseMassCut<RA2bTree>);  
   }else{
       baselineCuts.push_back(*singleEleBaselineCut<RA2bTree>);
   }
