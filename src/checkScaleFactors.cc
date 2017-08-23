@@ -339,6 +339,7 @@ void checkScaleFactors(TString tag = "_singleMu", bool doubletag = true, TString
 
     topPad->cd();
     legLabel="double-tag";
+    doubletagSBdata->GetYaxis()->SetRangeUser(0.,max(doubletagSBdata->GetMaximum(),max(doubletagSBmc->GetMaximum(),prediction->GetMaximum()))*1.3);
     if( tag == "_lowDphi" || tag == "_looseCuts_lowDphi" )
         doubletagSBdata->GetXaxis()->SetRangeUser(300.,900.);
     doubletagSBdata->Draw("p,e1");
@@ -422,7 +423,7 @@ void checkScaleFactors(TString tag = "_singleMu", bool doubletag = true, TString
         tagSRdata->GetXaxis()->SetRangeUser(300.,900.);
     tagSRdata->Draw("p,e1");
     tagSRmc->Draw("e2,SAME");
-    leg = new TLegend(.6,.7,.9,.9,"anti-tag SR");
+    leg = new TLegend(.6,.7,.9,.9,"single-tag SR");
     leg->SetFillColor(0);
     leg->SetBorderSize(0);
     leg->AddEntry(tagSRdata,"data","pl");
@@ -460,7 +461,7 @@ void checkScaleFactors(TString tag = "_singleMu", bool doubletag = true, TString
         tagSBdata->GetXaxis()->SetRangeUser(300.,900.);
     tagSBdata->Draw("p,e1");
     tagSBmc->Draw("e2,SAME");
-    leg = new TLegend(.6,.7,.9,.9,"anti-tag SB");
+    leg = new TLegend(.6,.7,.9,.9,"single-tag SB");
     leg->SetFillColor(0);
     leg->SetBorderSize(0);
     leg->AddEntry(tagSBdata,"data","pl");
