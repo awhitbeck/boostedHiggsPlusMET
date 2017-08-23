@@ -28,6 +28,8 @@ condor_submit batchExecute.jdl exec_name="plotObs_singleHiggsTag" arguments="${h
 
 condor_submit batchExecute.jdl exec_name="plotObs_singleEleCR_baseline" arguments="${hash} plotObs_singleEleCR_baseline"
 condor_submit batchExecute.jdl exec_name="plotObs_singleMuCR_baseline" arguments="${hash} plotObs_singleMuCR_baseline"
+condor_submit batchExecute.jdl exec_name="plotObs_singleEleCR_looseCuts_baseline" arguments="${hash} plotObs_singleEleCR_baseline 1"
+condor_submit batchExecute.jdl exec_name="plotObs_singleMuCR_looseCuts_baseline" arguments="${hash} plotObs_singleMuCR_baseline 1"
 
 condor_submit batchExecute.jdl exec_name="plotObs_photon_baseline" arguments="${hash} plotObs_photon_baseline"
 condor_submit batchExecute.jdl exec_name="plotObs_photon_looseCuts_baseline" arguments="${hash} plotObs_photon_baseline 1"
