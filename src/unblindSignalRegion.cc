@@ -1,5 +1,4 @@
 #include "CMS_lumi.cc"
-
 #include "TH1F.h"
 #include "TString.h"
 #include "TCanvas.h"
@@ -134,40 +133,40 @@ int main(int argc, char** argv){
     enum regions {kA2,kB2,kA1,kB1,kC,kD,kNumRegions};
 
     // these are relative uncertainties!
-    vector<double> singleLepMETunc={0.025,0.32,0.69};
+    vector<double> singleLepMETunc={0.015777,0.088778,0.12758};
 
     // scale factors and errors for each backgrounds
-    corrTT[0]=vector<double>(3,0.64);      corrErrTT[0]=vector<double>(3,0.15);
-    corrTT[1]=vector<double>(3,0.71);      corrErrTT[1]=vector<double>(3,0.059);
-    corrTT[2]=vector<double>(3,0.63);      corrErrTT[2]=vector<double>(3,0.069); //signal          
-    corrTT[3]=vector<double>(3,0.65);      corrErrTT[3]=vector<double>(3,0.1);//sideband       
-    corrTT[4]={0.43,0.17,0.11};            corrErrTT[4]={0.08,0.11,0.11};
-    corrTT[5]={0.54,0.32,0.13};            corrErrTT[5]={0.03,0.07,0.07};
+    corrTT[kA2]=vector<double>(3,0.59);      corrErrTT[kA2]=vector<double>(3,0.082);
+    corrTT[kB2]=vector<double>(3,0.71);      corrErrTT[kB2]=vector<double>(3,0.037);
+    corrTT[kA1]=vector<double>(3,0.61);      corrErrTT[kA1]=vector<double>(3,0.042); //signal          
+    corrTT[kB1]=vector<double>(3,0.59);      corrErrTT[kB1]=vector<double>(3,0.016);//sideband       
+    corrTT[kC]={0.49,0.64,0.15};            corrErrTT[kC]={0.05,0.15,0.09};
+    corrTT[kD]={0.54,0.43,0.30};            corrErrTT[kD]={0.016,0.04,0.06};
     // inflate uncertainties to account for MET systematics
-    for( int i = 0 ; i < corrErrTT[0].size() ; i++ ){
-        corrErrTT[0][i] = sqrt(corrErrTT[0][i]*corrErrTT[0][i]/corrTT[0][i]/corrTT[0][i]+singleLepMETunc[i]*singleLepMETunc[i])*corrTT[0][i];
-        corrErrTT[1][i] = sqrt(corrErrTT[1][i]*corrErrTT[1][i]/corrTT[1][i]/corrTT[1][i]+singleLepMETunc[i]*singleLepMETunc[i])*corrTT[1][i];
-        corrErrTT[2][i] = sqrt(corrErrTT[2][i]*corrErrTT[2][i]/corrTT[2][i]/corrTT[2][i]+singleLepMETunc[i]*singleLepMETunc[i])*corrTT[2][i];
-        corrErrTT[3][i] = sqrt(corrErrTT[3][i]*corrErrTT[3][i]/corrTT[3][i]/corrTT[3][i]+singleLepMETunc[i]*singleLepMETunc[i])*corrTT[3][i];
+    for( int i = 0 ; i < corrErrTT[kA2].size() ; i++ ){
+        corrErrTT[kA2][i] = sqrt(corrErrTT[kA2][i]*corrErrTT[kA2][i]/corrTT[kA2][i]/corrTT[kA2][i]+singleLepMETunc[i]*singleLepMETunc[i])*corrTT[kA2][i];
+        corrErrTT[kB2][i] = sqrt(corrErrTT[kB2][i]*corrErrTT[kB2][i]/corrTT[kB2][i]/corrTT[kB2][i]+singleLepMETunc[i]*singleLepMETunc[i])*corrTT[kB2][i];
+        corrErrTT[kA1][i] = sqrt(corrErrTT[kA1][i]*corrErrTT[kA1][i]/corrTT[kA1][i]/corrTT[kA1][i]+singleLepMETunc[i]*singleLepMETunc[i])*corrTT[kA1][i];
+        corrErrTT[kB1][i] = sqrt(corrErrTT[kB1][i]*corrErrTT[kB1][i]/corrTT[kB1][i]/corrTT[kB1][i]+singleLepMETunc[i]*singleLepMETunc[i])*corrTT[kB1][i];
     }
-    corrWJets[0]=corrTT[0];                corrErrWJets[0]=corrErrTT[0];
-    corrWJets[1]=corrTT[1];                corrErrWJets[1]=corrErrTT[1];
-    corrWJets[2]=corrTT[2];                corrErrWJets[2]=corrErrTT[2];              
-    corrWJets[3]=corrTT[3];                corrErrWJets[3]=corrErrTT[3];              
-    corrWJets[4]=corrTT[4];                corrErrWJets[4]=corrErrTT[4];
-    corrWJets[5]=corrTT[5];                corrErrWJets[5]=corrErrTT[5];
-    corrZJets[0]=vector<double>(3,0.75);   corrErrZJets[0]=vector<double>(3,0.29);
-    corrZJets[1]=vector<double>(3,2.58);   corrErrZJets[1]=vector<double>(3,0.63);
-    corrZJets[2]=vector<double>(3,0.61);   corrErrZJets[2]=vector<double>(3,0.088);                
-    corrZJets[3]=vector<double>(3,0.98);   corrErrZJets[3]=vector<double>(3,0.0094);                
-    corrZJets[4]=vector<double>(3,0.5);    corrErrZJets[4]=vector<double>(3,0.07);
-    corrZJets[5]=vector<double>(3,0.71);   corrErrZJets[5]=vector<double>(3,0.035);
-    corrQCD[0]=vector<double>(3,0.85);     corrErrQCD[0]=vector<double>(3,0.12);
-    corrQCD[1]=vector<double>(3,1.2);      corrErrQCD[1]=vector<double>(3,0.16);
-    corrQCD[2]=vector<double>(3,1.1);      corrErrQCD[2]=vector<double>(3,0.33);                   
-    corrQCD[3]=vector<double>(3,0.88);     corrErrQCD[3]=vector<double>(3,0.04);                  
-    corrQCD[4]=vector<double>(3,0.93);     corrErrQCD[4]=vector<double>(3,0.1);
-    corrQCD[5]=vector<double>(3,0.71);     corrErrQCD[5]=vector<double>(3,0.027);
+    corrWJets[kA2]=corrTT[kA2];                corrErrWJets[kA2]=corrErrTT[kA2];
+    corrWJets[kB2]=corrTT[kB2];                corrErrWJets[kB2]=corrErrTT[kB2];
+    corrWJets[kA1]=corrTT[kA1];                corrErrWJets[kA1]=corrErrTT[kA1];              
+    corrWJets[kB1]=corrTT[kB1];                corrErrWJets[kB1]=corrErrTT[kB1];              
+    corrWJets[kC]=corrTT[kC];                corrErrWJets[kC]=corrErrTT[kC];
+    corrWJets[kD]=corrTT[kD];                corrErrWJets[kD]=corrErrTT[kD];
+    corrZJets[kA2]=vector<double>(3,0.75);   corrErrZJets[kA2]=vector<double>(3,0.29);
+    corrZJets[kB2]=vector<double>(3,2.58);   corrErrZJets[kB2]=vector<double>(3,0.63);
+    corrZJets[kA1]=vector<double>(3,0.61);   corrErrZJets[kA1]=vector<double>(3,0.088);                
+    corrZJets[kB1]=vector<double>(3,0.98);   corrErrZJets[kB1]=vector<double>(3,0.094);                
+    corrZJets[kC]=vector<double>(3,0.5);    corrErrZJets[kC]=vector<double>(3,0.07);
+    corrZJets[kD]=vector<double>(3,0.71);   corrErrZJets[kD]=vector<double>(3,0.035);
+    corrQCD[kA2]=vector<double>(3,0.85);     corrErrQCD[kA2]=vector<double>(3,0.12);
+    corrQCD[kB2]=vector<double>(3,1.2);      corrErrQCD[kB2]=vector<double>(3,0.16);
+    corrQCD[kA1]=vector<double>(3,1.1);      corrErrQCD[kA1]=vector<double>(3,0.33);                   
+    corrQCD[kB1]=vector<double>(3,0.88);     corrErrQCD[kB1]=vector<double>(3,0.04);                  
+    corrQCD[kC]=vector<double>(3,0.93);     corrErrQCD[kC]=vector<double>(3,0.1);
+    corrQCD[kD]=vector<double>(3,0.71);     corrErrQCD[kD]=vector<double>(3,0.027);
 
     TFile* inputFile;
     if( looseCuts ) 
@@ -327,13 +326,13 @@ int main(int argc, char** argv){
         one->Draw();
 
         if( looseCuts ){ 
-            can->SaveAs("../plots/unblindSignalRegion/unblindSignalRegion_looseCuts_"+regionTags[reg]+".png");
-            can->SaveAs("../plots/unblindSignalRegion/unblindSignalRegion_looseCuts_"+regionTags[reg]+".eps");
-            can->SaveAs("../plots/unblindSignalRegion/unblindSignalRegion_looseCuts_"+regionTags[reg]+".pdf");
+            can->SaveAs("~/eos/boostedHiggsPlusMET/"+inputDir+"/plots/unblindSignalRegion/unblindSignalRegion_looseCuts_"+regionTags[reg]+".png");
+            can->SaveAs("~/eos/boostedHiggsPlusMET/"+inputDir+"/plots/unblindSignalRegion/unblindSignalRegion_looseCuts_"+regionTags[reg]+".eps");
+            can->SaveAs("~/eos/boostedHiggsPlusMET/"+inputDir+"/plots/unblindSignalRegion/unblindSignalRegion_looseCuts_"+regionTags[reg]+".pdf");
         }else{
-            can->SaveAs("../plots/unblindSignalRegion/unblindSignalRegion_"+regionTags[reg]+".png");
-            can->SaveAs("../plots/unblindSignalRegion/unblindSignalRegion_"+regionTags[reg]+".pdf");
-            can->SaveAs("../plots/unblindSignalRegion/unblindSignalRegion_"+regionTags[reg]+".eps");
+            can->SaveAs("~/eos/boostedHiggsPlusMET/"+inputDir+"/plots/unblindSignalRegion/unblindSignalRegion_"+regionTags[reg]+".png");
+            can->SaveAs("~/eos/boostedHiggsPlusMET/"+inputDir+"/plots/unblindSignalRegion/unblindSignalRegion_"+regionTags[reg]+".pdf");
+            can->SaveAs("~/eos/boostedHiggsPlusMET/"+inputDir+"/plots/unblindSignalRegion/unblindSignalRegion_"+regionTags[reg]+".eps");
         }
 
     }
@@ -388,26 +387,29 @@ int main(int argc, char** argv){
 
     TCanvas* can = new TCanvas("can","can",500,500);
           
-    TPad* topRightPad = new TPad("topRightPad","topRightPad",.49,0.4,.99,.99);
-    TPad* botRightPad = new TPad("botRightPad","botRightPad",.49,0.01,.99,.39);
-    TPad* topLeftPad = new TPad("topLeftPad","topLeftPad",0.,0.4,.49,.99);
-    TPad* botLeftPad = new TPad("botLeftPad","botLeftPad",0.,0.01,.49,.39);
+    TPad* topRightPad = new TPad("topRightPad","topRightPad",.55,0.4,.99,.99);
+    TPad* botRightPad = new TPad("botRightPad","botRightPad",.55,0.01,.99,.40);
+    TPad* topLeftPad = new TPad("topLeftPad","topLeftPad",0.,0.4,.55,.99);
+    TPad* botLeftPad = new TPad("botLeftPad","botLeftPad",0.,0.01,.55,.40);
 
     botRightPad->SetBottomMargin(0.25);
-    botRightPad->SetTopMargin(0.02);
+    botRightPad->SetTopMargin(0.);
     botRightPad->SetLeftMargin(0.);
 
     botLeftPad->SetBottomMargin(0.25);
-    botLeftPad->SetTopMargin(0.02);
+    botLeftPad->SetTopMargin(0.);
     botLeftPad->SetRightMargin(0.);
+    botLeftPad->SetLeftMargin(0.3);
 
     topRightPad->SetTopMargin(0.06);
     topRightPad->SetBottomMargin(0.17);
     topRightPad->SetLeftMargin(0.);
+    topRightPad->SetBottomMargin(0.);
 
     topLeftPad->SetTopMargin(0.06);
-    topLeftPad->SetBottomMargin(0.17);
     topLeftPad->SetRightMargin(0.);
+    topLeftPad->SetLeftMargin(0.3);
+    topLeftPad->SetBottomMargin(0.);
 
     topRightPad->Draw();
     topLeftPad->Draw();
@@ -416,13 +418,21 @@ int main(int argc, char** argv){
 
     topRightPad->cd();
     gStyle->SetErrorX(0.5);
-    prediction2H->GetYaxis()->SetRangeUser(0.01,(prediction1H->GetMaximum()+prediction1H->GetBinError(prediction1H->GetMaximumBin()))*10.);
+    prediction2H->GetYaxis()->SetRangeUser(0.015,(prediction1H->GetMaximum()+prediction1H->GetBinError(prediction1H->GetMaximumBin()))*10.);
     prediction2H->SetFillColor(2);
     prediction2H->SetMarkerColor(2);
     prediction2H->SetMarkerStyle(0);
     prediction2H->SetFillStyle(3490);
+    prediction2H->GetXaxis()->SetNdivisions(503);
+    prediction2H->GetXaxis()->SetTitleFont(43);
+    prediction2H->GetXaxis()->SetTitleSize(21);
+    prediction2H->GetXaxis()->SetTitleOffset(2.8);
+    prediction2H->GetXaxis()->SetLabelOffset(2.8);
+    prediction2H->GetXaxis()->SetLabelFont(43);
+    prediction2H->GetXaxis()->SetLabelSize(21);
+    prediction2H->GetXaxis()->SetTitle("MET");
     prediction2H->Draw("e2");
-    //hDatavec[kA2]->Draw("e1,SAME");
+    hDatavec[kA2]->Draw("e1,SAME");
     topRightPad->SetLogy();
 
     writeExtraText = true;
@@ -432,51 +442,89 @@ int main(int argc, char** argv){
     can->RedrawAxis();
     can->GetFrame()->Draw();
 
-    TLegend* legRight = new TLegend(.70,.70,.9,.9,"2 Higgs tags");
+    TLegend* legRight = new TLegend(.75,.70,.95,.85);
+    legRight->SetTextFont(43);
+    legRight->SetTextSize(18);
     legRight->SetBorderSize(0);
     legRight->SetFillColor(0);
-    legRight->AddEntry(prediction2H,"ABCD#kappa","f");
+    legRight->AddEntry(prediction2H,"#kappaBC/D","f");
     legRight->AddEntry(hDatavec[kA2],"data","p");
 
     legRight->Draw();
+
+    TText* labelRight = new TText(.75,.86,"2 Higgs tag");
+    labelRight->SetNDC();
+    labelRight->SetTextFont(43);
+    labelRight->SetTextSize(18);
+    labelRight->Draw();
 
     botRightPad->cd();
     TH1F* ratio2H = new TH1F(*hDatavec[kA2]);
     ratio2H->SetNameTitle("ratio2H","ratio2H");
     ratio2H->Divide(prediction2H);
-    ratio2H->GetYaxis()->SetRangeUser(2.,2.5);
+    ratio2H->GetXaxis()->SetNdivisions(503);
+    ratio2H->GetYaxis()->SetTitleFont(43);
+    ratio2H->GetYaxis()->SetTitleSize(21);
+    ratio2H->GetXaxis()->SetTitleFont(43);
+    ratio2H->GetXaxis()->SetTitleOffset(2.8);
+    ratio2H->GetXaxis()->SetTitleSize(21);
+    ratio2H->GetXaxis()->SetLabelFont(43);
+    ratio2H->GetXaxis()->SetLabelSize(21);
+    ratio2H->GetYaxis()->SetLabelFont(43);
+    ratio2H->GetYaxis()->SetLabelSize(1);
+    ratio2H->GetYaxis()->SetLabelOffset(21);
+    ratio2H->GetYaxis()->SetRangeUser(0.,1.99);
+    ratio2H->GetXaxis()->SetTitle("MET");
     ratio2H->Draw("e1");
 
     topLeftPad->cd();
-    prediction1H->GetYaxis()->SetRangeUser(0.01,(prediction1H->GetMaximum()+prediction1H->GetBinError(prediction1H->GetMaximumBin()))*10.);
+    prediction1H->GetYaxis()->SetRangeUser(0.015,(prediction1H->GetMaximum()+prediction1H->GetBinError(prediction1H->GetMaximumBin()))*10.);
     prediction1H->SetFillColor(2);
     prediction1H->SetMarkerColor(2);
     prediction1H->SetMarkerStyle(0);
     prediction1H->SetFillStyle(3490);
+    prediction1H->GetXaxis()->SetNdivisions(503);
+    prediction1H->GetYaxis()->SetTitleFont(43);
+    prediction1H->GetYaxis()->SetTitleSize(21);
+    prediction1H->GetYaxis()->SetTitleOffset(2.8);
+    prediction1H->GetXaxis()->SetTitleFont(43);
+    prediction1H->GetXaxis()->SetTitleSize(21);
+    prediction1H->GetYaxis()->SetLabelFont(43);
+    prediction1H->GetYaxis()->SetLabelSize(21);
+    prediction1H->GetXaxis()->SetLabelFont(43);
+    prediction1H->GetXaxis()->SetLabelSize(21);
+    prediction1H->GetXaxis()->SetLabelOffset(2.8);
+    prediction1H->GetYaxis()->SetTitle("Events");
     prediction1H->Draw("e2");
-    //hDatavec[kA1]->Draw("e1,SAME");
+    hDatavec[kA1]->Draw("e1,SAME");
     topLeftPad->SetLogy();
 
     TText* labelLeft = new TText(.6,.8,"1 Higgs tag");
     labelLeft->SetNDC();
     labelLeft->SetTextFont(43);
-    labelLeft->SetTextSize(15);
+    labelLeft->SetTextSize(18);
     labelLeft->Draw();
-
-    // TLegend* legLeft = new TLegend(.75,.75,.9,.9,"1 Higgs tag");
-    // legLeft->SetBorderSize(0);
-    // legLeft->SetFillColor(0);
-
-    // legLeft->Draw();
 
     botLeftPad->cd();
     TH1F* ratio1H = new TH1F(*hDatavec[kA1]);
     ratio1H->SetNameTitle("ratio1H","ratio1H");
     ratio1H->Divide(prediction1H);
-    ratio1H->GetYaxis()->SetRangeUser(2.,2.5);
+    ratio1H->GetXaxis()->SetNdivisions(503);
+    ratio1H->GetYaxis()->SetTitleFont(43);
+    ratio1H->GetYaxis()->SetTitleSize(21);
+    ratio1H->GetYaxis()->SetTitleOffset(2.8);
+    ratio1H->GetXaxis()->SetTitleFont(43);
+    ratio1H->GetXaxis()->SetTitleSize(21);
+    ratio1H->GetXaxis()->SetLabelFont(43);
+    ratio1H->GetXaxis()->SetLabelSize(21);
+    ratio1H->GetYaxis()->SetLabelFont(43);
+    ratio1H->GetYaxis()->SetLabelSize(21);
+    ratio1H->GetYaxis()->SetNdivisions(504);
+    ratio1H->GetYaxis()->SetRangeUser(0.,1.99);
+    ratio1H->GetYaxis()->SetTitle("Observed/Predicted");
     ratio1H->Draw("e1");
 
-    can->SaveAs("../plots/unblindSignalRegion/predictionsVsObservation.png");
-    can->SaveAs("../plots/unblindSignalRegion/predictionsVsObservation.eps");
-    can->SaveAs("../plots/unblindSignalRegion/predictionsVsObservation.pdf");
+    can->SaveAs("~/eos/boostedHiggsPlusMET/"+inputDir+"/plots/unblindSignalRegion/predictionsVsObservation.png");
+    can->SaveAs("~/eos/boostedHiggsPlusMET/"+inputDir+"/plots/unblindSignalRegion/predictionsVsObservation.eps");
+    can->SaveAs("~/eos/boostedHiggsPlusMET/"+inputDir+"/plots/unblindSignalRegion/predictionsVsObservation.pdf");
 }
