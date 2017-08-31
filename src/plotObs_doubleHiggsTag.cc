@@ -16,9 +16,11 @@
 
 using namespace std;
 
-const int MAX_EVENT = 99999999;
-
 int main(int argc, char** argv){
+
+  int MAX_EVENT = 99999999;
+  if( argc > 1 )
+      MAX_EVENT = atoi(argv[1]);
 
   gROOT->ProcessLine(".L tdrstyle.C");
   gROOT->ProcessLine("setTDRStyle()");
@@ -136,12 +138,12 @@ int main(int argc, char** argv){
 
   int numEvents = ntuple->fChain->GetEntries();
   ntupleBranchStatus<RA2bTree>(ntuple);
-  for( int iEvt = 0 ; iEvt < 0/*numEvents*/ ; iEvt++ ){
+  for( int iEvt = 0 ; iEvt < min(MAX_EVENT,numEvents) ; iEvt++ ){
       ntuple->GetEntry(iEvt);
       if( !baselineCut(ntuple) ) continue;
       if( !doubletagSRCut(ntuple) ) continue;
       if( !signalTriggerCut(ntuple) ) continue;
-      if( iEvt % 100000 == 0 ) cout << "DATA: " << iEvt << "/" << numEvents << endl;
+      if( iEvt % 100000 == 0 ) cout << "DATA: " << iEvt << "/" << min(MAX_EVENT,numEvents) << endl;
       for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++){
           plots[iPlot].fillSignal(ntuple);
       }

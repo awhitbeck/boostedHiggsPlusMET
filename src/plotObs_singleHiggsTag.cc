@@ -17,9 +17,11 @@
 
 using namespace std;
 
-const int MAX_EVENTS = 99999999;
-
 int main(int argc, char** argv){
+
+  int MAX_EVENTS = 99999999;
+  if( argc > 1 )
+      MAX_EVENTS = atoi(argv[1]);
 
   gROOT->ProcessLine(".L tdrstyle.C");
   gROOT->ProcessLine("setTDRStyle()");
@@ -102,7 +104,7 @@ int main(int argc, char** argv){
           if( ( filename.Contains("SingleLept") || filename.Contains("DiLept") ) && ntuple->madHT>600. )continue;
 
           if( !baselineCut(ntuple) ) continue;
-          if( !tagSRCut(ntuple) ) continue;
+          if( !singleHiggsTagLooseCut(ntuple) ) continue;
           for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++ ){
               plots[iPlot].fill(ntuple);
           }
@@ -127,9 +129,8 @@ int main(int argc, char** argv){
           ntuple->GetEntry(iEvt);
           if( iEvt % 100000 == 0 ) cout << skims.signalSampleName[iSample] << ": " << iEvt << "/" << numEvents << endl;
           if( !baselineCut(ntuple) ) continue;
-          if( !tagSRCut(ntuple) ) continue;
+          if( !singleHiggsTagLooseCut(ntuple) ) continue;
           if( !genLevelHHcut(ntuple) ) continue;
-          if( !signalTriggerCut(ntuple) ) continue;
           for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++){
               if( skims.signalSampleName[iSample] == "T5HH1300" )
                   plots[iPlot].fillSignal(ntuple,lumi*0.0460525/102482.);
@@ -138,6 +139,26 @@ int main(int argc, char** argv){
           }
       }
   }
+
+  // Data tree
+  RA2bTree* ntuple = skims.dataNtuple;
+  for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++){
+    plots[iPlot].addDataNtuple(ntuple,"data");
+  }
+
+  int numEvents = ntuple->fChain->GetEntries();
+  ntupleBranchStatus<RA2bTree>(ntuple);
+  for( int iEvt = 0 ; iEvt < min(MAX_EVENTS,numEvents) ; iEvt++ ){
+      ntuple->GetEntry(iEvt);
+      if( !baselineCut(ntuple) ) continue;
+      if( !singleHiggsTagLooseCut(ntuple) ) continue;
+      if( !signalTriggerCut(ntuple) ) continue;
+      if( iEvt % 100000 == 0 ) cout << "DATA: " << iEvt << "/" << min(MAX_EVENTS,numEvents) << endl;
+      for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++){
+          plots[iPlot].fillSignal(ntuple);
+      }
+  }
+
 
   for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++){
       TCanvas* can = new TCanvas("can","can",500,500);
