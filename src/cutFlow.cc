@@ -82,6 +82,8 @@ int main(int argc, char** argv){
     cutName.push_back("JetPt");
     cutFlow.push_back(*AK8JetLooseMassCut<RA2bTree>);
     cutName.push_back("LooseJetMass");
+    cutFlow.push_back(*OneOrMoreHiggsTagLooseCut<RA2bTree>);
+    cutName.push_back("OnePlusBBtag");
     cutFlow.push_back(*doubleTaggingLooseCut<RA2bTree>);
     cutName.push_back("doubleBBtag");
     cutFlow.push_back(*doubleMassCut<RA2bTree>);
@@ -214,9 +216,9 @@ int main(int argc, char** argv){
   
     int numEvents = ntuple->fChain->GetEntries();
     ntupleBranchStatus<RA2bTree>(ntuple);
-    for( int iEvt = 0 ; iEvt < min(MAX_EVENTS,( region == 0 ? 0 : numEvents )) ; iEvt++ ){
+    for( int iEvt = 0 ; iEvt < min(MAX_EVENTS,numEvents) ; iEvt++ ){
         ntuple->GetEntry(iEvt);
-        if( iEvt % 100000 == 0 ) cout << "data: " << iEvt << "/" << numEvents << endl;
+        if( iEvt % 100000 == 0 ) cout << "data: " << iEvt << "/" << min(MAX_EVENTS,numEvents) << endl;
         if( region == 0 ){
             if( !signalTriggerCut(ntuple) ) continue;
         }else if( region == 1){
