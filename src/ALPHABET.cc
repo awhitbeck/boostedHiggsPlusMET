@@ -117,6 +117,8 @@ int main(int argc, char** argv){
     plot J2pt_Mplot(*fillSubLeadingJetMass<RA2bTree>,"J2pt_M","m_{J} [GeV]",50,50.,250.);
     plot ClosestMass(*fillClosestJetMass<RA2bTree>,"ClosestMass","m_{J} [GeV]",3,mJbins);
     plot FarthestMass(*fillFarthestJetMass<RA2bTree>,"FarthestMass","m_{J} [GeV]",3,mJbins);
+    plot WPt(*FillGenWPt<RA2bTree>,"WPt","p_{T,W} [GeV]",10,0,1000);
+    plot ZPt(*FillGenZPt<RA2bTree>,"ZPt","p_{T,Z} [GeV]",10,0,1000);
 
     vector<plot> doubletagSRPlots;
     doubletagSRPlots.push_back(plot(MET_Plot));
@@ -127,6 +129,8 @@ int main(int argc, char** argv){
     doubletagSRPlots.push_back(plot(J2pt_Mplot));
     doubletagSRPlots.push_back(plot(ClosestMass));
     doubletagSRPlots.push_back(plot(FarthestMass));
+    doubletagSRPlots.push_back(plot(WPt));
+    doubletagSRPlots.push_back(plot(ZPt));
 
     vector<plot> doubletagSBPlots;
     doubletagSBPlots.push_back(plot(MET_Plot));
@@ -137,6 +141,8 @@ int main(int argc, char** argv){
     doubletagSBPlots.push_back(plot(J2pt_Mplot));    
     doubletagSBPlots.push_back(plot(ClosestMass));
     doubletagSBPlots.push_back(plot(FarthestMass));
+    doubletagSBPlots.push_back(plot(WPt));
+    doubletagSBPlots.push_back(plot(ZPt));
 
     vector<plot> tagSRPlots;
     tagSRPlots.push_back(plot(MET_Plot));
@@ -147,6 +153,8 @@ int main(int argc, char** argv){
     tagSRPlots.push_back(plot(J2pt_Mplot));    
     tagSRPlots.push_back(plot(ClosestMass));
     tagSRPlots.push_back(plot(FarthestMass));
+    tagSRPlots.push_back(plot(WPt));
+    tagSRPlots.push_back(plot(ZPt));
 
     vector<plot> tagSBPlots;
     tagSBPlots.push_back(plot(MET_Plot));
@@ -157,6 +165,8 @@ int main(int argc, char** argv){
     tagSBPlots.push_back(plot(J2pt_Mplot));    
     tagSBPlots.push_back(plot(ClosestMass));
     tagSBPlots.push_back(plot(FarthestMass));
+    tagSBPlots.push_back(plot(WPt));
+    tagSBPlots.push_back(plot(ZPt));
 
     vector<plot> antitagSRPlots;
     antitagSRPlots.push_back(plot(MET_Plot));
@@ -167,6 +177,8 @@ int main(int argc, char** argv){
     antitagSRPlots.push_back(plot(J2pt_Mplot));    
     antitagSRPlots.push_back(plot(ClosestMass));
     antitagSRPlots.push_back(plot(FarthestMass));
+    antitagSRPlots.push_back(plot(WPt));
+    antitagSRPlots.push_back(plot(ZPt));
 
     vector<plot> antitagSBPlots;
     antitagSBPlots.push_back(plot(MET_Plot));
@@ -177,12 +189,14 @@ int main(int argc, char** argv){
     antitagSBPlots.push_back(plot(J2pt_Mplot));    
     antitagSBPlots.push_back(plot(ClosestMass));
     antitagSBPlots.push_back(plot(FarthestMass));
+    antitagSBPlots.push_back(plot(WPt));
+    antitagSBPlots.push_back(plot(ZPt));
 
     // background MC samples - 0 lepton regions
     for( int iSample = 0 ; iSample < skims.ntuples.size() ; iSample++){
 
         RA2bTree* ntuple = skims.ntuples[iSample];
-
+        cout << skims.sampleName[iSample] << endl;
         for( int iBin = 0 ; iBin < numMETbins ; iBin++){
             for( int iPlot = 0 ; iPlot < plots[iBin].size() ; iPlot++){
                 plots[iBin][iPlot].addNtuple(ntuple,skims.sampleName[iSample]);
@@ -243,6 +257,8 @@ int main(int argc, char** argv){
             }
             if( ! passBaseline ) continue;
 
+            //cout << "passed baseline selection" << endl;
+            
             filename = ntuple->fChain->GetFile()->GetName();
             if( ( filename.Contains("SingleLept") || filename.Contains("DiLept") ) && ntuple->madHT>600. )continue;
             bin = -1;
@@ -288,7 +304,7 @@ int main(int argc, char** argv){
         }// end event loop
     }// end sample loop
     
-
+    /*
     // data 
     RA2bTree* ntuple = skims.dataNtuple;
   
@@ -381,6 +397,7 @@ int main(int argc, char** argv){
                 antitagSBPlots[i].fillData(ntuple);
         }// end if-else-if block for tagging regions
     }// end event loop 
+    */
 
     TFile* outputFile;
     TString regionName;
@@ -408,6 +425,7 @@ int main(int argc, char** argv){
     }
     
     for( int i = 0 ; i < doubletagSRPlots.size() ; i++ ){
+        cout << "test: " << i << endl;
         outputFile->cd();
         doubletagSRPlots[i].buildSum("doubletagSR");
         doubletagSRPlots[i].Write();
