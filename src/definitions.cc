@@ -1,5 +1,7 @@
 #include "TLorentzVector.h"
 #include "TRandom3.h"
+#include <iostream>
+
 // constants
 // ==============================================
 double bbtagCut = 0.3;
@@ -83,6 +85,31 @@ template<typename ntupleType>void ntupleBranchStatus(ntupleType* ntuple){
 /***************************************************************/
 /* - - - - - - - - - - - - gen-level cuts - - - - - - - - - -  */
 /***************************************************************/
+
+template<typename ntupleType> double FillGenWPt(ntupleType* ntuple){
+    //cout << "FillGenWPt:" << endl;
+    double pt = -999.;
+    for( unsigned int p = 0 ; p < ntuple->GenParticles->size() ; p++ ){
+        if( abs(ntuple->GenParticles_PdgId->at(p)) == 24 ){
+            //std::cout << "pt: " << ntuple->GenParticles->at(p).Pt() << std::endl;
+            pt = ntuple->GenParticles->at(p).Pt();
+        }
+    }
+    return pt; 
+}
+
+template<typename ntupleType> double FillGenZPt(ntupleType* ntuple){
+    //cout << "FillGenZPt:" << endl;
+    double pt = -999.;
+    for( unsigned int p = 0 ; p < ntuple->GenParticles->size() ; p++ ){
+        if( abs(ntuple->GenParticles_PdgId->at(p)) == 23 ){
+            //std::cout << "pt: " << ntuple->GenParticles->at(p).Pt() << std::endl;
+            pt = ntuple->GenParticles->at(p).Pt();
+        }
+    }
+    return pt; 
+}
+
 template<typename ntupleType> bool genWmatched(ntupleType* ntuple){
     if( ntuple->JetsAK8->size() == 0 ) return false;
     
@@ -340,6 +367,7 @@ template<typename ntupleType> double ISRweights(ntupleType* ntuple, ISRweightTyp
     else 
         return w[ntuple->NJetsISR]*D;
 }
+
 //////////////////////
 //////////////////////
 //////////////////////
@@ -1347,6 +1375,11 @@ template<typename ntupleType> bool singleHiggsTagLooseCut(ntupleType* ntuple ){
              && ( ntuple->JetsAK8_doubleBDiscriminator->at(1) < bbtagCut ) ) ||
         ( ( ntuple->JetsAK8_doubleBDiscriminator->at(0) < bbtagCut ) 
           && ( ntuple->JetsAK8_doubleBDiscriminator->at(1) > bbtagCut ) );
+}
+
+template<typename ntupleType> bool OneOrMoreHiggsTagLooseCut(ntupleType* ntuple ){ 
+    return ( ( ntuple->JetsAK8_doubleBDiscriminator->at(0) > bbtagCut ) ||
+             ( ntuple->JetsAK8_doubleBDiscriminator->at(1) > bbtagCut ) );
 }
 
 template<typename ntupleType> bool antiTaggingLooseCut(ntupleType* ntuple ){
