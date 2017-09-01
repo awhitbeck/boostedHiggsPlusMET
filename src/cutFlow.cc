@@ -52,8 +52,8 @@ int main(int argc, char** argv){
     vector<cutFunc> cutFlow;
     vector<TString> cutName;
 
-    cutFlow.push_back(*FiltersCut<RA2bTree>);
-    cutName.push_back("Filters");
+    cutFlow.push_back(*RA2bSkimCuts<RA2bTree>);
+    cutName.push_back("RA2bSkim");
     
     if( region == 3 ){ 
         cutFlow.push_back(*lowDPhiCuts<RA2bTree>);
@@ -241,7 +241,7 @@ int main(int argc, char** argv){
         for( int iPlot = 0 ; iPlot < plots[iCut].size() ; iPlot++){
             TCanvas* can = new TCanvas("can","can",500,500);
             if( region == 0 )
-                plots[iCut][iPlot].DrawNoRatio(can,skims.ntuples,sigSamples,outputDir[region]);
+                plots[iCut][iPlot].Draw(can,skims.ntuples,sigSamples,outputDir[region],0.1,2.0,true);
             else
                 plots[iCut][iPlot].Draw(can,skims.ntuples,sigSamples,outputDir[region],0.1,2.0,true);
         }
