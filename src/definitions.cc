@@ -1227,6 +1227,12 @@ template<typename ntupleType> bool AK8JetLooseMassCut(ntupleType* ntuple){
              ntuple->JetsAK8_prunedMass->at(1) < 250. );	   
 }
 
+template<typename ntupleType> bool RA2bSkimCuts(ntupleType* ntuple){
+    return ntuple->Muons->size()+ntuple->Electrons->size()==0 &&
+        ntuple->isoElectronTracks+ntuple->isoMuonTracks +ntuple->isoPionTracks==0 &&
+        FiltersCut(ntuple) && 
+        ntuple->JetID == 1;
+}
 
 template<typename ntupleType> bool baselineCut(ntupleType* ntuple){
  
@@ -1370,32 +1376,49 @@ template<typename ntupleType> bool photonBaselineCut_loose(ntupleType* ntuple){
              ntuple->JetIDclean == 1);
 }
 
+template<typename ntupleType> bool leadJetTighMassCut(ntupleType* ntuple ){ 
+    return ntuple->JetsAK8_doubleBDiscriminator->size()>=1 && 
+           (ntuple->JetsAK8_prunedMass->at(0) > 85. && 
+            ntuple->JetsAK8_prunedMass->at(0) < 135.);    
+}
+
+template<typename ntupleType> bool subleadJetTighMassCut(ntupleType* ntuple ){ 
+    return ntuple->JetsAK8_doubleBDiscriminator->size()>=2 && 
+           (ntuple->JetsAK8_prunedMass->at(1) > 85. && 
+            ntuple->JetsAK8_prunedMass->at(1) < 135.);
+}
+
 template<typename ntupleType> bool singleHiggsTagLooseCut(ntupleType* ntuple ){ 
-    return ( ( ntuple->JetsAK8_doubleBDiscriminator->at(0) > bbtagCut ) 
+    return ( ntuple->JetsAK8_doubleBDiscriminator->size()>=2 &&
+             ( ( ntuple->JetsAK8_doubleBDiscriminator->at(0) > bbtagCut ) 
              && ( ntuple->JetsAK8_doubleBDiscriminator->at(1) < bbtagCut ) ) ||
         ( ( ntuple->JetsAK8_doubleBDiscriminator->at(0) < bbtagCut ) 
-          && ( ntuple->JetsAK8_doubleBDiscriminator->at(1) > bbtagCut ) );
+          && ( ntuple->JetsAK8_doubleBDiscriminator->at(1) > bbtagCut ) ) );
 }
 
 template<typename ntupleType> bool OneOrMoreHiggsTagLooseCut(ntupleType* ntuple ){ 
-    return ( ( ntuple->JetsAK8_doubleBDiscriminator->at(0) > bbtagCut ) ||
-             ( ntuple->JetsAK8_doubleBDiscriminator->at(1) > bbtagCut ) );
+    return ( ntuple->JetsAK8_doubleBDiscriminator->size()>=2 &&
+             ( ntuple->JetsAK8_doubleBDiscriminator->at(0) > bbtagCut ||
+               ntuple->JetsAK8_doubleBDiscriminator->at(1) > bbtagCut ) );
 }
 
 template<typename ntupleType> bool antiTaggingLooseCut(ntupleType* ntuple ){
-    return ( ( ( ntuple->JetsAK8_doubleBDiscriminator->at(0) < bbtagCut
+    return ( ntuple->JetsAK8_doubleBDiscriminator->size()>=2 &&
+             ( ( ntuple->JetsAK8_doubleBDiscriminator->at(0) < bbtagCut
                ) &&
              ( ntuple->JetsAK8_doubleBDiscriminator->at(1) < bbtagCut 
                ) ) ) ;
 }
 
 template<typename ntupleType> bool doubleTaggingLooseCut(ntupleType* ntuple ){
-    return ( ntuple->JetsAK8_doubleBDiscriminator->at(0) > bbtagCut && 
+    return ( ntuple->JetsAK8_doubleBDiscriminator->size()>=2 &&
+             ntuple->JetsAK8_doubleBDiscriminator->at(0) > bbtagCut && 
              ntuple->JetsAK8_doubleBDiscriminator->at(1) > bbtagCut );
 }
 
 template<typename ntupleType> bool doubleMassCut(ntupleType* ntuple ){
-    return ( ntuple->JetsAK8_prunedMass->at(0) > 85. &&
+    return ( ntuple->JetsAK8_doubleBDiscriminator->size()>=2 &&
+             ntuple->JetsAK8_prunedMass->at(0) > 85. &&
              ntuple->JetsAK8_prunedMass->at(0) < 135. &&
              ntuple->JetsAK8_prunedMass->at(1) > 85. &&
              ntuple->JetsAK8_prunedMass->at(1) < 135. 
@@ -1403,21 +1426,23 @@ template<typename ntupleType> bool doubleMassCut(ntupleType* ntuple ){
 }
 
 template<typename ntupleType> bool singleHiggsTagCut(ntupleType* ntuple ){
-  return ( (ntuple->JetsAK8_prunedMass->at(0) > 85. && 
-            ntuple->JetsAK8_prunedMass->at(0) < 135. && 
-            ntuple->JetsAK8_doubleBDiscriminator->at(0) > bbtagCut ) ||
-           (ntuple->JetsAK8_prunedMass->at(1) > 85. && 
-            ntuple->JetsAK8_prunedMass->at(1) < 135. && 
-            ntuple->JetsAK8_doubleBDiscriminator->at(1) > bbtagCut ) );
+    return ntuple->JetsAK8_doubleBDiscriminator->size()>=2 && 
+        ( (ntuple->JetsAK8_prunedMass->at(0) > 85. && 
+           ntuple->JetsAK8_prunedMass->at(0) < 135. && 
+           ntuple->JetsAK8_doubleBDiscriminator->at(0) > bbtagCut ) ||
+          (ntuple->JetsAK8_prunedMass->at(1) > 85. && 
+           ntuple->JetsAK8_prunedMass->at(1) < 135. && 
+           ntuple->JetsAK8_doubleBDiscriminator->at(1) > bbtagCut ) );
 }
 
 template<typename ntupleType> bool doubleHiggsTagCut(ntupleType* ntuple ){
-  return ( ntuple->JetsAK8_prunedMass->at(0) > 85. && 
-           ntuple->JetsAK8_prunedMass->at(0) < 135. && 
-           ntuple->JetsAK8_doubleBDiscriminator->at(0) > bbtagCut &&
-           ntuple->JetsAK8_prunedMass->at(1) > 85. && 
-           ntuple->JetsAK8_prunedMass->at(1) < 135. && 
-           ntuple->JetsAK8_doubleBDiscriminator->at(1) > bbtagCut ) ;
+    return ntuple->JetsAK8_doubleBDiscriminator->size()>=2 &&
+        ( ntuple->JetsAK8_prunedMass->at(0) > 85. && 
+          ntuple->JetsAK8_prunedMass->at(0) < 135. && 
+          ntuple->JetsAK8_doubleBDiscriminator->at(0) > bbtagCut &&
+          ntuple->JetsAK8_prunedMass->at(1) > 85. && 
+          ntuple->JetsAK8_prunedMass->at(1) < 135. && 
+          ntuple->JetsAK8_doubleBDiscriminator->at(1) > bbtagCut ) ;
 }
 
 template<typename ntupleType> bool tagSR(ntupleType* ntuple, int i){
