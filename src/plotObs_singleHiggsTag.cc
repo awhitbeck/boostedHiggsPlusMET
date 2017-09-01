@@ -163,6 +163,6 @@ int main(int argc, char** argv){
   for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++){
       TCanvas* can = new TCanvas("can","can",500,500);
       plots[iPlot].dataHist = NULL;
-      plots[iPlot].DrawNoRatio(can,skims.ntuples,sigNtuples,"../plots/plotObs_singleHiggsTag_plots");
+      plots[iPlot].Draw(can,skims.ntuples,sigNtuples,"../plots/plotObs_singleHiggsTag_plots",0.1,2.0,true);
   }
 }

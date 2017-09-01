@@ -201,7 +201,7 @@ int main(int argc, char** argv){
     for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++){
         TCanvas* can = new TCanvas("can","can",500,500);
         plots[iPlot].dataHist = NULL;
-        plots[iPlot].DrawNoRatio(can,skims.ntuples,sigSamples,"../plots/plotObs_baseline_plots");
+        plots[iPlot].Draw(can,skims.ntuples,sigSamples,"../plots/plotObs_baseline_plots",0.1,2.0,true);
         plots[iPlot].Write();
         plots[iPlot].sum->Write();
     }
