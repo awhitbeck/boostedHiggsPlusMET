@@ -241,19 +241,19 @@ public :
         // - - - - - - - - - - - DATA INPUTS - - - - - - - - - -  //
         ////////////////////////////////////////////////////////////
 
-        std::vector<TString> HTMHTFileNames;
-        HTMHTFileNames.push_back("tree_HTMHT_re2016B.root");
-        HTMHTFileNames.push_back("tree_HTMHT_re2016C.root");
-        HTMHTFileNames.push_back("tree_HTMHT_re2016D.root");
-        HTMHTFileNames.push_back("tree_HTMHT_re2016E.root");
-        HTMHTFileNames.push_back("tree_HTMHT_re2016F.root");
-        HTMHTFileNames.push_back("tree_HTMHT_re2016G.root");
-        HTMHTFileNames.push_back("tree_HTMHT_re2016H2.root");
-        HTMHTFileNames.push_back("tree_HTMHT_re2016H3.root");
+        std::vector<TString> METFileNames;
+        METFileNames.push_back("tree_MET_re2016B.root");
+        METFileNames.push_back("tree_MET_re2016C.root");
+        METFileNames.push_back("tree_MET_re2016D.root");
+        METFileNames.push_back("tree_MET_re2016E.root");
+        METFileNames.push_back("tree_MET_re2016F.root");
+        METFileNames.push_back("tree_MET_re2016G.root");
+        METFileNames.push_back("tree_MET_re2016H2.root");
+        METFileNames.push_back("tree_MET_re2016H3.root");
         if( r == kSignal || r == kLowDphi ){
             data = new TChain("tree");
-            for( unsigned int i = 0 ; i < HTMHTFileNames.size() ; i++ ){
-                data->Add(skimType+"/"+HTMHTFileNames[i]);
+            for( unsigned int i = 0 ; i < METFileNames.size() ; i++ ){
+                data->Add(skimType+"/"+METFileNames[i]);
             }    
             dataNtuple = new RA2bTree(data);
             //ntuples.push_back(dataNtuple);
