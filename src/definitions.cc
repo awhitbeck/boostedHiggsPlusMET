@@ -1234,6 +1234,31 @@ template<typename ntupleType> bool RA2bSkimCuts(ntupleType* ntuple){
         ntuple->JetID == 1;
 }
 
+template<typename ntupleType> bool RA2bSkimCutsNoFilters(ntupleType* ntuple){
+    return ntuple->Muons->size()+ntuple->Electrons->size()==0 &&
+        ntuple->isoElectronTracks+ntuple->isoMuonTracks +ntuple->isoPionTracks==0 &&
+        ntuple->JetID == 1;
+}
+
+
+template<typename ntupleType> bool baselineCutNoFilters(ntupleType* ntuple){
+  return ( ntuple->MET > 300.             &&
+           ntuple->HT > 600.                         &&
+           ntuple->JetsAK8->size() >= 2 &&
+           ntuple->JetsAK8->at(0).Pt() > 300. && 
+           ntuple->JetsAK8_prunedMass->at(0) > 50. && 
+           ntuple->JetsAK8_prunedMass->at(0) < 250. && 
+           ntuple->JetsAK8->at(1).Pt() > 300. &&
+           ntuple->JetsAK8_prunedMass->at(1) > 50. && 
+           ntuple->JetsAK8_prunedMass->at(1) < 250.&&
+           DeltaPhiCuts(ntuple) && 
+           ntuple->Muons->size()+ntuple->Electrons->size()==0 
+           && ntuple->isoElectronTracks+ntuple->isoMuonTracks +ntuple->isoPionTracks==0 &&
+           ntuple->JetID == 1);
+
+}
+    
+
 template<typename ntupleType> bool baselineCut(ntupleType* ntuple){
  
   return ( ntuple->MET > 300.             &&
