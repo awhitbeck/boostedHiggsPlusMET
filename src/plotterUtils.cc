@@ -357,7 +357,7 @@ public:
                 max = dataHist->GetMaximum();
         }
 
-        stack->SetMaximum(max);
+        stack->SetMaximum(max*1.5);
         stack->SetMinimum(0.1);
 
         stack->GetYaxis()->SetLabelFont(63);
@@ -454,6 +454,10 @@ public:
         can->SaveAs(dir+"/"+label+".png");
         can->SaveAs(dir+"/"+label+".eps");
         can->SaveAs(dir+"/"+label+".pdf");
+
+        stack->SetMaximum(max*10.);
+        stack->SetMinimum(0.1);        
+
         gPad->SetLogy(true);
         can->SaveAs(dir+"/"+label+"_LogY.png");
         can->SaveAs(dir+"/"+label+"_LogY.eps");
