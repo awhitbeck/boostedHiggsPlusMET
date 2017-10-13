@@ -304,7 +304,6 @@ int main(int argc, char** argv){
         }// end event loop
     }// end sample loop
     
-    /*
     // data 
     RA2bTree* ntuple = skims.dataNtuple;
   
@@ -397,7 +396,6 @@ int main(int argc, char** argv){
                 antitagSBPlots[i].fillData(ntuple);
         }// end if-else-if block for tagging regions
     }// end event loop 
-    */
 
     TFile* outputFile;
     TString regionName;
@@ -425,7 +423,6 @@ int main(int argc, char** argv){
     }
     
     for( int i = 0 ; i < doubletagSRPlots.size() ; i++ ){
-        cout << "test: " << i << endl;
         outputFile->cd();
         doubletagSRPlots[i].buildSum("doubletagSR");
         doubletagSRPlots[i].Write();
