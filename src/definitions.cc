@@ -69,6 +69,7 @@ template<typename ntupleType>void ntupleBranchStatus(ntupleType* ntuple){
   ntuple->fChain->SetBranchStatus("EcalDeadCellTriggerPrimitiveFilter",1);
   ntuple->fChain->SetBranchStatus("BadPFMuonFilter",1);
   ntuple->fChain->SetBranchStatus("BadChargedCandidateFilter",1);
+  ntuple->fChain->SetBranchStatus("globalTightHalo2016Filter",1);
   ntuple->fChain->SetBranchStatus("CaloMET",1);
   ntuple->fChain->SetBranchStatus("NVtx",1);
   ntuple->fChain->SetBranchStatus("NumInteractions",1);
@@ -88,6 +89,7 @@ template<typename ntupleType>void ntupleBranchStatus(ntupleType* ntuple){
 
 template<typename ntupleType> double FillGenWPt(ntupleType* ntuple){
     //cout << "FillGenWPt:" << endl;
+    if( ntuple->GenParticles == NULL ) return -999.;
     double pt = -999.;
     for( unsigned int p = 0 ; p < ntuple->GenParticles->size() ; p++ ){
         if( abs(ntuple->GenParticles_PdgId->at(p)) == 24 ){
@@ -100,6 +102,7 @@ template<typename ntupleType> double FillGenWPt(ntupleType* ntuple){
 
 template<typename ntupleType> double FillGenZPt(ntupleType* ntuple){
     //cout << "FillGenZPt:" << endl;
+    if( ntuple->GenParticles == NULL ) return -999.;
     double pt = -999.;
     for( unsigned int p = 0 ; p < ntuple->GenParticles->size() ; p++ ){
         if( abs(ntuple->GenParticles_PdgId->at(p)) == 23 ){
@@ -1163,7 +1166,8 @@ template<typename ntupleType> bool FiltersCut(ntupleType* ntuple){
         ntuple->NVtx>0 && 
         ntuple->MET/ntuple->CaloMET < 5. &&
         ntuple->BadPFMuonFilter == 1 &&
-        ntuple->BadChargedCandidateFilter == 1;
+        ntuple->BadChargedCandidateFilter == 1 &&
+        ntuple->globalTightHalo2016Filter == 1;
 }
 
 template<typename ntupleType> bool AK8MultCut(ntupleType* ntuple){
