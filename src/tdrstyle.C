@@ -21,7 +21,7 @@ void fixOverlay() {
 }
 
 void setTDRStyle() {
-  
+
   // For the canvas:
   gStyle->SetCanvasBorderMode(0);
   gStyle->SetCanvasColor(kWhite);
@@ -169,5 +169,6 @@ void setTDRStyle() {
   //   gStyle->cd();
 
   gROOT->ForceStyle();
+  gROOT->SetStyle("Plain");
 
 }
