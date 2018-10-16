@@ -236,7 +236,7 @@ public:
         }
     
         for(int iSample = 0 ; iSample < signalNtuples.size() ; iSample++){
-            TH1F* temp = signalHistoMap[signalNtuples[iSample]];
+            TH1F* temp = (signalHistoMap[signalNtuples[iSample]]!=NULL?signalHistoMap[signalNtuples[iSample]]:NULL);
             if( temp ){
 
                 temp->Draw("histo,SAME");
@@ -253,17 +253,17 @@ public:
         stack->SetMaximum(max*1.5);
         stack->SetMinimum(0.1);
 
-        stack->GetYaxis()->SetLabelFont(63);
-        stack->GetYaxis()->SetLabelSize(14);
-        stack->GetYaxis()->SetTitleFont(63);
-        stack->GetYaxis()->SetTitleSize(20);
-        stack->GetYaxis()->SetTitleOffset(1.6);
+        stack->GetYaxis()->SetLabelFont(43);
+        stack->GetYaxis()->SetLabelSize(20);
+        stack->GetYaxis()->SetTitleFont(43);
+        stack->GetYaxis()->SetTitleSize(24);
+        stack->GetYaxis()->SetTitleOffset(1.3);
 
-        stack->GetXaxis()->SetLabelFont(63);
-        stack->GetXaxis()->SetLabelSize(14);
-        stack->GetXaxis()->SetTitleFont(63);
-        stack->GetXaxis()->SetTitleSize(20);
-        stack->GetXaxis()->SetTitleOffset(1.6);
+        stack->GetXaxis()->SetLabelFont(43);
+        stack->GetXaxis()->SetLabelSize(20);
+        stack->GetXaxis()->SetTitleFont(43);
+        stack->GetXaxis()->SetTitleSize(24);
+        stack->GetXaxis()->SetTitleOffset(1.1);
 
         writeExtraText = true;
         extraText="Preliminary";
@@ -316,10 +316,10 @@ public:
     
         TPad* topPad = new TPad("topPad","topPad",0.,0.4,.99,.99);
         TPad* botPad = new TPad("botPad","botPad",0.,0.01,.99,.39);
-        botPad->SetBottomMargin(0.25);
-        botPad->SetTopMargin(0.02);
+        botPad->SetBottomMargin(0.3);
+        botPad->SetTopMargin(0.0);
         topPad->SetTopMargin(0.06);
-        topPad->SetBottomMargin(0.17);
+        topPad->SetBottomMargin(0.0);
         topPad->Draw();
         botPad->Draw();
         topPad->cd();
@@ -343,7 +343,7 @@ public:
         }
     
         for(int iSample = 0 ; iSample < signalNtuples.size() ; iSample++){
-            TH1F* temp = signalHistoMap[signalNtuples[iSample]];
+            TH1F* temp = (signalHistoMap[signalNtuples[iSample]]!=NULL)?signalHistoMap[signalNtuples[iSample]]:NULL;
             if( temp ){
                 //temp->Scale(sum->Integral()/temp->Integral());
                 temp->Draw("histo,SAME");
@@ -360,17 +360,17 @@ public:
         stack->SetMaximum(max*1.5);
         stack->SetMinimum(0.1);
 
-        stack->GetYaxis()->SetLabelFont(63);
-        stack->GetYaxis()->SetLabelSize(14);
-        stack->GetYaxis()->SetTitleFont(63);
-        stack->GetYaxis()->SetTitleSize(20);
-        stack->GetYaxis()->SetTitleOffset(1.6);
+        stack->GetYaxis()->SetLabelFont(43);
+        stack->GetYaxis()->SetLabelSize(20);
+        stack->GetYaxis()->SetTitleFont(43);
+        stack->GetYaxis()->SetTitleSize(24);
+        stack->GetYaxis()->SetTitleOffset(1.3);
 
-        stack->GetXaxis()->SetLabelFont(63);
-        stack->GetXaxis()->SetLabelSize(14);
-        stack->GetXaxis()->SetTitleFont(63);
-        stack->GetXaxis()->SetTitleSize(20);
-        stack->GetXaxis()->SetTitleOffset(1.6);
+        stack->GetXaxis()->SetLabelFont(43);
+        stack->GetXaxis()->SetLabelSize(20);
+        stack->GetXaxis()->SetTitleFont(43);
+        stack->GetXaxis()->SetTitleSize(24);
+        stack->GetXaxis()->SetTitleOffset(1.1);
 
         writeExtraText = true;
         extraText="Preliminary";
@@ -397,18 +397,20 @@ public:
             ratio->GetYaxis()->SetRangeUser(ratioYmin,ratioYmax);
             ratio->GetXaxis()->SetRangeUser(lower,upper);
             ratio->GetXaxis()->SetTitle(xlabel);
-        
-            ratio->GetYaxis()->SetLabelFont(63);
-            ratio->GetYaxis()->SetLabelSize(14);
-            ratio->GetYaxis()->SetTitleFont(63);
-            ratio->GetYaxis()->SetTitleSize(20);
-            ratio->GetYaxis()->SetTitleOffset(1.6);
+            ratio->GetYaxis()->SetNdivisions(505);
+            ratio->GetXaxis()->SetNdivisions(505);
 
-            ratio->GetXaxis()->SetLabelFont(63);
-            ratio->GetXaxis()->SetLabelSize(14);
-            ratio->GetXaxis()->SetTitleFont(63);
-            ratio->GetXaxis()->SetTitleSize(20);
-            ratio->GetXaxis()->SetTitleOffset(2.);
+            ratio->GetYaxis()->SetLabelFont(43);
+            ratio->GetYaxis()->SetLabelSize(20);
+            ratio->GetYaxis()->SetTitleFont(43);
+            ratio->GetYaxis()->SetTitleSize(24);
+            ratio->GetYaxis()->SetTitleOffset(1.3);
+            
+            ratio->GetXaxis()->SetLabelFont(43);
+            ratio->GetXaxis()->SetLabelSize(20);
+            ratio->GetXaxis()->SetTitleFont(43);
+            ratio->GetXaxis()->SetTitleSize(24);
+            ratio->GetXaxis()->SetTitleOffset(2.5);
             // ------------------------------------------------------------
         
             // - - - - - - - compute data/MC scale factor - - - - - - - - 
