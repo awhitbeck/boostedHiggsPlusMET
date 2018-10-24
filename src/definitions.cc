@@ -1246,14 +1246,11 @@ template<typename ntupleType> bool RA2bSkimCutsNoFilters(ntupleType* ntuple){
 
 template<typename ntupleType> bool baselineCutNoFilters(ntupleType* ntuple){
   return ( ntuple->MET > 300.             &&
-           ntuple->HT > 600.                         &&
-           ntuple->JetsAK8->size() >= 2 &&
-           ntuple->JetsAK8->at(0).Pt() > 300. && 
-           ntuple->JetsAK8_prunedMass->at(0) > 50. && 
-           ntuple->JetsAK8_prunedMass->at(0) < 250. && 
-           ntuple->JetsAK8->at(1).Pt() > 300. &&
-           ntuple->JetsAK8_prunedMass->at(1) > 50. && 
-           ntuple->JetsAK8_prunedMass->at(1) < 250.&&
+           ntuple->HT > 300.                         &&
+           ntuple->JetsAK8->size() >= 1 &&
+           ntuple->JetsAK8->at(0).Pt() > 200. && 
+           ntuple->JetsAK8_prunedMass->at(0) > 30. && 
+           ntuple->JetsAK8_prunedMass->at(0) < 300. && 
            DeltaPhiCuts(ntuple) && 
            ntuple->BTags==0 &&
            ntuple->Muons->size()+ntuple->Electrons->size()==0 
