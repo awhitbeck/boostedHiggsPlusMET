@@ -1244,7 +1244,6 @@ template<typename ntupleType> bool RA2bSkimCutsNoFilters(ntupleType* ntuple){
         ntuple->JetID == 1;
 }
 
-
 template<typename ntupleType> bool baselineCutNoFilters(ntupleType* ntuple){
   return ( ntuple->MET > 300.             &&
            ntuple->HT > 600.                         &&
@@ -1256,27 +1255,35 @@ template<typename ntupleType> bool baselineCutNoFilters(ntupleType* ntuple){
            ntuple->JetsAK8_prunedMass->at(1) > 50. && 
            ntuple->JetsAK8_prunedMass->at(1) < 250.&&
            DeltaPhiCuts(ntuple) && 
+           ntuple->BTags==0 &&
            ntuple->Muons->size()+ntuple->Electrons->size()==0 
            && ntuple->isoElectronTracks+ntuple->isoMuonTracks +ntuple->isoPionTracks==0 &&
            ntuple->JetID == 1);
 
 }
     
-
 template<typename ntupleType> bool baselineCut(ntupleType* ntuple){
  
-  return ( ntuple->MET > 300.             &&
-           ntuple->HT > 300.                         &&
-           ntuple->JetsAK8->size() >= 1 &&
-           ntuple->JetsAK8->at(0).Pt() > 200. && 
-           ntuple->JetsAK8_prunedMass->at(0) > 50. && 
-           ntuple->JetsAK8_prunedMass->at(0) < 250. && 
-           DeltaPhiCuts(ntuple) && 
-           ntuple->Muons->size()+ntuple->Electrons->size()==0 
-           && ntuple->isoElectronTracks+ntuple->isoMuonTracks +ntuple->isoPionTracks==0 &&
-	   
-           FiltersCut(ntuple) &&
-           ntuple->JetID == 1);
+    return ( baselineCutNoFilters(ntuple) &&
+             ntuple->JetID == 1);
+
+}
+
+template<typename ntupleType> bool looseZtagCut(ntupleType* ntuple){
+ 
+    return ( baselineCut(ntuple) &&
+             ntuple->JetsAK8_NsubjettinessTau2->at(0)<0.75
+             );
+
+}
+
+template<typename ntupleType> bool tightZtagCut(ntupleType* ntuple){
+ 
+    return ( baselineCut(ntuple) &&
+             ntuple->JetsAK8_NsubjettinessTau2->at(0)<0.75 &&
+             ntuple->JetsAK8_prunedMass->at(0)<110 &&
+             ntuple->JetsAK8_prunedMass->at(0)>70
+             );
 
 }
 
