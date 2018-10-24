@@ -9,6 +9,7 @@
 #include <map>
 #include <iostream>
 #include <time.h>       /* clock_t, clock, CLOCKS_PER_SEC */
+#include <cassert>
 
 #include "plotterUtils.cc"
 #include "skimSamples.cc"
@@ -21,8 +22,20 @@ using namespace std;
 int main(int argc, char** argv){
 
     int MAX_EVENTS = 99999999;
-    if( argc > 1 )
-        MAX_EVENTS = atoi(argv[1]);
+    if( argc > 2 )
+        MAX_EVENTS = atoi(argv[2]);
+
+    assert(argc > 1);
+    TString selection_label = argv[1];
+    bool (*selectionFunc)(RA2bTree*);
+    if( selection_label == "baseline" ){
+        selectionFunc = baselineCut;
+    }else if( selection_label == "looseZtag" ){
+        selectionFunc = looseZtagCut;
+    }else if( selection_label == "tightZtag" ){
+        selectionFunc = tightZtagCut;
+    }else 
+        assert(0);
 
     gROOT->ProcessLine(".L tdrstyle.C");
     gROOT->ProcessLine("setTDRStyle()");
@@ -31,21 +44,21 @@ int main(int argc, char** argv){
     skimSamples skims;
     typedef plot<RA2bTree> plot;
 
-    plot METplot(*fillMET<RA2bTree>,"MET_baseline","MET [GeV]",15,300.,1800.);
-    plot HTplot(*fillHT<RA2bTree>,"HT_baseline","H_{T} [GeV]",15,300,2800.);
-    plot NJetsplot(*fillNJets<RA2bTree>,"NJets_baseline","n_{j}",14,1.5,15.5);
-    plot BTagsplot(*fillBTags<RA2bTree>,"BTags_baseline","n_{b}",6,-0.5,5.5);
+    plot METplot(*fillMET<RA2bTree>,"MET_"+selection_label,"MET [GeV]",15,300.,1800.);
+    plot HTplot(*fillHT<RA2bTree>,"HT_"+selection_label,"H_{T} [GeV]",15,300,2800.);
+    plot NJetsplot(*fillNJets<RA2bTree>,"NJets_"+selection_label,"n_{j}",14,1.5,15.5);
+    plot BTagsplot(*fillBTags<RA2bTree>,"BTags_"+selection_label,"n_{b}",6,-0.5,5.5);
 
-    plot DeltaPhi1plot(*fillDeltaPhi1<RA2bTree>,"DeltaPhi1_baseline","#Delta#Phi_{1}",20,0,3.1415);
-    plot DeltaPhi2plot(*fillDeltaPhi2<RA2bTree>,"DeltaPhi2_baseline","#Delta#Phi_{2}",20,0,3.1415);
-    plot DeltaPhi3plot(*fillDeltaPhi3<RA2bTree>,"DeltaPhi3_baseline","#Delta#Phi_{3}",20,0,3.1415);
-    plot DeltaPhi4plot(*fillDeltaPhi4<RA2bTree>,"DeltaPhi4_baseline","#Delta#Phi_{4}",20,0,3.1415);
+    plot DeltaPhi1plot(*fillDeltaPhi1<RA2bTree>,"DeltaPhi1_"+selection_label,"#Delta#Phi_{1}",20,0,3.1415);
+    plot DeltaPhi2plot(*fillDeltaPhi2<RA2bTree>,"DeltaPhi2_"+selection_label,"#Delta#Phi_{2}",20,0,3.1415);
+    plot DeltaPhi3plot(*fillDeltaPhi3<RA2bTree>,"DeltaPhi3_"+selection_label,"#Delta#Phi_{3}",20,0,3.1415);
+    plot DeltaPhi4plot(*fillDeltaPhi4<RA2bTree>,"DeltaPhi4_"+selection_label,"#Delta#Phi_{4}",20,0,3.1415);
 
-    plot J1pt_Massplot(*fillLeadingJetMass<RA2bTree>,"J1pt_Mass_baseline","m_{J} [GeV]",20,50.,200.);
-    plot J1pt_BBplot(*fillLeadingBBtag<RA2bTree>,"J1pt_BBtag_baseline","bb-tag",20,-1.,1.);
-    plot J1pt_Tau21plot(*fillLeadingTau21<RA2bTree>,"J1pt_Tau21_baseline","#tau_{21}",20,0.,1.);
-    plot J1pt_Ptplot(*fillLeadingJetPt<RA2bTree>,"J1pt_Pt_baseline","p_{T,J} [GeV]",40,300.,2300.);
-    plot J1pt_JetFlavorPlot(*fillLeadingJetFlavor<RA2bTree>,"J1pt_JetFlavorPlot","Jet Flavor",22,0.5,21.5);
+    plot J1pt_Massplot(*fillLeadingJetMass<RA2bTree>,"J1pt_Mass_"+selection_label,"m_{J} [GeV]",20,50.,200.);
+    plot J1pt_BBplot(*fillLeadingBBtag<RA2bTree>,"J1pt_BBtag_"+selection_label,"bb-tag",20,-1.,1.);
+    plot J1pt_Tau21plot(*fillLeadingTau21<RA2bTree>,"J1pt_Tau21_"+selection_label,"#tau_{21}",20,0.,1.);
+    plot J1pt_Ptplot(*fillLeadingJetPt<RA2bTree>,"J1pt_Pt_"+selection_label,"p_{T,J} [GeV]",40,300.,2300.);
+    plot J1pt_JetFlavorPlot(*fillLeadingJetFlavor<RA2bTree>,"J1pt_JetFlavorPlot_"+selection_label,"Jet Flavor",22,0.5,21.5);
 
     vector<plot> plots;
     plots.push_back(METplot);
@@ -90,7 +103,7 @@ int main(int argc, char** argv){
 
             filename = ntuple->fChain->GetFile()->GetName();
             if( ( filename.Contains("SingleLept") || filename.Contains("DiLept") ) && ntuple->madHT>600. )continue;
-            if(! baselineCut(ntuple) ) continue;
+            if(! selectionFunc(ntuple) ) continue;
 
             // ---------- custom weights -----------
             std::vector<double> EfficiencyCenterUpDown = Eff_MetMhtSextetReal_CenterUpDown(ntuple->HT, ntuple->MHT, ntuple->NJets);
@@ -127,7 +140,7 @@ int main(int argc, char** argv){
         for( int iEvt = 0 ; iEvt < min(MAX_EVENTS,numEvents) ; iEvt++ ){
             ntuple->GetEntry(iEvt);
             if( iEvt % 1000000 == 0 ) cout << skims.signalSampleName[iSample] << ": " << iEvt << "/" << numEvents << endl;
-            if(! baselineCut(ntuple) ) continue;
+            if(! selectionFunc(ntuple) ) continue;
             if( !genLevelHHcut(ntuple) ) continue;
             for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++){
                 if( skims.signalSampleName[iSample] == "T5HH1300" )
@@ -149,19 +162,19 @@ int main(int argc, char** argv){
     for( int iEvt = 0 ; iEvt < min(0/*MAX_EVENTS*/,numEvents) ; iEvt++ ){
         ntuple->GetEntry(iEvt);
         if( iEvt % 1000000 == 0 ) cout << "data_HTMHT: " << iEvt << "/" << min(MAX_EVENTS,numEvents) << endl;
-        if(! baselineCut(ntuple) ) continue;
+        if(! selectionFunc(ntuple) ) continue;
         if( !signalTriggerCut(ntuple) ) continue;
         for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++){
             plots[iPlot].fillData(ntuple);
         }
     }
 
-    TFile* outputFile = new TFile("plotObs_baseline.root","RECREATE");
+    TFile* outputFile = new TFile("plotObs_"+selection_label+".root","RECREATE");
 
     for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++){
         TCanvas* can = new TCanvas("can","can",500,500);
         //plots[iPlot].Draw(can,skims.ntuples,sigSamples,"../plots/plotObs_baseline_plots",0.1,1.999,true);
-        plots[iPlot].DrawNoRatio(can,skims.ntuples,sigSamples,"../plots/plotObs_baseline_plots");//,0.1,1.999,true);
+        plots[iPlot].DrawNoRatio(can,skims.ntuples,sigSamples,"../plots/plotObs_"+selection_label+"_plots");//,0.1,1.999,true);
         plots[iPlot].Write();
         plots[iPlot].sum->Write();
     }
