@@ -40,7 +40,7 @@ template<typename ntupleType>void ntupleBranchStatus(ntupleType* ntuple){
   ntuple->fChain->SetBranchStatus("isoElectronTracks",1);
   ntuple->fChain->SetBranchStatus("isoMuonTracks",1);
   ntuple->fChain->SetBranchStatus("isoPionTracks",1);
-  ntuple->fChain->SetBranchStatus("Photon*",1);
+  //  ntuple->fChain->SetBranchStatus("Photon*",1);
   ntuple->fChain->SetBranchStatus("DeltaPhi*",1);
 
   ntuple->fChain->SetBranchStatus("MHT",1);
@@ -51,18 +51,18 @@ template<typename ntupleType>void ntupleBranchStatus(ntupleType* ntuple){
   ntuple->fChain->SetBranchStatus("MHT",1);
   ntuple->fChain->SetBranchStatus("METPhi",1);
 
-  ntuple->fChain->SetBranchStatus("HTclean",1);
-  ntuple->fChain->SetBranchStatus("NJetsclean",1);
-  ntuple->fChain->SetBranchStatus("BTagsclean",1);
-  ntuple->fChain->SetBranchStatus("METclean",1);
-  ntuple->fChain->SetBranchStatus("METPhiclean",1);
+  // ntuple->fChain->SetBranchStatus("HTclean",1);
+  // ntuple->fChain->SetBranchStatus("NJetsclean",1);
+  // ntuple->fChain->SetBranchStatus("BTagsclean",1);
+  // ntuple->fChain->SetBranchStatus("METclean",1);
+  // ntuple->fChain->SetBranchStatus("METPhiclean",1);
 
   ntuple->fChain->SetBranchStatus("JetsAK8*",1);
   ntuple->fChain->SetBranchStatus("Jets*",1);
   ntuple->fChain->SetBranchStatus("Weight",1);  
   ntuple->fChain->SetBranchStatus("puWeightNew",1);  
-  ntuple->fChain->SetBranchStatus("TrueNumInteractions",1);  
-  ntuple->fChain->SetBranchStatus("TriggerPass",1);  
+  // ntuple->fChain->SetBranchStatus("TrueNumInteractions",1);  
+  // ntuple->fChain->SetBranchStatus("TriggerPass",1);  
   ntuple->fChain->SetBranchStatus("HBHENoiseFilter",1);
   ntuple->fChain->SetBranchStatus("HBHEIsoNoiseFilter",1);
   ntuple->fChain->SetBranchStatus("eeBadScFilter",1);
@@ -71,16 +71,16 @@ template<typename ntupleType>void ntupleBranchStatus(ntupleType* ntuple){
   ntuple->fChain->SetBranchStatus("BadChargedCandidateFilter",1);
   ntuple->fChain->SetBranchStatus("globalTightHalo2016Filter",1);
   ntuple->fChain->SetBranchStatus("CaloMET",1);
-  ntuple->fChain->SetBranchStatus("NVtx",1);
-  ntuple->fChain->SetBranchStatus("NumInteractions",1);
-  ntuple->fChain->SetBranchStatus("nAllVertices",1);
+  // ntuple->fChain->SetBranchStatus("NVtx",1);
+  // ntuple->fChain->SetBranchStatus("NumInteractions",1);
+  // ntuple->fChain->SetBranchStatus("nAllVertices",1);
   ntuple->fChain->SetBranchStatus("JetID*",1);
   ntuple->fChain->SetBranchStatus("madHT",1);
-  ntuple->fChain->SetBranchStatus("NJetsISR",1);
-  ntuple->fChain->SetBranchStatus("madMinDeltaRStatus",1);
-  ntuple->fChain->SetBranchStatus("madMinPhotonDeltaR",1);
+  // ntuple->fChain->SetBranchStatus("NJetsISR",1);
+  // ntuple->fChain->SetBranchStatus("madMinDeltaRStatus",1);
+  // ntuple->fChain->SetBranchStatus("madMinPhotonDeltaR",1);
 
-  ntuple->fChain->SetBranchStatus("GenParticles*",1);
+  // ntuple->fChain->SetBranchStatus("GenParticles*",1);
 }
 
 /***************************************************************/
@@ -1266,25 +1266,15 @@ template<typename ntupleType> bool baselineCutNoFilters(ntupleType* ntuple){
 template<typename ntupleType> bool baselineCut(ntupleType* ntuple){
  
   return ( ntuple->MET > 300.             &&
-           ntuple->HT > 600.                         &&
-           ntuple->JetsAK8->size() >= 2 &&
-           ntuple->JetsAK8->at(0).Pt() > 300. && 
+           ntuple->HT > 300.                         &&
+           ntuple->JetsAK8->size() >= 1 &&
+           ntuple->JetsAK8->at(0).Pt() > 200. && 
            ntuple->JetsAK8_prunedMass->at(0) > 50. && 
            ntuple->JetsAK8_prunedMass->at(0) < 250. && 
-           ntuple->JetsAK8->at(1).Pt() > 300. &&
-           ntuple->JetsAK8_prunedMass->at(1) > 50. && 
-           ntuple->JetsAK8_prunedMass->at(1) < 250.&&
            DeltaPhiCuts(ntuple) && 
            ntuple->Muons->size()+ntuple->Electrons->size()==0 
            && ntuple->isoElectronTracks+ntuple->isoMuonTracks +ntuple->isoPionTracks==0 &&
 	   
-/*
-           ntuple->HBHENoiseFilter==1 && 
-           ntuple->HBHEIsoNoiseFilter==1 && 
-           ntuple->eeBadScFilter==1 && 
-           ntuple->EcalDeadCellTriggerPrimitiveFilter == 1 && 
-           ntuple->NVtx>0 && 
-*/
            FiltersCut(ntuple) &&
            ntuple->JetID == 1);
 

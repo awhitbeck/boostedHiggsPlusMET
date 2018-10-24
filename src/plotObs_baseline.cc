@@ -8,6 +8,7 @@
 #include <vector>
 #include <map>
 #include <iostream>
+#include <time.h>       /* clock_t, clock, CLOCKS_PER_SEC */
 
 #include "plotterUtils.cc"
 #include "skimSamples.cc"
@@ -25,7 +26,8 @@ int main(int argc, char** argv){
 
     gROOT->ProcessLine(".L tdrstyle.C");
     gROOT->ProcessLine("setTDRStyle()");
-  
+
+    clock_t t;  
     skimSamples skims;
     typedef plot<RA2bTree> plot;
 
@@ -65,6 +67,8 @@ int main(int argc, char** argv){
     // background MC samples
     for( int iSample = 0 ; iSample < skims.ntuples.size() ; iSample++){
 
+        //t = clock();
+
         RA2bTree* ntuple = skims.ntuples[iSample];
 
         for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++){
@@ -78,7 +82,11 @@ int main(int argc, char** argv){
         double weight = 0.;
         for( int iEvt = 0 ; iEvt < min(MAX_EVENTS,numEvents) ; iEvt++ ){
             ntuple->GetEntry(iEvt);
-            if( iEvt % 1000000 == 0 ) cout << skims.sampleName[iSample] << ": " << iEvt << "/" << numEvents << endl;
+            if( iEvt % 10000 == 0 ){
+                cout << skims.sampleName[iSample] << ": " << iEvt << "/" << numEvents << endl;
+                //t = clock()-t;
+                //cout << "    time: " << ((float)t)/CLOCKS_PER_SEC << endl;
+            }
 
             filename = ntuple->fChain->GetFile()->GetName();
             if( ( filename.Contains("SingleLept") || filename.Contains("DiLept") ) && ntuple->madHT>600. )continue;
