@@ -9,9 +9,8 @@ echo "output_dir ${output_dir}"
 echo "executable ${executable}"
 echo "args ${args}"
 
-mv ../../workingArea.tar .
 tar -xf workingArea.tar
-cd CMSSW_7_4_2/src/
+cd CMSSW_10_1_7/src/
 eval `scramv1 runtime -sh`
 echo "step 2"
 cd boostedHiggsPlusMET
@@ -19,7 +18,7 @@ export PATH=$PWD/bin/:$PATH
 echo "PWD ${PWD}"
 echo "PATH ${PATH}"
 cd src
-make all
+make $executable
 
 `echo $executable $args1 $args2 $args3 $args4`
 
