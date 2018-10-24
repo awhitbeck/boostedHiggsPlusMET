@@ -1269,16 +1269,15 @@ template<typename ntupleType> bool baselineCut(ntupleType* ntuple){
 template<typename ntupleType> bool looseZtagCut(ntupleType* ntuple){
  
     return ( baselineCut(ntuple) &&
-             ntuple->JetsAK8_NsubjettinessTau2->at(0)<0.75
+             ntuple->JetsAK8_NsubjettinessTau2->at(0)/ntuple->JetsAK8_NsubjettinessTau1->at(0)<0.75
              );
 
 }
 
 template<typename ntupleType> bool tightZtagCut(ntupleType* ntuple){
  
-    return ( baselineCut(ntuple) &&
-             ntuple->JetsAK8_NsubjettinessTau2->at(0)<0.75 &&
-             ntuple->JetsAK8_prunedMass->at(0)<110 &&
+    return ( looseZtagCut(ntuple) &&
+              ntuple->JetsAK8_prunedMass->at(0)<110 &&
              ntuple->JetsAK8_prunedMass->at(0)>70
              );
 
