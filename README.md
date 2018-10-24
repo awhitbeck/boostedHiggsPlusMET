@@ -19,13 +19,14 @@ NEEDS UPDATING
  
 #### Batch:
 
-All batch submissions are done through `submitBatch.sh`.  Code is tar'ed sent to worker nodes and outputs are transferd to EOS.  
-You will need to have a directory in your eos called boostedHiggsPlusMET.  This script by default takes a branch as input
-and will create a new EOS area with the name of the latest commit hash from the remote repository (origin is used).
+All batch submissions are done through `submitBatch.sh`.  Code is tar'ed sent to worker nodes and outputs are transferd to EOS.  The script which tar's the code is:
 
 <pre>
 bash makeTar.sh        
 </pre>
+
+You will need to have a directory in your eos called boostedHiggsPlusMET.  This script by default takes a branch as input
+and will create a new EOS area with the name of the latest commit hash from the remote repository (origin is used).
 
 In case you want to submit jobs one by one, you can re-tar your area with `makeTag.sh` and generate the relevant directory
 structure in your target EOS area using `makeOutputDir.sh`.  The latter should be passed the target directory.  Individual
@@ -36,6 +37,13 @@ condor_submit batchExecute.jdl exec_name="plotObs_baseline" arguments="${hash} p
 ```
 
 Argument for the executable can be tacked onto the end of `arguments`.  The variable hash should be your target EOS directory.
+
+Since files will be read over `xrootd` you'll need to have a valid grid proxy before you submit.  If you don't you'll get messages like `Submitting job(s)ERROR: unable to read proxy file` 
+because the proxy file doesn't exist.  To fix this run and enter your grid password when prompted:
+
+```bash 
+voms-proxy-init -voms cms
+```
 
 #### Things to run
 
