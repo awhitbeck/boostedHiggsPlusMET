@@ -17,46 +17,46 @@ double lumi=35862.824;
 
 template <typename ntupleType> class plot{
 
-public: 
+public:
 
     plot(){};
     plot( double (*fillerFunc_)(ntupleType*) , TString label_="var"){
         fillerFunc = fillerFunc_;
         label = label_;
-        xlabel = "" ; 
+        xlabel = "" ;
         nbins = 40; lower = 200.; upper = 1200.;
         binEdges = NULL;
         stack=new THStack(label+"_stack",label+"_stack");
         dataHist=NULL;
     };
 
-    plot( double (*fillerFunc_)(ntupleType*) , 
+    plot( double (*fillerFunc_)(ntupleType*) ,
           TString label_="var",TString xlabel_="var",
           int nbins_=20 , double lower_=200. , double upper_=2200.){
         fillerFunc = fillerFunc_;
         label = label_;
-        xlabel =xlabel_ ; 
+        xlabel =xlabel_ ;
         nbins = nbins_; lower = lower_; upper = upper_;
         binEdges=NULL;
         stack=new THStack(label+"_stack",label+"_stack");
     };
 
-    plot( double (*fillerFunc_)(ntupleType*) , 
+    plot( double (*fillerFunc_)(ntupleType*) ,
           TString label_,TString xlabel_,
           int nbins_ , double* bins_){
         fillerFunc = fillerFunc_;
         label = label_;
-        xlabel =xlabel_ ; 
+        xlabel =xlabel_ ;
         binEdges = bins_;
         nbins = nbins_; lower = binEdges[0]; upper = binEdges[nbins];
         stack=new THStack(label+"_stack",label+"_stack");
     };
-  
+
     void setBinning(int nbins_ , double lower_ , double upper_ ){
         nbins = nbins_ ; lower = lower_ ; upper = upper_ ;
     };
-  
-    void addNtuple(ntupleType* ntuple_,TString tag="test"){ 
+
+    void addNtuple(ntupleType* ntuple_,TString tag="test"){
         //cout << "nbins: " << nbins << " lower: " << lower << " upper: " << upper << endl;
         //cout << "tag: " << tag << endl;
         tagMap[ntuple_] = tag;
@@ -67,17 +67,17 @@ public:
         histoMap[ntuple_]->Sumw2();
     };
 
-    void addSignalNtuple(ntupleType* ntuple_,TString tag="test"){ 
+    void addSignalNtuple(ntupleType* ntuple_,TString tag="test"){
         //cout << "nbins: " << nbins << " lower: " << lower << " upper: " << upper << endl;
         tagMap[ntuple_] = tag;
         if( binEdges )
-            signalHistoMap[ntuple_] = new TH1F(label+"_"+tag,label+"_"+tag,nbins,binEdges);   
+            signalHistoMap[ntuple_] = new TH1F(label+"_"+tag,label+"_"+tag,nbins,binEdges);
         else
             signalHistoMap[ntuple_] = new TH1F(label+"_"+tag,label+"_"+tag,nbins,lower,upper);
 
         signalHistoMap[ntuple_]->Sumw2();
     };
-  
+
     void addDataNtuple(ntupleType* ntuple_,TString tag="test"){
         //cout << "nbins: " << nbins << " lower: " << lower << " upper: " << upper << endl;
         tagMap[ntuple_] = tag ;
@@ -87,7 +87,7 @@ public:
             dataHist = new TH1F(label+"_"+tag,label+"_"+tag,nbins,lower,upper);
         dataHist->SetMarkerStyle(8);
     };
-  
+
     int fill(ntupleType* ntuple ){
         if( histoMap[ntuple] ){ // histoMap.find(ntuple) != histoMap.end() ){
             return histoMap[ntuple]->Fill(fillerFunc(ntuple),ntuple->Weight*lumi);
@@ -127,10 +127,10 @@ public:
     int fillData(ntupleType* ntuple ){
         if( dataHist )
             return dataHist->Fill(fillerFunc(ntuple));
-        else 
+        else
             return 0;
     };
-  
+
     void setFillColor(ntupleType* ntuple , int color=1){
         if( histoMap.find(ntuple) != histoMap.end() ){
             histoMap[ntuple]->SetFillColor(color);
@@ -151,21 +151,21 @@ public:
             cout << "plot::setFillColor - ERROR: couldn't find key, " << ntuple << endl;
         }
     };
-  
+
     void buildStack(vector<ntupleType*> ntuples,double scale=1.0){
         if( stack ){
             for( int iSample = 0 ; iSample < ntuples.size() ; iSample++ ){
                 histoMap[ntuples[iSample]]->Scale(scale);
                 stack->Add(histoMap[ntuples[iSample]]);
-            }    
+            }
         }
     };
 
     void buildStack(double scale=1.0){
-    
+
         vector<ntupleType*> ntuples;
         for( typename map<ntupleType*,TH1F*>::iterator it = histoMap.begin() ;
-             it != histoMap.end() ; 
+             it != histoMap.end() ;
              ++it){
             ntuples.push_back(it->first);
         }
@@ -175,7 +175,7 @@ public:
     void buildSum(TString tag=""){
         sum = NULL;
         for( typename map<ntupleType*,TH1F*>::iterator it = histoMap.begin() ;
-             it != histoMap.end() ; 
+             it != histoMap.end() ;
              ++it){
             if( sum == NULL ){
                 sum = new TH1F(*(it->second));
@@ -191,31 +191,30 @@ public:
     void Write(){
 
         for( typename map<ntupleType*,TH1F*>::iterator it = histoMap.begin() ;
-             it != histoMap.end() ; 
+             it != histoMap.end() ;
              ++it ){
-            if( it->second ) 
+            if( it->second )
                 it->second->Write();
         }
 
-        for( typename map<ntupleType*,TH1F*>::iterator it = signalHistoMap.begin() ;
-             it != signalHistoMap.end() ; 
-             ++it ){
-            if( it->second ) 
-                it->second->Write();
-        }
-        if( dataHist )
-            dataHist->Write();
+        // for( typename map<ntupleType*,TH1F*>::iterator it = signalHistoMap.begin() ;
+        //      it != signalHistoMap.end() ;
+        //      ++it ){
+        //     if( it->second )
+        //         it->second->Write();
+        // }
+        // if( dataHist )
+        //     dataHist->Write();
 
     };
 
-    void DrawNoRatio(TCanvas* can, 
+    void DrawNoRatio(TCanvas* can,
                      vector<ntupleType*>ntuples,
-                     vector<ntupleType*>signalNtuples,
                      TString dir = "./",
                      bool normalizeMCtoData=false){
-      
+
         if( ! can ) return ;
-          
+
         can->SetTopMargin(0.06);
         double max = 0 ;
         if( histoMap.size() ){
@@ -234,19 +233,10 @@ public:
             stack->GetYaxis()->SetTitle("Events");
 
         }
-    
-        for(int iSample = 0 ; iSample < signalNtuples.size() ; iSample++){
-            TH1F* temp = (signalHistoMap[signalNtuples[iSample]]!=NULL?signalHistoMap[signalNtuples[iSample]]:NULL);
-            if( temp ){
 
-                temp->Draw("histo,SAME");
-                if( temp->GetMaximum() > max ) 
-                    max = temp->GetMaximum();
-            }
-        }
         if( dataHist ){
             dataHist->Draw("e1,SAME");
-            if( dataHist->GetMaximum() > max ) 
+            if( dataHist->GetMaximum() > max )
                 max = dataHist->GetMaximum();
         }
 
@@ -268,7 +258,7 @@ public:
         writeExtraText = true;
         extraText="Preliminary";
         char lumiString[4];
-        sprintf(lumiString,"%.1f",lumi/1000.);
+        sprintf(lumiString,"%.1f fb^{-1}",lumi/1000.);
         lumi_13TeV = lumiString;
         CMS_lumi( can , 4 , 0 );
         can->Update();
@@ -282,10 +272,7 @@ public:
         for(int iSample = 0 ; iSample < ntuples.size() ; iSample++){
             leg->AddEntry(histoMap[ntuples[iSample]],tagMap[ntuples[iSample]],"f");
         }
-        for(int iSample = 0 ; iSample < signalNtuples.size() ; iSample++){
-            leg->AddEntry(signalHistoMap[signalNtuples[iSample]],tagMap[signalNtuples[iSample]],"f");
-        }
-        if( dataHist ) 
+        if( dataHist )
             leg->AddEntry(dataHist,"data","p");
         leg->Draw();
 
@@ -306,14 +293,13 @@ public:
 
     void Draw(TCanvas* can,
               vector<ntupleType*>ntuples,
-              vector<ntupleType*>signalNtuples,
               TString dir = "./" ,
-              double ratioYmin = 0.1 , 
+              double ratioYmin = 0.1 ,
               double ratioYmax = 2.0 ,
               bool normalizeMCtoData=false){
 
         if( ! can ) return ;
-    
+
         TPad* topPad = new TPad("topPad","topPad",0.,0.4,.99,.99);
         TPad* botPad = new TPad("botPad","botPad",0.,0.01,.99,.39);
         botPad->SetBottomMargin(0.3);
@@ -323,12 +309,12 @@ public:
         topPad->Draw();
         botPad->Draw();
         topPad->cd();
-    
+
         double max = 0 ;
         if( histoMap.size() ){
 
             buildSum();
-            max = sum->GetMaximum(); 
+            max = sum->GetMaximum();
 
             if( normalizeMCtoData )
                 buildStack(ntuples,dataHist->Integral()/sum->Integral());
@@ -341,19 +327,10 @@ public:
             stack->GetYaxis()->SetTitle("Events");
 
         }
-    
-        for(int iSample = 0 ; iSample < signalNtuples.size() ; iSample++){
-            TH1F* temp = (signalHistoMap[signalNtuples[iSample]]!=NULL)?signalHistoMap[signalNtuples[iSample]]:NULL;
-            if( temp ){
-                //temp->Scale(sum->Integral()/temp->Integral());
-                temp->Draw("histo,SAME");
-                if( temp->GetMaximum() > max ) 
-                    max = temp->GetMaximum();
-            }
-        }
+
         if( dataHist ){
             dataHist->Draw("e1,SAME");
-            if( dataHist->GetMaximum() > max ) 
+            if( dataHist->GetMaximum() > max )
                 max = dataHist->GetMaximum();
         }
 
@@ -375,7 +352,7 @@ public:
         writeExtraText = true;
         extraText="Preliminary";
         char lumiString[4];
-        sprintf(lumiString,"%.1f",lumi/1000.);
+        sprintf(lumiString,"%.1f fb^{-1}",lumi/1000.);
         lumi_13TeV = lumiString;
         CMS_lumi( can , 4 , 0 );
         can->Update();
@@ -385,13 +362,13 @@ public:
         botPad->cd();
         TH1F* ratio;
         if( dataHist ){
-            // - - - - - - - build data/MC ratio histogram - - - - - - - - 
+            // - - - - - - - build data/MC ratio histogram - - - - - - - -
             ratio = new TH1F(*dataHist);
             ratio->SetNameTitle(sum->GetName()+TString("ratio"),sum->GetTitle());
             ratio->Divide(sum);
-            if( normalizeMCtoData ) 
+            if( normalizeMCtoData )
                 ratio->Scale(sum->Integral()/dataHist->Integral());
-        
+
             ratio->SetMarkerStyle(8);
             ratio->GetYaxis()->SetTitle("Data/MC");
             ratio->GetYaxis()->SetRangeUser(ratioYmin,ratioYmax);
@@ -405,31 +382,31 @@ public:
             ratio->GetYaxis()->SetTitleFont(43);
             ratio->GetYaxis()->SetTitleSize(24);
             ratio->GetYaxis()->SetTitleOffset(1.3);
-            
+
             ratio->GetXaxis()->SetLabelFont(43);
             ratio->GetXaxis()->SetLabelSize(20);
             ratio->GetXaxis()->SetTitleFont(43);
             ratio->GetXaxis()->SetTitleSize(24);
             ratio->GetXaxis()->SetTitleOffset(2.5);
             // ------------------------------------------------------------
-        
-            // - - - - - - - compute data/MC scale factor - - - - - - - - 
+
+            // - - - - - - - compute data/MC scale factor - - - - - - - -
             char SF[16];
             sprintf(SF,"data/MC=%1.1f",dataHist->Integral()/sum->Integral());
             TText* scaleFactor = new TText(ratio->GetBinCenter(1)-ratio->GetBinWidth(1)/2.,ratioYmax+0.1,SF);
             scaleFactor->SetTextFont(43);
             scaleFactor->SetTextSize(16);
-        
+
             TLine one(ratio->GetBinCenter(1)-ratio->GetBinWidth(1)/2.,1.,ratio->GetBinCenter(ratio->GetNbinsX())+ratio->GetBinWidth(ratio->GetNbinsX())/2.,1.);
             TLine avg(ratio->GetBinCenter(1)-ratio->GetBinWidth(1)/2.,dataHist->Integral()/sum->Integral(),ratio->GetBinCenter(ratio->GetNbinsX())+ratio->GetBinWidth(ratio->GetNbinsX())/2.,dataHist->Integral()/sum->Integral());
             avg.SetLineColor(2);
             avg.SetLineStyle(2);
             one.SetLineStyle(2);
             // ----------------------------------------------------------
-        
+
             ratio->Draw("e1");
             one.Draw();
-            if( normalizeMCtoData ) 
+            if( normalizeMCtoData )
                 avg.Draw();
             scaleFactor->Draw();
         }
@@ -443,10 +420,7 @@ public:
         for(int iSample = 0 ; iSample < ntuples.size() ; iSample++){
             leg->AddEntry(histoMap[ntuples[iSample]],tagMap[ntuples[iSample]],"f");
         }
-        for(int iSample = 0 ; iSample < signalNtuples.size() ; iSample++){
-            leg->AddEntry(signalHistoMap[signalNtuples[iSample]],tagMap[signalNtuples[iSample]],"f");
-        }
-        if( dataHist ) 
+        if( dataHist )
             leg->AddEntry(dataHist,"data","p");
         leg->Draw();
 
@@ -458,7 +432,7 @@ public:
         can->SaveAs(dir+"/"+label+".pdf");
 
         stack->SetMaximum(max*10.);
-        stack->SetMinimum(0.1);        
+        stack->SetMinimum(0.1);
 
         gPad->SetLogy(true);
         can->SaveAs(dir+"/"+label+"_LogY.png");
@@ -479,6 +453,6 @@ public:
     TH1F* dataHist;
     double (*fillerFunc)(ntupleType*);
     THStack* stack;
-    TH1F* sum; 
+    TH1F* sum;
 
 };
