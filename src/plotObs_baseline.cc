@@ -34,13 +34,15 @@ int main(int argc, char** argv){
         selectionFunc = looseZtagCut;
     }else if( selection_label == "tightZtag" ){
         selectionFunc = tightZtagCut;
-    }else 
+    }else if( selection_label == "ZtagSideband"){
+        selectionFunc = ZtagSidebandCut;
+    }else
         assert(0);
 
     gROOT->ProcessLine(".L tdrstyle.C");
     gROOT->ProcessLine("setTDRStyle()");
 
-    clock_t t;  
+    clock_t t;
     skimSamples skims;
     typedef plot<RA2bTree> plot;
 
@@ -59,6 +61,10 @@ int main(int argc, char** argv){
     plot J1pt_Tau21plot(*fillLeadingTau21<RA2bTree>,"J1pt_Tau21_"+selection_label,"#tau_{21}",20,0.,1.);
     plot J1pt_Ptplot(*fillLeadingJetPt<RA2bTree>,"J1pt_Pt_"+selection_label,"p_{T,J} [GeV]",42,200.,2300.);
     plot J1pt_JetFlavorPlot(*fillLeadingJetFlavor<RA2bTree>,"J1pt_JetFlavorPlot_"+selection_label,"Jet Flavor",22,0.5,21.5);
+    plot MTplot(*fillXMT<RA2bTree>,"MTplot_"+selection_label,"M_{T}(J,p_{T}^{miss}) [GeV]",40,400,2400);
+
+    plot VBFmjj_plot(*fillVBF_Mjj<RA2bTree>,"VBFmjj_plot_"+selection_label,"m_{jj}^{VBF} [GeV]",40,0,4000);
+    plot VBFdEta_plot(*fillVBF_dEta<RA2bTree>,"VBFdEta_plot_"+selection_label,"#Delta#eta^{VBF}",20,0,10);
 
     vector<plot> plots;
     plots.push_back(METplot);
@@ -76,6 +82,10 @@ int main(int argc, char** argv){
     plots.push_back(J1pt_Tau21plot);
     plots.push_back(J1pt_Ptplot);
     plots.push_back(J1pt_JetFlavorPlot);
+    plots.push_back(MTplot);
+
+    plots.push_back(VBFmjj_plot);
+    plots.push_back(VBFdEta_plot);
 
     // background MC samples
     for( int iSample = 0 ; iSample < skims.ntuples.size() ; iSample++){
@@ -95,7 +105,7 @@ int main(int argc, char** argv){
         double weight = 0.;
         for( int iEvt = 0 ; iEvt < min(MAX_EVENTS,numEvents) ; iEvt++ ){
             ntuple->GetEntry(iEvt);
-            if( iEvt % 10000 == 0 ){
+            if( iEvt % 100000 == 0 ){
                 cout << skims.sampleName[iSample] << ": " << iEvt << "/" << numEvents << endl;
                 //t = clock()-t;
                 //cout << "    time: " << ((float)t)/CLOCKS_PER_SEC << endl;
@@ -123,45 +133,17 @@ int main(int argc, char** argv){
         }
     }
 
-    // Signal samples
-    vector<RA2bTree*> sigSamples;
-    for( int iSample = 0 ; iSample < skims.signalNtuples.size() ; iSample++){
-        if( skims.signalSampleName[iSample] != "T5HH1300" && skims.signalSampleName[iSample] != "T5HH1700" ) continue;
-
-        RA2bTree* ntuple = skims.signalNtuples[iSample];
-        sigSamples.push_back(ntuple);
-        for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++){
-            plots[iPlot].addSignalNtuple(ntuple,skims.signalSampleName[iSample]);
-            plots[iPlot].setLineColor(ntuple,skims.sigLineColor[iSample]);
-        }
-
-        int numEvents = ntuple->fChain->GetEntries();
-        ntupleBranchStatus<RA2bTree>(ntuple);
-        for( int iEvt = 0 ; iEvt < min(MAX_EVENTS,numEvents) ; iEvt++ ){
-            ntuple->GetEntry(iEvt);
-            if( iEvt % 1000000 == 0 ) cout << skims.signalSampleName[iSample] << ": " << iEvt << "/" << numEvents << endl;
-            if(! selectionFunc(ntuple) ) continue;
-            if( !genLevelHHcut(ntuple) ) continue;
-            for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++){
-                if( skims.signalSampleName[iSample] == "T5HH1300" )
-                    plots[iPlot].fillSignal(ntuple,lumi*0.0460525/102482.);
-                if( skims.signalSampleName[iSample] == "T5HH1700" )
-                    plots[iPlot].fillSignal(ntuple,lumi*0.00470323/103791.);
-            }
-        }
-    }
-
     // Data samples
     RA2bTree* ntuple = skims.dataNtuple;
     for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++){
-        plots[iPlot].addDataNtuple(ntuple,"data_HTMHT");
+        plots[iPlot].addDataNtuple(ntuple,"data_MET");
     }
-  
+
     int numEvents = ntuple->fChain->GetEntries();
     ntupleBranchStatus<RA2bTree>(ntuple);
-    for( int iEvt = 0 ; iEvt < min(0/*MAX_EVENTS*/,numEvents) ; iEvt++ ){
+    for( int iEvt = 0 ; iEvt < min(MAX_EVENTS,numEvents) ; iEvt++ ){
         ntuple->GetEntry(iEvt);
-        if( iEvt % 1000000 == 0 ) cout << "data_HTMHT: " << iEvt << "/" << min(MAX_EVENTS,numEvents) << endl;
+        if( iEvt % 100000 == 0 ) cout << "data_MET: " << iEvt << "/" << min(MAX_EVENTS,numEvents) << endl;
         if(! selectionFunc(ntuple) ) continue;
         if( !signalTriggerCut(ntuple) ) continue;
         for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++){
@@ -169,15 +151,19 @@ int main(int argc, char** argv){
         }
     }
 
+    cout << "DONE WITH DATA" << endl;
+
     TFile* outputFile = new TFile("plotObs_"+selection_label+".root","RECREATE");
 
     for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++){
         TCanvas* can = new TCanvas("can","can",500,500);
+        //plots[iPlot].dataHist=NULL;
         //plots[iPlot].Draw(can,skims.ntuples,sigSamples,"../plots/plotObs_baseline_plots",0.1,1.999,true);
-        plots[iPlot].DrawNoRatio(can,skims.ntuples,sigSamples,"../plots/plotObs_"+selection_label+"_plots");//,0.1,1.999,true);
+        //plots[iPlot].DrawNoRatio(can,skims.ntuples,sigSamples,"../plots/plotObs_"+selection_label+"_plots");
+        plots[iPlot].DrawNoRatio(can,skims.ntuples,"../plots/plotObs_"+selection_label+"_plots");
         plots[iPlot].Write();
         plots[iPlot].sum->Write();
     }
-    
+    cout << "DONE WITH PLOT LOOP" << endl;
     outputFile->Close();
 }
