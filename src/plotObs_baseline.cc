@@ -29,13 +29,19 @@ int main(int argc, char** argv){
     TString selection_label = argv[1];
     bool (*selectionFunc)(RA2bTree*);
     if( selection_label == "baseline" ){
-        selectionFunc = baselineCut;
+      selectionFunc = baselineCut;
     }else if( selection_label == "looseZtag" ){
-        selectionFunc = looseZtagCut;
+      selectionFunc = looseZtagCut;
     }else if( selection_label == "tightZtag" ){
-        selectionFunc = tightZtagCut;
+      selectionFunc = tightZtagCut;
     }else if( selection_label == "ZtagSideband"){
-        selectionFunc = ZtagSidebandCut;
+      selectionFunc = ZtagSidebandCut;
+    }else if( selection_label == "ZtagHighSideband"){
+      selectionFunc = ZtagHighSidebandCut;
+    }else if( selection_label == "ZtagVHighSideband"){
+      selectionFunc = ZtagVHighSidebandCut;
+    }else if( selection_label == "ZtagLowSideband"){
+      selectionFunc = ZtagLowSidebandCut;
     }else
         assert(0);
 
