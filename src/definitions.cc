@@ -1191,19 +1191,6 @@ template<typename ntupleType> bool ptBinCut(double pt , int ithBin){
   return pt>ptCut[ithBin] && pt<ptCut[ithBin+1];
 }
 
-template<typename ntupleType> bool RA2bBaselineCut(ntupleType* ntuple){
-
-  double DeltaPhi1 = ntuple->DeltaPhi1;
-  double DeltaPhi2 = ntuple->DeltaPhi2;
-  double DeltaPhi3 = ntuple->DeltaPhi3;
-  double DeltaPhi4 = ntuple->DeltaPhi4;
-  double HT = ntuple->HT;
-  double MET = ntuple->MET;
-  int NJets = ntuple->NJets;
-
-  return (NJets == 3 && MET > 300. && HT > 300. && DeltaPhi1 > 0.5 && DeltaPhi2 > 0.5 && DeltaPhi3 > 0.3) || (NJets > 3 && MET > 300. && HT > 300. && DeltaPhi1 > 0.5 && DeltaPhi2 > 0.5 && DeltaPhi3 > 0.3 && DeltaPhi4 > 0.3);
-}
-
 template<typename ntupleType> bool FiltersCut(ntupleType* ntuple){
     return ntuple->HBHENoiseFilter==1 &&
         ntuple->HBHEIsoNoiseFilter==1 &&
@@ -1277,19 +1264,6 @@ template<typename ntupleType> bool AK8JetLooseMassCut(ntupleType* ntuple){
              ntuple->JetsAK8_prunedMass->at(1) < 250. );
 }
 
-template<typename ntupleType> bool RA2bSkimCuts(ntupleType* ntuple){
-    return ntuple->Muons->size()+ntuple->Electrons->size()==0 &&
-        ntuple->isoElectronTracks+ntuple->isoMuonTracks +ntuple->isoPionTracks==0 &&
-        FiltersCut(ntuple) &&
-        ntuple->JetID == 1;
-}
-
-template<typename ntupleType> bool RA2bSkimCutsNoFilters(ntupleType* ntuple){
-    return ntuple->Muons->size()+ntuple->Electrons->size()==0 &&
-        ntuple->isoElectronTracks+ntuple->isoMuonTracks +ntuple->isoPionTracks==0 &&
-        ntuple->JetID == 1;
-}
-
 template<typename ntupleType> bool baselineCutNoFilters(ntupleType* ntuple){
   return ( ntuple->MET > 300.             &&
            ntuple->HT > 300.                         &&
@@ -1327,6 +1301,29 @@ template<typename ntupleType> bool ZtagSidebandCut(ntupleType* ntuple){
              ntuple->JetsAK8_prunedMass->at(0)>70 )
              );
 }
+
+template<typename ntupleType> bool ZtagHighSidebandCut(ntupleType* ntuple){
+
+    return ( looseZtagCut(ntuple) &&
+             ntuple->JetsAK8_prunedMass->at(0)>110 &&
+             ntuple->JetsAK8_prunedMass->at(0)<150
+             );
+}
+
+template<typename ntupleType> bool ZtagVHighSidebandCut(ntupleType* ntuple){
+
+    return ( looseZtagCut(ntuple) &&
+             ntuple->JetsAK8_prunedMass->at(0)>150
+             );
+}
+
+template<typename ntupleType> bool ZtagLowSidebandCut(ntupleType* ntuple){
+
+    return ( looseZtagCut(ntuple) &&
+             ntuple->JetsAK8_prunedMass->at(0)<70
+             );
+}
+
 
 template<typename ntupleType> bool tightZtagCut(ntupleType* ntuple){
 
