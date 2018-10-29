@@ -100,6 +100,23 @@ public :
             lineColor.push_back(1);
         }
 
+        std::vector<TString> SnglTFileNames;
+        SnglTFileNames.push_back("tree_ST_s-channel.root");
+        SnglTFileNames.push_back("tree_ST_t-channel_antitop.root");
+        SnglTFileNames.push_back("tree_ST_t-channel_top.root");
+        SnglTFileNames.push_back("tree_ST_tW_antitop.root");
+        SnglTFileNames.push_back("tree_ST_tW_top.root");
+        SnglT = new TChain("tree");
+        for( unsigned int i = 0 ; i < SnglTFileNames.size() ; i++ ) {
+            SnglT->Add(skimType+"/"+SnglTFileNames[i]);
+        }
+        if( r == kSignal || r == kSLm || r == kSLe ){
+            ntuples.push_back(new RA2bTree(SnglT));
+            sampleName.push_back("SnglT");
+            fillColor.push_back(kOrange);
+            lineColor.push_back(1);
+        }
+
         std::vector<TString> TTFileNames;
         TTFileNames.push_back("tree_TTJets_HT-600to800.root");
         TTFileNames.push_back("tree_TTJets_HT-800to1200.root");
@@ -156,23 +173,6 @@ public :
             fillColor.push_back(kBlue);
             lineColor.push_back(1);
         }
-
-        std::vector<TString> SnglTFileNames;
-        SnglTFileNames.push_back("tree_ST_s-channel.root");
-        SnglTFileNames.push_back("tree_ST_t-channel_antitop.root");
-        SnglTFileNames.push_back("tree_ST_t-channel_top.root");
-        SnglTFileNames.push_back("tree_ST_tW_antitop.root");
-        SnglTFileNames.push_back("tree_ST_tW_top.root");
-        // SnglT = new TChain("tree");
-        // for( unsigned int i = 0 ; i < SnglTFileNames.size() ; i++ ) {
-        //     SnglT->Add(skimType+"/"+SnglTFileNames[i]);
-        // }
-        // if( r == kSignal || r == kSLm || r == kSLe ){
-        //     ntuples.push_back(new RA2bTree(SnglT));
-        //     sampleName.push_back("SnglT");
-        //     fillColor.push_back(kOrange);
-        //     lineColor.push_back(1);
-        // }
 
         std::vector<TString> DYFileNames;
         DYFileNames.push_back("tree_DYJetsToLL_M-50_HT-100to200.root");
