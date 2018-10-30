@@ -19,16 +19,29 @@ TH1F* ZJets_LO = (TH1F*) NLOWeightFile->Get("ZJets_LO/inv_pt");
 // ==============================================
 
 double CalcdPhi( double phi1 , double phi2 ){
-
   double dPhi = phi1-phi2;
   if( dPhi < -TMath::Pi() ) 
     dPhi += 2*TMath::Pi() ;
   if( dPhi > TMath::Pi() )
     dPhi -= 2*TMath::Pi() ;
   return fabs(dPhi);
+  //return dPhi;
 
 }
 
+
+double CalcDeltaR( double eta1, double phi1 , double eta2, double phi2 ){
+    float dEta = (eta1-eta2);
+    float dPhi = CalcdPhi(phi1, phi2);
+    return sqrt((dEta*dEta) + (dPhi * dPhi));
+}
+
+double ZMT(double pt1, double phi1, double pt2, double phi2){
+    TLorentzVector v1, v2;
+    v1.SetPtEtaPhiM(pt1,0,phi1,0);
+    v2.SetPtEtaPhiM(pt2,0,phi2,0);
+    return (v1+v2).M();
+}
 
 template<typename ntupleType>void ntupleBranchStatus(ntupleType* ntuple){
   ntuple->fChain->SetBranchStatus("*",0);
@@ -42,7 +55,9 @@ template<typename ntupleType>void ntupleBranchStatus(ntupleType* ntuple){
   ntuple->fChain->SetBranchStatus("isoPionTracks",1);
   ntuple->fChain->SetBranchStatus("Photon*",1);
   ntuple->fChain->SetBranchStatus("DeltaPhi*",1);
-
+  
+  ntuple->fChain->SetBranchStatus("TriggerNames",1); 
+  ntuple->fChain->SetBranchStatus("TriggerPass",1);
   ntuple->fChain->SetBranchStatus("MHT",1);
   ntuple->fChain->SetBranchStatus("HT",1);
   ntuple->fChain->SetBranchStatus("NJets",1);
@@ -1187,11 +1202,13 @@ template<typename ntupleType> bool DeltaPhi2Cut(ntupleType* ntuple){
 }
 
 template<typename ntupleType> bool DeltaPhi3Cut(ntupleType* ntuple){
-  return ntuple->DeltaPhi3>0.3;
+  //return ntuple->DeltaPhi3>0.3;
+  return ntuple->DeltaPhi3>0.5;
 }
 
 template<typename ntupleType> bool DeltaPhi4Cut(ntupleType* ntuple){
-  return ntuple->DeltaPhi4>0.3;
+  //return ntuple->DeltaPhi4>0.3;
+  return ntuple->DeltaPhi4>0.5;
 }
 
 template<typename ntupleType> bool DeltaPhiCuts(ntupleType* ntuple){
@@ -1223,6 +1240,136 @@ template<typename ntupleType> bool AK8JetPtCut(ntupleType* ntuple){
 	   ntuple->JetsAK8->at(1).Pt() > 300. );
 }
 
+template<typename ntupleType> bool DeltaPhiAK8JMETCut(ntupleType* ntuple){
+  double DeltaPhiAK8JMET=CalcdPhi(ntuple->JetsAK8->at(0).Phi(), ntuple->METPhi);
+  return DeltaPhiAK8JMET>2.0;
+}
+
+/////////////////
+// B2G ZV VBF //
+///////////////
+
+template<typename ntupleType> double fillDeltaPhiAK8JMET(ntupleType* ntuple){
+  double DeltaPhiAK8JMET=CalcdPhi(ntuple->JetsAK8->at(0).Phi(), ntuple->METPhi);
+  return DeltaPhiAK8JMET;
+}
+
+template<typename ntupleType> double fillZMT(ntupleType* ntuple){
+     double AK8Pt = ntuple->JetsAK8->at(0).Pt();
+     double AK8Phi = ntuple->JetsAK8->at(0).Phi();
+     double MET = ntuple->MET;
+     double METPhi = ntuple->METPhi;
+     return ZMT(AK8Pt, AK8Phi, MET, METPhi);
+     //return sqrt( 2*AK8Pt*MET * ( 1 - cos( DeltaPhiAK8JMETCut(ntuple)) ) );
+}
+
+// DDT Calculation: HP: <0.55, LP: <0.95
+// DDT = tau21 + 0.082*log(m*m/pt)
+template<typename ntupleType> double fillDDT(ntupleType* ntuple){
+    double tau21 = ntuple->JetsAK8_NsubjettinessTau2->at(0)/ntuple->JetsAK8_NsubjettinessTau1->at(0);
+    double m = ntuple->JetsAK8_prunedMass->at(0);
+    double m2 = m*m;
+    double p = ntuple->JetsAK8->at(0).Pt(); 
+  return (tau21+(0.082*log(m2/p)));
+}
+
+
+// skip Z jets function
+template<typename ntupleType> vector<TLorentzVector>  skipZjets(ntupleType* ntuple, int iJ=0){
+    vector<TLorentzVector> skipZ_jets;
+    for( unsigned int iak4 = 0 ; iak4 < ntuple->Jets->size() ; iak4++ ){
+        if(!((ntuple->JetsAK8->at(iJ).DeltaR(ntuple->Jets->at(iak4)) < 0.8 ) && 
+            (ntuple->JetsAK8->at(0).Pt()>200 && ntuple->JetsAK8_NsubjettinessTau2->at(iJ)/ntuple->JetsAK8_NsubjettinessTau1->at(iJ)<0.75 &&
+            ntuple->JetsAK8_prunedMass->at(iJ)<300 &&
+            ntuple->JetsAK8_prunedMass->at(iJ)>30))){
+            //result = true;
+            skipZ_jets.push_back(TLorentzVector(ntuple->Jets->at(iak4)));
+        }// end if block to make sure there is a valid Ztag
+    }// end for loop over ak4 jets
+   return skipZ_jets;
+} 
+
+template<typename ntupleType> vector<TLorentzVector>  cleanedVBFjets(ntupleType* ntuple, int iJ=0){
+    vector<TLorentzVector> cleaned_jets=skipZjets(ntuple,iJ);
+    vector<TLorentzVector> vj(2);
+    int nj = cleaned_jets.size() ;
+    if (nj<2) return vj;
+    double MassMax = 0.0;
+    for( unsigned int iak4 = 0 ; iak4 < (nj-1); iak4++ ){
+        if (cleaned_jets[iak4].Pt()<30) continue;
+        //if(skipZjets(ntuple->Jets->at(iak4),0)) continue;
+        for( unsigned int jak4 = iak4+1; jak4 < nj; jak4++ ){        
+            if (cleaned_jets[jak4].Pt()<30) continue;
+            //if(skipZjets(ntuple->Jets->at(jak4),0)) continue;
+            TLorentzVector vjA, vjB;
+            vjA.SetPtEtaPhiM(cleaned_jets[iak4].Pt(), cleaned_jets[iak4].Eta(), 
+                             cleaned_jets[iak4].Phi(),cleaned_jets[iak4].M());
+            vjB.SetPtEtaPhiM(cleaned_jets[jak4].Pt(), cleaned_jets[jak4].Eta(),
+                             cleaned_jets[jak4].Phi(),cleaned_jets[jak4].M());
+            double jetABMass = (vjA+vjB).M();                       
+            if (jetABMass > MassMax){
+                MassMax = jetABMass;
+                vj[0] = vjA;
+                vj[1] = vjB;
+            }
+        }// end for loop over jak4 jets
+    }// end for loop over iak4 jets
+  return vj;
+} 
+
+template<typename ntupleType> double fillVBF_Mjj(ntupleType* ntuple){
+    vector<TLorentzVector> vbf_jets = cleanedVBFjets(ntuple,0);
+    //if( vbf_jets.size() < 2 ) return -1.;
+    TLorentzVector temp(vbf_jets[0]);
+    temp+=vbf_jets[1];
+    return temp.M(); 
+}
+
+template<typename ntupleType> double fillVBF_Ptjj(ntupleType* ntuple){
+    vector<TLorentzVector> vbf_jets = cleanedVBFjets(ntuple,0);
+    //if( vbf_jets.size() < 2 ) return -1.;
+    TLorentzVector temp(vbf_jets[0]);
+    temp+=vbf_jets[1];
+    return temp.Pt(); 
+}
+
+template<typename ntupleType> double fillVBF_dEta(ntupleType* ntuple){
+    vector<TLorentzVector> vbf_jets = cleanedVBFjets(ntuple,0);
+    return  fabs(vbf_jets[0].Eta()-vbf_jets[1].Eta());
+}
+
+template<typename ntupleType> double fillVBF_j1Eta(ntupleType* ntuple){
+    vector<TLorentzVector> vbf_jets = cleanedVBFjets(ntuple,0);
+    return  vbf_jets[0].Eta();
+}
+
+template<typename ntupleType> double fillVBF_j2Eta(ntupleType* ntuple){
+    vector<TLorentzVector> vbf_jets = cleanedVBFjets(ntuple,0);
+    return  vbf_jets[1].Eta();
+}
+
+template<typename ntupleType> double fillVBF_j1j2Eta(ntupleType* ntuple){
+    vector<TLorentzVector> vbf_jets = cleanedVBFjets(ntuple,0);
+    return  (vbf_jets[0].Eta()*vbf_jets[1].Eta());
+}
+
+template<typename ntupleType> double fillVBF_j1Pt(ntupleType* ntuple){
+    vector<TLorentzVector> vbf_jets = cleanedVBFjets(ntuple,0);
+    return  vbf_jets[0].Pt();
+}
+
+template<typename ntupleType> double fillVBF_j2Pt(ntupleType* ntuple){
+    vector<TLorentzVector> vbf_jets = cleanedVBFjets(ntuple,0);
+    return  vbf_jets[1].Pt();
+}
+
+
+template<typename ntupleType> bool VBFCuts(ntupleType* ntuple){
+    return ( fillVBF_dEta(ntuple)>4.0 &&
+             fillVBF_Mjj(ntuple)>500 &&
+             fillVBF_j1j2Eta(ntuple)<0 ) ;
+}             
+// end of B2G ZV VBF part
 template<typename ntupleType> bool AK8JetLooseMassCut(ntupleType* ntuple){
     return ( ntuple->JetsAK8_prunedMass->size() >= 2  &&
              ntuple->JetsAK8_prunedMass->at(0) > 50. &&
@@ -1256,8 +1403,12 @@ template<typename ntupleType> bool baselineCutNoFilters(ntupleType* ntuple){
            ntuple->JetsAK8_prunedMass->at(1) > 50. && 
            ntuple->JetsAK8_prunedMass->at(1) < 250.&&
            DeltaPhiCuts(ntuple) && 
-           ntuple->Muons->size()+ntuple->Electrons->size()==0 
-           && ntuple->isoElectronTracks+ntuple->isoMuonTracks +ntuple->isoPionTracks==0 &&
+           ntuple->Photons->size()==0 &&
+           //ntuple->Muons->size()+ntuple->Electrons->size()==0 
+           ntuple->Muons->size()==0 &&
+           ntuple->Electrons->size()==0  
+           //&& ntuple->isoElectronTracks+ntuple->isoMuonTracks +ntuple->isoPionTracks==0 &&
+           && ntuple->isoElectronTracks==0 && ntuple->isoMuonTracks==0 && ntuple->isoPionTracks==0 &&
            ntuple->JetID == 1);
 
 }
@@ -1265,28 +1416,21 @@ template<typename ntupleType> bool baselineCutNoFilters(ntupleType* ntuple){
 
 template<typename ntupleType> bool baselineCut(ntupleType* ntuple){
  
-  return ( ntuple->MET > 300.             &&
-           ntuple->HT > 600.                         &&
-           ntuple->JetsAK8->size() >= 2 &&
-           ntuple->JetsAK8->at(0).Pt() > 300. && 
-           ntuple->JetsAK8_prunedMass->at(0) > 50. && 
-           ntuple->JetsAK8_prunedMass->at(0) < 250. && 
-           ntuple->JetsAK8->at(1).Pt() > 300. &&
-           ntuple->JetsAK8_prunedMass->at(1) > 50. && 
-           ntuple->JetsAK8_prunedMass->at(1) < 250.&&
-           DeltaPhiCuts(ntuple) && 
-           ntuple->Muons->size()+ntuple->Electrons->size()==0 
-           && ntuple->isoElectronTracks+ntuple->isoMuonTracks +ntuple->isoPionTracks==0 &&
-	   
-/*
-           ntuple->HBHENoiseFilter==1 && 
-           ntuple->HBHEIsoNoiseFilter==1 && 
-           ntuple->eeBadScFilter==1 && 
-           ntuple->EcalDeadCellTriggerPrimitiveFilter == 1 && 
-           ntuple->NVtx>0 && 
-*/
+  return ( ntuple->MET > 200.             &&
+           ntuple->JetsAK8->size() >= 1 &&
+           ntuple->JetsAK8->at(0).Pt() > 200. && 
+           DeltaPhiCuts(ntuple) &&
+           DeltaPhiAK8JMETCut(ntuple) && 
+           ntuple->Photons->size()==0 &&  
+           //ntuple->Muons->size()+ntuple->Electrons->size()==0 &&
+           ntuple->Muons->size()==0 &&
+           ntuple->Electrons->size()==0 &&
+           ntuple->BTags == 0  
+           //&& ntuple->isoElectronTracks+ntuple->isoMuonTracks +ntuple->isoPionTracks==0 &&
+           && ntuple->isoElectronTracks==0 && ntuple->isoMuonTracks==0 && ntuple->isoPionTracks==0 &&
            FiltersCut(ntuple) &&
-           ntuple->JetID == 1);
+           ntuple->JetID == 1)&&
+           VBFCuts(ntuple);
 
 }
 
@@ -1704,6 +1848,16 @@ template<typename ntupleType> bool lowDphiTriggerCut(ntupleType* ntuple){
 template<typename ntupleType> bool photonTriggerCut(ntupleType* ntuple){
     return ntuple->TriggerPass->at(53) == 1 || ntuple->TriggerPass->at(54) == 1 ; // || ntuple->TriggerPass->at(51) || ntuple->TriggerPass->at(52);
 }
+
+// print out trigger name
+/*vector<string> TriggerNames;
+    int n = ntuple->TriggerNames.size();
+    for(int i=0; i<n; i++){
+        string TName = TriggerNames[i];
+        std::cout<<"Trigger Names: "<<TName<<std::endl;
+    }
+*/
+// end of Trigger name printout
 
 template<typename ntupleType> int getClosestGenHiggses(ntupleType* ntuple, double jeteta, double jetphi){
     float dRMin=999999.;
