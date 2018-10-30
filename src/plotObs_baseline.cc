@@ -29,86 +29,62 @@ int main(int argc, char** argv){
     skimSamples skims;
     typedef plot<RA2bTree> plot;
 
-    plot METplot(*fillMET<RA2bTree>,"MET_baseline","MET [GeV]",15,300.,1800.);
+    plot METplot(*fillMET<RA2bTree>,"MET_baseline","MET [GeV]",36,200.,2000.);//50 GeV bin
+    plot MET1plot(*fillMET<RA2bTree>,"MET1_baseline","MET [GeV]",25,200.,1200.);//40 GeV bin
     plot HTplot(*fillHT<RA2bTree>,"HT_baseline","H_{T} [GeV]",15,300,2800.);
     plot NJetsplot(*fillNJets<RA2bTree>,"NJets_baseline","n_{j}",14,1.5,15.5);
-    plot BTagsplot(*fillBTags<RA2bTree>,"BTags_baseline","n_{b}",6,-0.5,5.5);
-    plot Binsplot(*fillAnalysisBins<RA2bTree>,"AnalysisBins_baseline","i^th Bin",8,0.5,8.5);
 
     plot DeltaPhi1plot(*fillDeltaPhi1<RA2bTree>,"DeltaPhi1_baseline","#Delta#Phi_{1}",20,0,3.1415);
     plot DeltaPhi2plot(*fillDeltaPhi2<RA2bTree>,"DeltaPhi2_baseline","#Delta#Phi_{2}",20,0,3.1415);
     plot DeltaPhi3plot(*fillDeltaPhi3<RA2bTree>,"DeltaPhi3_baseline","#Delta#Phi_{3}",20,0,3.1415);
     plot DeltaPhi4plot(*fillDeltaPhi4<RA2bTree>,"DeltaPhi4_baseline","#Delta#Phi_{4}",20,0,3.1415);
+    plot DeltaPhiAK8JMETplot(*fillDeltaPhiAK8JMET<RA2bTree>,"DeltaPhiAK8JMET","#Delta#Phi(AK8J,MET)",20,0,3.1415);
 
-    plot J1pt_Massplot(*fillLeadingJetMass<RA2bTree>,"J1pt_Mass_baseline","m_{J} [GeV]",20,50.,200.);
-    plot J2pt_Massplot(*fillSubLeadingJetMass<RA2bTree>,"J2pt_Mass_baseline","m_{J} [GeV]",20,50.,200.);
-    plot J1bbtag_Massplot(*fillLeadingBBtagJetMass<RA2bTree>,"J1bbtag_Mass_baseline","m_{J} [GeV]",20,50.,200.);
-    plot J2bbtag_Massplot(*fillSubLeadingBBtagJetMass<RA2bTree>,"J2bbtag_Mass_baseline","m_{J} [GeV]",20,50.,200.);
-    plot J1mass_Massplot(*fillLeadingMassJetMass<RA2bTree>,"J1mass_Mass_baseline","m_{J} [GeV]",20,50.,200.);
-    plot J2mass_Massplot(*fillSubLeadingMassJetMass<RA2bTree>,"J2mass_Mass_baseline","m_{J} [GeV]",20,50.,200.);
-
-    plot J1pt_BBplot(*fillLeadingBBtag<RA2bTree>,"J1pt_BBtag_baseline","bb-tag",20,-1.,1.);
-    plot J2pt_BBplot(*fillSubLeadingBBtag<RA2bTree>,"J2pt_BBtag_baseline","bb-tag",20,-1.,1.);
-    plot J1bbtag_BBplot(*fillLeadingBBtagJetBBtag<RA2bTree>,"J1bbtag_BBtag_baseline","bb-tag",20,-1.,1.);
-    plot J2bbtag_BBplot(*fillSubLeadingBBtagJetBBtag<RA2bTree>,"J2bbtag_BBtag_baseline","bb-tag",20,-1.,1.);
-    plot J1mass_BBplot(*fillLeadingMassJetBBtag<RA2bTree>,"J1mass_BBtag_baseline","bb-tag",20,-1.,1.);
-    plot J2mass_BBplot(*fillSubLeadingMassJetBBtag<RA2bTree>,"J2mass_BBtag_baseline","bb-tag",20,-1.,1.);
-
+    plot J1pt_Massplot(*fillLeadingJetMass<RA2bTree>,"J1pt_Mass_baseline","m_{J} [GeV]",54,30.,300.);//5 Gev bin
     plot J1pt_Tau21plot(*fillLeadingTau21<RA2bTree>,"J1pt_Tau21_baseline","#tau_{21}",20,0.,1.);
-    plot J2pt_Tau21plot(*fillSubLeadingTau21<RA2bTree>,"J2pt_Tau21_baseline","#tau_{21}",20,0.,1.);
-    plot J1bbtag_Tau21plot(*fillLeadingBBtagJetTau21<RA2bTree>,"J1bbtag_Tau21_baseline","#tau_{21}",20,0.,1.);
-    plot J2bbtag_Tau21plot(*fillSubLeadingBBtagJetTau21<RA2bTree>,"J2bbtag_Tau21_baseline","#tau_{21}",20,0.,1.);
-    plot J1mass_Tau21plot(*fillLeadingMassJetTau21<RA2bTree>,"J1mass_Tau21_baseline","#tau_{21}",20,0.,1.);
-    plot J2mass_Tau21plot(*fillSubLeadingMassJetTau21<RA2bTree>,"J2mass_Tau21_baseline","#tau_{21}",20,0.,1.);
+    plot DDT_Tau21plot(*fillDDT<RA2bTree>,"DDT_Tau21_baseline","DDT",20,0.,1.);
 
-    plot J1pt_Ptplot(*fillLeadingJetPt<RA2bTree>,"J1pt_Pt_baseline","p_{T,J} [GeV]",40,300.,2300.);
-    plot J2pt_Ptplot(*fillSubLeadingJetPt<RA2bTree>,"J2pt_Pt_baseline","p_{T,J} [GeV]",40,300.,2300.);
-    plot J1bbtag_Ptplot(*fillLeadingBBtagJetPt<RA2bTree>,"J1bbtag_Pt_baseline","p_{T,J} [GeV]",40,300.,2300.);
-    plot J2bbtag_Ptplot(*fillSubLeadingBBtagJetPt<RA2bTree>,"J2bbtag_Pt_baseline","p_{T,J} [GeV]",40,300.,2300.);
-    plot J1mass_Ptplot(*fillLeadingMassJetPt<RA2bTree>,"J1mass_Pt_baseline","p_{T,J} [GeV]",40,300.,2300.);
-    plot J2mass_Ptplot(*fillSubLeadingMassJetPt<RA2bTree>,"J2mass_Pt_baseline","p_{T,J} [GeV]",40,300.,2300.);
+    plot ZMTplot(*fillZMT<RA2bTree>,"ZMT_baseline","MT_{Z} [GeV]",45,500.,5000.); // 100 GeV bin
+    plot ZMT1plot(*fillZMT<RA2bTree>,"ZMT1_baseline","MT_{Z} [GeV]",25,500.,3000.); // 100 GeV bin
+    plot J1pt_Ptplot(*fillLeadingJetPt<RA2bTree>,"J1pt_Pt_baseline","p_{T,J} [GeV]",36,200.,2000.); //50 GeV bin;
 
-    plot J1pt_JetFlavorPlot(*fillLeadingJetFlavor<RA2bTree>,"J1pt_JetFlavorPlot","Jet Flavor",22,0.5,21.5);
-    plot J2pt_JetFlavorPlot(*fillSubLeadingJetFlavor<RA2bTree>,"J2pt_JetFlavorPlot","Jet Flavor",22,0.5,21.5);
+    plot VBFmjj_plot(*fillVBF_Mjj<RA2bTree>,"VBFmjj_plot_baseline","m_{jj}^{VBF} [GeV]",40,0,4000);
+    plot VBFptjj_plot(*fillVBF_Ptjj<RA2bTree>,"VBFptjj_plot_baseline","pt_{jj}^{VBF} [GeV]",40,0,4000);
+    plot VBFj1pt_plot(*fillVBF_j1Pt<RA2bTree>,"VBFj1pt_plot_baseline","pt_{j1}^{VBF} [GeV]",50,0,1500);
+    plot VBFj2pt_plot(*fillVBF_j2Pt<RA2bTree>,"VBFj2pt_plot_baseline","pt_{j2}^{VBF} [GeV]",50,0,1500);
+    plot VBFdEta_plot(*fillVBF_dEta<RA2bTree>,"VBFdEta_plot_baseline","#Delta#eta^{VBF}",20,0,10);
+    plot VBFj1Eta_plot(*fillVBF_j1Eta<RA2bTree>,"VBFj1Eta_plot_baseline","#eta_{j1}^{VBF}",40,-5,5);
+    plot VBFj2Eta_plot(*fillVBF_j2Eta<RA2bTree>,"VBFj2Eta_plot_baseline","#eta_{j2}^{VBF}",40,-5,5);
+    plot VBFj1j2Eta_plot(*fillVBF_j1j2Eta<RA2bTree>,"VBFj1j2Eta_plot_baseline","#eta_{j1.j2}^{VBF}",100,-25,25);
+
 
     vector<plot> plots;
     plots.push_back(METplot);
+    plots.push_back(MET1plot);
     plots.push_back(HTplot);
+    plots.push_back(ZMTplot);
+    plots.push_back(ZMT1plot);
     plots.push_back(NJetsplot);
-    plots.push_back(BTagsplot);
 
     plots.push_back(DeltaPhi1plot);
     plots.push_back(DeltaPhi2plot);
     plots.push_back(DeltaPhi3plot);
     plots.push_back(DeltaPhi4plot);
+    plots.push_back(DeltaPhiAK8JMETplot);
 
-    plots.push_back(Binsplot);
     plots.push_back(J1pt_Massplot);
-    plots.push_back(J2pt_Massplot);
-    plots.push_back(J1bbtag_Massplot);
-    plots.push_back(J2bbtag_Massplot);
-    plots.push_back(J1mass_Massplot);
-    plots.push_back(J2mass_Massplot);
-    plots.push_back(J1pt_BBplot);
-    plots.push_back(J2pt_BBplot);
-    plots.push_back(J1bbtag_BBplot);
-    plots.push_back(J2bbtag_BBplot);
-    plots.push_back(J1mass_BBplot);
-    plots.push_back(J2mass_BBplot);
     plots.push_back(J1pt_Tau21plot);
-    plots.push_back(J2pt_Tau21plot);
-    plots.push_back(J1bbtag_Tau21plot);
-    plots.push_back(J2bbtag_Tau21plot);
-    plots.push_back(J1mass_Tau21plot);
-    plots.push_back(J2mass_Tau21plot);
+    plots.push_back(DDT_Tau21plot);
     plots.push_back(J1pt_Ptplot);
-    plots.push_back(J2pt_Ptplot);
-    plots.push_back(J1bbtag_Ptplot);
-    plots.push_back(J2bbtag_Ptplot);
-    plots.push_back(J1mass_Ptplot);
-    plots.push_back(J2mass_Ptplot);
-    plots.push_back(J1pt_JetFlavorPlot);
-    plots.push_back(J2pt_JetFlavorPlot);
+
+    plots.push_back(VBFmjj_plot);
+    plots.push_back(VBFdEta_plot);
+    plots.push_back(VBFptjj_plot);
+    plots.push_back(VBFj1pt_plot);
+    plots.push_back(VBFj2pt_plot);
+    plots.push_back(VBFj1Eta_plot);
+    plots.push_back(VBFj2Eta_plot);
+    plots.push_back(VBFj1j2Eta_plot);
 
     // background MC samples
     for( int iSample = 0 ; iSample < skims.ntuples.size() ; iSample++){
@@ -132,6 +108,14 @@ int main(int argc, char** argv){
             if( ( filename.Contains("SingleLept") || filename.Contains("DiLept") ) && ntuple->madHT>600. )continue;
             if(! baselineCut(ntuple) ) continue;
 
+            // print out trigger name
+            /*
+            int n = ntuple->TriggerNames->size();
+            for(int i=0; i<n; i++){
+                std::cout<<"Trigger Names: "<<ntuple->TriggerNames->at(i)<<std::endl;
+            }
+            */       
+            // end of Trigger name printout
             // ---------- custom weights -----------
             std::vector<double> EfficiencyCenterUpDown = Eff_MetMhtSextetReal_CenterUpDown(ntuple->HT, ntuple->MHT, ntuple->NJets);
             weight = ntuple->Weight*lumi*customPUweights(ntuple)*EfficiencyCenterUpDown[0];
@@ -151,7 +135,8 @@ int main(int argc, char** argv){
     }
 
     // Signal samples
-    vector<RA2bTree*> sigSamples;
+  
+  vector<RA2bTree*> sigSamples;
     for( int iSample = 0 ; iSample < skims.signalNtuples.size() ; iSample++){
         if( skims.signalSampleName[iSample] != "T5HH1300" && skims.signalSampleName[iSample] != "T5HH1700" ) continue;
 
@@ -181,14 +166,15 @@ int main(int argc, char** argv){
     // Data samples
     RA2bTree* ntuple = skims.dataNtuple;
     for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++){
-        plots[iPlot].addDataNtuple(ntuple,"data_HTMHT");
+        plots[iPlot].addDataNtuple(ntuple,"data_MET");
     }
   
     int numEvents = ntuple->fChain->GetEntries();
     ntupleBranchStatus<RA2bTree>(ntuple);
-    for( int iEvt = 0 ; iEvt < min(MAX_EVENTS,numEvents) ; iEvt++ ){
+    //for( int iEvt = 0 ; iEvt < min(MAX_EVENTS,numEvents) ; iEvt++ ){
+    for( int iEvt = 0 ; iEvt < min(0,numEvents) ; iEvt++ ){
         ntuple->GetEntry(iEvt);
-        if( iEvt % 1000000 == 0 ) cout << "data_HTMHT: " << iEvt << "/" << min(MAX_EVENTS,numEvents) << endl;
+        if( iEvt % 1000000 == 0 ) cout << "data_MET: " << iEvt << "/" << min(MAX_EVENTS,numEvents) << endl;
         if(! baselineCut(ntuple) ) continue;
         if( !signalTriggerCut(ntuple) ) continue;
         for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++){
