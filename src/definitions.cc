@@ -1351,7 +1351,7 @@ template<typename ntupleType> bool VBFCuts(ntupleType* ntuple){
 template<typename ntupleType> bool AK8JetSideBandCut(ntupleType* ntuple){
     return   (ntuple->JetsAK8_prunedMass->size() >= 1  &&
              ((ntuple->JetsAK8_prunedMass->at(0) > 30. &&
-             ntuple->JetsAK8_prunedMass->at(0) < 65.) &&
+             ntuple->JetsAK8_prunedMass->at(0) < 65.) ||
              (ntuple->JetsAK8_prunedMass->at(0) > 145. &&
              ntuple->JetsAK8_prunedMass->at(0) < 300.)));	   
 }
