@@ -1360,7 +1360,8 @@ template<typename ntupleType> bool AK8JetSideBandCut(ntupleType* ntuple){
 template<typename ntupleType> bool AK8JetSRCut(ntupleType* ntuple){
     return   (ntuple->JetsAK8_prunedMass->size() >= 1  &&
              (ntuple->JetsAK8_prunedMass->at(0) > 65. &&
-             ntuple->JetsAK8_prunedMass->at(0) < 105.));
+             ntuple->JetsAK8_prunedMass->at(0) < 105.)
+            );
 }
 
 template<typename ntupleType> bool baselineCutNoFilters(ntupleType* ntuple){
@@ -1433,6 +1434,23 @@ template<typename ntupleType> bool ZSidebandCut(ntupleType* ntuple){
            FiltersCut(ntuple) &&
            ntuple->JetID == 1 &&
            VBFCuts(ntuple) &&
+           AK8JetSideBandCut(ntuple) ); 
+}
+
+// Z side band w/o vbf cut selection ([30,65][>145])
+template<typename ntupleType> bool ZSidebandnoVBFCut(ntupleType* ntuple){
+  return ( ntuple->MET > 200.             &&
+           AK8JetPtCut(ntuple) && 
+           DeltaPhiCuts(ntuple) &&
+           DeltaPhiAK8JMETCut(ntuple) && 
+           ntuple->Photons->size()==0 &&  
+           ntuple->Muons->size()==0 &&
+           ntuple->Electrons->size()==0 &&
+           ntuple->BTags == 0 &&
+           ntuple->isoElectronTracks==0 && ntuple->isoMuonTracks==0 && ntuple->isoPionTracks==0 &&
+           FiltersCut(ntuple) &&
+           ntuple->JetID == 1 &&
+           //VBFCuts(ntuple) &&
            AK8JetSideBandCut(ntuple) ); 
 }
 

@@ -31,11 +31,13 @@ int main(int argc, char** argv){
         selectionFunc = baselineCut;
     }else if( selection_label == "ZSideband" ){
         selectionFunc = ZSidebandCut;
+    }else if( selection_label == "ZSidebandnoVBF" ){
+        selectionFunc = ZSidebandnoVBFCut;
     }else if( selection_label == "ZSBHP" ){
         selectionFunc = ZSidebandHPCut;
     }else if( selection_label == "ZSBLP"){
         selectionFunc = ZSidebandLPCut;
-    }else if( selection_label == "MCSR"){
+    }else if( selection_label == "MCSRVBF"){
         selectionFunc = ZSignalRegionCut;
     }else
         assert(0);
@@ -155,8 +157,7 @@ int main(int argc, char** argv){
   
   vector<RA2bTree*> sigSamples;
     for( int iSample = 0 ; iSample < skims.signalNtuples.size() ; iSample++){
-        if( skims.signalSampleName[iSample] != "T5HH1300" && skims.signalSampleName[iSample] != "T5HH1700" ) continue;
-
+        std::cout<<"Skims check 1: "<<skims.signalSampleName[iSample]<<std::endl;
         RA2bTree* ntuple = skims.signalNtuples[iSample];
         sigSamples.push_back(ntuple);
         for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++){
@@ -165,17 +166,14 @@ int main(int argc, char** argv){
         }
 
         int numEvents = ntuple->fChain->GetEntries();
+        std::cout<<"Skims check Num evts: "<<numEvents<<std::endl;
         ntupleBranchStatus<RA2bTree>(ntuple);
         for( int iEvt = 0 ; iEvt < min(MAX_EVENTS,numEvents) ; iEvt++ ){
             ntuple->GetEntry(iEvt);
             if( iEvt % 1000000 == 0 ) cout << skims.signalSampleName[iSample] << ": " << iEvt << "/" << numEvents << endl;
             if(! selectionFunc(ntuple) ) continue;
-            if( !genLevelHHcut(ntuple) ) continue;
             for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++){
-                if( skims.signalSampleName[iSample] == "T5HH1300" )
-                    plots[iPlot].fillSignal(ntuple,lumi*0.0460525/102482.);
-                if( skims.signalSampleName[iSample] == "T5HH1700" )
-                    plots[iPlot].fillSignal(ntuple,lumi*0.00470323/103791.);
+               plots[iPlot].fillSignal(ntuple,lumi*0.00001);
             }
         }
     }
@@ -205,7 +203,7 @@ int main(int argc, char** argv){
         TCanvas* can = new TCanvas("can","can",500,500);
         //plots[iPlot].dataHist = NULL;
         plots[iPlot].DrawNoRatio(can,skims.ntuples,sigSamples,"../plots/plotObs_"+selection_label+"_plots");
-        //plots[iPlot].Draw(can,skims.ntuples,sigSamples,"../plots/plotObs_baseline_plots",0.1,2.0,true);
+        //plots[iPlot].Draw(can,skims.ntuples,sigSamples,"../plots/plotObs_"+selection_label+"_plots",0.1,2.0,true);
         plots[iPlot].Write();
         plots[iPlot].sum->Write();
     }
