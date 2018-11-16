@@ -14,7 +14,7 @@ class skimSamples{
 public : 
 
     TChain *WJets,*ZJets,*QCD,*SnglT,*TT,*GJets,*GJets0p4,*Other,*DY,*TTinc;
-    TChain *TVBFZZ2000;
+    TChain *VBFG2000;
     TChain *data;
     std::vector<RA2bTree*> ntuples,signalNtuples;
     RA2bTree* dataNtuple;
@@ -63,13 +63,13 @@ public :
         for( unsigned int i = 0 ; i < QCDFileNames.size() ; i++ ){
             QCD->Add(skimType+"/"+QCDFileNames[i]);
         }
-        if( r == kSignal || r == kPhoton || r == kLowDphi ){
+/*        if( r == kSignal || r == kPhoton || r == kLowDphi ){
             ntuples.push_back(new RA2bTree(QCD));
             sampleName.push_back("QCD");
             fillColor.push_back(kGray);
             lineColor.push_back(1);
         }
-
+*/
         std::vector<TString> SnglTFileNames;
         SnglTFileNames.push_back("tree_ST_s-channel.root");
         SnglTFileNames.push_back("tree_ST_t-channel_antitop.root");
@@ -308,11 +308,11 @@ public :
             dataNtuple = new RA2bTree(data);
         }
         // VBF Signal
-        TVBFZZ2000 = new TChain("TreeMaker2/PreSelection");
-        TVBFZZ2000->Add("root://cmseos.fnal.gov//store/group/lpcdm/noreplica/klamichh/SUSY_VBFZZ_Sig_Samples/tree_VBF_ZZ_mG2000.root");
+        VBFG2000 = new TChain("TreeMaker2/PreSelection");
+        VBFG2000->Add("root://cmseos.fnal.gov//store/group/lpcdm/noreplica/klamichh/SUSY_VBFZZ_Sig_Samples/tree_VBF_ZZ_mG2000.root");
 
         if( r == kSignal){
-            signalNtuples.push_back(new RA2bTree(TVBFZZ2000)); signalSampleName.push_back("TVBFZZ2000"); sigLineColor.push_back(kRed);
+            signalNtuples.push_back(new RA2bTree(VBFG2000)); signalSampleName.push_back("VBFG2000"); sigLineColor.push_back(kRed);
         }
     };
 
