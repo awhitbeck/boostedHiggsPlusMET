@@ -291,7 +291,7 @@ public:
 
         gPad->SetLogy(false);
         can->SaveAs(dir+"/"+label+".png");
-        can->SaveAs(dir+"/"+label+".eps");
+      //  can->SaveAs(dir+"/"+label+".eps");
         can->SaveAs(dir+"/"+label+".pdf");
 
         stack->SetMaximum(max*10.);
@@ -299,7 +299,7 @@ public:
 
         gPad->SetLogy(true);
         can->SaveAs(dir+"/"+label+"_LogY.png");
-        can->SaveAs(dir+"/"+label+"_LogY.eps");
+    //    can->SaveAs(dir+"/"+label+"_LogY.eps");
         can->SaveAs(dir+"/"+label+"_LogY.pdf");
 
     }
@@ -454,7 +454,7 @@ public:
         topPad->cd();
         gPad->SetLogy(false);
         can->SaveAs(dir+"/"+label+".png");
-        can->SaveAs(dir+"/"+label+".eps");
+   //     can->SaveAs(dir+"/"+label+".eps");
         can->SaveAs(dir+"/"+label+".pdf");
 
         stack->SetMaximum(max*10.);
@@ -462,7 +462,7 @@ public:
 
         gPad->SetLogy(true);
         can->SaveAs(dir+"/"+label+"_LogY.png");
-        can->SaveAs(dir+"/"+label+"_LogY.eps");
+     //   can->SaveAs(dir+"/"+label+"_LogY.eps");
         can->SaveAs(dir+"/"+label+"_LogY.pdf");
 
 

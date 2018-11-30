@@ -543,6 +543,12 @@ template<typename ntupleType> double fillLeadingJetPt(ntupleType* ntuple){
   return ntuple->JetsAK8->at(0).Pt();
 }
 
+template<typename ntupleType> bool AK8JEtaCut(ntupleType* ntuple){
+  if(ntuple->JetsAK8->size()==0) return-99999.;
+  double AK8Eta = fabs(ntuple->JetsAK8->at(0).Eta()); 
+  return (AK8Eta<1.0);
+}
+
 template<typename ntupleType> double fillLeadingJetEta(ntupleType* ntuple){
   return ntuple->JetsAK8->at(0).Eta();
 }
@@ -620,13 +626,14 @@ template<typename ntupleType> bool lowDPhiCuts(ntupleType* ntuple){
 
 template<typename ntupleType> bool AK8JetPtCut(ntupleType* ntuple){
   return ( ntuple->JetsAK8->size() >= 1 &&
-	   ntuple->JetsAK8->at(0).Pt() > 200. );
+	   ntuple->JetsAK8->at(0).Pt() > 0. );
+	   //ntuple->JetsAK8->at(0).Pt() > 200. );
 }
 
-template<typename ntupleType> bool AK8JEtaCut(ntupleType* ntuple){
-  return fabs((ntuple->JetsAK8->at(0).Eta()>1.0));
+template<typename ntupleType> bool METCut(ntupleType* ntuple){
+  return ( ntuple->MET > 0.);
+	   //ntuple->MET > 200. );
 }
-
 template<typename ntupleType> bool DeltaPhiAK8JMETCut(ntupleType* ntuple){
   double DeltaPhiAK8JMET=CalcdPhi(ntuple->JetsAK8->at(0).Phi(), ntuple->METPhi);
   return DeltaPhiAK8JMET>2.0;
@@ -735,10 +742,13 @@ template<typename ntupleType> vector<TLorentzVector>  cleanedVBFjets(ntupleType*
 } 
 
 template<typename ntupleType> double fillVBF_Mjj(ntupleType* ntuple){
+    //double fwdMjj = -1.0
     vector<TLorentzVector> vbf_jets = cleanedVBFjets(ntuple,0);
+    //if (vbf_jets[0].Pt()>30.0 && vbf_jets[1].Pt()>30.0){
     //if( vbf_jets.size() < 2 ) return -1.;
-    TLorentzVector temp(vbf_jets[0]);
-    temp+=vbf_jets[1];
+        TLorentzVector temp(vbf_jets[0]);
+        temp+=vbf_jets[1];
+     //   fwdMjj = temp.M();
     return temp.M(); 
 }
 
@@ -804,16 +814,19 @@ template<typename ntupleType> bool AK4JptCuts(ntupleType* ntuple){
 }             
 
 template<typename ntupleType> bool VBFCuts(ntupleType* ntuple){
+    vector<TLorentzVector> vbf_jets = cleanedVBFjets(ntuple,0);
+    
     return ( fillVBF_dEta(ntuple)>4.0 &&
              fillVBF_Mjj(ntuple)>500 &&
-             fillVBF_j1j2Eta(ntuple)<0) ;
+             fillVBF_j1j2Eta(ntuple)<0 &&
+             vbf_jets[0].Pt()>30.0 && vbf_jets[1].Pt()>30.0);
 }             
 // end of B2G ZV VBF part
 template<typename ntupleType> bool AK8JetSideBandCut(ntupleType* ntuple){
     return   (ntuple->JetsAK8_prunedMass->size() >= 1  &&
               (
                ( ntuple->JetsAK8_prunedMass->at(0) > 30. && ntuple->JetsAK8_prunedMass->at(0) < 65.) ||
-               ( ntuple->JetsAK8_prunedMass->at(0) > 145. && ntuple->JetsAK8_prunedMass->at(0) < 300.)
+               ( ntuple->JetsAK8_prunedMass->at(0) > 135. && ntuple->JetsAK8_prunedMass->at(0) < 300.)
               )
              );	   
 }
@@ -849,17 +862,17 @@ template<typename ntupleType> bool LowPurityCut(ntupleType* ntuple){
 
 // 1) Baseline selection without VBF cut
 template<typename ntupleType> bool baselineCutNoVBF(ntupleType* ntuple){
-  return ( ntuple->MET > 200.  &&
-           AK8JetPtCut(ntuple) && 
-           DeltaPhiCuts(ntuple) &&
-           DeltaPhiAK8JMETCut(ntuple) && 
-           ntuple->Photons->size()==0 &&  
-           ntuple->Muons->size()==0 &&
-           ntuple->Electrons->size()==0 &&
-           ntuple->BTags == 0  
-           && ntuple->isoElectronTracks==0 && ntuple->isoMuonTracks==0 && ntuple->isoPionTracks==0 &&
-           FiltersCut(ntuple) &&
-           ntuple->JetID == 1);
+  return ( METCut(ntuple)  &&
+           AK8JetPtCut(ntuple)); //&& 
+           //DeltaPhiCuts(ntuple) &&
+           //DeltaPhiAK8JMETCut(ntuple) && 
+           //ntuple->Photons->size()==0 &&  
+           //ntuple->Muons->size()==0 &&
+           //ntuple->Electrons->size()==0 &&
+           //ntuple->BTags == 0  
+           //&& ntuple->isoElectronTracks==0 && ntuple->isoMuonTracks==0 && ntuple->isoPionTracks==0 &&
+           //FiltersCut(ntuple) &&
+           //ntuple->JetID == 1);
 }
     
 // 2) Baseline with VBF cut
@@ -898,8 +911,7 @@ template<typename ntupleType> bool ZSignalRegionHPCut(ntupleType* ntuple){
 
 // 6A) ZSRHPVBF + AK8 L1J eta > 1 cut 
 template<typename ntupleType> bool ZHPEtaCut(ntupleType* ntuple){
- 
-  return (ZSignalRegionHPCut(ntuple) && 
+  return (ZSignalRegionHPCut(ntuple) &&
            AK8JEtaCut(ntuple));
 }
 // 7) Baseline + Z Signal region i.e. Pruned Mass [65,105] GeV + LP without  VBF cut 
