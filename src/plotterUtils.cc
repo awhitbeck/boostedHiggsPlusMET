@@ -1,6 +1,7 @@
 #include "TGraphAsymmErrors.h"
 #include "THStack.h"
 #include "TH1F.h"
+#include "TH2F.h"
 #include "TString.h"
 #include "TCanvas.h"
 #include "TLegend.h"
@@ -24,7 +25,7 @@ public:
         fillerFunc = fillerFunc_;
         label = label_;
         xlabel = "" ; 
-        nbins = 40; lower = 200.; upper = 1200.;
+        nbinsx = 40; lowerx = 200.; upperx = 1200.;
         binEdges = NULL;
         stack=new THStack(label+"_stack",label+"_stack");
         dataHist=NULL;
@@ -32,115 +33,196 @@ public:
 
     plot( double (*fillerFunc_)(ntupleType*) , 
           TString label_="var",TString xlabel_="var",
-          int nbins_=20 , double lower_=200. , double upper_=2200.){
+          int nbinsx_=20 , double lowerx_=200. , double upperx_=2200.){
         fillerFunc = fillerFunc_;
         label = label_;
         xlabel =xlabel_ ; 
-        nbins = nbins_; lower = lower_; upper = upper_;
+        nbinsx = nbinsx_; lowerx = lowerx_; upperx = upperx_;
         binEdges=NULL;
         stack=new THStack(label+"_stack",label+"_stack");
     };
 
     plot( double (*fillerFunc_)(ntupleType*) , 
           TString label_,TString xlabel_,
-          int nbins_ , double* bins_){
+          int nbinsx_ , double* bins_){
         fillerFunc = fillerFunc_;
         label = label_;
         xlabel =xlabel_ ; 
         binEdges = bins_;
-        nbins = nbins_; lower = binEdges[0]; upper = binEdges[nbins];
+        nbinsx = nbinsx_; lowerx = binEdges[0]; upperx = binEdges[nbinsx];
         stack=new THStack(label+"_stack",label+"_stack");
     };
   
-    void setBinning(int nbins_ , double lower_ , double upper_ ){
-        nbins = nbins_ ; lower = lower_ ; upper = upper_ ;
+    plot( double (*fillerFunc_)(ntupleType*) , double (*fillerFuncY_)(ntupleType*) , 
+          TString label_="var",TString xlabel_="var",TString ylabel_="var",
+          int nbinsx_=20 , double lowerx_=200. , double upperx_=2200.,
+          int nbinsy_=20 , double lowery_=200. , double uppery_=2200.){
+        fillerFunc = fillerFunc_;
+        fillerFuncY = fillerFuncY_;
+        label = label_;
+        xlabel = xlabel_ ; 
+        ylabel = ylabel_ ; 
+        nbinsx = nbinsx_; lowerx = lowerx_; upperx = upperx_;
+        nbinsy = nbinsy_; lowery = lowery_; uppery = uppery_;
+        binEdges=NULL;
+        stack=0;
+	is2Dhist=true;
+    };
+
+    void setBinning(int nbinsx_ , double lowerx_ , double upperx_ ){
+        nbinsx = nbinsx_ ; lowerx = lowerx_ ; upperx = upperx_ ;
     };
   
     void addNtuple(ntupleType* ntuple_,TString tag="test"){ 
-        //cout << "nbins: " << nbins << " lower: " << lower << " upper: " << upper << endl;
+        //cout << "nbinsx: " << nbinsx << " lowerx: " << lowerx << " upperx: " << upperx << endl;
         //cout << "tag: " << tag << endl;
         tagMap[ntuple_] = tag;
-        if( binEdges )
-            histoMap[ntuple_] = new TH1F(label+"_"+tag,label+"_"+tag,nbins,binEdges);
-        else
-            histoMap[ntuple_] = new TH1F(label+"_"+tag,label+"_"+tag,nbins,lower,upper);
-        histoMap[ntuple_]->Sumw2();
+	if( is2Dhist ){
+	    histo2dMap[ntuple_] = new TH2F(label+"_"+tag,label+"_"+tag,nbinsx,lowerx,upperx,nbinsy,lowery,uppery);
+            histo2dMap[ntuple_]->Sumw2();
+	}else if( binEdges ){
+            histoMap[ntuple_] = new TH1F(label+"_"+tag,label+"_"+tag,nbinsx,binEdges);
+	    histoMap[ntuple_]->Sumw2();
+	}else{
+            histoMap[ntuple_] = new TH1F(label+"_"+tag,label+"_"+tag,nbinsx,lowerx,upperx);
+	    histoMap[ntuple_]->Sumw2();
+	}
+
     };
 
     void addSignalNtuple(ntupleType* ntuple_,TString tag="test"){ 
-        //cout << "nbins: " << nbins << " lower: " << lower << " upper: " << upper << endl;
+        //cout << "nbinsx: " << nbinsx << " lowerx: " << lowerx << " upperx: " << upperx << endl;
         tagMap[ntuple_] = tag;
-        if( binEdges )
-            signalHistoMap[ntuple_] = new TH1F(label+"_"+tag,label+"_"+tag,nbins,binEdges);   
-        else
-            signalHistoMap[ntuple_] = new TH1F(label+"_"+tag,label+"_"+tag,nbins,lower,upper);
+	if( is2Dhist ){
+	    signalHisto2dMap[ntuple_] = new TH2F(label+"_"+tag,label+"_"+tag,nbinsx,lowerx,upperx,nbinsy,lowery,uppery);
+	    signalHisto2dMap[ntuple_]->Sumw2();
+	}else if( binEdges ){
+            signalHistoMap[ntuple_] = new TH1F(label+"_"+tag,label+"_"+tag,nbinsx,binEdges);   
+	    signalHistoMap[ntuple_]->Sumw2();
+	}else{
+	    signalHistoMap[ntuple_] = new TH1F(label+"_"+tag,label+"_"+tag,nbinsx,lowerx,upperx);
+	    signalHistoMap[ntuple_]->Sumw2();
+	}
 
-        signalHistoMap[ntuple_]->Sumw2();
     };
   
     void addDataNtuple(ntupleType* ntuple_,TString tag="test"){
-        //cout << "nbins: " << nbins << " lower: " << lower << " upper: " << upper << endl;
+        //cout << "nbinsx: " << nbinsx << " lowerx: " << lowerx << " upperx: " << upperx << endl;
         tagMap[ntuple_] = tag ;
-        if( binEdges ){
-            dataHist = new TH1F(label+"_"+tag,label+"_"+tag,nbins,binEdges);
-        }else
-            dataHist = new TH1F(label+"_"+tag,label+"_"+tag,nbins,lower,upper);
-        dataHist->SetMarkerStyle(8);
+	if( is2Dhist ){
+	  dataHist2d = new TH2F(label+"_"+tag,label+"_"+tag,nbinsx,lowerx,upperx,nbinsy,lowery,uppery);
+	}else if( binEdges ){
+            dataHist = new TH1F(label+"_"+tag,label+"_"+tag,nbinsx,binEdges);
+	    dataHist->SetMarkerStyle(8);
+        }else{
+            dataHist = new TH1F(label+"_"+tag,label+"_"+tag,nbinsx,lowerx,upperx);
+	    dataHist->SetMarkerStyle(8);
+	}
+
     };
   
     int fill(ntupleType* ntuple ){
+
+      if( is2Dhist ){
+	if( histo2dMap[ntuple] ){
+	  return histoMap[ntuple]->Fill(fillerFunc(ntuple),fillerFuncY(ntuple),ntuple->Weight*lumi);
+	}else{
+	  cout << "plot::fill - ERROR: key not found: " << ntuple << endl;
+	  return 0;
+	}
+      }else{
         if( histoMap[ntuple] ){ // histoMap.find(ntuple) != histoMap.end() ){
             return histoMap[ntuple]->Fill(fillerFunc(ntuple),ntuple->Weight*lumi);
         }else{
             cout << "plot::fill - ERROR: key not found: " << ntuple << endl;
             return 0;
         }
+      }
     };
 
     int fillSignal(ntupleType* ntuple ){
+      if( is2Dhist ){
+	if( signalHisto2dMap[ntuple] ){
+	  return signalHisto2dMap[ntuple]->Fill(fillerFunc(ntuple),fillerFuncY(ntuple),ntuple->Weight*lumi);
+	}else{
+	  cout << "plot::fillSignal - ERROR: key not found, " << ntuple << endl;
+	  return 0;
+	}
+      }else{
         if( signalHistoMap[ntuple] ){ // signalHistoMap.find(ntuple) != signalHistoMap.end() ){
             return signalHistoMap[ntuple]->Fill(fillerFunc(ntuple),ntuple->Weight*lumi);
         }else{
             cout << "plot::fillSignal - ERROR: key not found, " << ntuple << endl;
             return 0;
         }
+      }
     };
 
     int fill(ntupleType* ntuple , float customWeight ){
+      if( is2Dhist ){
+	if( histo2dMap[ntuple] ){
+	  return histo2dMap[ntuple]->Fill(fillerFunc(ntuple),fillerFuncY(ntuple),customWeight);
+	}else{
+	  cout << "plot::fill - ERROR: key not found: " << ntuple << endl;
+	  return 0;
+	}
+      }else{
         if( histoMap[ntuple] ){ // histoMap.find(ntuple) != histoMap.end() ){
             return histoMap[ntuple]->Fill(fillerFunc(ntuple),customWeight);
         }else{
             cout << "plot::fill - ERROR: key not found: " << ntuple << endl;
             return 0;
         }
+      }
     };
 
     int fillSignal(ntupleType* ntuple , float customWeight ){
+      if( is2Dhist ){
+	if( signalHisto2dMap[ntuple] ){
+	  return signalHisto2dMap[ntuple]->Fill(fillerFunc(ntuple),fillerFuncY(ntuple),customWeight);
+	}else{
+	  cout << "plot::fillSignal - ERROR: key not found, " << ntuple << endl;
+	  return 0;
+	}
+      }else{
         if( signalHistoMap[ntuple] ){ // signalHistoMap.find(ntuple) != signalHistoMap.end() ){
             return signalHistoMap[ntuple]->Fill(fillerFunc(ntuple),customWeight);
         }else{
             cout << "plot::fillSignal - ERROR: key not found, " << ntuple << endl;
             return 0;
         }
+      }
     };
 
     int fillData(ntupleType* ntuple ){
-        if( dataHist )
+      if( is2Dhist ){
+	if( dataHist ){
+	  return dataHist->Fill(fillerFunc(ntuple));
+	}else{
+	  return 0;
+	}
+      }else{
+        if( dataHist ){
             return dataHist->Fill(fillerFunc(ntuple));
-        else 
+	}else{
             return 0;
+	}
+      }
     };
   
     void setFillColor(ntupleType* ntuple , int color=1){
+      if( !is2Dhist ){
         if( histoMap.find(ntuple) != histoMap.end() ){
             histoMap[ntuple]->SetFillColor(color);
             histoMap[ntuple]->SetLineWidth(2);
         }else{
             cout << "plot::setFillColor - ERROR: couldn't find key, " << ntuple << endl;
         }
+      }
     };
 
     void setLineColor(ntupleType* ntuple , int color=1){
+      if( !is2Dhist ){
         if( signalHistoMap.find(ntuple) != signalHistoMap.end() ){
             signalHistoMap[ntuple]->SetLineColor(color);
             signalHistoMap[ntuple]->SetLineWidth(2);
@@ -150,19 +232,22 @@ public:
         }else{
             cout << "plot::setFillColor - ERROR: couldn't find key, " << ntuple << endl;
         }
+      }
     };
   
     void buildStack(vector<ntupleType*> ntuples,double scale=1.0){
+      if( !is2Dhist ){
         if( stack ){
             for( int iSample = 0 ; iSample < ntuples.size() ; iSample++ ){
                 histoMap[ntuples[iSample]]->Scale(scale);
                 stack->Add(histoMap[ntuples[iSample]]);
             }    
         }
+      }
     };
 
     void buildStack(double scale=1.0){
-    
+      if( !is2Dhist ){
         vector<ntupleType*> ntuples;
         for( typename map<ntupleType*,TH1F*>::iterator it = histoMap.begin() ;
              it != histoMap.end() ; 
@@ -170,9 +255,11 @@ public:
             ntuples.push_back(it->first);
         }
         buildStack(ntuples,scale);
+      }
     };
 
     void buildSum(TString tag=""){
+      if( !is2Dhist ){
         sum = NULL;
         for( typename map<ntupleType*,TH1F*>::iterator it = histoMap.begin() ;
              it != histoMap.end() ; 
@@ -186,10 +273,26 @@ public:
             }else
                 sum->Add(it->second);
         }
+      }
     };
 
     void Write(){
-
+      if( is2Dhist ){
+        for( typename map<ntupleType*,TH2F*>::iterator it = histo2dMap.begin() ;
+             it != histo2dMap.end() ; 
+             ++it ){
+            if( it->second ) 
+                it->second->Write();
+        }
+        for( typename map<ntupleType*,TH2F*>::iterator it = signalHisto2dMap.begin() ;
+             it != signalHisto2dMap.end() ; 
+             ++it ){
+            if( it->second ) 
+                it->second->Write();
+        }
+        if( dataHist2d )
+            dataHist2d->Write();
+      }else{
         for( typename map<ntupleType*,TH1F*>::iterator it = histoMap.begin() ;
              it != histoMap.end() ; 
              ++it ){
@@ -205,7 +308,7 @@ public:
         }
         if( dataHist )
             dataHist->Write();
-
+      }
     };
 
     void DrawNoRatio(TCanvas* can, 
@@ -395,7 +498,7 @@ public:
             ratio->SetMarkerStyle(8);
             ratio->GetYaxis()->SetTitle("Data/MC");
             ratio->GetYaxis()->SetRangeUser(ratioYmin,ratioYmax);
-            ratio->GetXaxis()->SetRangeUser(lower,upper);
+            ratio->GetXaxis()->SetRangeUser(lowerx,upperx);
             ratio->GetXaxis()->SetTitle(xlabel);
             ratio->GetYaxis()->SetNdivisions(505);
             ratio->GetXaxis()->SetNdivisions(505);
@@ -470,15 +573,24 @@ public:
 
     TString label;
     TString xlabel;
-    int nbins;
-    double lower,upper;
+    TString ylabel;
+    int nbinsx;
+    int nbinsy;
+    double lowerx,upperx;
+    double lowery,uppery;
     double* binEdges;
     map<ntupleType*,TH1F*> histoMap;
+    map<ntupleType*,TH2F*> histo2dMap;
     map<ntupleType*,TString> tagMap;
     map<ntupleType*,TH1F*> signalHistoMap;
+    map<ntupleType*,TH2F*> signalHisto2dMap;
     TH1F* dataHist;
+    TH2F* dataHist2d;
     double (*fillerFunc)(ntupleType*);
+    double (*fillerFuncY)(ntupleType*);
     THStack* stack;
     TH1F* sum; 
+    TH2F* sum2d; 
+    bool is2Dhist{false};
 
 };

@@ -65,6 +65,8 @@ plotObs_antitag:
 	$(CC) $(CFLAGS) $(LIBS) $(INCLUDES) plotObs_antitag.cc -o ../bin/$@
 plotObs_baseline:
 	$(CC) $(CFLAGS) $(LIBS) $(INCLUDES) plotObs_baseline.cc -o ../bin/$@
+plot2D:
+	$(CC) $(CFLAGS) $(LIBS) $(INCLUDES) plot2D.cc -o ../bin/$@
 plotObs_singleEleCR_baseline:
 	$(CC) $(CFLAGS) $(LIBS) $(INCLUDES) plotObs_singleEleCR_baseline.cc -o ../bin/$@	
 plotObs_singleMuCR_baseline:

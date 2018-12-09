@@ -7,12 +7,12 @@
 #include <iostream>
 #include <vector>
 
-static const TString BASE_DIR="root://cmseos.fnal.gov//store/user/lpcsusyhad/SusyRA2Analysis2015/Skims/Run2ProductionV12/";
-
 class skimSamples{
 
 public : 
 
+  TString BASE_DIR, SIGNAL_DIR;
+  
     TChain *WJets,*ZJets,*QCD,*SnglT,*TT,*GJets,*GJets0p4,*Other,*DY,*TTinc;
     TChain *VBFG1000, *VBFG1200, *VBFG1400, *VBFG1600, *VBFG1800, *VBFG2000, *VBFG2500, *VBFG3000, *VBFG3500, *VBFG4000, *VBFG4500;
     //TChain *VBFG1000, *VBFG4500;
@@ -23,13 +23,30 @@ public :
     std::vector<TString> dataSampleName; 
     std::vector<int> fillColor, lineColor, sigLineColor;
 
-    enum signalType {kGluino,kElectroweak};
+    enum system {kLPC,kTTU};
     enum region {kSignal,kPhoton,kSLm,kSLe,kLowDphi, kNumRegions};
     TString regionNames[kNumRegions]={"signal","photon","SLm","SLe","kLowDphi"};
 
     TString skimType;
 
-    skimSamples(region r=kSignal, signalType s=kGluino){
+    skimSamples(region r=kSignal, system sys=kLPC){
+
+        if( sys == kLPC ){
+	  BASE_DIR="root://cmseos.fnal.gov//store/user/lpcsusyhad/SusyRA2Analysis2015/Skims/Run2ProductionV12/";
+	  SIGNAL_DIR="root://cmseos.fnal.gov//store/group/lpcdm/noreplica/klamichh/SUSY_VBFZZ_Sig_Samples/";
+	  cout << "system: " << BASE_DIR << endl;
+	  cout << "        " << SIGNAL_DIR << endl;
+	}else if( sys == kTTU ){
+	  BASE_DIR="/lustre/hep/awhitbec/RA2bSkims2016/Run2ProductionV12/";
+	  SIGNAL_DIR="/lustre/hep/awhitbec/RA2bSkims2016/Run2ProductionV12/VBF_signal/";
+	  cout << "system: " << BASE_DIR << endl;
+	  cout << "        " << SIGNAL_DIR << endl;
+	}else{
+	  BASE_DIR="";
+	  SIGNAL_DIR="";
+	  cout << "system: " << BASE_DIR << endl;
+	  cout << "        " << SIGNAL_DIR << endl;
+	}
 
         skimType="";
 
@@ -94,16 +111,8 @@ public :
         for( unsigned int i = 0 ; i < TTincFileNames.size() ; i++ ){
             TTinc->Add(skimType+"/"+TTincFileNames[i]);
         }
-        /*  DON'T USE THIS!!!
-        if( r == kSignal || r == kSLm || r == kSLe || r == kLowDphi ){
-            ntuples.push_back(new RA2bTree(TTinc));
-            sampleName.push_back("TT");
-            fillColor.push_back(kCyan);
-            lineColor.push_back(kCyan);
-        }
-        */
 
-        std::vector<TString> TTFileNames;
+	std::vector<TString> TTFileNames;
         TTFileNames.push_back("tree_TTJets_HT-600to800.root");
         TTFileNames.push_back("tree_TTJets_HT-800to1200.root");
         TTFileNames.push_back("tree_TTJets_HT-1200to2500.root");
@@ -311,27 +320,27 @@ public :
         }
         // VBF Signal
         VBFG1000 = new TChain("TreeMaker2/PreSelection");
-        VBFG1000->Add("root://cmseos.fnal.gov//store/group/lpcdm/noreplica/klamichh/SUSY_VBFZZ_Sig_Samples/tree_VBF_ZZ_mG1000.root");
+        VBFG1000->Add(SIGNAL_DIR+"tree_VBF_ZZ_mG1000.root");
         VBFG1200 = new TChain("TreeMaker2/PreSelection");
-        VBFG1200->Add("root://cmseos.fnal.gov//store/group/lpcdm/noreplica/klamichh/SUSY_VBFZZ_Sig_Samples/tree_VBF_ZZ_mG1200.root");
+        VBFG1200->Add(SIGNAL_DIR+"tree_VBF_ZZ_mG1200.root");
         VBFG1400 = new TChain("TreeMaker2/PreSelection");
-        VBFG1400->Add("root://cmseos.fnal.gov//store/group/lpcdm/noreplica/klamichh/SUSY_VBFZZ_Sig_Samples/tree_VBF_ZZ_mG1400.root");
+        VBFG1400->Add(SIGNAL_DIR+"tree_VBF_ZZ_mG1400.root");
         VBFG1600 = new TChain("TreeMaker2/PreSelection");
-        VBFG1600->Add("root://cmseos.fnal.gov//store/group/lpcdm/noreplica/klamichh/SUSY_VBFZZ_Sig_Samples/tree_VBF_ZZ_mG1600.root");
+        VBFG1600->Add(SIGNAL_DIR+"tree_VBF_ZZ_mG1600.root");
         VBFG1800 = new TChain("TreeMaker2/PreSelection");
-        VBFG1800->Add("root://cmseos.fnal.gov//store/group/lpcdm/noreplica/klamichh/SUSY_VBFZZ_Sig_Samples/tree_VBF_ZZ_mG1800.root");
+        VBFG1800->Add(SIGNAL_DIR+"tree_VBF_ZZ_mG1800.root");
         VBFG2000 = new TChain("TreeMaker2/PreSelection");
-        VBFG2000->Add("root://cmseos.fnal.gov//store/group/lpcdm/noreplica/klamichh/SUSY_VBFZZ_Sig_Samples/tree_VBF_ZZ_mG2000.root");
+        VBFG2000->Add(SIGNAL_DIR+"tree_VBF_ZZ_mG2000.root");
         VBFG2500 = new TChain("TreeMaker2/PreSelection");
-        VBFG2500->Add("root://cmseos.fnal.gov//store/group/lpcdm/noreplica/klamichh/SUSY_VBFZZ_Sig_Samples/tree_VBF_ZZ_mG2500.root");
+        VBFG2500->Add(SIGNAL_DIR+"tree_VBF_ZZ_mG2500.root");
         VBFG3000 = new TChain("TreeMaker2/PreSelection");
-        VBFG3000->Add("root://cmseos.fnal.gov//store/group/lpcdm/noreplica/klamichh/SUSY_VBFZZ_Sig_Samples/tree_VBF_ZZ_mG3000.root");
+        VBFG3000->Add(SIGNAL_DIR+"tree_VBF_ZZ_mG3000.root");
         VBFG3500 = new TChain("TreeMaker2/PreSelection");
-        VBFG3500->Add("root://cmseos.fnal.gov//store/group/lpcdm/noreplica/klamichh/SUSY_VBFZZ_Sig_Samples/tree_VBF_ZZ_mG3500.root");
+        VBFG3500->Add(SIGNAL_DIR+"tree_VBF_ZZ_mG3500.root");
         VBFG4000 = new TChain("TreeMaker2/PreSelection");
-        VBFG4000->Add("root://cmseos.fnal.gov//store/group/lpcdm/noreplica/klamichh/SUSY_VBFZZ_Sig_Samples/tree_VBF_ZZ_mG4000.root");
+        VBFG4000->Add(SIGNAL_DIR+"tree_VBF_ZZ_mG4000.root");
         VBFG4500 = new TChain("TreeMaker2/PreSelection");
-        VBFG4500->Add("root://cmseos.fnal.gov//store/group/lpcdm/noreplica/klamichh/SUSY_VBFZZ_Sig_Samples/tree_VBF_ZZ_mG4500.root");
+        VBFG4500->Add(SIGNAL_DIR+"tree_VBF_ZZ_mG4500.root");
 
         if( r == kSignal){
             signalNtuples.push_back(new RA2bTree(VBFG1000)); signalSampleName.push_back("VBFG1000"); sigLineColor.push_back(kRed);
