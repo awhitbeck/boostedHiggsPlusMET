@@ -14,8 +14,8 @@ public :
   TString BASE_DIR, SIGNAL_DIR;
   
     TChain *WJets,*ZJets,*QCD,*SnglT,*TT,*GJets,*GJets0p4,*Other,*DY,*TTinc;
-    TChain *VBFG1000, *VBFG1200, *VBFG1400, *VBFG1600, *VBFG1800, *VBFG2000, *VBFG2500, *VBFG3000, *VBFG3500, *VBFG4000, *VBFG4500;
-    //TChain *VBFG1000, *VBFG4500;
+    //TChain *VBFG1000, *VBFG1200, *VBFG1400, *VBFG1600, *VBFG1800, *VBFG2000, *VBFG2500, *VBFG3000, *VBFG3500, *VBFG4000, *VBFG4500;
+    TChain *VBFG1000, *VBFG2000;
     TChain *data;
     std::vector<RA2bTree*> ntuples,signalNtuples;
     RA2bTree* dataNtuple;
@@ -321,7 +321,7 @@ public :
         // VBF Signal
         VBFG1000 = new TChain("TreeMaker2/PreSelection");
         VBFG1000->Add(SIGNAL_DIR+"tree_VBF_ZZ_mG1000.root");
-        VBFG1200 = new TChain("TreeMaker2/PreSelection");
+  /*      VBFG1200 = new TChain("TreeMaker2/PreSelection");
         VBFG1200->Add(SIGNAL_DIR+"tree_VBF_ZZ_mG1200.root");
         VBFG1400 = new TChain("TreeMaker2/PreSelection");
         VBFG1400->Add(SIGNAL_DIR+"tree_VBF_ZZ_mG1400.root");
@@ -329,9 +329,9 @@ public :
         VBFG1600->Add(SIGNAL_DIR+"tree_VBF_ZZ_mG1600.root");
         VBFG1800 = new TChain("TreeMaker2/PreSelection");
         VBFG1800->Add(SIGNAL_DIR+"tree_VBF_ZZ_mG1800.root");
-        VBFG2000 = new TChain("TreeMaker2/PreSelection");
+        */VBFG2000 = new TChain("TreeMaker2/PreSelection");
         VBFG2000->Add(SIGNAL_DIR+"tree_VBF_ZZ_mG2000.root");
-        VBFG2500 = new TChain("TreeMaker2/PreSelection");
+        /*VBFG2500 = new TChain("TreeMaker2/PreSelection");
         VBFG2500->Add(SIGNAL_DIR+"tree_VBF_ZZ_mG2500.root");
         VBFG3000 = new TChain("TreeMaker2/PreSelection");
         VBFG3000->Add(SIGNAL_DIR+"tree_VBF_ZZ_mG3000.root");
@@ -341,20 +341,20 @@ public :
         VBFG4000->Add(SIGNAL_DIR+"tree_VBF_ZZ_mG4000.root");
         VBFG4500 = new TChain("TreeMaker2/PreSelection");
         VBFG4500->Add(SIGNAL_DIR+"tree_VBF_ZZ_mG4500.root");
-
+*/
         if( r == kSignal){
             signalNtuples.push_back(new RA2bTree(VBFG1000)); signalSampleName.push_back("VBFG1000"); sigLineColor.push_back(kRed);
-            signalNtuples.push_back(new RA2bTree(VBFG1200)); signalSampleName.push_back("VBFG1200"); sigLineColor.push_back(4);
+       /*     signalNtuples.push_back(new RA2bTree(VBFG1200)); signalSampleName.push_back("VBFG1200"); sigLineColor.push_back(4);
             signalNtuples.push_back(new RA2bTree(VBFG1400)); signalSampleName.push_back("VBFG1400"); sigLineColor.push_back(5);
             signalNtuples.push_back(new RA2bTree(VBFG1600)); signalSampleName.push_back("VBFG1600"); sigLineColor.push_back(8);
             signalNtuples.push_back(new RA2bTree(VBFG1800)); signalSampleName.push_back("VBFG1800"); sigLineColor.push_back(6);
-            signalNtuples.push_back(new RA2bTree(VBFG2000)); signalSampleName.push_back("VBFG2000"); sigLineColor.push_back(20);
-            signalNtuples.push_back(new RA2bTree(VBFG2500)); signalSampleName.push_back("VBFG2500"); sigLineColor.push_back(45);
+         */   signalNtuples.push_back(new RA2bTree(VBFG2000)); signalSampleName.push_back("VBFG2000"); sigLineColor.push_back(28);
+          /*  signalNtuples.push_back(new RA2bTree(VBFG2500)); signalSampleName.push_back("VBFG2500"); sigLineColor.push_back(45);
             signalNtuples.push_back(new RA2bTree(VBFG3000)); signalSampleName.push_back("VBFG3000"); sigLineColor.push_back(kCyan);
             signalNtuples.push_back(new RA2bTree(VBFG3500)); signalSampleName.push_back("VBFG3500"); sigLineColor.push_back(39);
             signalNtuples.push_back(new RA2bTree(VBFG4000)); signalSampleName.push_back("VBFG4000"); sigLineColor.push_back(9);
             signalNtuples.push_back(new RA2bTree(VBFG4500)); signalSampleName.push_back("VBFG4500"); sigLineColor.push_back(kBlack);
-        }
+        */}
     };
 
     RA2bTree* findNtuple(TString name){

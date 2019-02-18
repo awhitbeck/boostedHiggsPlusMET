@@ -559,8 +559,28 @@ template<typename ntupleType> double fillLeadingTau21(ntupleType* ntuple){
 }
 
 ////////////////////////////////////////
-// HIGHEST BBtag AK8 JET PROPERTIES  //
+// Graviton Mass Reconstruction  //
 //////////////////////////////////////
+
+double Gmass(double pt1, double eta1, double phi1, double mass1, double pt2, double eta2, double phi2, double mass2){
+    TLorentzVector v1, v2;
+    v1.SetPtEtaPhiM(pt1,eta1,phi1,mass1);
+    v2.SetPtEtaPhiM(pt2,eta2,phi2,mass2);
+    return (v1+v2).M();
+}
+
+template<typename ntupleType> double fillGMass(ntupleType* ntuple){
+     double AK8Pt = ntuple->JetsAK8->at(0).Pt();
+     double AK8Eta = ntuple->JetsAK8->at(0).Eta();
+     double AK8Phi = ntuple->JetsAK8->at(0).Phi();
+     double AK8Mass = ntuple->JetsAK8_prunedMass->at(0);
+     double MET = ntuple->MET;
+     double METEta = -AK8Eta;
+     double METPhi = ntuple->METPhi;
+     double ZMass = 91.0;
+     return Gmass(AK8Pt, AK8Eta, AK8Phi, AK8Mass, MET, METEta, METPhi, ZMass);
+}
+
 
 /////////////////////////////////////////////
 // SECOND HIGHEST BBtag AK8 JET PROPERTIES //
@@ -626,13 +646,11 @@ template<typename ntupleType> bool lowDPhiCuts(ntupleType* ntuple){
 
 template<typename ntupleType> bool AK8JetPtCut(ntupleType* ntuple){
   return ( ntuple->JetsAK8->size() >= 1 &&
-	   ntuple->JetsAK8->at(0).Pt() > 0. );
-	   //ntuple->JetsAK8->at(0).Pt() > 200. );
+	   ntuple->JetsAK8->at(0).Pt() > 200. );
 }
 
 template<typename ntupleType> bool METCut(ntupleType* ntuple){
-  return ( ntuple->MET > 0.);
-	   //ntuple->MET > 200. );
+  return ( ntuple->MET > 200.);
 }
 template<typename ntupleType> bool DeltaPhiAK8JMETCut(ntupleType* ntuple){
   double DeltaPhiAK8JMET=CalcdPhi(ntuple->JetsAK8->at(0).Phi(), ntuple->METPhi);
@@ -644,8 +662,18 @@ template<typename ntupleType> double fillDeltaPhiAK8JMET(ntupleType* ntuple){
   return DeltaPhiAK8JMET;
 }
 
+template<typename ntupleType> bool ZMTCut(ntupleType* ntuple){
+    if( ntuple->JetsAK8->size() == 0 ) return false;
+     double AK8Pt = ntuple->JetsAK8->at(0).Pt();
+     double AK8Phi = ntuple->JetsAK8->at(0).Phi();
+     double MET = ntuple->MET;
+     double METPhi = ntuple->METPhi;
+     double MT = ZMT(AK8Pt, AK8Phi, MET, METPhi);
+     return (MT > 800.0);
+}
 
 template<typename ntupleType> double fillZMT(ntupleType* ntuple){
+     if( ntuple->JetsAK8->size() == 0 ) return 0.;
      double AK8Pt = ntuple->JetsAK8->at(0).Pt();
      double AK8Phi = ntuple->JetsAK8->at(0).Phi();
      double MET = ntuple->MET;
@@ -655,7 +683,7 @@ template<typename ntupleType> double fillZMT(ntupleType* ntuple){
 }
 
 // Plot the jet mass for different MT interval to see how it changes with MT
-
+/*
 template<typename ntupleType> double fillMZ510MT(ntupleType* ntuple){
     if (fillZMT(ntuple) >500 && fillZMT(ntuple) <1000)
     return ntuple->JetsAK8_prunedMass->at(0);
@@ -680,7 +708,7 @@ template<typename ntupleType> double fillMZ2530MT(ntupleType* ntuple){
     if (fillZMT(ntuple) >2500 && fillZMT(ntuple) <3000)
     return ntuple->JetsAK8_prunedMass->at(0);
 }
-
+*/
 
 // DDT Calculation: HP: <0.55, LP: <0.95
 // DDT = tau21 + 0.082*log(m*m/pt)
@@ -817,7 +845,7 @@ template<typename ntupleType> bool VBFCuts(ntupleType* ntuple){
     vector<TLorentzVector> vbf_jets = cleanedVBFjets(ntuple,0);
     
     return ( fillVBF_dEta(ntuple)>4.0 &&
-             fillVBF_Mjj(ntuple)>500 &&
+             fillVBF_Mjj(ntuple)>500.0 &&
              fillVBF_j1j2Eta(ntuple)<0 &&
              vbf_jets[0].Pt()>30.0 && vbf_jets[1].Pt()>30.0);
 }             
@@ -863,16 +891,17 @@ template<typename ntupleType> bool LowPurityCut(ntupleType* ntuple){
 // 1) Baseline selection without VBF cut
 template<typename ntupleType> bool baselineCutNoVBF(ntupleType* ntuple){
   return ( METCut(ntuple)  &&
-           AK8JetPtCut(ntuple)); //&& 
-           //DeltaPhiCuts(ntuple) &&
-           //DeltaPhiAK8JMETCut(ntuple) && 
-           //ntuple->Photons->size()==0 &&  
-           //ntuple->Muons->size()==0 &&
-           //ntuple->Electrons->size()==0 &&
-           //ntuple->BTags == 0  
-           //&& ntuple->isoElectronTracks==0 && ntuple->isoMuonTracks==0 && ntuple->isoPionTracks==0 &&
-           //FiltersCut(ntuple) &&
-           //ntuple->JetID == 1);
+           //ZMTCut(ntuple) && 
+           AK8JetPtCut(ntuple) && 
+           DeltaPhiCuts(ntuple) &&
+           DeltaPhiAK8JMETCut(ntuple) && 
+           ntuple->Photons->size()==0 &&  
+           ntuple->Muons->size()==0 &&
+           ntuple->Electrons->size()==0 &&
+           ntuple->BTags == 0  
+           && ntuple->isoElectronTracks==0 && ntuple->isoMuonTracks==0 && ntuple->isoPionTracks==0 &&
+           FiltersCut(ntuple) &&
+           ntuple->JetID == 1);
 }
     
 // 2) Baseline with VBF cut

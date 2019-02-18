@@ -44,7 +44,13 @@ int main(int argc, char** argv){
         selectionFunc = ZSignalRegionHPCutNoVBF;
     }else if( selection_label == "ZSRHPVBF"){
         selectionFunc = ZSignalRegionHPCut;
-    }else if( selection_label == "ZSRHPVBF-Test"){
+    //}else if( selection_label == "ZSRHPVBF-dEta5p5-sig"){
+    //}else if( selection_label == "ZSRHPVBF_Loose"){
+    }else if( selection_label == "ZSRHPVBF_Loose_Sig"){
+    //}else if( selection_label == "ZSRHPVBF-TestFwdMjj"){
+    //}else if( selection_label == "ZSRHPVBF-TightMjjdEta"){
+        selectionFunc = ZSignalRegionHPCut;
+    }else if( selection_label == "ZSRHPVBF-Test1"){
         selectionFunc = ZSignalRegionHPCut;
     }else if( selection_label == "ZSRHPVBFEta"){
         selectionFunc = ZHPEtaCut;
@@ -58,7 +64,9 @@ int main(int argc, char** argv){
         selectionFunc = ZSidebandCut;
     }else if( selection_label == "ZSBHPNoVBF" ){
         selectionFunc = ZSidebandHPCutnoVBF;
-    }else if( selection_label == "ZSBHPVBF" ){
+    //}else if( selection_label == "ZSBHPVBF" ){
+    //}else if( selection_label == "ZSBHPVBF_Loose" ){
+    }else if( selection_label == "ZSBHPVBF_Loose_debug" ){
         selectionFunc = ZSidebandHPCut;
     }else if( selection_label == "ZSBLPNoVBF"){
         selectionFunc = ZSidebandLPCutnoVBF;
@@ -94,17 +102,21 @@ int main(int argc, char** argv){
     plot J1pt_Tau21plot(*fillLeadingTau21<RA2bTree>,"J1pt_Tau21_"+selection_label,"#tau_{21}",20,0.,1.);
     plot DDT_Tau21plot(*fillDDT<RA2bTree>,"DDT_Tau21_"+selection_label,"DDT",20,0.,1.);
 
+    //plot GMassvsZMTplot(*fillGMass<RA2bTree>,*fillZMT<RA2bTree>,"GMassvsZMT_"+selection_label,"M_{G} [GeV]","MT_{Z} [GeV]",25,500.,3000.,45,500.,5000.); // 100 GeV bin
+    plot GMassplot(*fillGMass<RA2bTree>,"GMass_"+selection_label,"M_{G} [GeV]",25,500.,3000.); // 100 GeV bin
+    plot GMass1plot(*fillGMass<RA2bTree>,"GMass1_"+selection_label,"M_{G} [GeV]",70,0.,7000.); // 100 GeV bin
+    plot GMass2plot(*fillGMass<RA2bTree>,"GMass2_"+selection_label,"M_{G} [GeV]",65,500.,7000.); // 100 GeV bin
     plot ZMTplot(*fillZMT<RA2bTree>,"ZMT_"+selection_label,"MT_{Z} [GeV]",45,500.,5000.); // 100 GeV bin
     plot ZMT1plot(*fillZMT<RA2bTree>,"ZMT1_"+selection_label,"MT_{Z} [GeV]",25,500.,3000.); // 100 GeV bin
-    plot ZMT2plot(*fillZMT<RA2bTree>,"ZMT2_"+selection_label,"MT_{Z} [GeV]",49,100.,5000.); // 100 GeV bin
+    plot ZMT2plot(*fillZMT<RA2bTree>,"ZMT2_"+selection_label,"MT_{Z} [GeV]",50,0.,5000.); // 100 GeV bin
     plot ZMT3plot(*fillZMT<RA2bTree>,"ZMT3_"+selection_label,"MT_{Z} [GeV]",30,2000.,5000.); // 100 GeV bin
     plot ZMT4plot(*fillZMT<RA2bTree>,"ZMT4_"+selection_label,"MT_{Z} [GeV]",19,100.,2000.); // 100 GeV bin
-    plot MZ510MTplot(*fillMZ510MT<RA2bTree>,"MZ510MT_"+selection_label,"m_{J} for MT [0.5-1 Tev] [GeV]",54,30.,300.); // 5 GeV bin
+/*    plot MZ510MTplot(*fillMZ510MT<RA2bTree>,"MZ510MT_"+selection_label,"m_{J} for MT [0.5-1 Tev] [GeV]",54,30.,300.); // 5 GeV bin
     plot MZ1015MTplot(*fillMZ1015MT<RA2bTree>,"MZ1015MT_"+selection_label,"m_{J} for MT [1-1.5 TeV] [GeV]",54,30.,300.); // 5 GeV bin
     plot MZ1520MTplot(*fillMZ1520MT<RA2bTree>,"MZ1520MT_"+selection_label,"m_{J} for MT [1.5-2 TeV] [GeV]",54,30.,300.); // 5 GeV bin
     plot MZ2025MTplot(*fillMZ2025MT<RA2bTree>,"MZ2025MT_"+selection_label,"m_{J} for MT [2-2.5 TeV] [GeV]",54,30.,300.); // 5 GeV bin
     plot MZ2530MTplot(*fillMZ2530MT<RA2bTree>,"MZ2530MT_"+selection_label,"m_{J} for MT [2.5-3.0 TeV] [GeV]",54,30.,300.); // 5 GeV bin
-    plot J1pt_Ptplot(*fillLeadingJetPt<RA2bTree>,"J1pt_Pt_"+selection_label,"p_{T,J} [GeV]",56,200.,3000.); //50 GeV bin;
+  */  plot J1pt_Ptplot(*fillLeadingJetPt<RA2bTree>,"J1pt_Pt_"+selection_label,"p_{T,J} [GeV]",56,200.,3000.); //50 GeV bin;
     plot J1pt_Pt1plot(*fillLeadingJetPt<RA2bTree>,"J1pt_Pt1_"+selection_label,"p_{T,J} [GeV]",60,0.,3000.); //50 GeV bin;
     //plot J1pt_Ptplot(*fillLeadingJetPt<RA2bTree>,"J1pt_Pt_"+selection_label,"p_{T,J} [GeV]",36,200.,2000.); //50 GeV bin;
     //plot J1pt_Etaplot(*fillLeadingJetEta<RA2bTree>,"J1pt_Eta_"+selection_label,"#eta_{AK8J} [GeV]",30,-3.,3.); //50 GeV bin;
@@ -130,17 +142,21 @@ int main(int argc, char** argv){
     plots.push_back(MET1plot);
     plots.push_back(MET2plot);
     plots.push_back(HTplot);
+    //plots.push_back(GMassvsZMTplot);
+    plots.push_back(GMassplot);
+    plots.push_back(GMass1plot);
+    plots.push_back(GMass2plot);
     plots.push_back(ZMTplot);
     plots.push_back(ZMT1plot);
     plots.push_back(ZMT2plot);
     plots.push_back(ZMT3plot);
     plots.push_back(ZMT4plot);
-    plots.push_back(MZ510MTplot);
+    /*plots.push_back(MZ510MTplot);
     plots.push_back(MZ1015MTplot);
     plots.push_back(MZ1520MTplot);
     plots.push_back(MZ2025MTplot);
     plots.push_back(MZ2530MTplot);
-    plots.push_back(NJetsplot);
+    */plots.push_back(NJetsplot);
     plots.push_back(NAK8Jetsplot);
 
     plots.push_back(DeltaPhi1plot);
@@ -185,6 +201,7 @@ int main(int argc, char** argv){
         TString filename;
         double weight = 0.;
         for( int iEvt = 0 ; iEvt < min(MAX_EVENTS,numEvents) ; iEvt++ ){
+        //for( int iEvt = 0 ; iEvt < min(10,numEvents) ; iEvt++ ){
             ntuple->GetEntry(iEvt);
             if( iEvt % 1000000 == 0 ) cout << skims.sampleName[iSample] << ": " << iEvt << "/" << numEvents << endl;
 
@@ -240,6 +257,7 @@ int main(int argc, char** argv){
             for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++){
                if (skims.signalSampleName[iSample]=="VBFG1000") 
                   plots[iPlot].fillSignal(ntuple,ntuple->Weight*lumi*1);
+/*
                if (skims.signalSampleName[iSample]=="VBFG1200") 
                   plots[iPlot].fillSignal(ntuple,ntuple->Weight*lumi*1);
                if (skims.signalSampleName[iSample]=="VBFG1400") 
@@ -248,9 +266,10 @@ int main(int argc, char** argv){
                   plots[iPlot].fillSignal(ntuple,ntuple->Weight*lumi*1);
                if (skims.signalSampleName[iSample]=="VBFG1800") 
                   plots[iPlot].fillSignal(ntuple,ntuple->Weight*lumi*1);
+*/  
                if (skims.signalSampleName[iSample]=="VBFG2000") 
                   plots[iPlot].fillSignal(ntuple,ntuple->Weight*lumi*1);
-               if (skims.signalSampleName[iSample]=="VBFG2500") 
+            /*   if (skims.signalSampleName[iSample]=="VBFG2500") 
                   plots[iPlot].fillSignal(ntuple,ntuple->Weight*lumi*1);
                if (skims.signalSampleName[iSample]=="VBFG3000") 
                   plots[iPlot].fillSignal(ntuple,ntuple->Weight*lumi*1);
@@ -259,7 +278,7 @@ int main(int argc, char** argv){
                if (skims.signalSampleName[iSample]=="VBFG4000") 
                   plots[iPlot].fillSignal(ntuple,ntuple->Weight*lumi*1);
                if (skims.signalSampleName[iSample]=="VBFG4500") 
-                  plots[iPlot].fillSignal(ntuple,ntuple->Weight*lumi*1);
+                  plots[iPlot].fillSignal(ntuple,ntuple->Weight*lumi*1);*/
             }
         }
     }
@@ -288,6 +307,7 @@ int main(int argc, char** argv){
     for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++){
         TCanvas* can = new TCanvas("can","can",500,500);
         //plots[iPlot].dataHist = NULL;
+        //if (plots[iPlot].is2Dhist) continue;
         plots[iPlot].DrawNoRatio(can,skims.ntuples,sigSamples,"../plots/plotObs_"+selection_label+"_plots");
         //plots[iPlot].Draw(can,skims.ntuples,sigSamples,"../plots/plotObs_"+selection_label+"_plots",0.1,2.0,true);
         plots[iPlot].Write();
