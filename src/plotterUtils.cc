@@ -197,7 +197,7 @@ public:
     int fillData(ntupleType* ntuple ){
       if( is2Dhist ){
 	if( dataHist ){
-	  return dataHist->Fill(fillerFunc(ntuple));
+	  return dataHist->Fill(fillerFunc(ntuple),fillerFuncY(ntuple));
 	}else{
 	  return 0;
 	}

@@ -32,7 +32,8 @@ int main(int argc, char** argv){
     TString selection_label = argv[1];
     bool (*selectionFunc)(RA2bTree*);
     //if( selection_label == "baselineNoVBF" ){
-    if( selection_label == "ZNoSelection-Test"){
+    if( selection_label == "ZNoSelection_Test_V16"){
+    //if( selection_label == "ZNoSelection-Test"){
         selectionFunc = baselineCutNoVBF;
     }else if( selection_label == "baselineVBF" ){
         selectionFunc = baselineCut;
@@ -40,15 +41,16 @@ int main(int argc, char** argv){
         selectionFunc = ZSignalRegionCutNoVBF;
     }else if( selection_label == "ZSRVBF"){
         selectionFunc = ZSignalRegionCut;
-    }else if( selection_label == "ZSRHPNoVBF"){
+    //}else if( selection_label == "ZSRHPNoVBF"){
+    }else if( selection_label == "ZSRHPNoVBF_SigBkg"){
         selectionFunc = ZSignalRegionHPCutNoVBF;
     }else if( selection_label == "ZSRHPVBF"){
         selectionFunc = ZSignalRegionHPCut;
     //}else if( selection_label == "ZSRHPVBF-dEta5p5-sig"){
     //}else if( selection_label == "ZSRHPVBF_Loose"){
-    }else if( selection_label == "ZSRHPVBF_Loose_Sig"){
+    //}else if( selection_label == "ZSRHPVBF_Loose_Sig_Unweighted"){
     //}else if( selection_label == "ZSRHPVBF-TestFwdMjj"){
-    //}else if( selection_label == "ZSRHPVBF-TightMjjdEta"){
+    }else if( selection_label == "ZSRHPVBF-TightMjjdEta"){
         selectionFunc = ZSignalRegionHPCut;
     }else if( selection_label == "ZSRHPVBF-Test1"){
         selectionFunc = ZSignalRegionHPCut;
@@ -58,15 +60,18 @@ int main(int argc, char** argv){
         selectionFunc = ZSignalRegionLPCutNoVBF;
     }else if( selection_label == "ZSRLPVBF"){
         selectionFunc = ZSignalRegionLPCut;
-    }else if( selection_label == "ZSBNoVBF" ){
+    //}else if( selection_label == "ZSBNoVBF" ){
+    }else if( selection_label == "ZSBNoVBF_Test" ){
         selectionFunc = ZSidebandnoVBFCut;
     }else if( selection_label == "ZSBVBF" ){
         selectionFunc = ZSidebandCut;
     }else if( selection_label == "ZSBHPNoVBF" ){
+    //}else if( selection_label == "ZSBHPNoVBF_SigBkg" ){
         selectionFunc = ZSidebandHPCutnoVBF;
-    //}else if( selection_label == "ZSBHPVBF" ){
+    }else if( selection_label == "ZSBHPVBF" ){
     //}else if( selection_label == "ZSBHPVBF_Loose" ){
-    }else if( selection_label == "ZSBHPVBF_Loose_debug" ){
+    //}else if( selection_label == "ZSBHPVBF_Loose_Sig" ){
+    //}else if( selection_label == "ZSBHPVBF_Loose_debug" ){
         selectionFunc = ZSidebandHPCut;
     }else if( selection_label == "ZSBLPNoVBF"){
         selectionFunc = ZSidebandLPCutnoVBF;
@@ -82,13 +87,47 @@ int main(int argc, char** argv){
     skimSamples skims(skimSamples::kSignal,sys);
     typedef plot<RA2bTree> plot;
 
-    plot NVtxplot(*fillNVtx<RA2bTree>,"NVtx_"+selection_label,"NVtx",79,1.5,80.5);//1 bin
+    plot NVtxplot(*fillNVtx<RA2bTree>,"NVtx_"+selection_label,"NVtx",80,0.5,80.5);//1 bin
     plot METplot(*fillMET<RA2bTree>,"MET_"+selection_label,"MET [GeV]",56,200.,3000.);//50 GeV bin
     plot MET2plot(*fillMET<RA2bTree>,"MET2_"+selection_label,"MET [GeV]",60,0.,3000.);//50 GeV bin
     plot MET1plot(*fillMET<RA2bTree>,"MET1_"+selection_label,"MET [GeV]",25,200.,1200.);//40 GeV bin
     plot HTplot(*fillHT<RA2bTree>,"HT_"+selection_label,"H_{T} [GeV]",30,300,3300.);
-    plot NJetsplot(*fillNJets<RA2bTree>,"NJets_"+selection_label,"n_{jets}",14,1.5,15.5);
-    plot NAK8Jetsplot(*fillNJets<RA2bTree>,"NAK8Jets_"+selection_label,"nAK8_{jets}",14,1.5,15.5);
+    plot NJetsplot(*fillNJets<RA2bTree>,"NJets_"+selection_label,"n_{jets}",15,0.5,15.5);
+    plot NAK8Jetsplot(*fillNJets<RA2bTree>,"NAK8Jets_"+selection_label,"nAK8_{jets}",15,0.5,15.5);
+
+    // AK4 Jets plots: pt, eta, phi, Nemf
+    plot AK4j1pt_plot(*fillJetPt1<RA2bTree>,"AK4j1pt_plot_"+selection_label,"pt_{j1}^{AK4} [GeV]",50,0,1500);
+    plot AK4j2pt_plot(*fillJetPt2<RA2bTree>,"AK4j2pt_plot_"+selection_label,"pt_{j2}^{AK4} [GeV]",50,0,1500);
+    plot AK4j3pt_plot(*fillJetPt3<RA2bTree>,"AK4j3pt_plot_"+selection_label,"pt_{j3}^{AK4} [GeV]",50,0,1500);
+    plot AK4j4pt_plot(*fillJetPt4<RA2bTree>,"AK4j4pt_plot_"+selection_label,"pt_{j4}^{AK4} [GeV]",50,0,1500);
+
+    plot AK4j1Eta1_plot(*fillJetEta1<RA2bTree>,"AK4j1Eta1_plot_"+selection_label,"#eta_{j1}^{AK4} 1",100,-5.,5.);
+    plot AK4j1Eta_plot(*fillJetEta1<RA2bTree>,"AK4j1Eta_plot_"+selection_label,"#eta_{j1}^{AK4}",50,-5.,5.);
+    plot AK4j2Eta_plot(*fillJetEta2<RA2bTree>,"AK4j2Eta_plot_"+selection_label,"#eta_{j2}^{AK4}",50,-5.,5.);
+    plot AK4j3Eta_plot(*fillJetEta3<RA2bTree>,"AK4j3Eta_plot_"+selection_label,"#eta_{j3}^{AK4}",50,-5.,5.);
+    plot AK4j4Eta_plot(*fillJetEta4<RA2bTree>,"AK4j4Eta_plot_"+selection_label,"#eta_{j4}^{AK4}",50,-5.,5.);
+
+    plot AK4j1Phi_plot(*fillJetPhi1<RA2bTree>,"AK4j1Phi_plot_"+selection_label,"#phi_{j1}^{AK4}",70,-3.5,3.5);
+    plot AK4j2Phi_plot(*fillJetPhi2<RA2bTree>,"AK4j2Phi_plot_"+selection_label,"#phi_{j2}^{AK4}",70,-3.5,3.5);
+    plot AK4j3Phi_plot(*fillJetPhi3<RA2bTree>,"AK4j3Phi_plot_"+selection_label,"#phi_{j3}^{AK4}",70,-3.5,3.5);
+    plot AK4j4Phi_plot(*fillJetPhi4<RA2bTree>,"AK4j4Phi_plot_"+selection_label,"#phi_{j4}^{AK4}",70,-3.5,3.5);
+
+    plot AK4j1NEMF_plot(*fillJetNEMF1<RA2bTree>,"AK4j1NEMF_plot_"+selection_label,"NEMF_{j1}^{AK4}",20,0.,1.);
+    plot AK4j2NEMF_plot(*fillJetNEMF2<RA2bTree>,"AK4j2NEMF_plot_"+selection_label,"NEMF_{j2}^{AK4}",20,0.,1.);
+    plot AK4j3NEMF_plot(*fillJetNEMF3<RA2bTree>,"AK4j3NEMF_plot_"+selection_label,"NEMF_{j3}^{AK4}",20,0.,1.);
+    plot AK4j4NEMF_plot(*fillJetNEMF4<RA2bTree>,"AK4j4NEMF_plot_"+selection_label,"NEMF_{j4}^{AK4}",20,0.,1.);
+
+   // 2D plot for AK4 Objects: 
+    plot AK4j1ptvsEtaplot(*fillJetEta1<RA2bTree>,*fillJetPt1<RA2bTree>,"AK4j1ptvsEta_"+selection_label,"#eta_{j1}^{AK4}","pt_{j1}^{AK4} [GeV]",50,-5.,5.,50,0.,1500.); 
+/*    plot AK4j1PhivsEtaplot(*fillJetEta1<RA2bTree>,*fillJetPhi1<RA2bTree>,"AK4j1PhivsEta_"+selection_label,"#eta_{j1}^{AK4}","#phi_{j1}^{AK4}",50,-5.,5.,70,-3.5,3.5); 
+    plot AK4j1NEMFvsEtaplot(*fillJetEta1<RA2bTree>,*fillJetNEMF1<RA2bTree>,"AK4j1NEMFvsEta_"+selection_label,"#eta_{j1}^{AK4}","NEMF_{j1}^{AK4}",50,-5.,5.,20,0.,1.); 
+    plot AK4j1NEMFvsPtplot(*fillJetPt1<RA2bTree>,*fillJetNEMF1<RA2bTree>,"AK4j1NEMFvsPt_"+selection_label,"pt_{j1}^{AK4} [GeV]","NEMF_{j1}^{AK4}",50,0.,1500.,20,0.,1.); 
+
+    plot AK4j2ptvsEtaplot(*fillJetEta2<RA2bTree>,*fillJetPt2<RA2bTree>,"AK4j2ptvsEta_"+selection_label,"#eta_{j2}^{AK4}","pt_{j2}^{AK4} [GeV]",50,-5.,5.,50,0.,1500.); 
+    plot AK4j2PhivsEtaplot(*fillJetEta2<RA2bTree>,*fillJetPhi2<RA2bTree>,"AK4j2PhivsEta_"+selection_label,"#eta_{j2}^{AK4}","#phi_{j2}^{AK4}",50,-5.,5.,70,-3.5,3.5); 
+    plot AK4j2NEMFvsEtaplot(*fillJetEta2<RA2bTree>,*fillJetNEMF2<RA2bTree>,"AK4j2NEMFvsEta_"+selection_label,"#eta_{j2}^{AK4}","NEMF_{j2}^{AK4}",50,-5.,5.,20,0.,1.); 
+    plot AK4j2NEMFvsPtplot(*fillJetPt2<RA2bTree>,*fillJetNEMF2<RA2bTree>,"AK4j2NEMFvsPt_"+selection_label,"pt_{j2}^{AK4} [GeV]","NEMF_{j2}^{AK4}",50,0.,1500.,20,0.,1.); 
+*/
 
     plot DeltaPhi1plot(*fillDeltaPhi1<RA2bTree>,"DeltaPhi1_"+selection_label,"#Delta#Phi_{1}",20,0,3.1415);
     plot DeltaPhi2plot(*fillDeltaPhi2<RA2bTree>,"DeltaPhi2_"+selection_label,"#Delta#Phi_{2}",20,0,3.1415);
@@ -97,12 +136,13 @@ int main(int argc, char** argv){
     plot DeltaPhiAK8JMETplot(*fillDeltaPhiAK8JMET<RA2bTree>,"DeltaPhiAK8JMET_"+selection_label,"#Delta#Phi(AK8J,MET)",20,0,3.1415);
 
     plot J1pt_Massplot(*fillLeadingJetMass<RA2bTree>,"J1pt_Mass_"+selection_label,"m_{J} [GeV]",54,30.,300.);//5 Gev bin
+    plot J1_SDMassplot(*fillLeadingJetSDMass<RA2bTree>,"J1_SDMass_"+selection_label,"SoftDrop m_{J} [GeV]",54,30.,300.);//5 Gev bin
     // Turn on the line below for SR only
     plot J1pt_Mass1plot(*fillLeadingJetMass<RA2bTree>,"J1pt_Mass1_"+selection_label,"m_{J} [GeV]",14,50.,120.);//5 Gev bin
     plot J1pt_Tau21plot(*fillLeadingTau21<RA2bTree>,"J1pt_Tau21_"+selection_label,"#tau_{21}",20,0.,1.);
     plot DDT_Tau21plot(*fillDDT<RA2bTree>,"DDT_Tau21_"+selection_label,"DDT",20,0.,1.);
 
-    //plot GMassvsZMTplot(*fillGMass<RA2bTree>,*fillZMT<RA2bTree>,"GMassvsZMT_"+selection_label,"M_{G} [GeV]","MT_{Z} [GeV]",25,500.,3000.,45,500.,5000.); // 100 GeV bin
+    plot GMassvsZMTplot(*fillGMass<RA2bTree>,*fillZMT<RA2bTree>,"GMassvsZMT_"+selection_label,"M_{G} [GeV]","MT_{Z} [GeV]",25,500.,3000.,45,500.,5000.); // 100 GeV bin
     plot GMassplot(*fillGMass<RA2bTree>,"GMass_"+selection_label,"M_{G} [GeV]",25,500.,3000.); // 100 GeV bin
     plot GMass1plot(*fillGMass<RA2bTree>,"GMass1_"+selection_label,"M_{G} [GeV]",70,0.,7000.); // 100 GeV bin
     plot GMass2plot(*fillGMass<RA2bTree>,"GMass2_"+selection_label,"M_{G} [GeV]",65,500.,7000.); // 100 GeV bin
@@ -142,7 +182,39 @@ int main(int argc, char** argv){
     plots.push_back(MET1plot);
     plots.push_back(MET2plot);
     plots.push_back(HTplot);
-    //plots.push_back(GMassvsZMTplot);
+    plots.push_back(GMassvsZMTplot);
+
+    plots.push_back(AK4j1pt_plot);
+    plots.push_back(AK4j2pt_plot);
+    plots.push_back(AK4j3pt_plot);
+    plots.push_back(AK4j4pt_plot);
+
+    plots.push_back(AK4j1Eta1_plot);
+    plots.push_back(AK4j1Eta_plot);
+    plots.push_back(AK4j2Eta_plot);
+    plots.push_back(AK4j3Eta_plot);
+    plots.push_back(AK4j4Eta_plot);
+
+    plots.push_back(AK4j1Phi_plot);
+    plots.push_back(AK4j2Phi_plot);
+    plots.push_back(AK4j3Phi_plot);
+    plots.push_back(AK4j4Phi_plot);
+
+    plots.push_back(AK4j1NEMF_plot);
+    plots.push_back(AK4j2NEMF_plot);
+    plots.push_back(AK4j3NEMF_plot);
+    plots.push_back(AK4j4NEMF_plot);
+
+    plots.push_back(AK4j1ptvsEtaplot);   
+/*    plots.push_back(AK4j1PhivsEtaplot);  
+    plots.push_back(AK4j1NEMFvsEtaplot); 
+    plots.push_back(AK4j1NEMFvsPtplot);   
+
+    plots.push_back(AK4j2ptvsEtaplot  );
+    plots.push_back(AK4j2PhivsEtaplot );
+    plots.push_back(AK4j2NEMFvsEtaplot);
+    plots.push_back(AK4j2NEMFvsPtplot ); 
+*/
     plots.push_back(GMassplot);
     plots.push_back(GMass1plot);
     plots.push_back(GMass2plot);
@@ -165,6 +237,7 @@ int main(int argc, char** argv){
     plots.push_back(DeltaPhi4plot);
     plots.push_back(DeltaPhiAK8JMETplot);
 
+    plots.push_back(J1_SDMassplot);
     plots.push_back(J1pt_Massplot);
     plots.push_back(J1pt_Mass1plot);
     plots.push_back(J1pt_Tau21plot);
@@ -256,30 +329,43 @@ int main(int argc, char** argv){
             if(! selectionFunc(ntuple) ) continue;
             for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++){
                if (skims.signalSampleName[iSample]=="VBFG1000") 
+                  //plots[iPlot].fillSignal(ntuple,1);
+                  //plots[iPlot].fillSignal(ntuple,ntuple->Weight*lumi*0.001);
                   plots[iPlot].fillSignal(ntuple,ntuple->Weight*lumi*1);
 /*
                if (skims.signalSampleName[iSample]=="VBFG1200") 
-                  plots[iPlot].fillSignal(ntuple,ntuple->Weight*lumi*1);
+                  //plots[iPlot].fillSignal(ntuple,1);
+                  plots[iPlot].fillSignal(ntuple,ntuple->Weight*lumi*0.001);
                if (skims.signalSampleName[iSample]=="VBFG1400") 
-                  plots[iPlot].fillSignal(ntuple,ntuple->Weight*lumi*1);
+                  //plots[iPlot].fillSignal(ntuple,1);
+                  plots[iPlot].fillSignal(ntuple,ntuple->Weight*lumi*0.001);
                if (skims.signalSampleName[iSample]=="VBFG1600") 
-                  plots[iPlot].fillSignal(ntuple,ntuple->Weight*lumi*1);
+                  //plots[iPlot].fillSignal(ntuple,1);
+                  plots[iPlot].fillSignal(ntuple,ntuple->Weight*lumi*0.001);
                if (skims.signalSampleName[iSample]=="VBFG1800") 
-                  plots[iPlot].fillSignal(ntuple,ntuple->Weight*lumi*1);
-*/  
+                  //plots[iPlot].fillSignal(ntuple,1);
+                  plots[iPlot].fillSignal(ntuple,ntuple->Weight*lumi*0.001);
+  */
                if (skims.signalSampleName[iSample]=="VBFG2000") 
+                  //plots[iPlot].fillSignal(ntuple,1);
+                  //plots[iPlot].fillSignal(ntuple,ntuple->Weight*lumi*0.001);
                   plots[iPlot].fillSignal(ntuple,ntuple->Weight*lumi*1);
-            /*   if (skims.signalSampleName[iSample]=="VBFG2500") 
-                  plots[iPlot].fillSignal(ntuple,ntuple->Weight*lumi*1);
+/*               if (skims.signalSampleName[iSample]=="VBFG2500") 
+                  //plots[iPlot].fillSignal(ntuple,1);
+                  plots[iPlot].fillSignal(ntuple,ntuple->Weight*lumi*0.001);
                if (skims.signalSampleName[iSample]=="VBFG3000") 
-                  plots[iPlot].fillSignal(ntuple,ntuple->Weight*lumi*1);
+                  //plots[iPlot].fillSignal(ntuple,1);
+                  plots[iPlot].fillSignal(ntuple,ntuple->Weight*lumi*0.001);
                if (skims.signalSampleName[iSample]=="VBFG3500") 
-                  plots[iPlot].fillSignal(ntuple,ntuple->Weight*lumi*1);
+                  //plots[iPlot].fillSignal(ntuple,1);
+                  plots[iPlot].fillSignal(ntuple,ntuple->Weight*lumi*0.001);
                if (skims.signalSampleName[iSample]=="VBFG4000") 
-                  plots[iPlot].fillSignal(ntuple,ntuple->Weight*lumi*1);
+                  //plots[iPlot].fillSignal(ntuple,1);
+                  plots[iPlot].fillSignal(ntuple,ntuple->Weight*lumi*0.001);
                if (skims.signalSampleName[iSample]=="VBFG4500") 
-                  plots[iPlot].fillSignal(ntuple,ntuple->Weight*lumi*1);*/
-            }
+                  //plots[iPlot].fillSignal(ntuple,1);
+                  plots[iPlot].fillSignal(ntuple,ntuple->Weight*lumi*0.001);
+  */          }
         }
     }
 
@@ -291,12 +377,13 @@ int main(int argc, char** argv){
   
     int numEvents = ntuple->fChain->GetEntries();
     ntupleBranchStatus<RA2bTree>(ntuple);
-    //for( int iEvt = 0 ; iEvt < min(MAX_EVENTS,numEvents) ; iEvt++ ){
-    for( int iEvt = 0 ; iEvt < min(0,numEvents) ; iEvt++ ){
+    for( int iEvt = 0 ; iEvt < min(MAX_EVENTS,numEvents) ; iEvt++ ){
+    //for( int iEvt = 0 ; iEvt < min(0,numEvents) ; iEvt++ ){
         ntuple->GetEntry(iEvt);
         if( iEvt % 1000000 == 0 ) cout << "data_MET: " << iEvt << "/" << min(MAX_EVENTS,numEvents) << endl;
         if(! selectionFunc(ntuple) ) continue;
         if( !signalTriggerCut(ntuple) ) continue;
+
         for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++){
             plots[iPlot].fillData(ntuple);
         }
@@ -307,10 +394,11 @@ int main(int argc, char** argv){
     for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++){
         TCanvas* can = new TCanvas("can","can",500,500);
         //plots[iPlot].dataHist = NULL;
-        //if (plots[iPlot].is2Dhist) continue;
-        plots[iPlot].DrawNoRatio(can,skims.ntuples,sigSamples,"../plots/plotObs_"+selection_label+"_plots");
-        //plots[iPlot].Draw(can,skims.ntuples,sigSamples,"../plots/plotObs_"+selection_label+"_plots",0.1,2.0,true);
         plots[iPlot].Write();
+        if (plots[iPlot].is2Dhist) continue;
+        //plots[iPlot].DrawNoRatio(can,skims.ntuples,sigSamples,"../plots/plotObs_"+selection_label+"_plots");
+        plots[iPlot].Draw(can,skims.ntuples,sigSamples,"../plots_V16_2016/plotObs_"+selection_label+"_plots",0.1,2.0,true);
+        //plots[iPlot].Draw(can,skims.ntuples,sigSamples,"../plots/plotObs_"+selection_label+"_plots",0.1,2.0,true);
         plots[iPlot].sum->Write();
     }
     outputFile->Close();
