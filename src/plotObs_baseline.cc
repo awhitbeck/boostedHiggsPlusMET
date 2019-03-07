@@ -94,7 +94,7 @@ int main(int argc, char** argv){
     plot HTplot(*fillHT<RA2bTree>,"HT_"+selection_label,"H_{T} [GeV]",75,300,3300.); // 100 GeV bin
     plot NJetsplot(*fillNJets<RA2bTree>,"NJets_"+selection_label,"n_{jets}",10,0.5,10.5);
     plot NAK8Jetsplot(*fillNJets<RA2bTree>,"NAK8Jets_"+selection_label,"nAK8_{jets}",10,0.5,10.5);
-
+    plot madHT(*fillMadHT<RA2bTree>,"madHT_"+selection_label,"Madgraph HT",19,100,2000);
     // AK4 Jets plots: pt, eta, phi, Nemf
     plot AK4j1pt_plot(*fillJetPt1<RA2bTree>,"AK4j1pt_"+selection_label,"pt_{j1}^{AK4} [GeV]",25,0,1000);//40 GeV bin
     plot AK4j2pt_plot(*fillJetPt2<RA2bTree>,"AK4j2pt_"+selection_label,"pt_{j2}^{AK4} [GeV]",25,0,1000);
@@ -183,6 +183,7 @@ int main(int argc, char** argv){
     //plots.push_back(MET2plot);
     plots.push_back(HTplot);
     plots.push_back(GMassvsZMTplot);
+    plots.push_back(madHT);
 
     plots.push_back(AK4j1pt_plot);
     plots.push_back(AK4j2pt_plot);
@@ -277,7 +278,12 @@ int main(int argc, char** argv){
         for( int iEvt = 0 ; iEvt < min(MAX_EVENTS,numEvents) ; iEvt++ ){
         //for( int iEvt = 0 ; iEvt < min(10,numEvents) ; iEvt++ ){
             ntuple->GetEntry(iEvt);
-            if( iEvt % 1000000 == 0 ) cout << skims.sampleName[iSample] << ": " << iEvt << "/" << numEvents << endl;
+	    // if( iEvt % 100 == 0 ){
+	    //   cout << plots[3].tagMap[ntuple] << endl;
+	    //   cout << plots[3].histoMap[ntuple] << endl;
+	    //   plots[3].histoMap[ntuple]->Print("all");
+	    // }
+	    if( iEvt % 1000000 == 0 ) cout << skims.sampleName[iSample] << ": " << iEvt << "/" << numEvents << endl;
             filename = ntuple->fChain->GetFile()->GetName();
             if( ( filename.Contains("SingleLept") || filename.Contains("DiLept") ) && ntuple->madHT>600. )continue;
             if(! selectionFunc(ntuple) ) continue;
@@ -292,6 +298,9 @@ int main(int argc, char** argv){
             // end of Trigger name printout
             // ---------- custom weights -----------
             std::vector<double> EfficiencyCenterUpDown = Eff_MetMhtSextetReal_CenterUpDown(ntuple->HT, ntuple->MHT, ntuple->NJets);
+
+	    // update pileup weights; 
+	    // update trigger efficiencies;
             weight = ntuple->Weight*lumi*customPUweights(ntuple)*EfficiencyCenterUpDown[0];
             if( skims.sampleName[iSample] == "TT" )
                 weight *= ISRweights(ntuple);
@@ -299,19 +308,24 @@ int main(int argc, char** argv){
                 weight *= WJetsNLOWeights(ntuple);
             }
             if( skims.sampleName[iSample] == "ZJets" ){
-               cout << "ZJets File: " << ntuple->fChain->GetFile()->GetName()<<" Num evts: "<<numEvents<<endl;
+               //cout << "ZJets File: " << ntuple->fChain->GetFile()->GetName()<<" Num evts: "<<numEvents<<endl;
                 weight *= ZJetsNLOWeights(ntuple);
             }
             // ------------ end weights -------------
+	    //cout << "event passed all selections" << endl;
             for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++ ){
                 plots[iPlot].fill(ntuple,weight);
             }
         }
     }
 
+    // cout << " = = = = = = = = = end of background loop " << endl; 
+    // for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++ ){
+    //   plots[iPlot].dump();
+    // }
+
     // Signal samples
-  
-  vector<RA2bTree*> sigSamples;
+    vector<RA2bTree*> sigSamples;
     for( int iSample = 0 ; iSample < skims.signalNtuples.size() ; iSample++){
         std::cout<<"Skims check 1: "<<skims.signalSampleName[iSample]<<std::endl;
         RA2bTree* ntuple = skims.signalNtuples[iSample];
@@ -370,6 +384,11 @@ int main(int argc, char** argv){
         }
     }
 
+    // cout << " = = = = = = = = = end of signal loop " << endl; 
+    // for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++ ){
+    //   plots[iPlot].dump();
+    // }
+
     // Data samples
     RA2bTree* ntuple = skims.dataNtuple;
     for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++){
@@ -378,8 +397,8 @@ int main(int argc, char** argv){
   
     int numEvents = ntuple->fChain->GetEntries();
     ntupleBranchStatus<RA2bTree>(ntuple);
-    for( int iEvt = 0 ; iEvt < min(MAX_EVENTS,numEvents) ; iEvt++ ){
-    //for( int iEvt = 0 ; iEvt < min(0,numEvents) ; iEvt++ ){
+    //for( int iEvt = 0 ; iEvt < min(MAX_EVENTS,numEvents) ; iEvt++ ){
+    for( int iEvt = 0 ; iEvt < min(10,numEvents) ; iEvt++ ){
         ntuple->GetEntry(iEvt);
         if( iEvt % 1000000 == 0 ) cout << "data_MET: " << iEvt << "/" << min(MAX_EVENTS,numEvents) << endl;
         if(! selectionFunc(ntuple) ) continue;
@@ -390,15 +409,20 @@ int main(int argc, char** argv){
         }
     }
 
+    // cout << " = = = = = = = = = end of data loop " << endl; 
+    // for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++ ){
+    //   plots[iPlot].dump();
+    // }
+
     TFile* outputFile = new TFile("plotObs_"+selection_label+".root","RECREATE");
 
     for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++){
         TCanvas* can = new TCanvas("can","can",500,500);
         //plots[iPlot].dataHist = NULL;
-        plots[iPlot].Write();
+        //plots[iPlot].Write();
         if (plots[iPlot].is2Dhist) continue;
         //plots[iPlot].DrawNoRatio(can,skims.ntuples,sigSamples,"../plots/plotObs_"+selection_label+"_plots");
-        plots[iPlot].Draw(can,skims.ntuples,sigSamples,"../plots_V16_2016/plotObs_"+selection_label+"_plots",0.1,2.0,true);
+        plots[iPlot].Draw(can,skims.ntuples,sigSamples,"../plots_V16_2016/plotObs_"+selection_label+"_plots",0.1,2.0,false);
         //plots[iPlot].Draw(can,skims.ntuples,sigSamples,"../plots/plotObs_"+selection_label+"_plots",0.1,2.0,true);
         plots[iPlot].sum->Write();
     }

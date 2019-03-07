@@ -571,6 +571,17 @@ public:
 
     }
 
+    void dump(){
+      for( typename map<ntupleType*,TH1F*>::iterator it = histoMap.begin() ;
+	   it != histoMap.end() ;
+	   ++it){
+	cout << tagMap[it->first] << endl;
+	cout << histoMap[it->first] << endl;
+	if( histoMap[it->first] ) 
+	  histoMap[it->first]->Print("all");
+      }
+    }
+
     TString label;
     TString xlabel;
     TString ylabel;
