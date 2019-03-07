@@ -46,22 +46,27 @@ double ZMT(double pt1, double phi1, double pt2, double phi2){
 template<typename ntupleType>void ntupleBranchStatus(ntupleType* ntuple){
   ntuple->fChain->SetBranchStatus("*",0);
   ntuple->fChain->SetBranchStatus("Muons",1);
+  //ntuple->fChain->SetBranchStatus("NMuons",1);
   ntuple->fChain->SetBranchStatus("Electrons",1);
+  //ntuple->fChain->SetBranchStatus("NElectrons",1);
   ntuple->fChain->SetBranchStatus("isoElectronTracksclean",1);
   ntuple->fChain->SetBranchStatus("isoMuonTracksclean",1);
   ntuple->fChain->SetBranchStatus("isoPionTracksclean",1);
-  ntuple->fChain->SetBranchStatus("isoElectronTracks",1);
-  ntuple->fChain->SetBranchStatus("isoMuonTracks",1);
-  ntuple->fChain->SetBranchStatus("isoPionTracks",1);
+  ntuple->fChain->SetBranchStatus("iso*Tracks",1);
+  //ntuple->fChain->SetBranchStatus("isoElectronTracks",1);
+  //ntuple->fChain->SetBranchStatus("isoMuonTracks",1);
+  //ntuple->fChain->SetBranchStatus("isoPionTracks",1);
   ntuple->fChain->SetBranchStatus("Photon*",1);
   ntuple->fChain->SetBranchStatus("DeltaPhi*",1);
   
   ntuple->fChain->SetBranchStatus("TriggerNames",1); 
   ntuple->fChain->SetBranchStatus("TriggerPass",1);
   ntuple->fChain->SetBranchStatus("MHT",1);
-  ntuple->fChain->SetBranchStatus("HT",1);
+  ntuple->fChain->SetBranchStatus("HT*",1);
+  //ntuple->fChain->SetBranchStatus("HT",1);
   ntuple->fChain->SetBranchStatus("NJets",1);
-  ntuple->fChain->SetBranchStatus("BTags",1);
+  ntuple->fChain->SetBranchStatus("BTags*",1);
+  //ntuple->fChain->SetBranchStatus("BTags",1);
   ntuple->fChain->SetBranchStatus("MET",1);
   ntuple->fChain->SetBranchStatus("MHT",1);
   ntuple->fChain->SetBranchStatus("METPhi",1);
@@ -75,16 +80,18 @@ template<typename ntupleType>void ntupleBranchStatus(ntupleType* ntuple){
   ntuple->fChain->SetBranchStatus("JetsAK8*",1);
   ntuple->fChain->SetBranchStatus("Jets*",1);
   ntuple->fChain->SetBranchStatus("Weight",1);  
-  ntuple->fChain->SetBranchStatus("puWeightNew",1);  
+  ntuple->fChain->SetBranchStatus("pu*",1);  
+  //ntuple->fChain->SetBranchStatus("puWeightNew",1);  
   ntuple->fChain->SetBranchStatus("TrueNumInteractions",1);  
   ntuple->fChain->SetBranchStatus("TriggerPass",1);  
-  ntuple->fChain->SetBranchStatus("HBHENoiseFilter",1);
-  ntuple->fChain->SetBranchStatus("HBHEIsoNoiseFilter",1);
-  ntuple->fChain->SetBranchStatus("eeBadScFilter",1);
-  ntuple->fChain->SetBranchStatus("EcalDeadCellTriggerPrimitiveFilter",1);
-  ntuple->fChain->SetBranchStatus("BadPFMuonFilter",1);
-  ntuple->fChain->SetBranchStatus("BadChargedCandidateFilter",1);
-  ntuple->fChain->SetBranchStatus("globalTightHalo2016Filter",1);
+  ntuple->fChain->SetBranchStatus("*Filter",1);
+  //ntuple->fChain->SetBranchStatus("HBHENoiseFilter",1);
+  //ntuple->fChain->SetBranchStatus("HBHEIsoNoiseFilter",1);
+  //ntuple->fChain->SetBranchStatus("eeBadScFilter",1);
+  //ntuple->fChain->SetBranchStatus("EcalDeadCellTriggerPrimitiveFilter",1);
+  //ntuple->fChain->SetBranchStatus("BadPFMuonFilter",1);
+  //ntuple->fChain->SetBranchStatus("BadChargedCandidateFilter",1);
+  //ntuple->fChain->SetBranchStatus("globalTightHalo2016Filter",1);
   ntuple->fChain->SetBranchStatus("CaloMET",1);
   ntuple->fChain->SetBranchStatus("NVtx",1);
   ntuple->fChain->SetBranchStatus("NumInteractions",1);
@@ -709,13 +716,15 @@ template<typename ntupleType> double fillGMass(ntupleType* ntuple){
 template<typename ntupleType> bool FiltersCut(ntupleType* ntuple){
     return ntuple->HBHENoiseFilter==1 && 
         ntuple->HBHEIsoNoiseFilter==1 && 
-        ntuple->eeBadScFilter==1 && 
+        ntuple->eeBadScFilter==1 &&
+        ntuple->ecalBadCalibFilter==1 && //New 
         ntuple->EcalDeadCellTriggerPrimitiveFilter == 1 && 
         ntuple->NVtx>0 && 
         ntuple->MET/ntuple->CaloMET < 5. &&
         ntuple->BadPFMuonFilter == 1 &&
         ntuple->BadChargedCandidateFilter == 1 &&
-        ntuple->globalTightHalo2016Filter == 1;
+        ntuple->globalSuperTightHalo2016Filter==1;
+        //ntuple->globalTightHalo2016Filter == 1;
 }
 
 template<typename ntupleType> bool BTagsCut(ntupleType* ntuple){
@@ -1007,12 +1016,12 @@ template<typename ntupleType> bool baselineCutNoVBF(ntupleType* ntuple){
            //ZMTCut(ntuple) && 
            AK8JetPtCut(ntuple) && 
            DeltaPhiCuts(ntuple) &&
-           DeltaPhiAK8JMETCut(ntuple) && 
+           //DeltaPhiAK8JMETCut(ntuple) && 
            ntuple->Photons->size()==0 &&  
            ntuple->Muons->size()==0 &&
            ntuple->Electrons->size()==0 &&
-           ntuple->BTags == 0  
-           && ntuple->isoElectronTracks==0 && ntuple->isoMuonTracks==0 && ntuple->isoPionTracks==0 &&
+           ntuple->BTags == 0 && // ntuple->BTagsDeepCSV==0; 
+           ntuple->isoElectronTracks==0 && ntuple->isoMuonTracks==0 && ntuple->isoPionTracks==0 &&
            FiltersCut(ntuple) &&
            ntuple->JetID == 1);
 }
@@ -1527,7 +1536,13 @@ template<typename ntupleType> bool doubletagSBCut_photon(ntupleType* ntuple){
 // - - - - - - - Trigger Cuts - - - - - - - -  //
 /////////////////////////////////////////////////
 template<typename ntupleType> bool signalTriggerCut(ntupleType* ntuple){
-    return ntuple->TriggerPass->at(42) == 1 || ntuple->TriggerPass->at(43) == 1 || ntuple->TriggerPass->at(44) == 1 || ntuple->TriggerPass->at(45) == 1 ; 
+    //return ntuple->TriggerPass->at(42) == 1 || ntuple->TriggerPass->at(43) == 1 || ntuple->TriggerPass->at(44) == 1 || ntuple->TriggerPass->at(45) == 1 ; 
+    return (ntuple->TriggerPass->at(110) == 1 || ntuple->TriggerPass->at(112) == 1 || 
+           ntuple->TriggerPass->at(116) == 1 || ntuple->TriggerPass->at(118) == 1 || 
+           ntuple->TriggerPass->at(120) == 1 || ntuple->TriggerPass->at(124) == 1 || 
+           ntuple->TriggerPass->at(126) == 1 || ntuple->TriggerPass->at(128) == 1 || 
+           ntuple->TriggerPass->at(131) == 1 || ntuple->TriggerPass->at(133) == 1 || 
+           ntuple->TriggerPass->at(135) == 1 || ntuple->TriggerPass->at(136) == 1) ; 
 }
 
 template<typename ntupleType> bool singleMuTriggerCut(ntupleType* ntuple){

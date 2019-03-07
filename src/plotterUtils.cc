@@ -196,16 +196,16 @@ public:
 
     int fillData(ntupleType* ntuple ){
       if( is2Dhist ){
-	if( dataHist ){
-	  return dataHist->Fill(fillerFunc(ntuple),fillerFuncY(ntuple));
+	if( dataHist2d ){
+	  return dataHist2d->Fill(fillerFunc(ntuple),fillerFuncY(ntuple));
 	}else{
 	  return 0;
 	}
       }else{
-        if( dataHist ){
-            return dataHist->Fill(fillerFunc(ntuple));
+	if( dataHist ){
+	  return dataHist->Fill(fillerFunc(ntuple));
 	}else{
-            return 0;
+	  return 0;
 	}
       }
     };

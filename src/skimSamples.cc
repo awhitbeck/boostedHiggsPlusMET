@@ -106,7 +106,7 @@ public :
             fillColor.push_back(kOrange);
             lineColor.push_back(1);
         }
-
+ // Test KL
         std::vector<TString> TTincFileNames;
         TTincFileNames.push_back("tree_TTJets_MC2016.root");
         TTinc = new TChain("tree");
@@ -132,7 +132,7 @@ public :
             fillColor.push_back(kCyan);
             lineColor.push_back(kCyan);
         }
-
+ //test KL
         std::vector<TString> OtherFileNames;
         OtherFileNames.push_back("tree_WWTo1L1Nu2Q_MC2016.root");
         OtherFileNames.push_back("tree_WWTo2L2Nu_MC2016.root");
@@ -160,7 +160,7 @@ public :
             fillColor.push_back(28);
             lineColor.push_back(1);
         }
-
+ //test KL
         std::vector<TString> WJetsFileNames;
         WJetsFileNames.push_back("tree_WJetsToLNu_HT-100to200_MC2016.root");
         WJetsFileNames.push_back("tree_WJetsToLNu_HT-1200to2500_MC2016.root");
@@ -179,7 +179,7 @@ public :
             fillColor.push_back(kBlue);
             lineColor.push_back(1);
         }
-
+ //test KL
         std::vector<TString> ZJetsFileNames;
         ZJetsFileNames.push_back("tree_ZJetsToNuNu_HT-100to200_MC2016.root");
         ZJetsFileNames.push_back("tree_ZJetsToNuNu_HT-200to400_MC2016.root");

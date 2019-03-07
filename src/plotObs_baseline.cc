@@ -88,52 +88,52 @@ int main(int argc, char** argv){
     typedef plot<RA2bTree> plot;
 
     plot NVtxplot(*fillNVtx<RA2bTree>,"NVtx_"+selection_label,"NVtx",80,0.5,80.5);//1 bin
-    plot METplot(*fillMET<RA2bTree>,"MET_"+selection_label,"MET [GeV]",56,200.,3000.);//50 GeV bin
-    plot MET2plot(*fillMET<RA2bTree>,"MET2_"+selection_label,"MET [GeV]",60,0.,3000.);//50 GeV bin
+    plot METplot(*fillMET<RA2bTree>,"MET_"+selection_label,"MET [GeV]",70,200.,3000.);//40 GeV bin
+    //plot MET2plot(*fillMET<RA2bTree>,"MET2_"+selection_label,"MET [GeV]",60,0.,3000.);//50 GeV bin
     plot MET1plot(*fillMET<RA2bTree>,"MET1_"+selection_label,"MET [GeV]",25,200.,1200.);//40 GeV bin
-    plot HTplot(*fillHT<RA2bTree>,"HT_"+selection_label,"H_{T} [GeV]",30,300,3300.);
-    plot NJetsplot(*fillNJets<RA2bTree>,"NJets_"+selection_label,"n_{jets}",15,0.5,15.5);
-    plot NAK8Jetsplot(*fillNJets<RA2bTree>,"NAK8Jets_"+selection_label,"nAK8_{jets}",15,0.5,15.5);
+    plot HTplot(*fillHT<RA2bTree>,"HT_"+selection_label,"H_{T} [GeV]",75,300,3300.); // 100 GeV bin
+    plot NJetsplot(*fillNJets<RA2bTree>,"NJets_"+selection_label,"n_{jets}",10,0.5,10.5);
+    plot NAK8Jetsplot(*fillNJets<RA2bTree>,"NAK8Jets_"+selection_label,"nAK8_{jets}",10,0.5,10.5);
 
     // AK4 Jets plots: pt, eta, phi, Nemf
-    plot AK4j1pt_plot(*fillJetPt1<RA2bTree>,"AK4j1pt_plot_"+selection_label,"pt_{j1}^{AK4} [GeV]",50,0,1500);
-    plot AK4j2pt_plot(*fillJetPt2<RA2bTree>,"AK4j2pt_plot_"+selection_label,"pt_{j2}^{AK4} [GeV]",50,0,1500);
-    plot AK4j3pt_plot(*fillJetPt3<RA2bTree>,"AK4j3pt_plot_"+selection_label,"pt_{j3}^{AK4} [GeV]",50,0,1500);
-    plot AK4j4pt_plot(*fillJetPt4<RA2bTree>,"AK4j4pt_plot_"+selection_label,"pt_{j4}^{AK4} [GeV]",50,0,1500);
+    plot AK4j1pt_plot(*fillJetPt1<RA2bTree>,"AK4j1pt_"+selection_label,"pt_{j1}^{AK4} [GeV]",25,0,1000);//40 GeV bin
+    plot AK4j2pt_plot(*fillJetPt2<RA2bTree>,"AK4j2pt_"+selection_label,"pt_{j2}^{AK4} [GeV]",25,0,1000);
+    plot AK4j3pt_plot(*fillJetPt3<RA2bTree>,"AK4j3pt_"+selection_label,"pt_{j3}^{AK4} [GeV]",25,0,1000);
+    plot AK4j4pt_plot(*fillJetPt4<RA2bTree>,"AK4j4pt_"+selection_label,"pt_{j4}^{AK4} [GeV]",25,0,1000);
 
-    plot AK4j1Eta1_plot(*fillJetEta1<RA2bTree>,"AK4j1Eta1_plot_"+selection_label,"#eta_{j1}^{AK4} 1",100,-5.,5.);
-    plot AK4j1Eta_plot(*fillJetEta1<RA2bTree>,"AK4j1Eta_plot_"+selection_label,"#eta_{j1}^{AK4}",50,-5.,5.);
-    plot AK4j2Eta_plot(*fillJetEta2<RA2bTree>,"AK4j2Eta_plot_"+selection_label,"#eta_{j2}^{AK4}",50,-5.,5.);
-    plot AK4j3Eta_plot(*fillJetEta3<RA2bTree>,"AK4j3Eta_plot_"+selection_label,"#eta_{j3}^{AK4}",50,-5.,5.);
-    plot AK4j4Eta_plot(*fillJetEta4<RA2bTree>,"AK4j4Eta_plot_"+selection_label,"#eta_{j4}^{AK4}",50,-5.,5.);
+    plot AK4j1Eta1_plot(*fillJetEta1<RA2bTree>,"AK4j1Eta1_"+selection_label,"#eta_{j1}^{AK4} 1",100,-5.,5.); // 0.1 bin
+    plot AK4j1Eta_plot(*fillJetEta1<RA2bTree>,"AK4j1Eta_"+selection_label,"#eta_{j1}^{AK4}",50,-5.,5.); // 0.2 bin
+    plot AK4j2Eta_plot(*fillJetEta2<RA2bTree>,"AK4j2Eta_"+selection_label,"#eta_{j2}^{AK4}",50,-5.,5.);
+    plot AK4j3Eta_plot(*fillJetEta3<RA2bTree>,"AK4j3Eta_"+selection_label,"#eta_{j3}^{AK4}",50,-5.,5.);
+    plot AK4j4Eta_plot(*fillJetEta4<RA2bTree>,"AK4j4Eta_"+selection_label,"#eta_{j4}^{AK4}",50,-5.,5.);
 
-    plot AK4j1Phi_plot(*fillJetPhi1<RA2bTree>,"AK4j1Phi_plot_"+selection_label,"#phi_{j1}^{AK4}",70,-3.5,3.5);
-    plot AK4j2Phi_plot(*fillJetPhi2<RA2bTree>,"AK4j2Phi_plot_"+selection_label,"#phi_{j2}^{AK4}",70,-3.5,3.5);
-    plot AK4j3Phi_plot(*fillJetPhi3<RA2bTree>,"AK4j3Phi_plot_"+selection_label,"#phi_{j3}^{AK4}",70,-3.5,3.5);
-    plot AK4j4Phi_plot(*fillJetPhi4<RA2bTree>,"AK4j4Phi_plot_"+selection_label,"#phi_{j4}^{AK4}",70,-3.5,3.5);
+    plot AK4j1Phi_plot(*fillJetPhi1<RA2bTree>,"AK4j1Phi_"+selection_label,"#phi_{j1}^{AK4}",35,-3.5,3.5);//0.2 bin
+    plot AK4j2Phi_plot(*fillJetPhi2<RA2bTree>,"AK4j2Phi_"+selection_label,"#phi_{j2}^{AK4}",35,-3.5,3.5);
+    plot AK4j3Phi_plot(*fillJetPhi3<RA2bTree>,"AK4j3Phi_"+selection_label,"#phi_{j3}^{AK4}",35,-3.5,3.5);
+    plot AK4j4Phi_plot(*fillJetPhi4<RA2bTree>,"AK4j4Phi_"+selection_label,"#phi_{j4}^{AK4}",35,-3.5,3.5);
 
-    plot AK4j1NEMF_plot(*fillJetNEMF1<RA2bTree>,"AK4j1NEMF_plot_"+selection_label,"NEMF_{j1}^{AK4}",20,0.,1.);
-    plot AK4j2NEMF_plot(*fillJetNEMF2<RA2bTree>,"AK4j2NEMF_plot_"+selection_label,"NEMF_{j2}^{AK4}",20,0.,1.);
-    plot AK4j3NEMF_plot(*fillJetNEMF3<RA2bTree>,"AK4j3NEMF_plot_"+selection_label,"NEMF_{j3}^{AK4}",20,0.,1.);
-    plot AK4j4NEMF_plot(*fillJetNEMF4<RA2bTree>,"AK4j4NEMF_plot_"+selection_label,"NEMF_{j4}^{AK4}",20,0.,1.);
+    plot AK4j1NEMF_plot(*fillJetNEMF1<RA2bTree>,"AK4j1NEMF_"+selection_label,"NEMF_{j1}^{AK4}",20,0.,1.); // 0.05
+    plot AK4j2NEMF_plot(*fillJetNEMF2<RA2bTree>,"AK4j2NEMF_"+selection_label,"NEMF_{j2}^{AK4}",20,0.,1.);
+    plot AK4j3NEMF_plot(*fillJetNEMF3<RA2bTree>,"AK4j3NEMF_"+selection_label,"NEMF_{j3}^{AK4}",20,0.,1.);
+    plot AK4j4NEMF_plot(*fillJetNEMF4<RA2bTree>,"AK4j4NEMF_"+selection_label,"NEMF_{j4}^{AK4}",20,0.,1.);
 
    // 2D plot for AK4 Objects: 
-    plot AK4j1ptvsEtaplot(*fillJetEta1<RA2bTree>,*fillJetPt1<RA2bTree>,"AK4j1ptvsEta_"+selection_label,"#eta_{j1}^{AK4}","pt_{j1}^{AK4} [GeV]",50,-5.,5.,50,0.,1500.); 
-/*    plot AK4j1PhivsEtaplot(*fillJetEta1<RA2bTree>,*fillJetPhi1<RA2bTree>,"AK4j1PhivsEta_"+selection_label,"#eta_{j1}^{AK4}","#phi_{j1}^{AK4}",50,-5.,5.,70,-3.5,3.5); 
+    plot AK4j1ptvsEtaplot(*fillJetEta1<RA2bTree>,*fillJetPt1<RA2bTree>,"AK4j1ptvsEta_"+selection_label,"#eta_{j1}^{AK4}","pt_{j1}^{AK4} [GeV]",50,-5.,5.,25,0.,1000.); 
+    plot AK4j1PhivsEtaplot(*fillJetEta1<RA2bTree>,*fillJetPhi1<RA2bTree>,"AK4j1PhivsEta_"+selection_label,"#eta_{j1}^{AK4}","#phi_{j1}^{AK4}",50,-5.,5.,35,-3.5,3.5); 
     plot AK4j1NEMFvsEtaplot(*fillJetEta1<RA2bTree>,*fillJetNEMF1<RA2bTree>,"AK4j1NEMFvsEta_"+selection_label,"#eta_{j1}^{AK4}","NEMF_{j1}^{AK4}",50,-5.,5.,20,0.,1.); 
-    plot AK4j1NEMFvsPtplot(*fillJetPt1<RA2bTree>,*fillJetNEMF1<RA2bTree>,"AK4j1NEMFvsPt_"+selection_label,"pt_{j1}^{AK4} [GeV]","NEMF_{j1}^{AK4}",50,0.,1500.,20,0.,1.); 
+    plot AK4j1NEMFvsPtplot(*fillJetPt1<RA2bTree>,*fillJetNEMF1<RA2bTree>,"AK4j1NEMFvsPt_"+selection_label,"pt_{j1}^{AK4} [GeV]","NEMF_{j1}^{AK4}",25,0.,1000.,20,0.,1.); 
 
-    plot AK4j2ptvsEtaplot(*fillJetEta2<RA2bTree>,*fillJetPt2<RA2bTree>,"AK4j2ptvsEta_"+selection_label,"#eta_{j2}^{AK4}","pt_{j2}^{AK4} [GeV]",50,-5.,5.,50,0.,1500.); 
-    plot AK4j2PhivsEtaplot(*fillJetEta2<RA2bTree>,*fillJetPhi2<RA2bTree>,"AK4j2PhivsEta_"+selection_label,"#eta_{j2}^{AK4}","#phi_{j2}^{AK4}",50,-5.,5.,70,-3.5,3.5); 
+    plot AK4j2ptvsEtaplot(*fillJetEta2<RA2bTree>,*fillJetPt2<RA2bTree>,"AK4j2ptvsEta_"+selection_label,"#eta_{j2}^{AK4}","pt_{j2}^{AK4} [GeV]",50,-5.,5.,25,0.,1000.); 
+    plot AK4j2PhivsEtaplot(*fillJetEta2<RA2bTree>,*fillJetPhi2<RA2bTree>,"AK4j2PhivsEta_"+selection_label,"#eta_{j2}^{AK4}","#phi_{j2}^{AK4}",50,-5.,5.,35,-3.5,3.5); 
     plot AK4j2NEMFvsEtaplot(*fillJetEta2<RA2bTree>,*fillJetNEMF2<RA2bTree>,"AK4j2NEMFvsEta_"+selection_label,"#eta_{j2}^{AK4}","NEMF_{j2}^{AK4}",50,-5.,5.,20,0.,1.); 
-    plot AK4j2NEMFvsPtplot(*fillJetPt2<RA2bTree>,*fillJetNEMF2<RA2bTree>,"AK4j2NEMFvsPt_"+selection_label,"pt_{j2}^{AK4} [GeV]","NEMF_{j2}^{AK4}",50,0.,1500.,20,0.,1.); 
-*/
+    plot AK4j2NEMFvsPtplot(*fillJetPt2<RA2bTree>,*fillJetNEMF2<RA2bTree>,"AK4j2NEMFvsPt_"+selection_label,"pt_{j2}^{AK4} [GeV]","NEMF_{j2}^{AK4}",25,0.,1000.,20,0.,1.); 
 
-    plot DeltaPhi1plot(*fillDeltaPhi1<RA2bTree>,"DeltaPhi1_"+selection_label,"#Delta#Phi_{1}",20,0,3.1415);
-    plot DeltaPhi2plot(*fillDeltaPhi2<RA2bTree>,"DeltaPhi2_"+selection_label,"#Delta#Phi_{2}",20,0,3.1415);
-    plot DeltaPhi3plot(*fillDeltaPhi3<RA2bTree>,"DeltaPhi3_"+selection_label,"#Delta#Phi_{3}",20,0,3.1415);
-    plot DeltaPhi4plot(*fillDeltaPhi4<RA2bTree>,"DeltaPhi4_"+selection_label,"#Delta#Phi_{4}",20,0,3.1415);
-    plot DeltaPhiAK8JMETplot(*fillDeltaPhiAK8JMET<RA2bTree>,"DeltaPhiAK8JMET_"+selection_label,"#Delta#Phi(AK8J,MET)",20,0,3.1415);
+
+    plot DeltaPhi1plot(*fillDeltaPhi1<RA2bTree>,"DeltaPhi1_"+selection_label,"#Delta#Phi_{1}",16,0,3.2);
+    plot DeltaPhi2plot(*fillDeltaPhi2<RA2bTree>,"DeltaPhi2_"+selection_label,"#Delta#Phi_{2}",16,0,3.2);
+    plot DeltaPhi3plot(*fillDeltaPhi3<RA2bTree>,"DeltaPhi3_"+selection_label,"#Delta#Phi_{3}",16,0,3.2);
+    plot DeltaPhi4plot(*fillDeltaPhi4<RA2bTree>,"DeltaPhi4_"+selection_label,"#Delta#Phi_{4}",16,0,3.2);
+    plot DeltaPhiAK8JMETplot(*fillDeltaPhiAK8JMET<RA2bTree>,"DeltaPhiAK8JMET_"+selection_label,"#Delta#Phi(AK8J,MET)",16,0,3.2);
 
     plot J1pt_Massplot(*fillLeadingJetMass<RA2bTree>,"J1pt_Mass_"+selection_label,"m_{J} [GeV]",54,30.,300.);//5 Gev bin
     plot J1_SDMassplot(*fillLeadingJetSDMass<RA2bTree>,"J1_SDMass_"+selection_label,"SoftDrop m_{J} [GeV]",54,30.,300.);//5 Gev bin
@@ -148,39 +148,39 @@ int main(int argc, char** argv){
     plot GMass2plot(*fillGMass<RA2bTree>,"GMass2_"+selection_label,"M_{G} [GeV]",65,500.,7000.); // 100 GeV bin
     plot ZMTplot(*fillZMT<RA2bTree>,"ZMT_"+selection_label,"MT_{Z} [GeV]",45,500.,5000.); // 100 GeV bin
     plot ZMT1plot(*fillZMT<RA2bTree>,"ZMT1_"+selection_label,"MT_{Z} [GeV]",25,500.,3000.); // 100 GeV bin
-    plot ZMT2plot(*fillZMT<RA2bTree>,"ZMT2_"+selection_label,"MT_{Z} [GeV]",50,0.,5000.); // 100 GeV bin
+    plot ZMT2plot(*fillZMT<RA2bTree>,"ZMT2_"+selection_label,"MT_{Z} [GeV]",20,500.,2500.); // 100 GeV bin
     plot ZMT3plot(*fillZMT<RA2bTree>,"ZMT3_"+selection_label,"MT_{Z} [GeV]",30,2000.,5000.); // 100 GeV bin
-    plot ZMT4plot(*fillZMT<RA2bTree>,"ZMT4_"+selection_label,"MT_{Z} [GeV]",19,100.,2000.); // 100 GeV bin
+    plot ZMT4plot(*fillZMT<RA2bTree>,"ZMT4_"+selection_label,"MT_{Z} [GeV]",20,0.,2000.); // 100 GeV bin
 /*    plot MZ510MTplot(*fillMZ510MT<RA2bTree>,"MZ510MT_"+selection_label,"m_{J} for MT [0.5-1 Tev] [GeV]",54,30.,300.); // 5 GeV bin
     plot MZ1015MTplot(*fillMZ1015MT<RA2bTree>,"MZ1015MT_"+selection_label,"m_{J} for MT [1-1.5 TeV] [GeV]",54,30.,300.); // 5 GeV bin
     plot MZ1520MTplot(*fillMZ1520MT<RA2bTree>,"MZ1520MT_"+selection_label,"m_{J} for MT [1.5-2 TeV] [GeV]",54,30.,300.); // 5 GeV bin
     plot MZ2025MTplot(*fillMZ2025MT<RA2bTree>,"MZ2025MT_"+selection_label,"m_{J} for MT [2-2.5 TeV] [GeV]",54,30.,300.); // 5 GeV bin
     plot MZ2530MTplot(*fillMZ2530MT<RA2bTree>,"MZ2530MT_"+selection_label,"m_{J} for MT [2.5-3.0 TeV] [GeV]",54,30.,300.); // 5 GeV bin
-  */  plot J1pt_Ptplot(*fillLeadingJetPt<RA2bTree>,"J1pt_Pt_"+selection_label,"p_{T,J} [GeV]",56,200.,3000.); //50 GeV bin;
-    plot J1pt_Pt1plot(*fillLeadingJetPt<RA2bTree>,"J1pt_Pt1_"+selection_label,"p_{T,J} [GeV]",60,0.,3000.); //50 GeV bin;
+  */  plot J1pt_Ptplot(*fillLeadingJetPt<RA2bTree>,"AK8L1J_Pt_"+selection_label,"p_{T,J} [GeV]",70,200.,3000.); //40 GeV bin;
+    plot J1pt_Pt1plot(*fillLeadingJetPt<RA2bTree>,"AK8L1J_Pt1_"+selection_label,"p_{T,J} [GeV]",35,200.,1600.); //40 GeV bin;
     //plot J1pt_Ptplot(*fillLeadingJetPt<RA2bTree>,"J1pt_Pt_"+selection_label,"p_{T,J} [GeV]",36,200.,2000.); //50 GeV bin;
     //plot J1pt_Etaplot(*fillLeadingJetEta<RA2bTree>,"J1pt_Eta_"+selection_label,"#eta_{AK8J} [GeV]",30,-3.,3.); //50 GeV bin;
     plot J1pt_Etaplot(*fillLeadingJetEta<RA2bTree>,"J1pt_Eta_"+selection_label,"#eta_{AK8J} [GeV]",50,-5.,5.); //50 GeV bin;
-    plot J1pt_Eta1plot(*fillLeadingJetEta<RA2bTree>,"J1pt_Eta1_"+selection_label,"#eta_{AK8J} [GeV]",20,-2.,2.); //0.2 GeV bin;
+    plot J1pt_Eta1plot(*fillLeadingJetEta<RA2bTree>,"J1pt_Eta1_"+selection_label,"#eta_{AK8J} [GeV]",30,-3.,3.); //0.2 GeV bin;
 
-    plot VBFmjj_plot(*fillVBF_Mjj<RA2bTree>,"VBFmjj_plot_"+selection_label,"m_{jj}^{VBF} [GeV]",40,0,4000);
-    plot VBFptjj_plot(*fillVBF_Ptjj<RA2bTree>,"VBFptjj_plot_"+selection_label,"pt_{jj}^{VBF} [GeV]",40,0,4000);
-    plot VBFj1pt_plot(*fillVBF_j1Pt<RA2bTree>,"VBFj1pt_plot_"+selection_label,"pt_{j1}^{VBF} [GeV]",50,0,1500);
-    plot VBFj2pt_plot(*fillVBF_j2Pt<RA2bTree>,"VBFj2pt_plot_"+selection_label,"pt_{j2}^{VBF} [GeV]",50,0,1500);
-    plot VBFdEta_plot(*fillVBF_dEta<RA2bTree>,"VBFdEta_plot_"+selection_label,"#Delta#eta^{VBF}",20,0,10);
-    plot VBFdPhi_plot(*fillVBF_dPhi<RA2bTree>,"VBFdPhi_"+selection_label,"#Delta#Phi VBF(j1,j2)",20,0,3.1415);
-    plot VBFj1Eta_plot(*fillVBF_j1Eta<RA2bTree>,"VBFj1Eta_plot_"+selection_label,"#eta_{j1}^{VBF}",50,-5.,5.);
-    plot VBFj2Eta_plot(*fillVBF_j2Eta<RA2bTree>,"VBFj2Eta_plot_"+selection_label,"#eta_{j2}^{VBF}",50,-5.,5.);
-    plot VBFj1Phi_plot(*fillVBF_j1Phi<RA2bTree>,"VBFj1Phi_plot_"+selection_label,"#Phi_{j1}^{VBF}",40,-3.1415,3.1415);
-    plot VBFj2Phi_plot(*fillVBF_j2Phi<RA2bTree>,"VBFj2Phi_plot_"+selection_label,"#Phi_{j2}^{VBF}",40,-3.1415,3.1415);
-    plot VBFj1j2Eta_plot(*fillVBF_j1j2Eta<RA2bTree>,"VBFj1j2Eta_plot_"+selection_label,"#eta_{j1.j2}^{VBF}",100,-25,25);
+    plot VBFmjj_plot(*fillVBF_Mjj<RA2bTree>,"VBFmjj_"+selection_label,"m_{jj}^{VBF} [GeV]",40,0,4000);
+    plot VBFptjj_plot(*fillVBF_Ptjj<RA2bTree>,"VBFptjj_"+selection_label,"pt_{jj}^{VBF} [GeV]",40,0,4000);
+    plot VBFj1pt_plot(*fillVBF_j1Pt<RA2bTree>,"VBFj1pt_"+selection_label,"pt_{j1}^{VBF} [GeV]",25,0,1000);
+    plot VBFj2pt_plot(*fillVBF_j2Pt<RA2bTree>,"VBFj2pt_"+selection_label,"pt_{j2}^{VBF} [GeV]",25,0,1000);
+    plot VBFdEta_plot(*fillVBF_dEta<RA2bTree>,"VBFdEta_"+selection_label,"#Delta#eta^{VBF}",50,0,10);
+    plot VBFdPhi_plot(*fillVBF_dPhi<RA2bTree>,"VBFdPhi_"+selection_label,"#Delta#Phi VBF(j1,j2)",16,0,3.2);
+    plot VBFj1Eta_plot(*fillVBF_j1Eta<RA2bTree>,"VBFj1Eta_"+selection_label,"#eta_{j1}^{VBF}",50,-5.,5.);
+    plot VBFj2Eta_plot(*fillVBF_j2Eta<RA2bTree>,"VBFj2Eta_"+selection_label,"#eta_{j2}^{VBF}",50,-5.,5.);
+    plot VBFj1Phi_plot(*fillVBF_j1Phi<RA2bTree>,"VBFj1Phi_"+selection_label,"#Phi_{j1}^{VBF}",32,-3.2,3.2);
+    plot VBFj2Phi_plot(*fillVBF_j2Phi<RA2bTree>,"VBFj2Phi_"+selection_label,"#Phi_{j2}^{VBF}",32,-3.2,3.2);
+    plot VBFj1j2Eta_plot(*fillVBF_j1j2Eta<RA2bTree>,"VBFj1j2Eta_"+selection_label,"#eta_{j1.j2}^{VBF}",250,-25,25);
 
 
     vector<plot> plots;
     plots.push_back(NVtxplot);
     plots.push_back(METplot);
     plots.push_back(MET1plot);
-    plots.push_back(MET2plot);
+    //plots.push_back(MET2plot);
     plots.push_back(HTplot);
     plots.push_back(GMassvsZMTplot);
 
@@ -206,7 +206,7 @@ int main(int argc, char** argv){
     plots.push_back(AK4j4NEMF_plot);
 
     plots.push_back(AK4j1ptvsEtaplot);   
-/*    plots.push_back(AK4j1PhivsEtaplot);  
+    plots.push_back(AK4j1PhivsEtaplot);  
     plots.push_back(AK4j1NEMFvsEtaplot); 
     plots.push_back(AK4j1NEMFvsPtplot);   
 
@@ -214,7 +214,7 @@ int main(int argc, char** argv){
     plots.push_back(AK4j2PhivsEtaplot );
     plots.push_back(AK4j2NEMFvsEtaplot);
     plots.push_back(AK4j2NEMFvsPtplot ); 
-*/
+
     plots.push_back(GMassplot);
     plots.push_back(GMass1plot);
     plots.push_back(GMass2plot);
@@ -272,12 +272,12 @@ int main(int argc, char** argv){
         int numEvents = ntuple->fChain->GetEntries();
         ntupleBranchStatus<RA2bTree>(ntuple);
         TString filename;
+        //if( skims.sampleName[iSample] == "ZJets" ) cout << "ZJets File: " << ntuple->fChain->GetFile()->GetName()<<endl;
         double weight = 0.;
         for( int iEvt = 0 ; iEvt < min(MAX_EVENTS,numEvents) ; iEvt++ ){
         //for( int iEvt = 0 ; iEvt < min(10,numEvents) ; iEvt++ ){
             ntuple->GetEntry(iEvt);
             if( iEvt % 1000000 == 0 ) cout << skims.sampleName[iSample] << ": " << iEvt << "/" << numEvents << endl;
-
             filename = ntuple->fChain->GetFile()->GetName();
             if( ( filename.Contains("SingleLept") || filename.Contains("DiLept") ) && ntuple->madHT>600. )continue;
             if(! selectionFunc(ntuple) ) continue;
@@ -299,6 +299,7 @@ int main(int argc, char** argv){
                 weight *= WJetsNLOWeights(ntuple);
             }
             if( skims.sampleName[iSample] == "ZJets" ){
+               cout << "ZJets File: " << ntuple->fChain->GetFile()->GetName()<<" Num evts: "<<numEvents<<endl;
                 weight *= ZJetsNLOWeights(ntuple);
             }
             // ------------ end weights -------------
