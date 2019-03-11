@@ -1,0 +1,119 @@
+system: root://cmseos.fnal.gov//store/user/lpcsusyhad/SusyRA2Analysis2015/Skims/Run2ProductionV16/
+        root://cmseos.fnal.gov//store/group/lpcdm/noreplica/klamichh/SUSY_VBFZZ_Sig_Samples/
+ZJets: 0/1397777
+ZJets Weight: 0.0469797
+ZJets Weight after NLO: 0.0530396
+ZJets Weight: 0.0428038
+ZJets Weight after NLO: 0.0526966
+ZJets Weight: 0.0324133
+ZJets Weight after NLO: 0.0355021
+ZJets Weight: 0.000104854
+ZJets Weight after NLO: 0.000114846
+ZJets Weight: 0.0288461
+ZJets Weight after NLO: 0.0346809
+ZJets Weight: 0.0483558
+ZJets Weight after NLO: 0.0581369
+ZJets Weight: 0.048844
+ZJets Weight after NLO: 0.0587239
+ZJets Weight: 0.00111003
+ZJets Weight after NLO: 0.00136979
+ZJets Weight: 0.0479923
+ZJets Weight after NLO: 0.0525657
+ZJets Weight: 0.0175852
+ZJets Weight after NLO: 0.0198535
+ZJets Weight: 0.0516724
+ZJets Weight after NLO: 0.0563848
+ZJets Weight: 0.0447874
+ZJets Weight after NLO: 0.0432658
+ZJets Weight: 0.0395353
+ZJets Weight after NLO: 0.044635
+ZJets Weight: 0.0322542
+ZJets Weight after NLO: 0.0330298
+ZJets Weight: 0.0393923
+ZJets Weight after NLO: 0.0403396
+ZJets Weight: 0.000185415
+ZJets Weight after NLO: 0.000228269
+ZJets Weight: 0.0483762
+ZJets Weight after NLO: 0.0567809
+ZJets Weight: 0.00101587
+ZJets Weight after NLO: 0.0012536
+ZJets Weight: 0.0489427
+ZJets Weight after NLO: 0.0508642
+ZJets Weight: 0.0475183
+ZJets Weight after NLO: 0.0586381
+ZJets Weight: 0.0477953
+ZJets Weight after NLO: 0.0523499
+ZJets Weight: 0.0500613
+ZJets Weight after NLO: 0.0620786
+ZJets Weight: 0.0522603
+ZJets Weight after NLO: 0.0543121
+ZJets Weight: 0.0516112
+ZJets Weight after NLO: 0.0605781
+ZJets Weight: 0.0543443
+ZJets Weight after NLO: 0.0613542
+ZJets Weight: 0.041089
+ZJets Weight after NLO: 0.0482277
+ZJets Weight: 0.0403821
+ZJets Weight after NLO: 0.0422439
+ZJets Weight: 0.000994536
+ZJets Weight after NLO: 0.00112282
+ZJets Weight: 0.0460494
+ZJets Weight after NLO: 0.0504377
+ZJets Weight: 0.0671896
+ZJets Weight after NLO: 0.0698275
+ZJets Weight: 0.0100101
+ZJets Weight after NLO: 0.0117143
+ZJets Weight: 0.042984
+ZJets Weight after NLO: 0.0470802
+ZJets Weight: 0.057782
+ZJets Weight after NLO: 0.0591716
+ZJets Weight: 0.0505148
+ZJets Weight after NLO: 0.0592911
+ZJets Weight: 0.0478663
+ZJets Weight after NLO: 0.0561825
+ZJets Weight: 0.0498616
+ZJets Weight after NLO: 0.0599473
+ZJets Weight: 0.0214346
+ZJets Weight after NLO: 0.0264506
+ZJets Weight: 0.0514754
+ZJets Weight after NLO: 0.0633725
+ZJets Weight: 0.038191
+ZJets Weight after NLO: 0.0396904
+ZJets Weight: 0.00465584
+ZJets Weight after NLO: 0.0055976
+ZJets Weight: 0.0552429
+ZJets Weight after NLO: 0.0602809
+ZJets Weight: 0.0459074
+ZJets Weight after NLO: 0.0480239
+ZJets Weight: 0.0405369
+ZJets Weight after NLO: 0.0487365
+ZJets Weight: 0.0439485
+ZJets Weight after NLO: 0.051584
+ZJets Weight: 0.00994667
+ZJets Weight after NLO: 0.0116748
+ZJets Weight: 0.0501361
+ZJets Weight after NLO: 0.0602774
+ZJets Weight: 0.0687712
+ZJets Weight after NLO: 0.0826819
+ZJets Weight: 0.0394444
+ZJets Weight after NLO: 0.0432033
+ZJets Weight: 0.0700813
+ZJets Weight after NLO: 0.084257
+ZJets Weight: 0.0498107
+ZJets Weight after NLO: 0.0584646
+ZJets Weight: 0.0513635
+ZJets Weight after NLO: 0.0560477
+ZJets Weight: 0.0423334
+ZJets Weight after NLO: 0.0496883
+ZJets Weight: 0.0401632
+ZJets Weight after NLO: 0.043826
+ZJets Weight: 0.0641334
+ZJets Weight after NLO: 0.0699822
+ZJets Weight: 0.0527052
+ZJets Weight after NLO: 0.0551352
+ZJets Weight: 0.0414394
+ZJets Weight after NLO: 0.0467846
+Skims check 1: VBFG1000
+Skims check Num evts: 50000
+VBFG1000: 0/50000
+data_MET: 0/100

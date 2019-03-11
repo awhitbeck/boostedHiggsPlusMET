@@ -46,9 +46,9 @@ double ZMT(double pt1, double phi1, double pt2, double phi2){
 template<typename ntupleType>void ntupleBranchStatus(ntupleType* ntuple){
   ntuple->fChain->SetBranchStatus("*",0);
   ntuple->fChain->SetBranchStatus("Muons",1);
-  //ntuple->fChain->SetBranchStatus("NMuons",1);
+  ntuple->fChain->SetBranchStatus("NMuons",1);
   ntuple->fChain->SetBranchStatus("Electrons",1);
-  //ntuple->fChain->SetBranchStatus("NElectrons",1);
+  ntuple->fChain->SetBranchStatus("NElectrons",1);
   ntuple->fChain->SetBranchStatus("isoElectronTracksclean",1);
   ntuple->fChain->SetBranchStatus("isoMuonTracksclean",1);
   ntuple->fChain->SetBranchStatus("isoPionTracksclean",1);
@@ -56,14 +56,15 @@ template<typename ntupleType>void ntupleBranchStatus(ntupleType* ntuple){
   //ntuple->fChain->SetBranchStatus("isoElectronTracks",1);
   //ntuple->fChain->SetBranchStatus("isoMuonTracks",1);
   //ntuple->fChain->SetBranchStatus("isoPionTracks",1);
-  ntuple->fChain->SetBranchStatus("Photon*",1);
+  //ntuple->fChain->SetBranchStatus("Photon*",1);
+  ntuple->fChain->SetBranchStatus("Photons*",1);
   ntuple->fChain->SetBranchStatus("DeltaPhi*",1);
   
   ntuple->fChain->SetBranchStatus("TriggerNames",1); 
   ntuple->fChain->SetBranchStatus("TriggerPass",1);
   ntuple->fChain->SetBranchStatus("MHT",1);
+  ntuple->fChain->SetBranchStatus("madHT",1);  
   ntuple->fChain->SetBranchStatus("HT*",1);
-  //ntuple->fChain->SetBranchStatus("HT",1);
   ntuple->fChain->SetBranchStatus("NJets",1);
   ntuple->fChain->SetBranchStatus("BTags*",1);
   //ntuple->fChain->SetBranchStatus("BTags",1);
@@ -73,17 +74,18 @@ template<typename ntupleType>void ntupleBranchStatus(ntupleType* ntuple){
 
   ntuple->fChain->SetBranchStatus("HTclean",1);
   ntuple->fChain->SetBranchStatus("NJetsclean",1);
+  ntuple->fChain->SetBranchStatus("NJets",1);
   ntuple->fChain->SetBranchStatus("BTagsclean",1);
   ntuple->fChain->SetBranchStatus("METclean",1);
   ntuple->fChain->SetBranchStatus("METPhiclean",1);
 
   ntuple->fChain->SetBranchStatus("JetsAK8*",1);
   ntuple->fChain->SetBranchStatus("Jets*",1);
+  //ntuple->fChain->SetBranchStatus("Weight*",1);  
   ntuple->fChain->SetBranchStatus("Weight",1);  
   ntuple->fChain->SetBranchStatus("pu*",1);  
   //ntuple->fChain->SetBranchStatus("puWeightNew",1);  
   ntuple->fChain->SetBranchStatus("TrueNumInteractions",1);  
-  ntuple->fChain->SetBranchStatus("TriggerPass",1);  
   ntuple->fChain->SetBranchStatus("*Filter",1);
   //ntuple->fChain->SetBranchStatus("HBHENoiseFilter",1);
   //ntuple->fChain->SetBranchStatus("HBHEIsoNoiseFilter",1);
@@ -93,6 +95,7 @@ template<typename ntupleType>void ntupleBranchStatus(ntupleType* ntuple){
   //ntuple->fChain->SetBranchStatus("BadChargedCandidateFilter",1);
   //ntuple->fChain->SetBranchStatus("globalTightHalo2016Filter",1);
   ntuple->fChain->SetBranchStatus("CaloMET",1);
+  ntuple->fChain->SetBranchStatus("PFCaloMETRatio",1);
   ntuple->fChain->SetBranchStatus("NVtx",1);
   ntuple->fChain->SetBranchStatus("NumInteractions",1);
   ntuple->fChain->SetBranchStatus("nAllVertices",1);
@@ -101,8 +104,13 @@ template<typename ntupleType>void ntupleBranchStatus(ntupleType* ntuple){
   ntuple->fChain->SetBranchStatus("NJetsISR",1);
   ntuple->fChain->SetBranchStatus("madMinDeltaRStatus",1);
   ntuple->fChain->SetBranchStatus("madMinPhotonDeltaR",1);
-
+  ntuple->fChain->SetBranchStatus("ZCandidates",1);
   ntuple->fChain->SetBranchStatus("GenParticles*",1);
+  ntuple->fChain->SetBranchStatus("NonPrefiringProb",1);
+  ntuple->fChain->SetBranchStatus("NonPrefiringProbUp",1);
+  ntuple->fChain->SetBranchStatus("NonPrefiringProbDn",1);
+  ntuple->fChain->SetBranchStatus("HTRatioDPhiFilter",1);
+      
 }
 
 /***************************************************************/

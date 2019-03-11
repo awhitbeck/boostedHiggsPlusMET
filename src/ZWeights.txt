@@ -1,0 +1,23 @@
+system: root://cmseos.fnal.gov//store/user/lpcsusyhad/SusyRA2Analysis2015/Skims/Run2ProductionV16/
+        root://cmseos.fnal.gov//store/group/lpcdm/noreplica/klamichh/SUSY_VBFZZ_Sig_Samples/
+ZJets: 0/4224360
+ZJets Weight: 0.44472
+ZJets Weight after NLO: 0.551477
+ZJets Weight: 0.476388
+ZJets Weight after NLO: 0.590746
+ZJets Weight: 0.426214
+ZJets Weight after NLO: 0.528527
+ZJets Weight: 0.388222
+ZJets Weight after NLO: 0.477948
+ZJets Weight: 0.455277
+ZJets Weight after NLO: 0.561817
+ZJets Weight: 0.504406
+ZJets Weight after NLO: 0.625489
+ZJets Weight: 0.452409
+ZJets Weight after NLO: 0.561011
+ZJets Weight: 0.00581604
+ZJets Weight after NLO: 0.00717706
+Skims check 1: VBFG1000
+Skims check Num evts: 50000
+VBFG1000: 0/50000
+data_MET: 0/100

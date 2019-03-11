@@ -304,7 +304,9 @@ int main(int argc, char** argv){
             }
             if( skims.sampleName[iSample] == "ZJets" ){
                //cout << "ZJets File: " << ntuple->fChain->GetFile()->GetName()<<" Num evts: "<<numEvents<<endl;
+               //cout << "ZJets Weight: " << weight<<endl;
                 weight *= ZJetsNLOWeights(ntuple);
+               //cout << "ZJets Weight after NLO: " << weight<<endl;
             }
             // ------------ end weights -------------
 	    //cout << "event passed all selections" << endl;
@@ -314,11 +316,11 @@ int main(int argc, char** argv){
         }
     }
 
-    cout << " = = = = = = = = = end of background loop " << endl; 
-    for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++ ){
+    //cout << " = = = = = = = = = end of background loop " << endl; 
+ /*   for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++ ){
       plots[iPlot].dump();
     }
-
+*/
     // Signal samples
     vector<RA2bTree*> sigSamples;
     for( int iSample = 0 ; iSample < skims.signalNtuples.size() ; iSample++){
