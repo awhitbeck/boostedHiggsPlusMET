@@ -717,7 +717,7 @@ template<typename ntupleType> bool FiltersCut(ntupleType* ntuple){
     return ntuple->HBHENoiseFilter==1 && 
         ntuple->HBHEIsoNoiseFilter==1 && 
         ntuple->eeBadScFilter==1 &&
-        ntuple->ecalBadCalibFilter==1 && //New 
+        //ntuple->ecalBadCalibFilter==1 && //New 
         ntuple->EcalDeadCellTriggerPrimitiveFilter == 1 && 
         ntuple->NVtx>0 && 
         ntuple->MET/ntuple->CaloMET < 5. &&
@@ -972,7 +972,8 @@ template<typename ntupleType> bool VBFCuts(ntupleType* ntuple){
 // end of B2G ZV VBF part
 template<typename ntupleType> bool AK8JetSideBandCut(ntupleType* ntuple){
     //return   (ntuple->JetsAK8_prunedMass->size() >= 1  &&
-    return   (ntuple->JetsAK8_softDropMass->size() >= 1  &&
+    //return   (ntuple->JetsAK8_softDropMass->size() >= 1  &&
+    return   (ntuple->JetsAK8->size() >= 1  &&
               (
                ( ntuple->JetsAK8_softDropMass->at(0) > 30. && ntuple->JetsAK8_softDropMass->at(0) < 65.) ||
                ( ntuple->JetsAK8_softDropMass->at(0) > 135. && ntuple->JetsAK8_softDropMass->at(0) < 300.)
@@ -1012,18 +1013,17 @@ template<typename ntupleType> bool LowPurityCut(ntupleType* ntuple){
 
 // 1) Baseline selection without VBF cut
 template<typename ntupleType> bool baselineCutNoVBF(ntupleType* ntuple){
-  return ( METCut(ntuple)  &&
-           //ZMTCut(ntuple) && 
-           AK8JetPtCut(ntuple) && 
-           DeltaPhiCuts(ntuple) &&
-           //DeltaPhiAK8JMETCut(ntuple) && 
-           ntuple->Photons->size()==0 &&  
-           ntuple->Muons->size()==0 &&
-           ntuple->Electrons->size()==0 &&
-           ntuple->BTags == 0 && // ntuple->BTagsDeepCSV==0; 
-           ntuple->isoElectronTracks==0 && ntuple->isoMuonTracks==0 && ntuple->isoPionTracks==0 &&
-           FiltersCut(ntuple) &&
-           ntuple->JetID == 1);
+  return (  METCut(ntuple) &&
+	        AK8JetPtCut(ntuple) && 
+	        DeltaPhiCuts(ntuple) &&
+	  //ntuple->Photons->size()==0 &&  
+            ntuple->Muons->size()==0 &&
+            ntuple->Electrons->size()==0 &&
+            ntuple->BTags == 0 && // ntuple->BTagsDeepCSV==0; 
+            ntuple->isoElectronTracks==0 && ntuple->isoMuonTracks==0 && ntuple->isoPionTracks==0 &&
+	        FiltersCut(ntuple) &&
+            ntuple->JetID == 1
+	     );
 }
     
 // 2) Baseline with VBF cut

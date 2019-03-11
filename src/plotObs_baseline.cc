@@ -89,14 +89,13 @@ int main(int argc, char** argv){
 
     plot NVtxplot(*fillNVtx<RA2bTree>,"NVtx_"+selection_label,"NVtx",80,0.5,80.5);//1 bin
     plot METplot(*fillMET<RA2bTree>,"MET_"+selection_label,"MET [GeV]",70,200.,3000.);//40 GeV bin
-    //plot MET2plot(*fillMET<RA2bTree>,"MET2_"+selection_label,"MET [GeV]",60,0.,3000.);//50 GeV bin
     plot MET1plot(*fillMET<RA2bTree>,"MET1_"+selection_label,"MET [GeV]",25,200.,1200.);//40 GeV bin
     plot HTplot(*fillHT<RA2bTree>,"HT_"+selection_label,"H_{T} [GeV]",75,300,3300.); // 100 GeV bin
-    plot NJetsplot(*fillNJets<RA2bTree>,"NJets_"+selection_label,"n_{jets}",10,0.5,10.5);
+ /*   plot NJetsplot(*fillNJets<RA2bTree>,"NJets_"+selection_label,"n_{jets}",10,0.5,10.5);
     plot NAK8Jetsplot(*fillNJets<RA2bTree>,"NAK8Jets_"+selection_label,"nAK8_{jets}",10,0.5,10.5);
-    plot madHT(*fillMadHT<RA2bTree>,"madHT_"+selection_label,"Madgraph HT",19,100,2000);
+  */  plot madHT(*fillMadHT<RA2bTree>,"madHT_"+selection_label,"Madgraph HT",19,100,2000);
     // AK4 Jets plots: pt, eta, phi, Nemf
-    plot AK4j1pt_plot(*fillJetPt1<RA2bTree>,"AK4j1pt_"+selection_label,"pt_{j1}^{AK4} [GeV]",25,0,1000);//40 GeV bin
+/*    plot AK4j1pt_plot(*fillJetPt1<RA2bTree>,"AK4j1pt_"+selection_label,"pt_{j1}^{AK4} [GeV]",25,0,1000);//40 GeV bin
     plot AK4j2pt_plot(*fillJetPt2<RA2bTree>,"AK4j2pt_"+selection_label,"pt_{j2}^{AK4} [GeV]",25,0,1000);
     plot AK4j3pt_plot(*fillJetPt3<RA2bTree>,"AK4j3pt_"+selection_label,"pt_{j3}^{AK4} [GeV]",25,0,1000);
     plot AK4j4pt_plot(*fillJetPt4<RA2bTree>,"AK4j4pt_"+selection_label,"pt_{j4}^{AK4} [GeV]",25,0,1000);
@@ -116,9 +115,9 @@ int main(int argc, char** argv){
     plot AK4j2NEMF_plot(*fillJetNEMF2<RA2bTree>,"AK4j2NEMF_"+selection_label,"NEMF_{j2}^{AK4}",20,0.,1.);
     plot AK4j3NEMF_plot(*fillJetNEMF3<RA2bTree>,"AK4j3NEMF_"+selection_label,"NEMF_{j3}^{AK4}",20,0.,1.);
     plot AK4j4NEMF_plot(*fillJetNEMF4<RA2bTree>,"AK4j4NEMF_"+selection_label,"NEMF_{j4}^{AK4}",20,0.,1.);
-
+*/
    // 2D plot for AK4 Objects: 
-    plot AK4j1ptvsEtaplot(*fillJetEta1<RA2bTree>,*fillJetPt1<RA2bTree>,"AK4j1ptvsEta_"+selection_label,"#eta_{j1}^{AK4}","pt_{j1}^{AK4} [GeV]",50,-5.,5.,25,0.,1000.); 
+/*    plot AK4j1ptvsEtaplot(*fillJetEta1<RA2bTree>,*fillJetPt1<RA2bTree>,"AK4j1ptvsEta_"+selection_label,"#eta_{j1}^{AK4}","pt_{j1}^{AK4} [GeV]",50,-5.,5.,25,0.,1000.); 
     plot AK4j1PhivsEtaplot(*fillJetEta1<RA2bTree>,*fillJetPhi1<RA2bTree>,"AK4j1PhivsEta_"+selection_label,"#eta_{j1}^{AK4}","#phi_{j1}^{AK4}",50,-5.,5.,35,-3.5,3.5); 
     plot AK4j1NEMFvsEtaplot(*fillJetEta1<RA2bTree>,*fillJetNEMF1<RA2bTree>,"AK4j1NEMFvsEta_"+selection_label,"#eta_{j1}^{AK4}","NEMF_{j1}^{AK4}",50,-5.,5.,20,0.,1.); 
     plot AK4j1NEMFvsPtplot(*fillJetPt1<RA2bTree>,*fillJetNEMF1<RA2bTree>,"AK4j1NEMFvsPt_"+selection_label,"pt_{j1}^{AK4} [GeV]","NEMF_{j1}^{AK4}",25,0.,1000.,20,0.,1.); 
@@ -127,8 +126,8 @@ int main(int argc, char** argv){
     plot AK4j2PhivsEtaplot(*fillJetEta2<RA2bTree>,*fillJetPhi2<RA2bTree>,"AK4j2PhivsEta_"+selection_label,"#eta_{j2}^{AK4}","#phi_{j2}^{AK4}",50,-5.,5.,35,-3.5,3.5); 
     plot AK4j2NEMFvsEtaplot(*fillJetEta2<RA2bTree>,*fillJetNEMF2<RA2bTree>,"AK4j2NEMFvsEta_"+selection_label,"#eta_{j2}^{AK4}","NEMF_{j2}^{AK4}",50,-5.,5.,20,0.,1.); 
     plot AK4j2NEMFvsPtplot(*fillJetPt2<RA2bTree>,*fillJetNEMF2<RA2bTree>,"AK4j2NEMFvsPt_"+selection_label,"pt_{j2}^{AK4} [GeV]","NEMF_{j2}^{AK4}",25,0.,1000.,20,0.,1.); 
-
-
+*/
+/*
     plot DeltaPhi1plot(*fillDeltaPhi1<RA2bTree>,"DeltaPhi1_"+selection_label,"#Delta#Phi_{1}",16,0,3.2);
     plot DeltaPhi2plot(*fillDeltaPhi2<RA2bTree>,"DeltaPhi2_"+selection_label,"#Delta#Phi_{2}",16,0,3.2);
     plot DeltaPhi3plot(*fillDeltaPhi3<RA2bTree>,"DeltaPhi3_"+selection_label,"#Delta#Phi_{3}",16,0,3.2);
@@ -142,7 +141,7 @@ int main(int argc, char** argv){
     plot J1pt_Tau21plot(*fillLeadingTau21<RA2bTree>,"J1pt_Tau21_"+selection_label,"#tau_{21}",20,0.,1.);
     plot DDT_Tau21plot(*fillDDT<RA2bTree>,"DDT_Tau21_"+selection_label,"DDT",20,0.,1.);
 
-    plot GMassvsZMTplot(*fillGMass<RA2bTree>,*fillZMT<RA2bTree>,"GMassvsZMT_"+selection_label,"M_{G} [GeV]","MT_{Z} [GeV]",25,500.,3000.,45,500.,5000.); // 100 GeV bin
+    //plot GMassvsZMTplot(*fillGMass<RA2bTree>,*fillZMT<RA2bTree>,"GMassvsZMT_"+selection_label,"M_{G} [GeV]","MT_{Z} [GeV]",25,500.,3000.,45,500.,5000.); // 100 GeV bin
     plot GMassplot(*fillGMass<RA2bTree>,"GMass_"+selection_label,"M_{G} [GeV]",25,500.,3000.); // 100 GeV bin
     plot GMass1plot(*fillGMass<RA2bTree>,"GMass1_"+selection_label,"M_{G} [GeV]",70,0.,7000.); // 100 GeV bin
     plot GMass2plot(*fillGMass<RA2bTree>,"GMass2_"+selection_label,"M_{G} [GeV]",65,500.,7000.); // 100 GeV bin
@@ -151,6 +150,7 @@ int main(int argc, char** argv){
     plot ZMT2plot(*fillZMT<RA2bTree>,"ZMT2_"+selection_label,"MT_{Z} [GeV]",20,500.,2500.); // 100 GeV bin
     plot ZMT3plot(*fillZMT<RA2bTree>,"ZMT3_"+selection_label,"MT_{Z} [GeV]",30,2000.,5000.); // 100 GeV bin
     plot ZMT4plot(*fillZMT<RA2bTree>,"ZMT4_"+selection_label,"MT_{Z} [GeV]",20,0.,2000.); // 100 GeV bin
+*/
 /*    plot MZ510MTplot(*fillMZ510MT<RA2bTree>,"MZ510MT_"+selection_label,"m_{J} for MT [0.5-1 Tev] [GeV]",54,30.,300.); // 5 GeV bin
     plot MZ1015MTplot(*fillMZ1015MT<RA2bTree>,"MZ1015MT_"+selection_label,"m_{J} for MT [1-1.5 TeV] [GeV]",54,30.,300.); // 5 GeV bin
     plot MZ1520MTplot(*fillMZ1520MT<RA2bTree>,"MZ1520MT_"+selection_label,"m_{J} for MT [1.5-2 TeV] [GeV]",54,30.,300.); // 5 GeV bin
@@ -160,7 +160,7 @@ int main(int argc, char** argv){
     plot J1pt_Pt1plot(*fillLeadingJetPt<RA2bTree>,"AK8L1J_Pt1_"+selection_label,"p_{T,J} [GeV]",35,200.,1600.); //40 GeV bin;
     //plot J1pt_Ptplot(*fillLeadingJetPt<RA2bTree>,"J1pt_Pt_"+selection_label,"p_{T,J} [GeV]",36,200.,2000.); //50 GeV bin;
     //plot J1pt_Etaplot(*fillLeadingJetEta<RA2bTree>,"J1pt_Eta_"+selection_label,"#eta_{AK8J} [GeV]",30,-3.,3.); //50 GeV bin;
-    plot J1pt_Etaplot(*fillLeadingJetEta<RA2bTree>,"J1pt_Eta_"+selection_label,"#eta_{AK8J} [GeV]",50,-5.,5.); //50 GeV bin;
+    /*plot J1pt_Etaplot(*fillLeadingJetEta<RA2bTree>,"J1pt_Eta_"+selection_label,"#eta_{AK8J} [GeV]",50,-5.,5.); //50 GeV bin;
     plot J1pt_Eta1plot(*fillLeadingJetEta<RA2bTree>,"J1pt_Eta1_"+selection_label,"#eta_{AK8J} [GeV]",30,-3.,3.); //0.2 GeV bin;
 
     plot VBFmjj_plot(*fillVBF_Mjj<RA2bTree>,"VBFmjj_"+selection_label,"m_{jj}^{VBF} [GeV]",40,0,4000);
@@ -174,17 +174,16 @@ int main(int argc, char** argv){
     plot VBFj1Phi_plot(*fillVBF_j1Phi<RA2bTree>,"VBFj1Phi_"+selection_label,"#Phi_{j1}^{VBF}",32,-3.2,3.2);
     plot VBFj2Phi_plot(*fillVBF_j2Phi<RA2bTree>,"VBFj2Phi_"+selection_label,"#Phi_{j2}^{VBF}",32,-3.2,3.2);
     plot VBFj1j2Eta_plot(*fillVBF_j1j2Eta<RA2bTree>,"VBFj1j2Eta_"+selection_label,"#eta_{j1.j2}^{VBF}",250,-25,25);
-
+*/
 
     vector<plot> plots;
     plots.push_back(NVtxplot);
     plots.push_back(METplot);
     plots.push_back(MET1plot);
-    //plots.push_back(MET2plot);
     plots.push_back(HTplot);
-    plots.push_back(GMassvsZMTplot);
+  //  plots.push_back(GMassvsZMTplot);
     plots.push_back(madHT);
-
+/*
     plots.push_back(AK4j1pt_plot);
     plots.push_back(AK4j2pt_plot);
     plots.push_back(AK4j3pt_plot);
@@ -205,7 +204,8 @@ int main(int argc, char** argv){
     plots.push_back(AK4j2NEMF_plot);
     plots.push_back(AK4j3NEMF_plot);
     plots.push_back(AK4j4NEMF_plot);
-
+*/
+/*
     plots.push_back(AK4j1ptvsEtaplot);   
     plots.push_back(AK4j1PhivsEtaplot);  
     plots.push_back(AK4j1NEMFvsEtaplot); 
@@ -215,8 +215,8 @@ int main(int argc, char** argv){
     plots.push_back(AK4j2PhivsEtaplot );
     plots.push_back(AK4j2NEMFvsEtaplot);
     plots.push_back(AK4j2NEMFvsPtplot ); 
-
-    plots.push_back(GMassplot);
+*/
+ /*   plots.push_back(GMassplot);
     plots.push_back(GMass1plot);
     plots.push_back(GMass2plot);
     plots.push_back(ZMTplot);
@@ -224,12 +224,13 @@ int main(int argc, char** argv){
     plots.push_back(ZMT2plot);
     plots.push_back(ZMT3plot);
     plots.push_back(ZMT4plot);
-    /*plots.push_back(MZ510MTplot);
+   */ /*plots.push_back(MZ510MTplot);
     plots.push_back(MZ1015MTplot);
     plots.push_back(MZ1520MTplot);
     plots.push_back(MZ2025MTplot);
     plots.push_back(MZ2530MTplot);
-    */plots.push_back(NJetsplot);
+    */
+    /*plots.push_back(NJetsplot);
     plots.push_back(NAK8Jetsplot);
 
     plots.push_back(DeltaPhi1plot);
@@ -243,9 +244,9 @@ int main(int argc, char** argv){
     plots.push_back(J1pt_Mass1plot);
     plots.push_back(J1pt_Tau21plot);
     plots.push_back(DDT_Tau21plot);
-    plots.push_back(J1pt_Ptplot);
+  */  plots.push_back(J1pt_Ptplot);
     plots.push_back(J1pt_Pt1plot);
-    plots.push_back(J1pt_Etaplot);
+   /* plots.push_back(J1pt_Etaplot);
     plots.push_back(J1pt_Eta1plot);
 
     plots.push_back(VBFmjj_plot);
@@ -259,7 +260,7 @@ int main(int argc, char** argv){
     plots.push_back(VBFj1Phi_plot);
     plots.push_back(VBFj2Phi_plot);
     plots.push_back(VBFj1j2Eta_plot);
-
+*/
     // background MC samples
     for( int iSample = 0 ; iSample < skims.ntuples.size() ; iSample++){
 
@@ -277,6 +278,7 @@ int main(int argc, char** argv){
         double weight = 0.;
         for( int iEvt = 0 ; iEvt < min(MAX_EVENTS,numEvents) ; iEvt++ ){
         //for( int iEvt = 0 ; iEvt < min(10,numEvents) ; iEvt++ ){
+	    //ntuple->fChain->Show(0);
             ntuple->GetEntry(iEvt);
 	    // if( iEvt % 100 == 0 ){
 	    //   cout << plots[3].tagMap[ntuple] << endl;
@@ -288,13 +290,6 @@ int main(int argc, char** argv){
             if( ( filename.Contains("SingleLept") || filename.Contains("DiLept") ) && ntuple->madHT>600. )continue;
             if(! selectionFunc(ntuple) ) continue;
 
-            // print out trigger name
-            /*
-            int n = ntuple->TriggerNames->size();
-            for(int i=0; i<n; i++){
-                std::cout<<"Trigger Names: "<<ntuple->TriggerNames->at(i)<<std::endl;
-            }
-            */       
             // end of Trigger name printout
             // ---------- custom weights -----------
             std::vector<double> EfficiencyCenterUpDown = Eff_MetMhtSextetReal_CenterUpDown(ntuple->HT, ntuple->MHT, ntuple->NJets);
@@ -319,10 +314,10 @@ int main(int argc, char** argv){
         }
     }
 
-    // cout << " = = = = = = = = = end of background loop " << endl; 
-    // for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++ ){
-    //   plots[iPlot].dump();
-    // }
+    cout << " = = = = = = = = = end of background loop " << endl; 
+    for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++ ){
+      plots[iPlot].dump();
+    }
 
     // Signal samples
     vector<RA2bTree*> sigSamples;
@@ -361,10 +356,10 @@ int main(int argc, char** argv){
                   //plots[iPlot].fillSignal(ntuple,1);
                   plots[iPlot].fillSignal(ntuple,ntuple->Weight*lumi*0.001);
   */
-               if (skims.signalSampleName[iSample]=="VBFG2000") 
+               //if (skims.signalSampleName[iSample]=="VBFG2000") 
                   //plots[iPlot].fillSignal(ntuple,1);
                   //plots[iPlot].fillSignal(ntuple,ntuple->Weight*lumi*0.001);
-                  plots[iPlot].fillSignal(ntuple,ntuple->Weight*lumi*1);
+                  //plots[iPlot].fillSignal(ntuple,ntuple->Weight*lumi*1);
 /*               if (skims.signalSampleName[iSample]=="VBFG2500") 
                   //plots[iPlot].fillSignal(ntuple,1);
                   plots[iPlot].fillSignal(ntuple,ntuple->Weight*lumi*0.001);
@@ -397,8 +392,8 @@ int main(int argc, char** argv){
   
     int numEvents = ntuple->fChain->GetEntries();
     ntupleBranchStatus<RA2bTree>(ntuple);
-    //for( int iEvt = 0 ; iEvt < min(MAX_EVENTS,numEvents) ; iEvt++ ){
-    for( int iEvt = 0 ; iEvt < min(10,numEvents) ; iEvt++ ){
+    for( int iEvt = 0 ; iEvt < min(MAX_EVENTS,numEvents) ; iEvt++ ){
+    //for( int iEvt = 0 ; iEvt < min(10,numEvents) ; iEvt++ ){
         ntuple->GetEntry(iEvt);
         if( iEvt % 1000000 == 0 ) cout << "data_MET: " << iEvt << "/" << min(MAX_EVENTS,numEvents) << endl;
         if(! selectionFunc(ntuple) ) continue;
@@ -420,9 +415,10 @@ int main(int argc, char** argv){
         TCanvas* can = new TCanvas("can","can",500,500);
         //plots[iPlot].dataHist = NULL;
         //plots[iPlot].Write();
-        if (plots[iPlot].is2Dhist) continue;
+        //if (plots[iPlot].is2Dhist) continue;
         //plots[iPlot].DrawNoRatio(can,skims.ntuples,sigSamples,"../plots/plotObs_"+selection_label+"_plots");
-        plots[iPlot].Draw(can,skims.ntuples,sigSamples,"../plots_V16_2016/plotObs_"+selection_label+"_plots",0.1,2.0,false);
+        plots[iPlot].Draw(can,skims.ntuples,sigSamples,"../plots_V16_2016/plotObs_"+selection_label+"_plots",0.1,2.0,true);
+        //plots[iPlot].Draw(can,skims.ntuples,sigSamples,"../plots_V16_2016/plotObs_"+selection_label+"_plots",0.1,2.0,false);
         //plots[iPlot].Draw(can,skims.ntuples,sigSamples,"../plots/plotObs_"+selection_label+"_plots",0.1,2.0,true);
         plots[iPlot].sum->Write();
     }
