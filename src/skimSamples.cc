@@ -14,9 +14,7 @@ public :
   TString BASE_DIR, SIGNAL_DIR;
   
     TChain *WJets,*ZJets,*QCD,*SnglT,*TT,*GJets,*GJets0p4,*Other,*DY,*TTinc;
-    //TChain *VBFG1000, *VBFG1200, *VBFG1400, *VBFG1600, *VBFG1800, *VBFG2000, *VBFG2500, *VBFG3000, *VBFG3500, *VBFG4000, *VBFG4500;
-    TChain *VBFG1000;
-    //TChain *VBFG1000, *VBFG2000;
+    TChain *VBFG1000, *VBFG1200, *VBFG1400, *VBFG1600, *VBFG1800, *VBFG2000, *VBFG2500, *VBFG3000, *VBFG3500, *VBFG4000, *VBFG4500;
     TChain *data;
     std::vector<RA2bTree*> ntuples,signalNtuples;
     RA2bTree* dataNtuple;
@@ -39,8 +37,8 @@ public :
 	  cout << "system: " << BASE_DIR << endl;
 	  cout << "        " << SIGNAL_DIR << endl;
 	}else if( sys == kTTU ){
-	  BASE_DIR="/lustre/hep/awhitbec/RA2bSkims2016/Run2ProductionV12/";
-	  SIGNAL_DIR="/lustre/hep/awhitbec/RA2bSkims2016/Run2ProductionV12/VBF_signal/";
+	  BASE_DIR="/home/whitbeck/raid/temp/SusyRA2Analysis2015/Skims/Run2ProductionV16/";
+	  SIGNAL_DIR="/home/whitbeck/raid/temp/SusyRA2Analysis2015/Skims/Run2ProductionV16/";
 	  cout << "system: " << BASE_DIR << endl;
 	  cout << "        " << SIGNAL_DIR << endl;
 	}else{
@@ -83,13 +81,13 @@ public :
         for( unsigned int i = 0 ; i < QCDFileNames.size() ; i++ ){
             QCD->Add(skimType+"/"+QCDFileNames[i]);
         }
-/*        if( r == kSignal || r == kPhoton || r == kLowDphi ){
+        if( r == kSignal || r == kPhoton || r == kLowDphi ){
             ntuples.push_back(new RA2bTree(QCD));
             sampleName.push_back("QCD");
             fillColor.push_back(kGray);
             lineColor.push_back(1);
         }
-*/
+
         std::vector<TString> SnglTFileNames;
         //SnglTFileNames.push_back("tree_ST_s-channel.root");
         SnglTFileNames.push_back("tree_ST_s-channel_MC2016.root");
@@ -101,18 +99,11 @@ public :
         for( unsigned int i = 0 ; i < SnglTFileNames.size() ; i++ ) {
             SnglT->Add(skimType+"/"+SnglTFileNames[i]);
         }
-       /* if( r == kSignal || r == kSLm || r == kSLe ){
+	if( r == kSignal || r == kSLm || r == kSLe ){
             ntuples.push_back(new RA2bTree(SnglT));
             sampleName.push_back("SnglT");
             fillColor.push_back(kOrange);
             lineColor.push_back(1);
-        }*/
- // Test KL
-        std::vector<TString> TTincFileNames;
-        TTincFileNames.push_back("tree_TTJets_MC2016.root");
-        TTinc = new TChain("tree");
-        for( unsigned int i = 0 ; i < TTincFileNames.size() ; i++ ){
-            TTinc->Add(skimType+"/"+TTincFileNames[i]);
         }
 
 	std::vector<TString> TTFileNames;
@@ -127,14 +118,14 @@ public :
         for( unsigned int i = 0 ; i < TTFileNames.size() ; i++ ){
             TT->Add(skimType+"/"+TTFileNames[i]);
         }
-      /*  if( r == kSignal || r == kSLm || r == kSLe || r == kLowDphi ){
+	if( r == kSignal || r == kSLm || r == kSLe || r == kLowDphi ){
             ntuples.push_back(new RA2bTree(TT));
             sampleName.push_back("TT");
             fillColor.push_back(kCyan);
             lineColor.push_back(kCyan);
-        }*/
- //test KL
-        std::vector<TString> OtherFileNames;
+        }
+
+	std::vector<TString> OtherFileNames;
         OtherFileNames.push_back("tree_WWTo1L1Nu2Q_MC2016.root");
         OtherFileNames.push_back("tree_WWTo2L2Nu_MC2016.root");
         OtherFileNames.push_back("tree_WWZ_MC2016.root");
@@ -154,14 +145,14 @@ public :
         for( unsigned int i = 0 ; i < OtherFileNames.size() ; i++ ){
             Other->Add(skimType+"/"+OtherFileNames[i]);
         }
-      /*  if( r == kSignal || r == kSLm || r == kSLe || r == kLowDphi || r == kPhoton ){
+        if( r == kSignal || r == kSLm || r == kSLe || r == kLowDphi || r == kPhoton ){
             ntuples.push_back(new RA2bTree(Other));
             sampleName.push_back("Other");
             //fillColor.push_back(kRed+1);
             fillColor.push_back(28);
             lineColor.push_back(1);
-        }*/
- //test KL
+        }
+
         std::vector<TString> WJetsFileNames;
         WJetsFileNames.push_back("tree_WJetsToLNu_HT-100to200_MC2016.root");
         WJetsFileNames.push_back("tree_WJetsToLNu_HT-1200to2500_MC2016.root");
@@ -174,13 +165,13 @@ public :
         for( unsigned int i = 0 ; i < WJetsFileNames.size() ; i++ ){
             WJets->Add(skimType+"/"+WJetsFileNames[i]);
         }
-      /*  if( r == kSignal || r == kSLm || r == kSLe || r == kLowDphi ){
+	if( r == kSignal || r == kSLm || r == kSLe || r == kLowDphi ){
             ntuples.push_back(new RA2bTree(WJets));
             sampleName.push_back("WJets");
             fillColor.push_back(kBlue);
             lineColor.push_back(1);
-        }*/
- //test KL
+        }
+	
         std::vector<TString> ZJetsFileNames;
         ZJetsFileNames.push_back("tree_ZJetsToNuNu_HT-100to200_MC2016.root");
         ZJetsFileNames.push_back("tree_ZJetsToNuNu_HT-200to400_MC2016.root");
@@ -252,7 +243,6 @@ public :
         ////////////////////////////////////////////////////////////
 
         std::vector<TString> METFileNames;
-        //METFileNames.push_back("tree_MET_re2016B.root");
         METFileNames.push_back("tree_MET_2016B.root");
         METFileNames.push_back("tree_MET_2016C.root");
         METFileNames.push_back("tree_MET_2016D.root");
@@ -260,20 +250,19 @@ public :
         METFileNames.push_back("tree_MET_2016F.root");
         METFileNames.push_back("tree_MET_2016G.root");
         METFileNames.push_back("tree_MET_2016H.root");
-        //METFileNames.push_back("tree_MET_2016H2.root");
-        //METFileNames.push_back("tree_MET_2016H3.root");
         if( r == kSignal || r == kLowDphi ){
-            data = new TChain("tree");
-            for( unsigned int i = 0 ; i < METFileNames.size() ; i++ ){
-                data->Add(skimType+"/"+METFileNames[i]);
-            }    
-            dataNtuple = new RA2bTree(data);
-            //ntuples.push_back(dataNtuple);
-            sampleName.push_back("data"); 
-            fillColor.push_back(kWhite);
-            lineColor.push_back(1);
+	  data = new TChain("tree");
+	  for( unsigned int i = 0 ; i < METFileNames.size() ; i++ ){
+	    cout << "adding MET data: " << skimType+"/"+METFileNames[i] << endl;
+	    data->Add(skimType+"/"+METFileNames[i]);
+	  }    
+	  dataNtuple = new RA2bTree(data);
+	  ntuples.push_back(dataNtuple);
+	  sampleName.push_back("data"); 
+	  fillColor.push_back(kWhite);
+	  lineColor.push_back(1);
         }
-
+	
         std::vector<TString> SingleElectronNames;
         SingleElectronNames.push_back("tree_SingleElectron_re2016C.root");
         SingleElectronNames.push_back("tree_SingleElectron_re2016D.root");
