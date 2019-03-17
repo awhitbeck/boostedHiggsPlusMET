@@ -12,7 +12,7 @@
 #include <cassert>
 #include "plotterUtils.cc"
 #include "skimSamples.cc"
-#include "definitions.cc"
+#include "definitions.h"
 #include "RA2bTree.cc"
 #include "TriggerEfficiencySextet.cc"
 
@@ -274,40 +274,15 @@ int main(int argc, char** argv){
         int numEvents = ntuple->fChain->GetEntries();
         ntupleBranchStatus<RA2bTree>(ntuple);
         TString filename;
-        //if( skims.sampleName[iSample] == "ZJets" ) cout << "ZJets File: " << ntuple->fChain->GetFile()->GetName()<<endl;
         double weight = 0.;
         for( int iEvt = 0 ; iEvt < min(MAX_EVENTS,numEvents) ; iEvt++ ){
-        //for( int iEvt = 0 ; iEvt < min(10,numEvents) ; iEvt++ ){
-	    //ntuple->fChain->Show(0);
             ntuple->GetEntry(iEvt);
-	    // if( iEvt % 100 == 0 ){
-	    //   cout << plots[3].tagMap[ntuple] << endl;
-	    //   cout << plots[3].histoMap[ntuple] << endl;
-	    //   plots[3].histoMap[ntuple]->Print("all");
-	    // }
 	    if( iEvt % 1000000 == 0 ) cout << skims.sampleName[iSample] << ": " << iEvt << "/" << numEvents << endl;
             filename = ntuple->fChain->GetFile()->GetName();
             if( ( filename.Contains("SingleLept") || filename.Contains("DiLept") ) && ntuple->madHT>600. )continue;
             if(! selectionFunc(ntuple) ) continue;
 
-            // end of Trigger name printout
-            // ---------- custom weights -----------
-            std::vector<double> EfficiencyCenterUpDown = Eff_MetMhtSextetReal_CenterUpDown(ntuple->HT, ntuple->MHT, ntuple->NJets);
-
-	    // update pileup weights; 
-	    // update trigger efficiencies;
-            weight = ntuple->Weight*lumi*customPUweights(ntuple)*EfficiencyCenterUpDown[0];
-            if( skims.sampleName[iSample] == "TT" )
-                weight *= ISRweights(ntuple);
-            if( skims.sampleName[iSample] == "WJets" ){
-                weight *= WJetsNLOWeights(ntuple);
-            }
-            if( skims.sampleName[iSample] == "ZJets" ){
-               //cout << "ZJets File: " << ntuple->fChain->GetFile()->GetName()<<" Num evts: "<<numEvents<<endl;
-               //cout << "ZJets Weight: " << weight<<endl;
-                weight *= ZJetsNLOWeights(ntuple);
-               //cout << "ZJets Weight after NLO: " << weight<<endl;
-            }
+            weight = ntuple->Weight*lumi;
             // ------------ end weights -------------
 	    //cout << "event passed all selections" << endl;
             for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++ ){
@@ -316,11 +291,6 @@ int main(int argc, char** argv){
         }
     }
 
-    //cout << " = = = = = = = = = end of background loop " << endl; 
- /*   for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++ ){
-      plots[iPlot].dump();
-    }
-*/
     // Signal samples
     vector<RA2bTree*> sigSamples;
     for( int iSample = 0 ; iSample < skims.signalNtuples.size() ; iSample++){
@@ -343,48 +313,10 @@ int main(int argc, char** argv){
                if (skims.signalSampleName[iSample]=="VBFG1000") 
                   //plots[iPlot].fillSignal(ntuple,1);
                   //plots[iPlot].fillSignal(ntuple,ntuple->Weight*lumi*0.001);
-                  plots[iPlot].fillSignal(ntuple,ntuple->Weight*lumi*1);
-/*
-               if (skims.signalSampleName[iSample]=="VBFG1200") 
-                  //plots[iPlot].fillSignal(ntuple,1);
-                  plots[iPlot].fillSignal(ntuple,ntuple->Weight*lumi*0.001);
-               if (skims.signalSampleName[iSample]=="VBFG1400") 
-                  //plots[iPlot].fillSignal(ntuple,1);
-                  plots[iPlot].fillSignal(ntuple,ntuple->Weight*lumi*0.001);
-               if (skims.signalSampleName[iSample]=="VBFG1600") 
-                  //plots[iPlot].fillSignal(ntuple,1);
-                  plots[iPlot].fillSignal(ntuple,ntuple->Weight*lumi*0.001);
-               if (skims.signalSampleName[iSample]=="VBFG1800") 
-                  //plots[iPlot].fillSignal(ntuple,1);
-                  plots[iPlot].fillSignal(ntuple,ntuple->Weight*lumi*0.001);
-  */
-               //if (skims.signalSampleName[iSample]=="VBFG2000") 
-                  //plots[iPlot].fillSignal(ntuple,1);
-                  //plots[iPlot].fillSignal(ntuple,ntuple->Weight*lumi*0.001);
-                  //plots[iPlot].fillSignal(ntuple,ntuple->Weight*lumi*1);
-/*               if (skims.signalSampleName[iSample]=="VBFG2500") 
-                  //plots[iPlot].fillSignal(ntuple,1);
-                  plots[iPlot].fillSignal(ntuple,ntuple->Weight*lumi*0.001);
-               if (skims.signalSampleName[iSample]=="VBFG3000") 
-                  //plots[iPlot].fillSignal(ntuple,1);
-                  plots[iPlot].fillSignal(ntuple,ntuple->Weight*lumi*0.001);
-               if (skims.signalSampleName[iSample]=="VBFG3500") 
-                  //plots[iPlot].fillSignal(ntuple,1);
-                  plots[iPlot].fillSignal(ntuple,ntuple->Weight*lumi*0.001);
-               if (skims.signalSampleName[iSample]=="VBFG4000") 
-                  //plots[iPlot].fillSignal(ntuple,1);
-                  plots[iPlot].fillSignal(ntuple,ntuple->Weight*lumi*0.001);
-               if (skims.signalSampleName[iSample]=="VBFG4500") 
-                  //plots[iPlot].fillSignal(ntuple,1);
-                  plots[iPlot].fillSignal(ntuple,ntuple->Weight*lumi*0.001);
-  */          }
+                  plots[iPlot].fillSignal(ntuple,ntuple->Weight*lumi);
+	    }
         }
     }
-
-    // cout << " = = = = = = = = = end of signal loop " << endl; 
-    // for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++ ){
-    //   plots[iPlot].dump();
-    // }
 
     // Data samples
     RA2bTree* ntuple = skims.dataNtuple;
@@ -394,8 +326,8 @@ int main(int argc, char** argv){
   
     int numEvents = ntuple->fChain->GetEntries();
     ntupleBranchStatus<RA2bTree>(ntuple);
+    cout << "data MET: " << numEvents << endl;
     for( int iEvt = 0 ; iEvt < min(MAX_EVENTS,numEvents) ; iEvt++ ){
-    //for( int iEvt = 0 ; iEvt < min(10,numEvents) ; iEvt++ ){
         ntuple->GetEntry(iEvt);
         if( iEvt % 1000000 == 0 ) cout << "data_MET: " << iEvt << "/" << min(MAX_EVENTS,numEvents) << endl;
         if(! selectionFunc(ntuple) ) continue;
@@ -406,23 +338,14 @@ int main(int argc, char** argv){
         }
     }
 
-    // cout << " = = = = = = = = = end of data loop " << endl; 
-    // for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++ ){
-    //   plots[iPlot].dump();
-    // }
-
     TFile* outputFile = new TFile("plotObs_"+selection_label+".root","RECREATE");
 
     for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++){
         TCanvas* can = new TCanvas("can","can",500,500);
-        //plots[iPlot].dataHist = NULL;
-        //plots[iPlot].Write();
-        //if (plots[iPlot].is2Dhist) continue;
-        //plots[iPlot].DrawNoRatio(can,skims.ntuples,sigSamples,"../plots/plotObs_"+selection_label+"_plots");
-        plots[iPlot].Draw(can,skims.ntuples,sigSamples,"../plots_V16_2016/plotObs_"+selection_label+"_plots",0.1,2.0,true);
-        //plots[iPlot].Draw(can,skims.ntuples,sigSamples,"../plots_V16_2016/plotObs_"+selection_label+"_plots",0.1,2.0,false);
-        //plots[iPlot].Draw(can,skims.ntuples,sigSamples,"../plots/plotObs_"+selection_label+"_plots",0.1,2.0,true);
-        plots[iPlot].sum->Write();
+        plots[iPlot].Write();
+        if (plots[iPlot].is2Dhist) continue;
+        plots[iPlot].Draw(can,skims.ntuples,sigSamples,"../plots_V16_2016/plotObs_"+selection_label+"_plots",0.1,2.0,false);
+	plots[iPlot].sum->Write();
     }
     outputFile->Close();
 }
